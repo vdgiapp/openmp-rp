@@ -1,0 +1,588 @@
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[19:36:57] rcon_password = "changeme"  (string)
+[19:36:57] filterscripts = ""  (string)
+[19:36:57] Error: Your password must be changed from the default password, please change it.
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[19:38:25] filterscripts = ""  (string)
+[19:38:25] 
+[19:38:25] Server Plugins
+[19:38:25] --------------
+[19:38:25]  Loading plugin: audio
+[19:38:25] 
+
+*** Audio Plugin v0.5 R2 by Incognito loaded ***
+
+[19:38:25]   Loaded.
+[19:38:25]  Loading plugin: crashdetect
+[19:38:25]   CrashDetect plugin 4.20
+[19:38:25]   Loaded.
+[19:38:25]  Loading plugin: jit
+[19:38:25]   JIT plugin must be loaded before 'crashdetect.DLL'
+[19:38:25]   Failed.
+[19:38:25]  Loading plugin: pwnplus
+[19:38:25]  PawnPlus v1.3.2 loaded
+[19:38:25]  Created by IllidanS4
+[19:38:25]   Loaded.
+[19:38:25]  Loaded 3 plugins.
+
+[19:38:25] 
+[19:38:25] Filterscripts
+[19:38:25] ---------------
+[19:38:25]   Loaded 0 filterscripts.
+
+[19:38:25]  
+[19:38:25]  
+[19:38:25]          ==============================================================
+[19:38:25]          |                                                            |
+[19:38:25]          |                                                            |
+[19:38:25]          |    YYYYYYY       YYYYYYY    SSSSSSSSSSSSSSS  IIIIIIIIII    |
+[19:38:25]          |    Y:::::Y       Y:::::Y  SS:::::::::::::::S I::::::::I    |
+[19:38:25]          |    Y:::::Y       Y:::::Y S:::::SSSSSS::::::S I::::::::I    |
+[19:38:25]          |    Y::::::Y     Y::::::Y S:::::S     SSSSSSS II::::::II    |
+[19:38:25]          |    YYY:::::Y   Y:::::YYY S:::::S               I::::I      |
+[19:38:25]          |       Y:::::Y Y:::::Y    S:::::S               I::::I      |
+[19:38:25]          |        Y:::::Y:::::Y      S::::SSSS            I::::I      |
+[19:38:25]          |         Y:::::::::Y        SS::::::SSSSS       I::::I      |
+[19:38:25]          |          Y:::::::Y           SSS::::::::SS     I::::I      |
+[19:38:25]          |           Y:::::Y               SSSSSS::::S    I::::I      |
+[19:38:25]          |           Y:::::Y                    S:::::S   I::::I      |
+[19:38:25]          |           Y:::::Y                    S:::::S   I::::I      |
+[19:38:25]          |           Y:::::Y        SSSSSSS     S:::::S II::::::II    |
+[19:38:25]          |        YYYY:::::YYYY     S::::::SSSSSS:::::S I::::::::I    |
+[19:38:25]          |        Y:::::::::::Y     S:::::::::::::::SS  I::::::::I    |
+[19:38:25]          |        YYYYYYYYYYYYY      SSSSSSSSSSSSSSS    IIIIIIIIII    |
+[19:38:25]          |                                                            |
+[19:38:25]          |                                                            |
+[19:38:25]          |                      (c) 2021 MPL v1.1                     |
+[19:38:25]          |            Alex "Y_Less" Cole and contributors.            |
+[19:38:25]          |                                                            |
+[19:38:25]          |                                                            |
+[19:38:25]          ==============================================================
+[19:38:25]  
+[19:38:25]  
+[19:38:25]  ========================================== 
+[19:38:25]  |                                        | 
+[19:38:25]  |  Missing YSI scriptfiles directories:  | 
+[19:38:25]  |                                        | 
+[19:38:25]  |      /scriptfiles/YSI/fixes/           | 
+[19:38:25]  |      /scriptfiles/YSI/temp/            | 
+[19:38:25]  |                                        | 
+[19:38:25]  ========================================== 
+[19:38:25]  |                                        | 
+[19:38:25]  |   Generating code, this may take a     | 
+[19:38:25]  |  little bit of time.  Note that this   | 
+[19:38:25]  |  code generation works best with the   | 
+[19:38:25]  |     JIT plugin, which you are not      | 
+[19:38:25]  |     currently using.  Get it here:     | 
+[19:38:25]  |                                        | 
+[19:38:25]  |       https://git.io/jit-plugin        | 
+[19:38:25]  |                                        | 
+[19:38:25]  |             Please wait...             | 
+[19:38:25]  |                                        | 
+[19:38:25]  |                 Done!                  | 
+[19:38:25]  |                                        | 
+[19:38:25]  ========================================== 
+[19:38:25]  |                                        | 
+[19:38:25]  | Server:      0.3.7 - Windows           | 
+[19:38:25]  | Compiler:    3.10.10 - Windows         | 
+[19:38:25]  | Codepage:    <none>                    | 
+[19:38:25]  | YSI:         5.06.1932                 | 
+[19:38:25]  | Started:     1658234305                | 
+[19:38:25]  | JIT:         <none>                    | 
+[19:38:25]  | Crashdetect: <found>                   | 
+[19:38:25]  |                                        | 
+[19:38:25]  ========================================== 
+[19:38:25]  |                                        | 
+[19:38:25]  | Unable to check the latest YSI version | 
+[19:38:25]  | - please watch the forums and github:  | 
+[19:38:25]  |                                        | 
+[19:38:25]  |          https://git.io/5.x            | 
+[19:38:25]  |                                        | 
+[19:38:25]  ========================================== 
+[19:38:25]  
+[19:38:25]   Filterscript '../scriptfiles/callbackfix.amx' loaded.
+[19:38:25] [debug] Long callback execution detected (hang or performance issue)
+[19:38:25] [debug] AMX backtrace:
+[19:38:25] [debug] #0 00003a4c in ?? (0, 45, 1391668, 1598650688) in gamemode.amx
+[19:38:25] [debug] #1 00003d10 in ?? (0, 0, 1391700, 1598650688) in gamemode.amx
+[19:38:25] [debug] #2 00005ee8 in ?? () in gamemode.amx
+[19:38:25] [debug] #3 00001f94 in public YHNPS_OnCodeInit () in gamemode.amx
+[19:38:25]  
+[19:38:25] Number of vehicle models: 0
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[20:04:06] filterscripts = ""  (string)
+[20:04:06] 
+[20:04:06] Server Plugins
+[20:04:06] --------------
+[20:04:06]  Loading plugin: memory
+[20:04:06] ========================
+[20:04:06] = Memory access plugin =
+[20:04:06] =       Made by BigETI =
+[20:04:06] = Loaded!              =
+[20:04:06] ========================
+[20:04:06]   Loaded.
+[20:04:06]  Loading plugin: audio
+[20:04:06] 
+
+*** Audio Plugin v0.5 R2 by Incognito loaded ***
+
+[20:04:06]   Loaded.
+[20:04:06]  Loading plugin: crashdetect
+[20:04:06]   CrashDetect plugin 4.20
+[20:04:06]   Loaded.
+[20:04:06]  Loading plugin: pwnplus
+[20:04:06]  PawnPlus v1.3.2 loaded
+[20:04:06]  Created by IllidanS4
+[20:04:06]   Loaded.
+[20:04:06]  Loading plugin: streamer
+[20:04:06] 
+
+*** Streamer Plugin v2.9.5 by Incognito loaded ***
+
+[20:04:06]   Loaded.
+[20:04:06]  Loading plugin: ptextdraw
+[20:04:06] 
+[20:04:06]  ===============================
+[20:04:06]                                 
+[20:04:06]     Textdraw Streamer Yuklendi  
+[20:04:06]                                 
+[20:04:06]           Surum: v1.6.2            
+[20:04:06]                                 
+[20:04:06]     Developer: Burak (NexoR)    
+[20:04:06]                                 
+[20:04:06]  ===============================
+[20:04:06] 
+[20:04:06]   Loaded.
+[20:04:06]  Loaded 6 plugins.
+
+[20:04:06] 
+[20:04:06] Filterscripts
+[20:04:06] ---------------
+[20:04:06]   Loaded 0 filterscripts.
+
+[20:04:06] [ADM] Info: Load Streamer Functions v3.0.1 for SA:MP 0.3.7 by Abyss Morgan
+[20:04:06]  
+[20:04:06]  
+[20:04:06]          ==============================================================
+[20:04:06]          |                                                            |
+[20:04:06]          |                                                            |
+[20:04:06]          |    YYYYYYY       YYYYYYY    SSSSSSSSSSSSSSS  IIIIIIIIII    |
+[20:04:06]          |    Y:::::Y       Y:::::Y  SS:::::::::::::::S I::::::::I    |
+[20:04:06]          |    Y:::::Y       Y:::::Y S:::::SSSSSS::::::S I::::::::I    |
+[20:04:06]          |    Y::::::Y     Y::::::Y S:::::S     SSSSSSS II::::::II    |
+[20:04:06]          |    YYY:::::Y   Y:::::YYY S:::::S               I::::I      |
+[20:04:06]          |       Y:::::Y Y:::::Y    S:::::S               I::::I      |
+[20:04:06]          |        Y:::::Y:::::Y      S::::SSSS            I::::I      |
+[20:04:06]          |         Y:::::::::Y        SS::::::SSSSS       I::::I      |
+[20:04:06]          |          Y:::::::Y           SSS::::::::SS     I::::I      |
+[20:04:06]          |           Y:::::Y               SSSSSS::::S    I::::I      |
+[20:04:06]          |           Y:::::Y                    S:::::S   I::::I      |
+[20:04:06]          |           Y:::::Y                    S:::::S   I::::I      |
+[20:04:06]          |           Y:::::Y        SSSSSSS     S:::::S II::::::II    |
+[20:04:06]          |        YYYY:::::YYYY     S::::::SSSSSS:::::S I::::::::I    |
+[20:04:06]          |        Y:::::::::::Y     S:::::::::::::::SS  I::::::::I    |
+[20:04:06]          |        YYYYYYYYYYYYY      SSSSSSSSSSSSSSS    IIIIIIIIII    |
+[20:04:06]          |                                                            |
+[20:04:06]          |                                                            |
+[20:04:06]          |                      (c) 2021 MPL v1.1                     |
+[20:04:06]          |            Alex "Y_Less" Cole and contributors.            |
+[20:04:06]          |                                                            |
+[20:04:06]          |                                                            |
+[20:04:06]          ==============================================================
+[20:04:06]  
+[20:04:06]  
+[20:04:06]  ========================================== 
+[20:04:06]  |                                        | 
+[20:04:06]  |   Generating code, this may take a     | 
+[20:04:06]  |  little bit of time.  Note that this   | 
+[20:04:06]  |  code generation works best with the   | 
+[20:04:06]  |     JIT plugin, which you are not      | 
+[20:04:06]  |     currently using.  Get it here:     | 
+[20:04:06]  |                                        | 
+[20:04:06]  |       https://git.io/jit-plugin        | 
+[20:04:06]  |                                        | 
+[20:04:06]  |             Please wait...             | 
+[20:04:06]  |                                        | 
+[20:04:06]  |                 Done!                  | 
+[20:04:06]  |                                        | 
+[20:04:06]  ========================================== 
+[20:04:06]  |                                        | 
+[20:04:06]  | Server:      0.3.7 - Windows           | 
+[20:04:06]  | Compiler:    3.10.10 - Windows         | 
+[20:04:06]  | Codepage:    <none>                    | 
+[20:04:06]  | YSI:         5.06.1932                 | 
+[20:04:06]  | Started:     1658235846                | 
+[20:04:06]  | JIT:         <none>                    | 
+[20:04:06]  | Crashdetect: <found>                   | 
+[20:04:06]  |                                        | 
+[20:04:06]  ========================================== 
+[20:04:06]  |                                        | 
+[20:04:06]  | Unable to check the latest YSI version | 
+[20:04:06]  | - please watch the forums and github:  | 
+[20:04:06]  |                                        | 
+[20:04:06]  |          https://git.io/5.x            | 
+[20:04:06]  |                                        | 
+[20:04:06]  ========================================== 
+[20:04:06]  
+[20:04:06]   Filterscript '../scriptfiles/callbackfix.amx' loaded.
+[20:04:06] [debug] Long callback execution detected (hang or performance issue)
+[20:04:06] [debug] AMX backtrace:
+[20:04:06] [debug] #0 00004188 in ?? (0, 19, 1393612, 1598650688) in gamemode.amx
+[20:04:06] [debug] #1 0000447c in ?? (0, 0, 1393644, 1598650688) in gamemode.amx
+[20:04:06] [debug] #2 00006654 in ?? () in gamemode.amx
+[20:04:06] [debug] #3 00002700 in public SSpec_OnGameModeInit () in gamemode.amx
+[20:04:06] [debug] #4 00000af8 in public ScriptInit_OnGameModeExit () in gamemode.amx
+[20:04:06]  
+[20:04:06] Number of vehicle models: 0
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[21:10:53] filterscripts = ""  (string)
+[21:10:53] 
+[21:10:53] Server Plugins
+[21:10:53] --------------
+[21:10:53]  Loading plugin: memory
+[21:10:53] ========================
+[21:10:53] = Memory access plugin =
+[21:10:53] =       Made by BigETI =
+[21:10:53] = Loaded!              =
+[21:10:53] ========================
+[21:10:53]   Loaded.
+[21:10:53]  Loading plugin: audio
+[21:10:53] 
+
+*** Audio Plugin v0.5 R2 by Incognito loaded ***
+
+[21:10:53]   Loaded.
+[21:10:53]  Loading plugin: crashdetect
+[21:10:53]   CrashDetect plugin 4.20
+[21:10:53]   Loaded.
+[21:10:53]  Loading plugin: pwnplus
+[21:10:53]  PawnPlus v1.3.2 loaded
+[21:10:53]  Created by IllidanS4
+[21:10:53]   Loaded.
+[21:10:53]  Loading plugin: streamer
+[21:10:53] 
+
+*** Streamer Plugin v2.9.5 by Incognito loaded ***
+
+[21:10:53]   Loaded.
+[21:10:53]  Loading plugin: ptextdraw
+[21:10:53] 
+[21:10:53]  ===============================
+[21:10:53]                                 
+[21:10:53]     Textdraw Streamer Yuklendi  
+[21:10:53]                                 
+[21:10:53]           Surum: v1.6.2            
+[21:10:53]                                 
+[21:10:53]     Developer: Burak (NexoR)    
+[21:10:53]                                 
+[21:10:53]  ===============================
+[21:10:53] 
+[21:10:53]   Loaded.
+[21:10:53]  Loaded 6 plugins.
+
+[21:10:53] 
+[21:10:53] Filterscripts
+[21:10:53] ---------------
+[21:10:53]   Loaded 0 filterscripts.
+
+[21:10:53] [debug] Run time error 19: "File or function is not found"
+[21:10:53] [debug]  SSCANF_Init
+[21:10:53] [debug]  SSCANF_IsConnected
+[21:10:53] [debug]  SSCANF_Join
+[21:10:53] [debug]  SSCANF_Leave
+[21:10:53] [debug] Run time error 19: "File or function is not found"
+[21:10:53] [debug]  SSCANF_Init
+[21:10:53] [debug]  SSCANF_IsConnected
+[21:10:53] [debug]  SSCANF_Join
+[21:10:53] [debug]  SSCANF_Leave
+[21:10:53] Script[gamemodes/gamemode.amx]: Run time error 19: "File or function is not found"
+[21:10:53] Number of vehicle models: 0
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[21:19:04] rcon_password = "changeme"  (string)
+[21:19:04] filterscripts = ""  (string)
+[21:19:04] Error: Your password must be changed from the default password, please change it.
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[21:19:16] rcon_password = "changeme"  (string)
+[21:19:16] filterscripts = ""  (string)
+[21:19:16] Error: Your password must be changed from the default password, please change it.
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[21:19:46] filterscripts = ""  (string)
+[21:19:46] Error: Your password must be changed from the default password, please change it.
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[21:20:00] filterscripts = ""  (string)
+[21:20:00] 
+[21:20:00] Server Plugins
+[21:20:00] --------------
+[21:20:00]  Loading plugin: memory
+[21:20:00] ========================
+[21:20:00] = Memory access plugin =
+[21:20:00] =       Made by BigETI =
+[21:20:00] = Loaded!              =
+[21:20:00] ========================
+[21:20:00]   Loaded.
+[21:20:00]  Loading plugin: sscanf
+[21:20:00] 
+
+[21:20:00]  ===============================
+
+[21:20:00]       sscanf plugin loaded.     
+
+[21:20:00]          Version:  2.8.3        
+
+[21:20:00]   (c) 2018 Alex "Y_Less" Cole  
+
+[21:20:00]  ===============================
+
+[21:20:00]   Loaded.
+[21:20:00]  Loading plugin: crashdetect
+[21:20:00]   CrashDetect plugin 4.20
+[21:20:00]   Loaded.
+[21:20:00]  Loading plugin: pwnplus
+[21:20:00]  PawnPlus v1.3.2 loaded
+[21:20:00]  Created by IllidanS4
+[21:20:00]   Loaded.
+[21:20:00]  Loading plugin: streamer
+[21:20:00] 
+
+*** Streamer Plugin v2.9.5 by Incognito loaded ***
+
+[21:20:00]   Loaded.
+[21:20:00]  Loading plugin: ptextdraw
+[21:20:00] 
+[21:20:00]  ===============================
+[21:20:00]                                 
+[21:20:00]     Textdraw Streamer Yuklendi  
+[21:20:00]                                 
+[21:20:00]           Surum: v1.6.2            
+[21:20:00]                                 
+[21:20:00]     Developer: Burak (NexoR)    
+[21:20:00]                                 
+[21:20:00]  ===============================
+[21:20:00] 
+[21:20:00]   Loaded.
+[21:20:00]  Loaded 6 plugins.
+
+[21:20:01] 
+[21:20:01] Filterscripts
+[21:20:01] ---------------
+[21:20:01]   Loaded 0 filterscripts.
+
+[21:20:01] [ADM] Info: Load Streamer Functions v3.0.1 for SA:MP 0.3.7 by Abyss Morgan
+[21:20:01]  
+[21:20:01]  
+[21:20:01]          ==============================================================
+[21:20:01]          |                                                            |
+[21:20:01]          |                                                            |
+[21:20:01]          |    YYYYYYY       YYYYYYY    SSSSSSSSSSSSSSS  IIIIIIIIII    |
+[21:20:01]          |    Y:::::Y       Y:::::Y  SS:::::::::::::::S I::::::::I    |
+[21:20:01]          |    Y:::::Y       Y:::::Y S:::::SSSSSS::::::S I::::::::I    |
+[21:20:01]          |    Y::::::Y     Y::::::Y S:::::S     SSSSSSS II::::::II    |
+[21:20:01]          |    YYY:::::Y   Y:::::YYY S:::::S               I::::I      |
+[21:20:01]          |       Y:::::Y Y:::::Y    S:::::S               I::::I      |
+[21:20:01]          |        Y:::::Y:::::Y      S::::SSSS            I::::I      |
+[21:20:01]          |         Y:::::::::Y        SS::::::SSSSS       I::::I      |
+[21:20:01]          |          Y:::::::Y           SSS::::::::SS     I::::I      |
+[21:20:01]          |           Y:::::Y               SSSSSS::::S    I::::I      |
+[21:20:01]          |           Y:::::Y                    S:::::S   I::::I      |
+[21:20:01]          |           Y:::::Y                    S:::::S   I::::I      |
+[21:20:01]          |           Y:::::Y        SSSSSSS     S:::::S II::::::II    |
+[21:20:01]          |        YYYY:::::YYYY     S::::::SSSSSS:::::S I::::::::I    |
+[21:20:01]          |        Y:::::::::::Y     S:::::::::::::::SS  I::::::::I    |
+[21:20:01]          |        YYYYYYYYYYYYY      SSSSSSSSSSSSSSS    IIIIIIIIII    |
+[21:20:01]          |                                                            |
+[21:20:01]          |                                                            |
+[21:20:01]          |                      (c) 2021 MPL v1.1                     |
+[21:20:01]          |            Alex "Y_Less" Cole and contributors.            |
+[21:20:01]          |                                                            |
+[21:20:01]          |                                                            |
+[21:20:01]          ==============================================================
+[21:20:01]  
+[21:20:01]  
+[21:20:01]  ========================================== 
+[21:20:01]  |                                        | 
+[21:20:01]  |   Generating code, this may take a     | 
+[21:20:01]  |  little bit of time.  Note that this   | 
+[21:20:01]  |  code generation works best with the   | 
+[21:20:01]  |     JIT plugin, which you are not      | 
+[21:20:01]  |     currently using.  Get it here:     | 
+[21:20:01]  |                                        | 
+[21:20:01]  |       https://git.io/jit-plugin        | 
+[21:20:01]  |                                        | 
+[21:20:01]  |             Please wait...             | 
+[21:20:01]  |                                        | 
+[21:20:01]  |                 Done!                  | 
+[21:20:01]  |                                        | 
+[21:20:01]  ========================================== 
+[21:20:01]  |                                        | 
+[21:20:01]  | Server:      0.3.7 - Windows           | 
+[21:20:01]  | Compiler:    3.10.10 - Windows         | 
+[21:20:01]  | Codepage:    <none>                    | 
+[21:20:01]  | YSI:         5.06.1932                 | 
+[21:20:01]  | Started:     1658240401                | 
+[21:20:01]  | JIT:         <none>                    | 
+[21:20:01]  | Crashdetect: <found>                   | 
+[21:20:01]  |                                        | 
+[21:20:01]  ========================================== 
+[21:20:01]  |                                        | 
+[21:20:01]  | Unable to check the latest YSI version | 
+[21:20:01]  | - please watch the forums and github:  | 
+[21:20:01]  |                                        | 
+[21:20:01]  |          https://git.io/5.x            | 
+[21:20:01]  |                                        | 
+[21:20:01]  ========================================== 
+[21:20:01]  
+[21:20:01]   Filterscript '../scriptfiles/callbackfix.amx' loaded.
+[21:20:01]  
+[21:20:01] Number of vehicle models: 0
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[02:50:26] filterscripts = ""  (string)
+[02:50:26] 
+[02:50:26] Server Plugins
+[02:50:26] --------------
+[02:50:26]  Loading plugin: memory
+[02:50:26] ========================
+[02:50:26] = Memory access plugin =
+[02:50:26] =       Made by BigETI =
+[02:50:26] = Loaded!              =
+[02:50:26] ========================
+[02:50:26]   Loaded.
+[02:50:26]  Loading plugin: sscanf
+[02:50:26] 
+
+[02:50:26]  ===============================
+
+[02:50:26]       sscanf plugin loaded.     
+
+[02:50:26]          Version:  2.8.3        
+
+[02:50:26]   (c) 2018 Alex "Y_Less" Cole  
+
+[02:50:26]  ===============================
+
+[02:50:26]   Loaded.
+[02:50:26]  Loading plugin: crashdetect
+[02:50:26]   CrashDetect plugin 4.20
+[02:50:26]   Loaded.
+[02:50:26]  Loading plugin: pwnplus
+[02:50:26]  PawnPlus v1.3.2 loaded
+[02:50:26]  Created by IllidanS4
+[02:50:26]   Loaded.
+[02:50:26]  Loading plugin: streamer
+[02:50:26] 
+
+*** Streamer Plugin v2.9.5 by Incognito loaded ***
+
+[02:50:26]   Loaded.
+[02:50:26]  Loading plugin: ptextdraw
+[02:50:26] 
+[02:50:26]  ===============================
+[02:50:26]                                 
+[02:50:26]     Textdraw Streamer Yuklendi  
+[02:50:26]                                 
+[02:50:26]           Surum: v1.6.2            
+[02:50:26]                                 
+[02:50:26]     Developer: Burak (NexoR)    
+[02:50:26]                                 
+[02:50:26]  ===============================
+[02:50:26] 
+[02:50:26]   Loaded.
+[02:50:26]  Loading plugin: mysql
+[02:50:26]  >> plugin.mysql: R41-4 successfully loaded.
+[02:50:26]   Loaded.
+[02:50:26]  Loaded 7 plugins.
+
+[02:50:26] 
+[02:50:26] Filterscripts
+[02:50:26] ---------------
+[02:50:26]   Loaded 0 filterscripts.
+
+[02:50:26] [debug] Run time error 19: "File or function is not found"
+[02:50:26] [debug]  PR_Init
+[02:50:26] [debug]  PC_Init
+[02:50:26] [debug]  GetVehicleInterior
+[02:50:26] [debug]  IsVehicleOccupied
+[02:50:26] [debug]  SendClientMessagef
+[02:50:26] [debug]  AddServerRule
+[02:50:26] [debug]  SetModeRestartTime
+[02:50:26] [debug] Run time error 19: "File or function is not found"
+[02:50:26] [debug]  PR_Init
+[02:50:26] [debug]  PC_Init
+[02:50:26] [debug]  GetVehicleInterior
+[02:50:26] [debug]  IsVehicleOccupied
+[02:50:26] [debug]  SendClientMessagef
+[02:50:26] [debug]  AddServerRule
+[02:50:26] [debug]  SetModeRestartTime
+[02:50:26] Script[gamemodes/gamemode.amx]: Run time error 19: "File or function is not found"
+[02:50:26] Number of vehicle models: 0

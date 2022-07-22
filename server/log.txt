@@ -1,0 +1,190 @@
+[00:10:44] [Info] [Pawn.RakNet] plugin v1.5.1 loading...
+[00:10:44] [Info] [Pawn.RakNet] 
+
+    | Pawn.RakNet 1.5.1 | omp-beta7 | 2016 - 2022
+    |--------------------------------------------
+    | Author and maintainer: katursis
+
+
+    | Compiled: Jul 16 2022 at 22:39:48
+    |--------------------------------------------------------------
+    | Repository: https://github.com/katursis/Pawn.RakNet/tree/omp
+    |--------------------------------------------------------------
+    | Wiki: https://github.com/katursis/Pawn.RakNet/wiki
+
+[00:10:44] [Info] [sv:dbg:network:init] : module initializing...
+[00:10:44] [Info] [dbg:raknet:init] : module initializing...
+[00:10:44] [Info] [dbg:raknet:init] : module initialized
+[00:10:44] [Info] [sv:dbg:network:init] : module initialized
+[00:10:44] [Info] [sv:dbg:main:Load] : creating 1 work threads...
+[00:10:44] [Info]  -------------------------------------------    
+[00:10:44] [Info]    ___                __   __    _              
+[00:10:44] [Info]   / __| __ _ _ __  _ _\ \ / /__ (_) __ ___    
+[00:10:44] [Info]   \__ \/ _` | '  \| '_ \   / _ \| |/ _/ -_)
+[00:10:44] [Info]   |___/\__,_|_|_|_| .__/\_/\___/|_|\__\___|
+[00:10:44] [Info]                   |_|                           
+[00:10:44] [Info]  -------------------------------------------    
+[00:10:44] [Info]                 SampVoice by MOR                
+[00:10:44] [Info]     Ported to open.mp by AmyrAhmady (iAmir)     
+[00:10:45] [Info]  -------------------------------------------    
+[00:10:45] [Info] [Pawn.CMD] plugin v3.3.6 loading...
+[00:10:45] [Info] [Pawn.CMD] 
+
+    | Pawn.CMD 3.3.6 | omp-beta7 | 2016 - 2022
+    |-----------------------------------------
+    | Author and maintainer: katursis
+
+
+    | Compiled: Jul 16 2022 at 22:48:36
+    |----------------------------------------------------------
+    | Repository: https://github.com/katursis/Pawn.CMD/tree/omp
+
+[00:10:45] [Info] Loading plugin: memory
+[00:10:45] [Info] ========================
+[00:10:45] [Info] = Memory access plugin =
+[00:10:45] [Info] =       Made by BigETI =
+[00:10:45] [Info] = Loaded!              =
+[00:10:45] [Info] ========================
+[00:10:45] [Info] Loading plugin: sscanf
+[00:10:45] [Info] 
+
+[00:10:45] [Info]  ===============================
+
+[00:10:45] [Info]       sscanf plugin loaded.     
+
+[00:10:45] [Info]          Version:  2.8.3        
+
+[00:10:45] [Info]   (c) 2018 Alex "Y_Less" Cole  
+
+[00:10:45] [Info]  ===============================
+
+[00:10:45] [Info] Loading plugin: crashdetect
+[00:10:45] [Info]   CrashDetect plugin 4.20
+[00:10:45] [Info] Loading plugin: pwnplus
+[00:10:45] [Info]  PawnPlus v1.3.2 loaded
+[00:10:45] [Info]  Created by IllidanS4
+[00:10:45] [Info] Loading plugin: streamer
+[00:10:45] [Info] 
+
+*** Streamer Plugin v2.9.5 by Incognito loaded ***
+
+[00:10:45] [Info] Loading plugin: ptextdraw
+[00:10:45] [Info] 
+[00:10:45] [Info]  ===============================
+[00:10:45] [Info]                                 
+[00:10:45] [Info]     Textdraw Streamer Yuklendi  
+[00:10:45] [Info]                                 
+[00:10:45] [Info]           Surum: v1.6.2            
+[00:10:45] [Info]                                 
+[00:10:45] [Info]     Developer: Burak (NexoR)    
+[00:10:45] [Info]                                 
+[00:10:45] [Info]  ===============================
+[00:10:45] [Info] 
+[00:10:45] [Info] Loading plugin: mysql
+[00:10:45] [Info]  >> plugin.mysql: R41-4 successfully loaded.
+[00:10:45] [Info] Loading plugin: bcrypt
+[00:10:45] [Info] [SampBcrypt] [info]: Version: 0.3.4
+[00:10:45] [Info] [sv:dbg:network:bind] : voice server running on port 60327
+[00:10:45] [Warning] Deprecated function GetVehiclePoolSize used. This function was replaced by MAX_VEHICLES.
+[00:10:45] [Warning] Deprecated function GetPlayerPoolSize used. This function was replaced by MAX_PLAYERS.
+[00:10:45] [Warning] Deprecated functions will be removed in the next open.mp release.
+[00:10:45] [Info] [ADM] Info: Load EVF v3.3.3 for SA:MP 0.3.7 by Abyss Morgan
+[00:10:45] [Info] [ADM] Info: Load Streamer Functions v3.0.1 for SA:MP 0.3.7 by Abyss Morgan
+[00:10:45] [Info]  
+[00:10:45] [Info]  
+[00:10:45] [Info]          ==============================================================
+[00:10:45] [Info]          |                                                            |
+[00:10:45] [Info]          |                                                            |
+[00:10:45] [Info]          |    YYYYYYY       YYYYYYY    SSSSSSSSSSSSSSS  IIIIIIIIII    |
+[00:10:45] [Info]          |    Y:::::Y       Y:::::Y  SS:::::::::::::::S I::::::::I    |
+[00:10:45] [Info]          |    Y:::::Y       Y:::::Y S:::::SSSSSS::::::S I::::::::I    |
+[00:10:45] [Info]          |    Y::::::Y     Y::::::Y S:::::S     SSSSSSS II::::::II    |
+[00:10:45] [Info]          |    YYY:::::Y   Y:::::YYY S:::::S               I::::I      |
+[00:10:45] [Info]          |       Y:::::Y Y:::::Y    S:::::S               I::::I      |
+[00:10:45] [Info]          |        Y:::::Y:::::Y      S::::SSSS            I::::I      |
+[00:10:45] [Info]          |         Y:::::::::Y        SS::::::SSSSS       I::::I      |
+[00:10:45] [Info]          |          Y:::::::Y           SSS::::::::SS     I::::I      |
+[00:10:45] [Info]          |           Y:::::Y               SSSSSS::::S    I::::I      |
+[00:10:45] [Info]          |           Y:::::Y                    S:::::S   I::::I      |
+[00:10:45] [Info]          |           Y:::::Y                    S:::::S   I::::I      |
+[00:10:45] [Info]          |           Y:::::Y        SSSSSSS     S:::::S II::::::II    |
+[00:10:45] [Info]          |        YYYY:::::YYYY     S::::::SSSSSS:::::S I::::::::I    |
+[00:10:45] [Info]          |        Y:::::::::::Y     S:::::::::::::::SS  I::::::::I    |
+[00:10:45] [Info]          |        YYYYYYYYYYYYY      SSSSSSSSSSSSSSS    IIIIIIIIII    |
+[00:10:45] [Info]          |                                                            |
+[00:10:45] [Info]          |                                                            |
+[00:10:45] [Info]          |                      (c) 2021 MPL v1.1                     |
+[00:10:45] [Info]          |            Alex "Y_Less" Cole and contributors.            |
+[00:10:45] [Info]          |                                                            |
+[00:10:45] [Info]          |                                                            |
+[00:10:45] [Info]          ==============================================================
+[00:10:45] [Info]  
+[00:10:45] [Info]  
+[00:10:45] [Info]  ========================================== 
+[00:10:45] [Info]  |                                        | 
+[00:10:45] [Info]  |   Generating code, this may take a     | 
+[00:10:45] [Info]  |  little bit of time.  Note that this   | 
+[00:10:45] [Info]  |  code generation works best with the   | 
+[00:10:45] [Info]  |     JIT plugin, which you are not      | 
+[00:10:45] [Info]  |     currently using.  Get it here:     | 
+[00:10:45] [Info]  |                                        | 
+[00:10:45] [Info]  |       https://git.io/jit-plugin        | 
+[00:10:45] [Info]  |                                        | 
+[00:10:45] [Info]  |             Please wait...             | 
+[00:10:45] [Info]  |                                        | 
+[00:10:45] [Info]  |                 Done!                  | 
+[00:10:45] [Info]  |                                        | 
+[00:10:45] [Info]  ========================================== 
+[00:10:45] [Info]  |                                        | 
+[00:10:45] [Info]  | Server:      0.3.7 - Windows           | 
+[00:10:45] [Info]  | Compiler:    3.10.10 - Windows         | 
+[00:10:45] [Info]  | Codepage:    <none>                    | 
+[00:10:45] [Info]  | YSI:         5.06.1932                 | 
+[00:10:45] [Info]  | Started:     1658423445                | 
+[00:10:45] [Info]  | JIT:         <none>                    | 
+[00:10:45] [Info]  | Crashdetect: <found>                   | 
+[00:10:45] [Info]  |                                        | 
+[00:10:45] [Info]  ========================================== 
+[00:10:45] [Info]  |                                        | 
+[00:10:45] [Info]  | Unable to check the latest YSI version | 
+[00:10:45] [Info]  | - please watch the forums and github:  | 
+[00:10:45] [Info]  |                                        | 
+[00:10:45] [Info]  |          https://git.io/5.x            | 
+[00:10:45] [Info]  |                                        | 
+[00:10:45] [Info]  ========================================== 
+[00:10:45] [Info]  
+[00:10:45] [Info] Filterscript '../scriptfiles/callbackfix' loaded.
+[00:10:45] [Info]  
+[00:10:45] [Info] 
+[SERVER] Ket noi den co so du lieu thanh cong!
+[00:10:45] [Info] Legacy Network started on port 7777
+[00:10:46] [Info]  -------------------------------------------
+[00:10:46] [Info]            SampVoice unloading...           
+[00:10:46] [Info]  -------------------------------------------
+[00:10:46] [Info] [sv:dbg:network:free] : module releasing...
+[00:10:46] [Info] [dbg:raknet:free] : module releasing...
+[00:10:46] [Info] [dbg:raknet:free] : module released
+[00:10:46] [Info] [sv:dbg:network:free] : module released
+[00:10:46] [Info] [Pawn.RakNet] plugin unloaded
+[00:10:46] [Info] [Pawn.CMD] plugin unloaded
+[00:10:46] [Info] [ADM] Info: Unload EVF v3.3.3 for SA:MP 0.3.7 by Abyss Morgan
+[00:10:46] [Info] [ADM] Info: Unload Streamer Functions v3.0.1 for SA:MP 0.3.7 by Abyss Morgan
+[00:10:46] [Info] 
+
+[00:10:46] [Info]  ===============================
+
+[00:10:46] [Info]      sscanf plugin unloaded.    
+
+[00:10:46] [Info]  ===============================
+
+[00:10:46] [Info]  PawnPlus v1.3.2 unloaded
+[00:10:46] [Info] ========================
+[00:10:46] [Info] = Memory access plugin =
+[00:10:46] [Info] =       Made by BigETI =
+[00:10:46] [Info] = Unloaded!            =
+[00:10:46] [Info] ========================
+[00:10:46] [Info] 
+
+*** Streamer Plugin v2.9.5 by Incognito unloaded ***
+
+[00:10:46] [Info] plugin.mysql: Unloading plugin...
