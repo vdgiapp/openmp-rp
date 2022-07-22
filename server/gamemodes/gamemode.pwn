@@ -3,7 +3,7 @@
 #define PP_SYNTAX_AWAIT // ASYNC AWAIT
 #define YSI_NO_HEAP_MALLOC // NO HEAP MEMORY ALLOCATION
 
-#define GM_VERSION "Summer v1.01"
+#define GM_VERSION "1.415.122"
 #define SV_WEBSITE "\"http://none.vn\""
 
 #include <a_samp>
@@ -41,8 +41,8 @@
 #include <YSI_Coding/y_timers> // task, ptask, timer - (pause, resume, defer, repeat, stop)
 #include <YSI_Coding/y_hooks> // hook, hook function, hook callback
 
-#include "includes/main0.pwn"
+#include "include/main0.pwn"
 main ( ) { }
-#include "includes/main1.pwn"
+#include "include/main1.pwn"
 
-#include "includes/authentication.pwn"
+#include "include/authentication.pwn"
