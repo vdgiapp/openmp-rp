@@ -1,1 +1,1 @@
-# samp-openmp
+# SA-MP w/ Open.MP
