@@ -27,6 +27,7 @@
 #include <streamerf> // Streamer more functions
 #include <playertd> // Player Textdraw
 #include <eSelection>
+#include <MenuStore>
 #include <progress2>
 #include <progress3D>
 #include <chatbreaker>
