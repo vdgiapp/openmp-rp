@@ -15,7 +15,6 @@
 #include <a_sampdb> // SA-MP database
 #include <a_zones> // SA-MP zones
 #include <a_mysql> // SA-MP MySQL
-#include <bcrypt>
 #include <pwnraknet> // PAWN RakNet
 #include <pwnplus> // PAWN plus
 #include <pwncmd> // PAWN commands
