@@ -30,7 +30,7 @@ public OnGameModeInit() {
 	EnableStuntBonusForAll(0);
 	DisableInteriorEnterExits();
 	AllowInteriorWeapons(1);
-	SetGameModeText(GM_VERSION);
+	SetGameModeText(SERVER_VERSION);
 	SetModeRestartTime(20.0); // default: 12.0
 	return 1;
 }

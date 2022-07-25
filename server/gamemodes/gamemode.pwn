@@ -3,8 +3,9 @@
 #define PP_SYNTAX_AWAIT // ASYNC AWAIT
 #define YSI_NO_HEAP_MALLOC // NO HEAP MEMORY ALLOCATION
 
-#define GM_VERSION "1.415.122"
-#define SV_WEBSITE "\"http://none.vn\""
+#define SERVER_NAME "No name"
+#define SERVER_WEBSITE "\"http://none.vn\""
+#define SERVER_VERSION "NONAME 1.415.122"
 
 #include <a_samp>
 #undef MAX_PLAYERS
@@ -25,24 +26,26 @@
 #include <evf> // Extended vehicles functions
 #include <streamer> // Streamer plugins
 #include <streamerf> // Streamer more functions
+#include <cDialog> // Center text in dialog '\\c'
+#include <eDialog> // Easy Dialog
+#include <mDialog> // Preview Model Dialog
 #include <playertd> // Player Textdraw
-#include <eSelection>
-#include <MenuStore>
-#include <progress2>
-#include <progress3D>
-#include <chatbreaker>
-#include <dialogcenter>
-#include <humanize>
-#include <nametag>
-#include <fader>
+#include <eSelection> // Selection menu
+#include <MenuStore> // Menu store
+#include <progress2> // Progress bar
+#include <progress3D> // Progress bar 3D
+#include <chatbreaker> // Break long chat string
+#include <humanize> // Format something
+#include <nametag> // Set player nametag
+#include <fader> // Fader
 
 #include <YSI_Data/y_iterate> // or YSI_Data/y_foreach (instead of foreach)
 #include <YSI_Coding/y_va> // Variable arguments (va_args<>, va_format, va_start<3>)
 #include <YSI_Coding/y_timers> // task, ptask, timer - (pause, resume, defer, repeat, stop)
 #include <YSI_Coding/y_hooks> // hook, hook function, hook callback
 
-#include "include/main0.pwn"
-main ( ) { }
-#include "include/main1.pwn"
+#include "include/main0.pwn" // Load trước main()
+main() { printf("[S] %s da khoi dong thanh cong\n[S] Phien ban: %s", SERVER_NAME, SERVER_VERSION); }
+#include "include/main1.pwn" // Load sau main()
 
 #include "include/authentication.pwn"
