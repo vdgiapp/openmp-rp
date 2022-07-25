@@ -2,10 +2,13 @@
 #include <YSI_Coding/y_hooks>
 
 // +-+-+-+-+- MAIN DEFINES +-+-+-+-+-
-#define function%0(%1) 			forward%0(%1); public%0(%1) // function
-#define forloop(%0,%1,%2) 		for(new %0 = %1; %0 < %2; %0++) // for loop normal
-#define strset(%1,%2)			format(%1, sizeof(%1), %2) // format
+#define function%0(%1) 			forward%0(%1); public%0(%1) 		// function
+#define forloop(%0,%1,%2) 		for(new %0 = %1; %0 < %2; %0++) 	// for loop normal
+#define strset(%1,%2)			format(%1, sizeof(%1), %2) 			// format
+#define ClientMsg 				SendClientMessagef
+#define ServerMsg 				SendClientMessageToAllf 	
 
+// +-+-+-+-+- DIALOG STYLES +-+-+-+-+-
 #define DS_LIST 				DIALOG_STYLE_LIST
 #define DS_TABLIST 				DIALOG_STYLE_TABLIST
 #define DS_HEADERS 				DIALOG_STYLE_TABLIST_HEADERS
@@ -67,25 +70,6 @@
 #define COLOR_SERVER       		(0xFFFF90FF) // 6688FF
 #define COLOR_DEPARTMENT   		(0xF0CC00FF)
 #define COLOR_ADMINCHAT    		(0x33EE33FF)
-
-// +-+-+-+-+- DIALOGS +-+-+-+-+-
-#define D_MSGBOX 					(3)
-#define D_AUTHENTICATION			(4)
-#define D_LOGIN						(5) //
-#define D_LOG_ACCOUNT				(6)
-#define D_LOG_PASSWORD				(7)
-#define D_LOG_PASS2					(8)
-#define D_LOG_WAITING				(9)
-#define D_REGISTER 					(10) //
-#define D_REG_ACCOUNT				(11)
-#define D_REG_PASSWORD				(12)
-#define D_REG_PASSA 				(13)
-#define D_REG_PASS2 				(14)
-#define D_REG_EMAIL					(15)
-#define D_FORGOT_PASS				(16) //
-#define D_SELECT_CHAR 				(17)
-#define D_SELECT_CHAR2 				(18)
-#define D_CREATE_CHAR 				(19)
 
 // +-+-+-+-+- CONFIGS +-+-+-+-+-
 #define host_mysql 				"localhost"

@@ -60,9 +60,16 @@ stock Dialog_Close(playerid)
 stock Dialog_Open(playerid, const function[], style, const caption[], const info[], const button1[], const button2[], {Float,_}:...)
 {
 	static
+		capt[256],
 		string[4096],
+		btn1[64],
+		btn2[64],
 		args
 	;
+
+	format(capt, sizeof capt, "%s", caption);
+	format(btn1, sizeof capt, "%s", button1);
+	format(btn2, sizeof capt, "%s", button2);
 
 	if (!strlen(info))
 	{
@@ -93,11 +100,12 @@ stock Dialog_Open(playerid, const function[], style, const caption[], const info
 		#emit LCTRL 5
 		#emit SCTRL 4
 
-		ShowPlayerDialog(playerid, 32700, style, caption, string, button1, button2);
+		ShowPlayerDialog(playerid, 32700, style, capt, string, btn1, btn2);
 	}
 	else
 	{
-		ShowPlayerDialog(playerid, 32700, style, caption, info, button1, button2);
+		format(string, sizeof string, "%s", info);
+		ShowPlayerDialog(playerid, 32700, style, capt, string, btn1, btn2);
 	}
 	s_DialogOpened[playerid] = true;
 

@@ -45,7 +45,10 @@
 #include <YSI_Coding/y_hooks> // hook, hook function, hook callback
 
 #include "include/main0.pwn" // Load trước main()
-main() { printf("[S] %s da khoi dong thanh cong\n[S] Phien ban: %s", SERVER_NAME, SERVER_VERSION); }
+main() {
+	printf("[S] %s da khoi dong thanh cong", SERVER_NAME);
+	printf("[S] Phien ban %s", SERVER_VERSION);
+}
 #include "include/main1.pwn" // Load sau main()
 
 #include "include/authentication.pwn"

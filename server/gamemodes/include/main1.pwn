@@ -1,20 +1,6 @@
 
 #include <YSI_Coding/y_hooks>
 
-// +-+-+-+-+- Redefine Functions +-+-+-+-+-
-ShowDialog(playerid, id, style, caption[], info[], button1[], button2[]) return ShowPlayerDialog(playerid, id, style, caption, info, button1, button2);
-ClientMsg(playerid, color, const message[], va_args<>) return SendClientMessagef(playerid, color, message, va_start<3>);
-ServerMsg(color, const message[], va_args<>) return SendClientMessageToAllf(color, message, va_start<2>);
-ErrorMsg(playerid, const message[], va_args<>) return SendClientMessagef(playerid, COLOR_LIGHTRED, message, va_start<2>);
-
-GlobalMsg(color, const message[], va_args<>) {
-	forloop(playerid,0,GetPlayerPoolSize()+1) {
-		if(IsPlayerInGame(playerid)) {
-			SendClientMessagef(playerid, message, va_start<2>);
-		}
-	}
-}
-
 // +-+-+-+-+- Main Callbacks +-+-+-+-+-
 public OnGameModeInit() {
 	Database = mysql_connect(host_mysql, user_mysql, pass_mysql, dbase_mysql);
@@ -183,7 +169,7 @@ GetXYZFromAngle(&Float:posX, &Float:posY, &Float:posZ, Float:angle, Float:height
 
 GetWeaponIDFromModel(modelid)
 {
-    new idweapon;
+    static idweapon;
     switch(modelid)
     {
         case 331: idweapon = 1; // Brass Knuckles
@@ -226,61 +212,6 @@ GetWeaponIDFromModel(modelid)
     return idweapon;
 }
 
-IsPlayerInGame(playerid) {
-	if(IsPlayerConnected(playerid) && LoginData[playerid][Logged] && 
-		LoginData[playerid][Joined]) return true;
-	return false;
-}
-
-GetRoleplayName(const name[]) {
-    static ret[MAX_PLAYER_NAME+1];
-    format(ret, sizeof ret, "%s", name);
-    strreplace(ret, "_", " ");
-    return ret;
-}
-
-IsRoleplayName(const name[], max_unders = 2) {
-    static unders = 0;
-    if(name[0] < 'A' || name[0] > 'Z') return 0;
-    forloop(i, 1, strlen(name)) {
-        if(name[i] != '_' && (name[i] < 'A' || name[i] > 'Z') && (name[i] < 'a' || name[i] > 'z')) return 0;
-        if((name[i] >= 'A' && name[i] <= 'Z') && (name[i - 1] != '_')) return 0;
-        if(name[i] == '_') {
-            unders++;
-            if(unders > max_unders || i == strlen(name)) return 0;
-            if(name[i + 1] < 'A' || name[i + 1] > 'Z') return 0;
-        }
-    }
-    if(unders == 0) return 0;
-    return 1;
-}
-
-IsValidAccount(const str[]) {
-	if(str[0] == '_' || str[0] == '.') return 0;
-    forloop(i, 1, strlen(str)) {
-    	if(!((str[i] >= 'a' && str[i] <= 'z') || (str[i] >= 'A' && str[i] <= 'Z') || (str[i] >= '0' && str[i] <= '9') || str[i] == '_' || str[i] == '.')) return 0;
-    }
-    return 1;
-}
-
-IsValidEmail(const email[]) {
-	if(strfind(email, "@gmail.com") != -1 || 
-		strfind(email, "@outlook.com") != -1 || 
-		strfind(email, "@hotmail.com") != -1 || 
-		strfind(email, "@protonmail.com") != -1 || 
-		strfind(email, "@protonmail.ch") != -1 || 
-		strfind(email, "@yahoo.com") != -1 || 
-		strfind(email, "@zohomail.com") != -1 || 
-		strfind(email, "@zoho.com") != -1 || 
-		strfind(email, "@yandex.com") != -1 || 
-		strfind(email, "@icloud.com") != -1 || 
-		strfind(email, "@gmx.com") != -1 ||
-		strfind(email, "@gmx.us") != -1 || 
-		strfind(email, "@aol.com") != -1 || 
-		strfind(email, "@aim.com") != -1) return 1;
-	return 0;
-}
-
 ResetPlayerVars(playerid) {	
 	CharacterData[playerid][CmdCD] = 0;
 }
@@ -305,6 +236,20 @@ curtime() {
 	gettime(hour, minute, second);
 	format(result, sizeof result, "%02d:%02d:%02d", hour, minute, second);
 	return result;
+}
+
+/*
+ClientMsg(playerid, color, const message[], va_args<>) return SendClientMessagef(playerid, color, message, va_start<3>);
+ServerMsg(color, const message[], va_args<>) return SendClientMessageToAllf(color, message, va_start<2>);
+*/
+
+GlobalMsg(color, const message[], va_args<>) {
+	foreach(new playerid : Player) {
+		if(IsPlayerInGame(playerid)) {
+			SendClientMessagef(playerid, message, va_start<2>);
+		}
+	}
+	return 1;
 }
 
 LocalMsg(playerid, const string[]) 
