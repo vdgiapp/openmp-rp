@@ -24,7 +24,7 @@ enum characterInfo {
 	Arrested,
 	Hunger,
 	Thirst,
-	Fitness,
+	Stamina,
 	Injured,
 	Float:Health,
 	Float:Armour,

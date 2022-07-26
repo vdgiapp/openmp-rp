@@ -1,27 +1,19 @@
 
 #include <YSI_Coding/y_hooks>
 
-enum loginfo {
-	Account[32],
+enum authinfo {
+	Account[25],
 	Password[65],
 	Password2[65],
 	EnablePass2,
+	Email,
 	Attempt,
 	Logged,
 	Selected,
 	Creating,
 	Joined
 }
-new LoginData[MAX_PLAYERS][loginfo];
-
-enum reginfo {
-	Account[32],
-	Password[65],
-	Passworda[65],
-	Password2[65],
-	Email[64]
-}
-new RegisterData[MAX_PLAYERS][reginfo];
+new AuthData[MAX_PLAYERS][authinfo];
 
 enum createCharInfo {
 	Name[MAX_PLAYER_NAME+1],
@@ -44,8 +36,8 @@ enum tmpCharacterInfo {
 new tmpCharacterData[MAX_PLAYERS][4][tmpCharacterInfo];
 
 IsPlayerInGame(playerid) {
-	if(IsPlayerConnected(playerid) && LoginData[playerid][Logged] && 
-		LoginData[playerid][Joined]) return true;
+	if(IsPlayerConnected(playerid) && AuthData[playerid][Logged] && 
+		AuthData[playerid][Joined]) return true;
 	return false;
 }
 
@@ -99,20 +91,16 @@ IsValidEmail(const email[]) {
 }
 
 hook function ResetPlayerVars(playerid) {
-	format(LoginData[playerid][Account], MAX_PLAYER_NAME+1, "");
-    format(LoginData[playerid][Password], 65, "");
-    format(LoginData[playerid][Password2], 65, "");
-    LoginData[playerid][EnablePass2] = 0;
-	LoginData[playerid][Attempt] = 0;
-	LoginData[playerid][Logged] = 0;
-	LoginData[playerid][Joined] = 0;
-	LoginData[playerid][Selected] = 0;
-	LoginData[playerid][Creating] = 0;
-
-	format(RegisterData[playerid][Account], MAX_PLAYER_NAME+1, "");
-	format(RegisterData[playerid][Password], 65, "");
-	format(RegisterData[playerid][Password2], 65, "");
-	format(RegisterData[playerid][Email], 128, "");
+	format(AuthData[playerid][Account], MAX_PLAYER_NAME+1, "");
+    format(AuthData[playerid][Password], 65, "");
+    format(AuthData[playerid][Password2], 65, "");
+    format(AuthData[playerid][Email], 64, "");
+    AuthData[playerid][EnablePass2] = 0;
+	AuthData[playerid][Attempt] = 0;
+	AuthData[playerid][Logged] = 0;
+	AuthData[playerid][Joined] = 0;
+	AuthData[playerid][Selected] = 0;
+	AuthData[playerid][Creating] = 0;
 
 	forloop(i,0,4) {
 		format(tmpCharacterData[playerid][i][Name], 25, "");
@@ -121,6 +109,184 @@ hook function ResetPlayerVars(playerid) {
 	}
 	continue(playerid);
 }
+
+timer CheckPlayerNameToLogin[100](playerid) {
+
+	// Check To Login
+	forloop(i, 0, 100) ClientMsg(playerid, -1, " ");
+	SetPlayerTeam(playerid, NO_TEAM);
+	SetPlayerColor(playerid, COLOR_WHITE);
+	SetPlayerPos(playerid, 1666.624267, -1243.601684, 129.364807);
+	SetPlayerFacingAngle(playerid, 180);
+	SetPlayerCameraPos(playerid, 1982.5140, -1703.8862, 100);//124.3137);
+	SetPlayerCameraLookAt(playerid, 1765.5276, -1451.8524, 137.7477);
+	TogglePlayerControllable(playerid, false);
+	SetRandomName(playerid, "Unknown_");
+
+	static string[256];
+	strset(string, "SELECT * FROM `accounts` WHERE `Account`='%s'", AuthData[playerid][Account]);
+	await mysql_aquery(Database, string);
+
+	if(IsPlayerInGame(playerid)) return Kick(playerid);
+
+	if(cache_num_rows()) {
+		static isbanned, banday, banmonth, banyear, banby[32], banreason[128],
+			unbanday, unbanmonth, unbanyear, online, pass[65], password[65];
+		static day, month, year, hour, minute, second;
+		online = cache_value_int(0, "Online");
+		getdate(year, month, day); gettime(hour, minute, second);
+		sscanf(cache_value_string(0, "BanData"), "iiiis[32]iii", isbanned, banday, banmonth, banyear, banby, unbanday, unbanmonth, unbanyear);
+		strset(banreason, "%s", cache_value_string(0, "BanReason"));
+		format(AuthData[playerid][Password], 65, "%s", cache_value_string(0, "Password"));
+		format(AuthData[playerid][Password2], 65, "%s", cache_value_string(0, "Password2"));
+		AuthData[playerid][EnablePass2] = cache_value_int(0, "EnablePass2");
+		if((day >= unbanday && month >= unbanmonth && year >= unbanyear) || (day < unbanday && month > unbanmonth && year >= unbanyear)) {
+			isbanned = 0;
+			strset(string, "UPDATE `accounts` SET `BanData`='0 0 0 0 none 0 0 0' WHERE `Account`='%s'", AuthData[playerid][Account]);
+			mysql_tquery(Database, string);
+		}
+		if(isbanned == 1) {
+			ShowLoginDialog(playerid);
+			ClientMsg(playerid, COLOR_LIGHTRED, "(!) Tai khoan nay da bi khoa. Hay truy cap vao dien dan de xem thong tin chi tiet hon.");
+			return KickPlayer(playerid, 500);
+		}
+		if(online == 1) {
+			ShowLoginDialog(playerid);
+			ClientMsg(playerid, COLOR_LIGHTRED, "(!) Tai khoan nay dang truc tuyen. Ban khong the dang nhap vao tai khoan nay.");
+			return KickPlayer(playerid, 500);
+		}
+		//CheckVoiceChat(playerid);
+		ShowLoginDialog(playerid);
+	}
+
+	if(!cache_num_rows()) {
+		ShowRegisterDialog(playerid);
+	}
+}
+
+SetRandomName(playerid, name[])
+{
+	static str[MAX_PLAYER_NAME+1];
+	strset(str, "%s%d", name, random(MAX_PLAYERS));
+	switch(SetPlayerName(playerid, str)) {
+		case -1: return SetRandomName(playerid, name);
+	}
+}
+
+hook OnPlayerConnect(playerid) {
+
+	ResetPlayerVars(playerid);
+	GetPlayerName(playerid, AuthData[playerid][Account], MAX_PLAYER_NAME+1);
+	ClientMsg(playerid, COLOR_YELLOW, "Dang lay du lieu tu may chu...");
+
+	defer CheckPlayerNameToLogin(playerid);
+	return 1;
+}
+
+hook OnPlayerDisconnect(playerid, reason) {
+	if(AuthData[playerid][Logged]) {
+		static string[256];
+		strset(string, "UPDATE `accounts` SET `Online`='0' WHERE `Account`='%s'", AuthData[playerid][Account]);
+		await mysql_aquery(Database, string);
+		switch(reason) {
+			case 0: flog("logs/auth.log", "[AUTH] Tai khoan \"%s\" da dang xuat khoi tro choi (mat ket noi).", AuthData[playerid][Account]);
+			case 1: flog("logs/auth.log", "[AUTH] Tai khoan \"%s\" da dang xuat khoi tro choi (thoat game).", AuthData[playerid][Account]);
+			case 2: flog("logs/auth.log", "[AUTH] Tai khoan \"%s\" da dang xuat khoi tro choi (kick / ban).", AuthData[playerid][Account]);
+		}
+		//Save if(IsPlayerInGame(playerid)) SaveCharacterInfoData(playerid, log_Account[playerid], char_Selected[playerid]);
+	}
+	ResetPlayerVars(playerid);
+	return 1;
+}
+
+ShowLoginDialog(playerid) {
+	static string[256];
+	strset(string, "\\c"COL_WHITE"Chao mung ban da quay tro lai may chu, "COL_GREEN"%s\n\\c"COL_WHITE"Hay nhap mat khau cua ban de dang nhap vao tro choi!", AuthData[playerid][Account]);
+	Dialog_Show(playerid, Login_Pass, DS_PASS, ""COL_AQUA""SERVER_NAME"", string, "Xong", "Thoat");
+}
+
+ShowRegisterDialog(playerid) {
+	static string[256];
+	strset(string, "\\c"COL_WHITE"Chao mung ban da den may chu, "COL_GREEN"%s\n\\c"COL_WHITE"Hay nhap mat khau cua ban de dang ky tai khoan moi!", AuthData[playerid][Account]);
+	Dialog_Show(playerid, Register_Pass, DS_PASS, ""COL_AQUA""SERVER_NAME"", string, "Xong", "Thoat");
+}
+
+ShowEmailDialog(playerid) {
+	Dialog_Show(playerid, Register_Pass, DS_PASS, ""COL_AQUA""SERVER_NAME"", "\\c"COL_WHITE"Hay nhap email cua ban de hoan thanh qua trinh dang ky tai khoan!", "Xong", "Quay lai");
+}
+
+LoginSuccess(playerid) {
+	static string[256];
+	static day, month, year, hour, minute, second;
+	getdate(year, month, day);
+	gettime(hour, minute, second);
+
+	strset(string, "UPDATE `accounts` SET `Online`='1', `LastLogin`='%02d %02d %02d %02d %02d %04d' WHERE `Account`='%s'", hour, minute, second, day, month, year, AuthData[playerid][Account]);
+	mysql_tquery(Database, string);
+
+	ClientMsg(playerid, COLOR_GREEN, "Dang nhap vao tai khoan thanh cong. Chuc ban choi game vui ve.");
+	flog("logs/auth.log", "[AUTH] Tai khoan \"%s\" da dang nhap vao tro choi.", AuthData[playerid][Account]);
+	PlayerPlaySound(playerid, 1084, 0, 0, 0);
+	SetRandomName(playerid, "Logged_");
+	FadePlayerScreen(playerid, tempLoadCharacters, 0x000000FF, 200, 200);
+
+	// Reset
+    format(AuthData[playerid][Password], 65, "");
+    format(AuthData[playerid][Password2], 65, "");
+	AuthData[playerid][Attempt] = 0;
+
+	// Set var
+	AuthData[playerid][Logged] = 1;
+}
+
+Dialog:Login_Pass(playerid, response, listitem, inputtext[]) {
+	if(!response) return KickPlayer(playerid, 500);
+	else {
+		static pass[65];
+		SHA256_PassHash(inputtext, "", pass, sizeof pass);
+
+		if(!isequal(pass, AuthData[playerid][Password], true)) {
+			if(AuthData[playerid][Attempt] >= 3) {
+				ClientMsg(playerid, COLOR_LIGHTRED, "Ban da bi kick vi nhap sai mat khau %d lan.", AuthData[playerid][Attempt]);
+				return KickPlayer(playerid, 500);
+			}
+			AuthData[playerid][Attempt]++;
+			ClientMsg(playerid, COLOR_LIGHTRED, "Ban da nhap sai mat khau %d lan, vui long thu lai.", AuthData[playerid][Attempt]);
+			return ShowLoginDialog(playerid);
+		}
+		if(AuthData[playerid][EnablePass2])	return Dialog_Show(playerid, Login_Pass2, DS_PASS,""COL_AQUA"He thong bao mat cap 2", ""COL_WHITE"Hay nhap mat khau bao mat cap 2 cua ban de tiep tuc:", "Xong", "Thoat");
+		LoginSuccess(playerid);
+	}
+}
+
+Dialog:Login_Pass2(playerid, response, listitem, inputtext[]) {
+	if(!response) return KickPlayer(playerid, 500);
+	else {
+		static pass2[65];
+		SHA256_PassHash(inputtext, "", pass2, sizeof pass2);
+		if(isequal(pass2, AuthData[playerid][Password2], true)) return LoginSuccess(playerid);
+		else {
+			Dialog_Show(playerid, Login_Pass2, DS_PASS,""COL_AQUA"He thong bao mat cap 2", ""COL_WHITE"Hay nhap mat khau bao mat cap 2 cua ban de tiep tuc:", "Xong", "Thoat");
+			ClientMsg(playerid, COLOR_LIGHTRED, "Mat khau bao mat cap 2 ban vua nhap khong dung.");
+		}
+	}
+}
+
+Dialog:Register_Pass(playerid, response, listitem, inputtext[]) {
+	if(!response) return KickPlayer(playerid, 500);
+	else {
+		if(strlen(inputtext) < 6 || strlen(inputtext) > 32 || isnull(inputtext)) {
+			ShowRegisterDialog(playerid);
+			ClientMsg(playerid, COLOR_LIGHTRED, "Mat khau duoc nhap phai bao gom tu 6 - 32 ki tu.");
+		}
+		else {
+			format(AuthData[playerid][Password], 65, "%s", inputtext);
+			ShowEmailDialog(playerid);
+		}
+	}
+}
+
+/*
 
 timer WaitingForAuth[200](playerid) {
 	if(!IsPlayerInGame(playerid)) {
@@ -582,3 +748,4 @@ ShowSelectCharDialog(playerid) {
 	}
 }
 
+*/

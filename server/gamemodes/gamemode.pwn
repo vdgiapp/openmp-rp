@@ -29,16 +29,18 @@
 #include <cDialog> // Center text in dialog '\\c'
 #include <eDialog> // Easy Dialog
 #include <mDialog> // Preview Model Dialog
-#include <playertd> // Player Textdraw
+#include <playertd> // Player textdraw
 #include <eSelection> // Selection menu
-#include <MenuStore> // Menu store
 #include <notification> // Textdraw notification
+#include <MenuStore> // Menu store texdraw
 #include <progress2> // Progress bar
 #include <progress3D> // Progress bar 3D
 #include <chatbreaker> // Break long chat string
 #include <humanize> // Format something
 #include <nametag> // Set player nametag
 #include <fader> // Fader
+
+#include <stamina> // Player stamina
 
 #include <YSI_Data/y_iterate> // or YSI_Data/y_foreach (instead of foreach)
 #include <YSI_Coding/y_va> // Variable arguments (va_args<>, va_format, va_start<3>)
@@ -52,11 +54,11 @@ main() {
 }
 #include "include/main1.pwn" // Load sau main()
 
-#include "include/property/character/character.pwn"
-#include "include/property/house/house.pwn"
-
 #include "include/core/timer.pwn"
 #include "include/core/chat.pwn"
 #include "include/core/damage.pwn"
 
 #include "include/authentication.pwn"
+
+#include "include/property/character/character.pwn"
+#include "include/property/house/house.pwn"

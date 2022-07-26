@@ -28,7 +28,7 @@
 #define COL_AQUA				"{039DFC}"
 #define COL_GREEN2 				"{6FA828}"
 #define COL_RED2 				"{FF0000}"
-#define COL_GREY 				"{7D8584}"
+#define COL_GREY 				"{AFAFAF}"//"{7D8584}"
 #define COL_BROWN 				"{6B3F34}"
 
 #define COLOR_DIST1 	   		(0xE6E6E6E6)

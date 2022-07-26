@@ -26,12 +26,8 @@ public OnGameModeExit() {
 	return 1;
 }
 
-public OnPlayerConnect(playerid) {
-	static name[MAX_PLAYER_NAME+1];
-	strset(name, "Unknown_%d", playerid);
-	SetPlayerName(playerid, name);
-	ResetPlayerVars(playerid);
-	SetPlayerColor(playerid, -1);
+public OnPlayerConnect(playerid)
+{
 	return 1;
 }
 

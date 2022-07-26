@@ -3,14 +3,14 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th7 25, 2022 lúc 11:53 AM
+-- Thời gian đã tạo: Th7 26, 2022 lúc 05:55 PM
 -- Phiên bản máy phục vụ: 10.1.38-MariaDB
 -- Phiên bản PHP: 7.3.2
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
 START TRANSACTION;
-SET time_zone = "+07:00";
+SET time_zone = "+00:00";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -35,15 +35,16 @@ CREATE TABLE `accounts` (
   `Password` varchar(65) COLLATE utf8mb4_vietnamese_ci NOT NULL,
   `Password2` varchar(65) COLLATE utf8mb4_vietnamese_ci NOT NULL,
   `EnablePass2` int(11) NOT NULL,
-  `Email` varchar(64) COLLATE utf8mb4_vietnamese_ci NOT NULL
+  `Email` varchar(64) COLLATE utf8mb4_vietnamese_ci NOT NULL,
+  `LastLogin` varchar(32) COLLATE utf8mb4_vietnamese_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
 
 --
 -- Đang đổ dữ liệu cho bảng `accounts`
 --
 
-INSERT INTO `accounts` (`UID`, `Account`, `Online`, `Password`, `Password2`, `EnablePass2`, `Email`) VALUES
-(1, 'vdgiapp', 0, '47A098BEC5DF36D2ACE0AACBB6BA9A83907298619913393CD19F489E200046A6', '66595AF2140492D5D19A980352DD16D491E62067A8FAC4D1B3D8C84617C70BE0', 0, 'vdgiapp@gmail.com');
+INSERT INTO `accounts` (`UID`, `Account`, `Online`, `Password`, `Password2`, `EnablePass2`, `Email`, `LastLogin`) VALUES
+(1, 'vdgiapp', 0, '47A098BEC5DF36D2ACE0AACBB6BA9A83907298619913393CD19F489E200046A6', '66595AF2140492D5D19A980352DD16D491E62067A8FAC4D1B3D8C84617C70BE0', 0, 'vdgiapp@gmail.com', '22 54 28 26 07 2022');
 
 -- --------------------------------------------------------
 
@@ -53,7 +54,7 @@ INSERT INTO `accounts` (`UID`, `Account`, `Online`, `Password`, `Password2`, `En
 
 CREATE TABLE `characters` (
   `UID` int(11) NOT NULL,
-  `Account` varchar(32) COLLATE utf8mb4_vietnamese_ci NOT NULL,
+  `Account` varchar(25) COLLATE utf8mb4_vietnamese_ci NOT NULL,
   `Slot` int(11) NOT NULL,
   `Name` varchar(25) COLLATE utf8mb4_vietnamese_ci NOT NULL,
   `Nick` varchar(25) COLLATE utf8mb4_vietnamese_ci NOT NULL,
@@ -77,7 +78,7 @@ CREATE TABLE `characters` (
   `Arrested` int(11) NOT NULL,
   `Hunger` int(11) NOT NULL,
   `Thirst` int(11) NOT NULL,
-  `Fitness` int(11) NOT NULL,
+  `Stamina` int(11) NOT NULL,
   `Injured` int(11) NOT NULL,
   `Health` float NOT NULL,
   `Armour` float NOT NULL,
