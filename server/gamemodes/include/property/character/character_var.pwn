@@ -1,0 +1,43 @@
+
+#include <YSI_Coding/y_hooks>
+
+enum characterInfo {
+	Name[MAX_PLAYER_NAME+1],
+	Nick[MAX_PLAYER_NAME+1],
+	Birthday[16],
+	Gender,
+	Nation,
+	Description[512],
+	SkinID,
+	IsGuided,
+	Level[16],
+	Respects,
+	JobID,
+	JobSkills[64],
+	FightStyle[32],
+	Playtime,
+	Payday,
+	RespawnLocation,
+	Faction,
+	Warns,
+	Wanted,
+	Arrested,
+	Hunger,
+	Thirst,
+	Fitness,
+	Injured,
+	Float:Health,
+	Float:Armour,
+	Position[128],
+	ImprisonData[128],
+	MuteData[16],
+	Cash,
+	Coins,
+	Bank[32],
+	IDCard,
+	LicenseData[32],
+	PhoneData[32],
+	ContactData[512],
+	WalkieTalkieData[64]
+}
+new CharacterData[MAX_PLAYERS][characterInfo];

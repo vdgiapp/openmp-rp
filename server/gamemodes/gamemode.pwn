@@ -32,6 +32,7 @@
 #include <playertd> // Player Textdraw
 #include <eSelection> // Selection menu
 #include <MenuStore> // Menu store
+#include <notification> // Textdraw notification
 #include <progress2> // Progress bar
 #include <progress3D> // Progress bar 3D
 #include <chatbreaker> // Break long chat string
@@ -50,5 +51,12 @@ main() {
 	printf("[S] Phien ban %s", SERVER_VERSION);
 }
 #include "include/main1.pwn" // Load sau main()
+
+#include "include/property/character/character.pwn"
+#include "include/property/house/house.pwn"
+
+#include "include/core/timer.pwn"
+#include "include/core/chat.pwn"
+#include "include/core/damage.pwn"
 
 #include "include/authentication.pwn"

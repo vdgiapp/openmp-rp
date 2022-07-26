@@ -1,6 +1,48 @@
 
 #include <YSI_Coding/y_hooks>
 
+enum loginfo {
+	Account[32],
+	Password[65],
+	Password2[65],
+	EnablePass2,
+	Attempt,
+	Logged,
+	Selected,
+	Creating,
+	Joined
+}
+new LoginData[MAX_PLAYERS][loginfo];
+
+enum reginfo {
+	Account[32],
+	Password[65],
+	Passworda[65],
+	Password2[65],
+	Email[64]
+}
+new RegisterData[MAX_PLAYERS][reginfo];
+
+enum createCharInfo {
+	Name[MAX_PLAYER_NAME+1],
+	Description[64],
+	Gender[16],
+	Nation[16],
+	Bday,
+	Bmonth,
+	Byear,
+	Birthday[16],
+	SkinID
+}
+new CreateCharactedData[MAX_PLAYERS][createCharInfo];
+
+enum tmpCharacterInfo {
+	Available,
+	Name[MAX_PLAYER_NAME+1],
+	Level[16]
+}
+new tmpCharacterData[MAX_PLAYERS][4][tmpCharacterInfo];
+
 IsPlayerInGame(playerid) {
 	if(IsPlayerConnected(playerid) && LoginData[playerid][Logged] && 
 		LoginData[playerid][Joined]) return true;
@@ -56,8 +98,7 @@ IsValidEmail(const email[]) {
 	return 0;
 }
 
-hook function ResetPlayerVars(playerid)
-{
+hook function ResetPlayerVars(playerid) {
 	format(LoginData[playerid][Account], MAX_PLAYER_NAME+1, "");
     format(LoginData[playerid][Password], 65, "");
     format(LoginData[playerid][Password2], 65, "");
@@ -81,8 +122,7 @@ hook function ResetPlayerVars(playerid)
 	continue(playerid);
 }
 
-timer WaitingForAuth[200](playerid)
-{
+timer WaitingForAuth[200](playerid) {
 	if(!IsPlayerInGame(playerid)) {
 		forloop(i, 0, 100) ClientMsg(playerid, -1, " ");
 		SetPlayerTeam(playerid, NO_TEAM);
@@ -98,10 +138,25 @@ timer WaitingForAuth[200](playerid)
 	}
 }
 
-hook OnPlayerConnect(playerid)
-{
+hook OnPlayerConnect(playerid) {
 	ClientMsg(playerid, COLOR_YELLOW, "Dang lay du lieu tu may chu...");
 	defer WaitingForAuth(playerid);
+	return 1;
+}
+
+hook OnPlayerDisconnect(playerid, reason) {
+	if(LoginData[playerid][Logged]) {
+		static string[256];
+		strset(string, "UPDATE `accounts` SET `Online`='0' WHERE `Account`='%s'", LoginData[playerid][Account]);
+		await mysql_aquery(Database, string);
+		switch(reason) {
+			case 0: flog("logs/auth.log", "[AUTH] Tai khoan \"%s\" da dang xuat khoi tro choi (mat ket noi).", LoginData[playerid][Account]);
+			case 1: flog("logs/auth.log", "[AUTH] Tai khoan \"%s\" da dang xuat khoi tro choi (thoat game).", LoginData[playerid][Account]);
+			case 2: flog("logs/auth.log", "[AUTH] Tai khoan \"%s\" da dang xuat khoi tro choi (kick / ban).", LoginData[playerid][Account]);
+		}
+		//Save if(IsPlayerInGame(playerid)) SaveCharacterInfoData(playerid, log_Account[playerid], char_Selected[playerid]);
+	}
+	ResetPlayerVars(playerid);
 	return 1;
 }
 
@@ -489,8 +544,7 @@ Dialog:Character_Select2(playerid, response, listitem, inputtext[]) {
 	return 1;
 }
 
-fade:GetCharacterData(playerid)
-{
+fade:GetCharacterData(playerid) {
 	SetPlayerTeam(playerid, NO_TEAM);
 	SetPlayerColor(playerid, COLOR_WHITE);
 	SetPlayerPos(playerid, 1400, -920, 20);

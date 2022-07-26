@@ -36,30 +36,10 @@ public OnPlayerConnect(playerid) {
 }
 
 public OnPlayerDisconnect(playerid, reason) { // 0- Timeout, Crash / 1- Quit / 2- Kick, Ban
-	if(LoginData[playerid][Logged]) {
-		static string[256];
-		strset(string, "UPDATE `accounts` SET `Online`='0' WHERE `Account`='%s'", LoginData[playerid][Account]);
-		await mysql_aquery(Database, string);
-		switch(reason) {
-			case 0: flog("logs/auth.log", "[AUTH] Tai khoan \"%s\" da dang xuat khoi tro choi (mat ket noi).", LoginData[playerid][Account]);
-			case 1: flog("logs/auth.log", "[AUTH] Tai khoan \"%s\" da dang xuat khoi tro choi (thoat game).", LoginData[playerid][Account]);
-			case 2: flog("logs/auth.log", "[AUTH] Tai khoan \"%s\" da dang xuat khoi tro choi (kick / ban).", LoginData[playerid][Account]);
-		}
-		//Save if(IsPlayerInGame(playerid)) SaveCharacterInfoData(playerid, log_Account[playerid], char_Selected[playerid]);
-	}
-	ResetPlayerVars(playerid);
 	return 1;
 }
 
-public OnPlayerText(playerid, text[])
-{
-    if(IsPlayerInGame(playerid)) {
-    	static string[128];
-    	strset(string, "%s noi: %s", GetRoleplayName(CharacterData[playerid][Name]), text);
-        //if(GetPlayerMuteType(playerid) == 1) return ErrorMsg(playerid, "WARNING: Ban dang bi mute.");
-        SetPlayerChatBubble(playerid, text, COLOR_WHITE, 20, ONE_SECOND*7);
-        return LocalMsg(playerid, string);
-    }
+public OnPlayerText(playerid, text[]) {
     return 0;
 }
 
@@ -88,11 +68,7 @@ public OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, Float:fX, Float:fY
 }
 
 public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart) {
-	if(!IsPlayerInGame(playerid) || CharacterData[playerid][SpawnProtection]) return 0;
-	else {
-		// continue
-		return 1;
-	}
+	return 1;
 }
 
 public OnPlayerGiveDamageDynamicActor(playerid, actorid, Float:amount, weaponid, bodypart) {
@@ -110,10 +86,15 @@ GivePlayerArmour(playerid, Float:ar) {
 	return SetPlayerArmour(playerid, floatadd(oar, ar));
 }
 
-SetPlayerMoney(playerid, money)
-{
+SetPlayerMoney(playerid, money) {
 	ResetPlayerMoney(playerid);
 	GivePlayerMoney(playerid, money);
+}
+
+PlayerName(playerid) {
+	static string[MAX_PLAYER_NAME+1];
+	GetPlayerName(playerid, string, sizeof string);
+	return string;
 }
 
 fNumber(number) {
@@ -212,9 +193,7 @@ GetWeaponIDFromModel(modelid)
     return idweapon;
 }
 
-ResetPlayerVars(playerid) {	
-	CharacterData[playerid][CmdCD] = 0;
-}
+ResetPlayerVars(playerid) { }
 
 now() {
 	static result[32], year, month, day, hour, minute, second;
@@ -269,7 +248,7 @@ ProxDetector(Float:radi, playerid, const string[], col1, col2, col3, col4, col5)
         GetPlayerPos(playerid, oldposx, oldposy, oldposz);
         forloop(i,0,GetPlayerPoolSize()+1) {
             if(IsPlayerInGame(i)) {
-                if(!CharacterData[i][BigEar]) {
+                if(!GetPVarInt(playerid, "BigEar")) {
                     GetPlayerPos(i, posx, posy, posz);
                     tempposx = (oldposx -posx);
                     tempposy = (oldposy -posy);
@@ -297,25 +276,6 @@ ProxDetector(Float:radi, playerid, const string[], col1, col2, col3, col4, col5)
 }
 
 fade:FadeBack(playerid) return 1;
-
-timer UnFreezePlayer[ONE_SECOND](playerid) {
-	CharacterData[playerid][SpawnProtection] = 0;
-	TogglePlayerControllable(playerid, true);
-}
-
-FreezePlayer(playerid, time) {
-	CharacterData[playerid][SpawnProtection] = 1;
-	TogglePlayerControllable(playerid, false);
-	defer UnFreezePlayer[time](playerid);
-}
-
-timer tKickPlayer[ONE_SECOND](playerid) {
-	Kick(playerid);
-}
-
-KickPlayer(playerid, time) {
-	defer tKickPlayer[time](playerid);
-}
 
 // MySQL
 cache_value_string(row_idx, const column_name[]) {
