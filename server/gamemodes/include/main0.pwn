@@ -4,7 +4,6 @@
 // +-+-+-+-+- MAIN DEFINES +-+-+-+-+-
 #define function%0(%1) 			forward%0(%1); public%0(%1) 		// function
 #define forloop(%0,%1,%2) 		for(new %0 = %1; %0 < %2; %0++) 	// for loop normal
-#define strset(%1,%2)			format(%1, sizeof(%1), %2) 			// format
 #define ClientMsg 				SendClientMessagef
 #define ServerMsg 				SendClientMessageToAllf 	
 

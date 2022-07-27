@@ -18,6 +18,9 @@ public OnGameModeInit() {
 	AllowInteriorWeapons(1);
 	SetGameModeText(SERVER_VERSION);
 	SetModeRestartTime(20.0); // default: 12.0
+
+	// Log files
+	fcreate("logs/auth.log");
 	return 1;
 }
 
@@ -73,13 +76,13 @@ public OnPlayerGiveDamageDynamicActor(playerid, actorid, Float:amount, weaponid,
 
 // +-+-+-+-+- Addition Functions +-+-+-+-+-
 GivePlayerHealth(playerid, Float:hp) {
-	static Float:ohp; GetPlayerHealth(playerid, ohp);
-	return SetPlayerHealth(playerid, floatadd(ohp, hp));
+	GetPlayerHealth(playerid, I@);
+	return SetPlayerHealth(playerid, floatadd(I@, hp));
 }
 
 GivePlayerArmour(playerid, Float:ar) {
-	static Float:oar; GetPlayerArmour(playerid, oar);
-	return SetPlayerArmour(playerid, floatadd(oar, ar));
+	GetPlayerArmour(playerid, I@);
+	return SetPlayerArmour(playerid, floatadd(I@, ar));
 }
 
 SetPlayerMoney(playerid, money) {
@@ -88,13 +91,12 @@ SetPlayerMoney(playerid, money) {
 }
 
 PlayerName(playerid) {
-	static string[MAX_PLAYER_NAME+1];
-	GetPlayerName(playerid, string, sizeof string);
-	return string;
+	GetPlayerName(playerid, Q@, MAX_PLAYER_NAME+1);
+	return Q@;
 }
 
 fNumber(number) {
-	static result[32];
+	static result[64];
 	forloop(i,0,sizeof(number)) {
         HumanizeThousand(number[i], result);
         return result;
@@ -123,14 +125,13 @@ cTime(time) {
 }
 
 GetXYInFrontOfPlayer(playerid, &Float:x, &Float:y, Float:distance) {
-    static Float:a;
-    GetPlayerPos(playerid, x, y, a);
-    GetPlayerFacingAngle(playerid, a);
+    GetPlayerPos(playerid, x, y, I@);
+    GetPlayerFacingAngle(playerid, I@);
     if(GetPlayerVehicleID(playerid)) {
-        GetVehicleZAngle(GetPlayerVehicleID(playerid), a);
+        GetVehicleZAngle(GetPlayerVehicleID(playerid), I@);
     }
-    x += (distance * floatsin(-a, degrees));
-    y += (distance * floatcos(-a, degrees));
+    x += (distance * floatsin(-I@, degrees));
+    y += (distance * floatcos(-I@, degrees));
 }
 
 GetXYFromAngle(&Float:posX, &Float:posY, Float:angle, Float:distance) {
@@ -146,77 +147,71 @@ GetXYZFromAngle(&Float:posX, &Float:posY, &Float:posZ, Float:angle, Float:height
 
 GetWeaponIDFromModel(modelid)
 {
-    static idweapon;
     switch(modelid)
     {
-        case 331: idweapon = 1; // Brass Knuckles
-        case 333: idweapon = 2; // Golf Club
-        case 334: idweapon = 3; // Nightstick
-        case 335: idweapon = 4; // Knife
-        case 336: idweapon = 5; // Baseball Bat
-        case 337: idweapon = 6; // Shovel
-        case 338: idweapon = 7; // Pool Cue
-        case 339: idweapon = 8; // Katana
-        case 341: idweapon = 9; // Chainsaw
-        case 321: idweapon = 10; // Double-ended Dildo
-        case 325: idweapon = 14; // Flowers
-       	case 326: idweapon = 15; // Cane
-        case 342: idweapon = 16; // Grenade
-        case 343: idweapon = 17; // Tear Gas
-        case 344: idweapon = 18; // Molotov Cocktail
-        case 346: idweapon = 22; // 9mm
-        case 347: idweapon = 23; // Silenced 9mm
-        case 348: idweapon = 24; // Desert Eagle
-        case 349: idweapon = 25; // Shotgun
-        case 350: idweapon = 26; // Sawnoff
-        case 351: idweapon = 27; // Combat Shotgun
-        case 352: idweapon = 28; // Micro SMG/Uzi
-        case 353: idweapon = 29; // MP5
-        case 355: idweapon = 30; // AK-47
-        case 356: idweapon = 31; // M4
-        case 372: idweapon = 32; // Tec-9
-        case 357: idweapon = 33; // Country Rifle
-        case 358: idweapon = 34; // Sniper Rifle
-        case 359: idweapon = 35; // RPG
-        case 360: idweapon = 36; // HS Rocket
-        case 361: idweapon = 37; // Flamethrower
-        case 362: idweapon = 38; // Minigun
-        case 363: idweapon = 39;// Satchel Charge + Detonator
-        case 365: idweapon = 41; // Spraycan
-        case 366: idweapon = 42; // Fire Extinguisher
-        case 367: idweapon = 43; // Camera
+        case 331: J@ = 1; // Brass Knuckles
+        case 333: J@ = 2; // Golf Club
+        case 334: J@ = 3; // Nightstick
+        case 335: J@ = 4; // Knife
+        case 336: J@ = 5; // Baseball Bat
+        case 337: J@ = 6; // Shovel
+        case 338: J@ = 7; // Pool Cue
+        case 339: J@ = 8; // Katana
+        case 341: J@ = 9; // Chainsaw
+        case 321: J@ = 10; // Double-ended Dildo
+        case 325: J@ = 14; // Flowers
+       	case 326: J@ = 15; // Cane
+        case 342: J@ = 16; // Grenade
+        case 343: J@ = 17; // Tear Gas
+        case 344: J@ = 18; // Molotov Cocktail
+        case 346: J@ = 22; // 9mm
+        case 347: J@ = 23; // Silenced 9mm
+        case 348: J@ = 24; // Desert Eagle
+        case 349: J@ = 25; // Shotgun
+        case 350: J@ = 26; // Sawnoff
+        case 351: J@ = 27; // Combat Shotgun
+        case 352: J@ = 28; // Micro SMG/Uzi
+        case 353: J@ = 29; // MP5
+        case 355: J@ = 30; // AK-47
+        case 356: J@ = 31; // M4
+        case 372: J@ = 32; // Tec-9
+        case 357: J@ = 33; // Country Rifle
+        case 358: J@ = 34; // Sniper Rifle
+        case 359: J@ = 35; // RPG
+        case 360: J@ = 36; // HS Rocket
+        case 361: J@ = 37; // Flamethrower
+        case 362: J@ = 38; // Minigun
+        case 363: J@ = 39;// Satchel Charge + Detonator
+        case 365: J@ = 41; // Spraycan
+        case 366: J@ = 42; // Fire Extinguisher
+        case 367: J@ = 43; // Camera
     }
-    return idweapon;
+    return J@;
 }
 
 ResetPlayerVars(playerid) { }
 
 now() {
-	static result[32], year, month, day, hour, minute, second;
+	static year, month, day, hour, minute, second;
 	getdate(year, month, day);
 	gettime(hour, minute, second);
-	format(result, sizeof result, "%02d:%02d:%02d - %02d/%02d/%d", hour, minute, second, day, month, year);
-	return result;
+	format(Q@, 32, "%02d:%02d:%02d - %02d/%02d/%d", hour, minute, second, day, month, year);
+	return Q@;
 }
 
 curdate() {
-	static result[20], year, month, day;
+	static year, month, day;
 	getdate(year, month, day);
-	format(result, sizeof result, "%02d/%02d/%d", day, month, year);
-	return result;
+	format(Q@, 20, "%02d/%02d/%d", day, month, year);
+	return Q@;
 }
 
 curtime() {
-	static result[20], hour, minute, second;
+	static hour, minute, second;
 	gettime(hour, minute, second);
-	format(result, sizeof result, "%02d:%02d:%02d", hour, minute, second);
-	return result;
+	format(Q@, 20, "%02d:%02d:%02d", hour, minute, second);
+	return Q@;
 }
-
-/*
-ClientMsg(playerid, color, const message[], va_args<>) return SendClientMessagef(playerid, color, message, va_start<3>);
-ServerMsg(color, const message[], va_args<>) return SendClientMessageToAllf(color, message, va_start<2>);
-*/
 
 GlobalMsg(color, const message[], va_args<>) {
 	foreach(new playerid : Player) {
@@ -275,27 +270,18 @@ fade:FadeBack(playerid) return 1;
 
 // MySQL
 cache_value_string(row_idx, const column_name[]) {
-	static string[512];
-	cache_get_value_name(row_idx, column_name, string);
-	return string;
+	cache_get_value_name(row_idx, column_name, Q@, 512);
+	return Q@;
 }
 
 cache_value_int(row_idx, const column_name[]) {
-	static int;
-	cache_get_value_name_int(row_idx, column_name, int);
-	return int;
-}
-
-bool:cache_value_bool(row_idx, const column_name[]) {
-	static bool:bool;
-	cache_get_value_name_bool(row_idx, column_name[], bool);
-	return bool;
+	cache_get_value_name_int(row_idx, column_name, J@);
+	return J@;
 }
 
 Float:cache_value_float(row_idx, const column_name[]) {
-	static Float:float;
-	cache_get_value_name_float(row_idx, column_name[], float);
-	return float;
+	cache_get_value_name_float(row_idx, column_name[], I@);
+	return I@;
 }
 
 // File log
@@ -318,10 +304,9 @@ flog(const file[], const string[], va_args<>)
 	static File:temp;
 	temp = fopen(file, io_append);
 	if(temp) {
-		static str[1024];
-		strset(str, string, va_start<2>);
-		strset(str, "[%s] | %s\r\n", now(), str);
-	    fwrite(temp, str);
+		format(Q@, 1024, string, va_start<2>);
+		format(Q@, 1024, "[%s] | %s\r\n", now(), Q@);
+	    fwrite(temp, Q@);
 	    fclose(temp);
 	    return 1;
 	}

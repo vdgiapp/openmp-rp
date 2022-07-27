@@ -1,4 +1,22 @@
 
+/*
+	S A - M P   S E R V E R   
+	W I T H   O P E N . M P   B Y   G I A P P
+*/
+
+/*
+DEFINE_HOOK_REPLACEMENT__(Checkpoint, CP );
+DEFINE_HOOK_REPLACEMENT__(Collisions, Col);
+DEFINE_HOOK_REPLACEMENT__(Container , Cnt);
+DEFINE_HOOK_REPLACEMENT__(Inventory , Inv);
+DEFINE_HOOK_REPLACEMENT__(TextDraw  , TD );
+DEFINE_HOOK_REPLACEMENT__(Command   , Cmd);
+DEFINE_HOOK_REPLACEMENT__(Dynamic   , Dyn);
+DEFINE_HOOK_REPLACEMENT__(Action    , Act);
+DEFINE_HOOK_REPLACEMENT__(Object    , Obj);
+DEFINE_HOOK_REPLACEMENT__(Update    , Upd);
+*/
+
 #define MEMORYSQUEEZE
 #define PP_SYNTAX_AWAIT // ASYNC AWAIT
 #define YSI_NO_HEAP_MALLOC // NO HEAP MEMORY ALLOCATION
@@ -57,6 +75,7 @@ main() {
 #include "include/core/timer.pwn"
 #include "include/core/chat.pwn"
 #include "include/core/damage.pwn"
+#include "include/core/cmd.pwn"
 
 #include "include/authentication.pwn"
 
