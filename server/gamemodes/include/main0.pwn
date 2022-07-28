@@ -71,11 +71,10 @@
 #define COLOR_ADMINCHAT    		(0x33EE33FF)
 
 // +-+-+-+-+- CONFIGS +-+-+-+-+-
+new MySQL:Database;
 #define host_mysql 				"localhost"
 #define user_mysql 				"root"
 #define pass_mysql 				""
 #define dbase_mysql 			"sa-mp"
 
-
-// +-+-+-+-+- VARIABLES +-+-+-+-+-
-new MySQL:Database;
+#define NAMETAG_DISTANCE		(15)

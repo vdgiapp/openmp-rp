@@ -258,7 +258,7 @@ Dialog:Login_Pass2(playerid, response, listitem, inputtext[]) {
 		if(isequal(Q@, AuthData[playerid][Password2], true)) return LoginSuccess(playerid);
 		else {
 			Dialog_Show(playerid, Login_Pass2, DS_PASS,""COL_AQUA"He thong bao mat cap 2", ""COL_WHITE"Hay nhap mat khau bao mat cap 2 cua ban de tiep tuc:", "Xong", "Thoat");
-			ClientMsg(playerid, COLOR_LIGHTRED, "Mat khau bao mat cap 2 ban vua nhap khong dung.");
+			return ClientMsg(playerid, COLOR_LIGHTRED, "Mat khau bao mat cap 2 ban vua nhap khong dung.");
 		}
 	}
 }
@@ -268,11 +268,11 @@ Dialog:Register_Pass(playerid, response, listitem, inputtext[]) {
 	else {
 		if(strlen(inputtext) < 6 || strlen(inputtext) > 32 || isnull(inputtext)) {
 			ShowRegisterDialog(playerid);
-			ClientMsg(playerid, COLOR_LIGHTRED, "Mat khau duoc nhap phai bao gom tu 6 - 32 ki tu.");
+			return ClientMsg(playerid, COLOR_LIGHTRED, "Mat khau duoc nhap phai bao gom tu 6 - 32 ki tu.");
 		}
 		else {
 			format(AuthData[playerid][Password], 65, "%s", inputtext);
-			ShowEmailDialog(playerid);
+			return ShowEmailDialog(playerid);
 		}
 	}
 }

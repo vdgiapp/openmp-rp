@@ -10,10 +10,10 @@ public OnGameModeInit() {
     }
     printf("\n[SERVER] Ket noi den co so du lieu thanh cong!");
     pp_use_funcidx(true);
-	ShowNameTags(0);
-	SetNameTagDrawDistance(0);
-	ShowPlayerMarkers(0);
-	EnableStuntBonusForAll(0);
+	ShowNameTags(true);
+	SetNameTagDrawDistance(NAMETAG_DISTANCE);
+	ShowPlayerMarkers(false);
+	EnableStuntBonusForAll(false);
 	DisableInteriorEnterExits();
 	AllowInteriorWeapons(1);
 	SetGameModeText(SERVER_VERSION);
@@ -21,11 +21,12 @@ public OnGameModeInit() {
 
 	// Log files
 	fcreate("logs/auth.log");
+	
 	return 1;
 }
 
 public OnGameModeExit() {
-	foreach(Player, playerid) OnPlayerDisconnect(playerid, 1);
+	foreach(new playerid : Player) OnPlayerDisconnect(playerid, 1);
 	return 1;
 }
 
@@ -237,7 +238,7 @@ ProxDetector(Float:radi, playerid, const string[], col1, col2, col3, col4, col5)
         static Float:oldposx, Float:oldposy, Float:oldposz;
         static Float:tempposx, Float:tempposy, Float:tempposz;
         GetPlayerPos(playerid, oldposx, oldposy, oldposz);
-        forloop(i,0,GetPlayerPoolSize()+1) {
+        forloop(i, 0, MAX_PLAYERS) {
             if(IsPlayerInGame(i)) {
                 if(!GetPVarInt(playerid, "BigEar")) {
                     GetPlayerPos(i, posx, posy, posz);
@@ -266,7 +267,7 @@ ProxDetector(Float:radi, playerid, const string[], col1, col2, col3, col4, col5)
     }
 }
 
-fade:FadeBack(playerid) return 1;
+Fade:FadeBack(playerid) return 1;
 
 // MySQL
 cache_value_string(row_idx, const column_name[]) {
