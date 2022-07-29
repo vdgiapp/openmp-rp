@@ -1,6 +1,6 @@
 
 /*
-	S A - M P   S E R V E R   
+	S A - M P   S E R V E R   R O L E P L A Y
 	W I T H   O P E N . M P   B Y   G I A P P
 */
 
@@ -8,9 +8,10 @@
 #define PP_SYNTAX_AWAIT // ASYNC AWAIT
 #define YSI_YES_HEAP_MALLOC // NO/YES HEAP MEMORY ALLOCATION
 
-#define SERVER_NAME "No name"
-#define SERVER_WEBSITE "\"http://none.vn\""
-#define SERVER_VERSION "NONAME 1.415.122"
+#define SERVER_NAME "San Andreas Playground: Roleplay"
+#define SERVER_SNAME "SA PG.VN"
+#define SERVER_WEBSITE "\"http://rp.sapg.vn\""
+#define SERVER_VERSION "SAPG v1.415"
 
 #include <a_samp>
 #undef MAX_PLAYERS
@@ -45,6 +46,7 @@
 #include <nametag> // Set player nametag
 #include <fader> // Fader
 
+#include <mapfix> // Texture bug fixes
 #include <stamina> // Player stamina
 
 #include <YSI_Data/y_iterate> // or YSI_Data/y_foreach (instead of foreach)

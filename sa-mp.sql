@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th7 26, 2022 lúc 05:55 PM
+-- Thời gian đã tạo: Th7 30, 2022 lúc 12:57 AM
 -- Phiên bản máy phục vụ: 10.1.38-MariaDB
 -- Phiên bản PHP: 7.3.2
 
@@ -36,15 +36,20 @@ CREATE TABLE `accounts` (
   `Password2` varchar(65) COLLATE utf8mb4_vietnamese_ci NOT NULL,
   `EnablePass2` int(11) NOT NULL,
   `Email` varchar(64) COLLATE utf8mb4_vietnamese_ci NOT NULL,
-  `LastLogin` varchar(32) COLLATE utf8mb4_vietnamese_ci NOT NULL
+  `BanData` varchar(128) COLLATE utf8mb4_vietnamese_ci NOT NULL,
+  `LastLogin` varchar(32) COLLATE utf8mb4_vietnamese_ci NOT NULL,
+  `DateCreated` varchar(32) COLLATE utf8mb4_vietnamese_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
 
 --
 -- Đang đổ dữ liệu cho bảng `accounts`
 --
 
-INSERT INTO `accounts` (`UID`, `Account`, `Online`, `Password`, `Password2`, `EnablePass2`, `Email`, `LastLogin`) VALUES
-(1, 'vdgiapp', 0, '47A098BEC5DF36D2ACE0AACBB6BA9A83907298619913393CD19F489E200046A6', '66595AF2140492D5D19A980352DD16D491E62067A8FAC4D1B3D8C84617C70BE0', 0, 'vdgiapp@gmail.com', '22 54 28 26 07 2022');
+INSERT INTO `accounts` (`UID`, `Account`, `Online`, `Password`, `Password2`, `EnablePass2`, `Email`, `BanData`, `LastLogin`, `DateCreated`) VALUES
+(1, 'vdgiapp', 0, '47A098BEC5DF36D2ACE0AACBB6BA9A83907298619913393CD19F489E200046A6', '66595AF2140492D5D19A980352DD16D491E62067A8FAC4D1B3D8C84617C70BE0', 0, 'vdgiapp@gmail.com', '0 0 0 0 none 0 0 0', '05 52 59 30 07 2022', ''),
+(2, 'redshank', 0, '47A098BEC5DF36D2ACE0AACBB6BA9A83907298619913393CD19F489E200046A6', '', 0, 'redshankseries@gmail.com', '0 0 0 0 none 0 0 0', '', ''),
+(3, 'minecraft', 0, '47A098BEC5DF36D2ACE0AACBB6BA9A83907298619913393CD19F489E200046A6', '', 0, 'minecraft151607389@gmail.com', '0 0 0 0 none 0 0 0', '22 17 30 29 07 2022', ''),
+(4, 'android', 0, '47A098BEC5DF36D2ACE0AACBB6BA9A83907298619913393CD19F489E200046A6', '', 0, 'tuilagiaptbz@gmail.com', '0 0 0 0 none 0 0 0', '05 52 20 30 07 2022', '');
 
 -- --------------------------------------------------------
 
@@ -58,6 +63,7 @@ CREATE TABLE `characters` (
   `Slot` int(11) NOT NULL,
   `Name` varchar(25) COLLATE utf8mb4_vietnamese_ci NOT NULL,
   `Nick` varchar(25) COLLATE utf8mb4_vietnamese_ci NOT NULL,
+  `DateCreated` varchar(32) COLLATE utf8mb4_vietnamese_ci NOT NULL,
   `Birthday` varchar(16) COLLATE utf8mb4_vietnamese_ci NOT NULL,
   `Gender` int(11) NOT NULL,
   `Nation` int(11) NOT NULL,
@@ -95,6 +101,27 @@ CREATE TABLE `characters` (
   `WalkieTalkieData` varchar(64) COLLATE utf8mb4_vietnamese_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
 
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `serverinfo`
+--
+
+CREATE TABLE `serverinfo` (
+  `UID` int(11) NOT NULL,
+  `Registered` int(11) NOT NULL,
+  `CharCreated` int(11) NOT NULL,
+  `Day` int(11) NOT NULL,
+  `Logged` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `serverinfo`
+--
+
+INSERT INTO `serverinfo` (`UID`, `Registered`, `CharCreated`, `Day`, `Logged`) VALUES
+(1, 4, 0, 30, 3);
+
 --
 -- Chỉ mục cho các bảng đã đổ
 --
@@ -112,6 +139,12 @@ ALTER TABLE `characters`
   ADD PRIMARY KEY (`UID`);
 
 --
+-- Chỉ mục cho bảng `serverinfo`
+--
+ALTER TABLE `serverinfo`
+  ADD PRIMARY KEY (`UID`);
+
+--
 -- AUTO_INCREMENT cho các bảng đã đổ
 --
 
@@ -119,13 +152,19 @@ ALTER TABLE `characters`
 -- AUTO_INCREMENT cho bảng `accounts`
 --
 ALTER TABLE `accounts`
-  MODIFY `UID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `UID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT cho bảng `characters`
 --
 ALTER TABLE `characters`
   MODIFY `UID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT cho bảng `serverinfo`
+--
+ALTER TABLE `serverinfo`
+  MODIFY `UID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

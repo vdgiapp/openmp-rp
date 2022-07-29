@@ -5,7 +5,9 @@
 #define function%0(%1) 			forward%0(%1); public%0(%1) 		// function
 #define forloop(%0,%1,%2) 		for(new %0 = %1; %0 < %2; %0++) 	// for loop normal
 #define ClientMsg 				SendClientMessagef
-#define ServerMsg 				SendClientMessageToAllf 	
+#define ServerMsg 				SendClientMessageToAllf
+
+#define FLOAT_INFINITY 			(Float:0x7F800000)
 
 // +-+-+-+-+- DIALOG STYLES +-+-+-+-+-
 #define DS_LIST 				DIALOG_STYLE_LIST
@@ -19,13 +21,14 @@
 #define COL_WHITE 				"{FFFFFF}"
 #define COL_RED 				"{F81414}"
 #define COL_LIGHTRED			"{FF6347}"
-#define COL_GREEN 				"{29B32E}"
+#define COL_GREEN 				"{33CC33}"
+#define COL_GREEN2 				"{29B32E}"
+#define COL_GREEN3 				"{6FA828}"
 #define COL_LIGHTBLUE 			"{00CED1}"
 #define COL_YELLOW 				"{FFF982}"
 #define COL_ORANGE 				"{E68C0E}"
 #define COL_BLUE 				"{39AACC}"
 #define COL_AQUA				"{039DFC}"
-#define COL_GREEN2 				"{6FA828}"
 #define COL_RED2 				"{FF0000}"
 #define COL_GREY 				"{AFAFAF}"//"{7D8584}"
 #define COL_BROWN 				"{6B3F34}"
@@ -77,4 +80,4 @@ new MySQL:Database;
 #define pass_mysql 				""
 #define dbase_mysql 			"sa-mp"
 
-#define NAMETAG_DISTANCE		(15)
+#define NAMETAG_DISTANCE		(20)

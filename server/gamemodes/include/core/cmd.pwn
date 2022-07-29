@@ -4,9 +4,6 @@
 hook OnPlayerCmdPerformed(playerid, cmd[], params[], result, flags)
 {
 	if(!IsPlayerInGame(playerid)) return 0;
-	if(result == -1) {
-		format(Q@, 128, "SERVER: Cau lenh \"%s\" khong ton tai. Hay su dung lenh /help de xem danh sach cac lenh.");
-		return SendClientMessage(playerid, COLOR_LIGHTRED, Q@);
-	}
+	if(result == -1) return ClientMsg(playerid, COLOR_LIGHTRED, "SERVER: Cau lenh \"%s\" khong ton tai. Hay su dung lenh /help de xem danh sach cac lenh.", cmd);
 	return 1;
 }

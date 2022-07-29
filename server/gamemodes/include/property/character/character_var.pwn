@@ -3,6 +3,7 @@
 
 enum characterInfo {
 	Name[MAX_PLAYER_NAME+1],
+	DateCreated[32],
 	Nick[MAX_PLAYER_NAME+1],
 	Birthday[16],
 	Gender,

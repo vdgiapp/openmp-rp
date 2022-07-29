@@ -5,10 +5,10 @@
 public OnGameModeInit() {
 	Database = mysql_connect(host_mysql, user_mysql, pass_mysql, dbase_mysql);
     if(Database == MYSQL_INVALID_HANDLE || mysql_errno(Database) != 0) {
-        printf("[SERVER] Ket noi den co so du lieu khong thanh cong!");
+        printf("[S] Ket noi den co so du lieu khong thanh cong!");
         return mysql_close(Database);
     }
-    printf("\n[SERVER] Ket noi den co so du lieu thanh cong!");
+    printf("[S] Ket noi den co so du lieu thanh cong!");
     pp_use_funcidx(true);
 	ShowNameTags(true);
 	SetNameTagDrawDistance(NAMETAG_DISTANCE);
@@ -36,6 +36,7 @@ public OnPlayerConnect(playerid)
 }
 
 public OnPlayerDisconnect(playerid, reason) { // 0- Timeout, Crash / 1- Quit / 2- Kick, Ban
+	Auth_OnPlayerDisconnect(playerid, reason);
 	return 1;
 }
 
@@ -77,11 +78,13 @@ public OnPlayerGiveDamageDynamicActor(playerid, actorid, Float:amount, weaponid,
 
 // +-+-+-+-+- Addition Functions +-+-+-+-+-
 GivePlayerHealth(playerid, Float:hp) {
+	I@ = 0;
 	GetPlayerHealth(playerid, I@);
 	return SetPlayerHealth(playerid, floatadd(I@, hp));
 }
 
 GivePlayerArmour(playerid, Float:ar) {
+	I@ = 0;
 	GetPlayerArmour(playerid, I@);
 	return SetPlayerArmour(playerid, floatadd(I@, ar));
 }
@@ -126,6 +129,7 @@ cTime(time) {
 }
 
 GetXYInFrontOfPlayer(playerid, &Float:x, &Float:y, Float:distance) {
+	I@ = 0;
     GetPlayerPos(playerid, x, y, I@);
     GetPlayerFacingAngle(playerid, I@);
     if(GetPlayerVehicleID(playerid)) {
@@ -148,6 +152,7 @@ GetXYZFromAngle(&Float:posX, &Float:posY, &Float:posZ, Float:angle, Float:height
 
 GetWeaponIDFromModel(modelid)
 {
+	J@ = 0;
     switch(modelid)
     {
         case 331: J@ = 1; // Brass Knuckles
@@ -217,22 +222,32 @@ curtime() {
 GlobalMsg(color, const message[], va_args<>) {
 	foreach(new playerid : Player) {
 		if(IsPlayerInGame(playerid)) {
-			SendClientMessagef(playerid, message, va_start<2>);
+			ClientMsg(playerid, color, message, va_start<2>);
 		}
 	}
 	return 1;
 }
 
+ErrorMsg(playerid, const string[]) {
+	format(Q@, 128, ""COL_LIGHTRED"ERROR > "COL_GREY"%s", string);
+	ClientMsg(playerid, -1, Q@);
+}
+
+SuccessMsg(playerid, const string[]) {
+	format(Q@, 128, ""COL_GREEN"SUCCESS > "COL_WHITE"%s", string);
+	ClientMsg(playerid, -1, Q@);
+}
+
 LocalMsg(playerid, const string[]) 
-return ProxDetector(20.0, playerid, string, COLOR_DIST1, COLOR_DIST2, COLOR_DIST3, COLOR_DIST4, COLOR_DIST5);
+return ProxDetector(20.0, playerid, COLOR_DIST1, COLOR_DIST2, COLOR_DIST3, COLOR_DIST4, COLOR_DIST5, string);
 
 LowMsg(playerid, const string[]) 
-return ProxDetector(8.0, playerid, string, COLOR_GREY, COLOR_DIST1, COLOR_DIST2, COLOR_DIST3, COLOR_DIST4);
+return ProxDetector(8.0, playerid, COLOR_GREY, COLOR_DIST1, COLOR_DIST2, COLOR_DIST3, COLOR_DIST4, string);
 
 ShoutMsg(playerid, const string[]) 
-return ProxDetector(50.0, playerid, string, COLOR_DIST1, COLOR_DIST2, COLOR_DIST3, COLOR_DIST4, COLOR_DIST5);
+return ProxDetector(50.0, playerid, COLOR_DIST1, COLOR_DIST2, COLOR_DIST3, COLOR_DIST4, COLOR_DIST5, string);
 
-ProxDetector(Float:radi, playerid, const string[], col1, col2, col3, col4, col5) {
+ProxDetector(Float:radi, playerid, col1, col2, col3, col4, col5, const string[]) {
     if(IsPlayerInGame(playerid)) {
         static Float:posx, Float:posy, Float:posz;
         static Float:oldposx, Float:oldposy, Float:oldposz;
@@ -276,11 +291,13 @@ cache_value_string(row_idx, const column_name[]) {
 }
 
 cache_value_int(row_idx, const column_name[]) {
+	J@ = 0;
 	cache_get_value_name_int(row_idx, column_name, J@);
 	return J@;
 }
 
 Float:cache_value_float(row_idx, const column_name[]) {
+	I@ = 0;
 	cache_get_value_name_float(row_idx, column_name[], I@);
 	return I@;
 }
