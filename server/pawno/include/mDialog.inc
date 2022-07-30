@@ -9,14 +9,12 @@
 #endif
 #define previewmodel_dialog_included
 
-/*
 // by BigETI
 #if defined __MEMORY_INCLUDED__
 	#endinput
 #else
 	#tryinclude <memory>
 #endif
-*/
 
 // definitions
 #if !defined MAX_DIALOG_PREVIEW_MODELS

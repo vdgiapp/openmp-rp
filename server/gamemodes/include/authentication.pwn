@@ -24,7 +24,7 @@ enum createCharInf {
 	BMonth,
 	BYear,
 	Birthday[16],
-	SkinID
+	Skin
 }
 static CreateCharData[MAX_PLAYERS][createCharInf];
 
@@ -345,7 +345,6 @@ hook OnPlayerConnect(playerid) {
 	}
 
 	forloop(i, 0, 100) ClientMsg(playerid, -1, " ");
-	SpawnPlayer(playerid);
 	SetPlayerTeam(playerid, NO_TEAM);
 	SetPlayerColor(playerid, COLOR_WHITE);
 	SetPlayerPos(playerid, 1514.5, -1006, 100);
@@ -385,11 +384,51 @@ hook OnPlayerConnect(playerid) {
 	return 1;
 }
 
+Auth_OnPlayerDisconnect(playerid, reason) {
+	if(AuthData[playerid][Logged]) {
+		format(Q@, 256, "UPDATE `accounts` SET `Online`='0' WHERE `Account`='%s'", AuthData[playerid][Account]);
+		await mysql_aquery(Database, Q@);
+		switch(reason) {
+			case 0: flog("logs/auth.log", "[AUTH] Tai khoan \"%s\" da dang xuat khoi tro choi (mat ket noi).", AuthData[playerid][Account]);
+			case 1: flog("logs/auth.log", "[AUTH] Tai khoan \"%s\" da dang xuat khoi tro choi (thoat game).", AuthData[playerid][Account]);
+			case 2: flog("logs/auth.log", "[AUTH] Tai khoan \"%s\" da dang xuat khoi tro choi (kick / ban).", AuthData[playerid][Account]);
+		}
+		//Save if(IsPlayerInGame(playerid)) SaveCharacterInfoData(playerid, log_Account[playerid], char_Selected[playerid]);
+	}
+	ResetPlayerVars(playerid);
+}
+
 hook OnPlayerClickTextDraw(playerid, Text:clickedid) {
 	if(clickedid == Text:INVALID_TEXT_DRAW && !AuthData[playerid][Logged]) return SelectTextDraw(playerid, COLOR_WHITE);
 	if(clickedid == Text:INVALID_TEXT_DRAW && !AuthData[playerid][Joined]) return SelectTextDraw(playerid, COLOR_WHITE);
 	if(clickedid == Auth_Button) return CheckPlayerNameToLogin(playerid);
 	if(clickedid == Auth_Button2) return CheckPlayerNameToLogin(playerid);
+	return 1;
+}
+
+hook OnPlayerModelSelection(playerid, response, listid, modelid) {
+	if(listid == MaleSkinList) {
+		if(!IsPlayerInGame(playerid)) {
+			if(response) {
+				CreateCharData[playerid][Skin] = modelid;
+				SetPlayerSkin(playerid, modelid);
+				ApplyAnimation(playerid, "BAR", "Barcustom_loop", 4.1, 1, 1, 1, 1, 0, 1);
+				ShowCharCreateDialog(playerid);
+			}
+			else dialog_Char_Create(playerid, true, 4, "");
+		}
+	}
+	if(listid == FemaleSkinList) {
+		if(!IsPlayerInGame(playerid)) {
+			if(response) {
+				CreateCharData[playerid][Skin] = modelid;
+				SetPlayerSkin(playerid, modelid);
+				ApplyAnimation(playerid, "BAR", "Barcustom_loop", 4.1, 1, 1, 1, 1, 0, 1);
+				ShowCharCreateDialog(playerid);
+			}
+			else dialog_Char_Create(playerid, true, 4, "");
+		}
+	}
 	return 1;
 }
 
@@ -420,8 +459,8 @@ hook function ResetPlayerVars(playerid) {
 	CreateCharData[playerid][BDay] = 0;
 	CreateCharData[playerid][BMonth] = 0;
 	CreateCharData[playerid][BYear] = 0;
-	CreateCharData[playerid][SkinID] = 2;
 	CreateCharData[playerid][Nation] = 0;
+	CreateCharData[playerid][Skin] = 2;
 
 	continue(playerid);
 }
@@ -489,7 +528,6 @@ SetRandomName(playerid, name[], min_int, max_int)
 }
 
 CheckPlayerNameToLogin(playerid) {
-
 	// Check if player is a newbie or old member
 	format(Q@, 256, "SELECT * FROM `accounts` WHERE `Account`='%s'", AuthData[playerid][Account]);
 	await mysql_aquery(Database, Q@);
@@ -528,17 +566,15 @@ ShowCharCreateDialog(playerid) {
 	}
 
     format(Q@, 1024, "Ten nhan vat\t%s\n\
-        Tieu su nhan vat\n\
         Gioi tinh\t%s\n\
         Ngay sinh\t%s\n\
         Quoc tich\t%s\n\
         Trang phuc\t%d\n\
+        Mo ta nhan vat\n\
         "COL_GREEN"Hoan thanh", 
-        CreateCharData[playerid][Name], 
-        gender,
+        CreateCharData[playerid][Name], gender,
         CreateCharData[playerid][Birthday], 
-        nation,
-        CreateCharData[playerid][SkinID]);
+        nation, CreateCharData[playerid][Skin]);
 	return Dialog_Show(playerid, Char_Create, DS_TABLIST, ""COL_AQUA"TAO NHAN VAT", Q@, "Chon", "Thoat");
 }
 
@@ -615,7 +651,7 @@ LoginSuccess(playerid) {
 	getdate(year, month, day);
 	gettime(hour, minute, second);
 
-	format(Q@, 256, "UPDATE `accounts` SET `Online`='1', `LastLogin`='%02d %02d %02d %02d %02d %04d' WHERE `Account`='%s'", hour, minute, second, day, month, year, AuthData[playerid][Account]);
+	format(Q@, 256, "UPDATE `accounts` SET `Online`='1', `LastTimeLogged`='%02d %02d %02d %02d %02d %04d' WHERE `Account`='%s'", hour, minute, second, day, month, year, AuthData[playerid][Account]);
 	mysql_tquery(Database, Q@);
 	mysql_tquery(Database, "UPDATE `serverinfo` SET `Logged`=`Logged`+1");
 
@@ -696,56 +732,21 @@ CheckToRegister(playerid) {
     return 1;
 }
 
-Auth_OnPlayerDisconnect(playerid, reason) {
-	if(AuthData[playerid][Logged]) {
-		format(Q@, 256, "UPDATE `accounts` SET `Online`='0' WHERE `Account`='%s'", AuthData[playerid][Account]);
-		await mysql_aquery(Database, Q@);
-		switch(reason) {
-			case 0: flog("logs/auth.log", "[AUTH] Tai khoan \"%s\" da dang xuat khoi tro choi (mat ket noi).", AuthData[playerid][Account]);
-			case 1: flog("logs/auth.log", "[AUTH] Tai khoan \"%s\" da dang xuat khoi tro choi (thoat game).", AuthData[playerid][Account]);
-			case 2: flog("logs/auth.log", "[AUTH] Tai khoan \"%s\" da dang xuat khoi tro choi (kick / ban).", AuthData[playerid][Account]);
-		}
-		//Save if(IsPlayerInGame(playerid)) SaveCharacterInfoData(playerid, log_Account[playerid], char_Selected[playerid]);
-	}
-	ResetPlayerVars(playerid);
-}
+CreateCharacterForPlayer(playerid, name[], slot)
+{
+	AuthData[playerid][Creating] = 0;
 
-ShowCharCreateMaleSkins(playerid) {
-    static List:male; male = list_new();
+	static ye, mo, da, ho, mi, se, crtdate[32], lastpl[32];
+    gettime(ho, mi, se); getdate(ye, mo, da);
+    format(crtdate, sizeof crtdate, "%02d %02d %02d %02d %02d %04d", ho, mi, se, da, mo, ye);
+    format(lastpl, sizeof lastpl, "%02d %02d %02d %02d %02d %04d", ho, mi, se, da, mo, ye);
+    CancelSelectTextDraw(playerid);
+    flog("logs/auth.log", "[AUTH] Tai khoan \"%s\" da tao mot nhan vat tai slot %d: %s", AuthData[playerid][Account], slot, GetRoleplayName(name));
+    format(Q@, 2048, "INSERT INTO `characters` (`Slot`,`Account`,`DateCreated`,`LastTimePlayed`,`Name`,`Description`,`Level`,`Gender`,`Birthday`,`Nation`,`Skin`) VALUES ('%d','%s','%s','%s','%s','%s','1 0','%d','%s','%d','%d')", slot, AuthData[playerid][Account], crtdate, lastpl, CreateCharData[playerid][Name], CreateCharData[playerid][Description], CreateCharData[playerid][Gender], CreateCharData[playerid][Birthday], CreateCharData[playerid][Nation], CreateCharData[playerid][Skin]);
+    mysql_tquery(Database, Q@);
 
-    forloop(i, 0, sizeof(male_skins)) {
-    	format(Q@, 16, "ID: %d", male_skins[i]);
-    	AddModelMenuItem(male, male_skins[i], Q@);
-    }
-
-    static response[E_MODEL_SELECTION_INFO];
-    await_arr(response) ShowAsyncModelSelectionMenu(playerid, "Trang phuc nam", male);
-
-    if(response[E_MODEL_SELECTION_RESPONSE] == MODEL_RESPONSE_SELECT) {
-    	CreateCharData[playerid][SkinID] = response[E_MODEL_SELECTION_MODELID];
-        SetPlayerSkin(playerid, CreateCharData[playerid][SkinID]);
-        ShowCharCreateDialog(playerid);
-    }
-    if(response[E_MODEL_SELECTION_RESPONSE] == MODEL_RESPONSE_CANCEL) dialog_Char_Create(playerid, true, 5, "");
-}
-
-ShowCharCreateFemaleSkins(playerid) {
-	static List:female; female = list_new();
-
-    forloop(i, 0, sizeof(female_skins)) {
-    	format(Q@, 16, "ID: %d", female_skins[i]);
-    	AddModelMenuItem(female, female_skins[i], Q@);
-    }
-
-    static response[E_MODEL_SELECTION_INFO];
-    await_arr(response) ShowAsyncModelSelectionMenu(playerid, "Trang phuc nu", female);
-
-    if(response[E_MODEL_SELECTION_RESPONSE] == MODEL_RESPONSE_SELECT) {
-    	CreateCharData[playerid][SkinID] = response[E_MODEL_SELECTION_MODELID];
-        SetPlayerSkin(playerid, CreateCharData[playerid][SkinID]);
-        ShowCharCreateDialog(playerid);
-    }
-    if(response[E_MODEL_SELECTION_RESPONSE] == MODEL_RESPONSE_CANCEL) dialog_Char_Create(playerid, true, 5, "");
+    FadePlayerScreen(playerid, NewCharacterCreated, 0x000000FF, 200, 50);
+    return 1;
 }
 
 Fade:tempLoadCharacters(playerid) {
@@ -761,6 +762,44 @@ Fade:tempLoadCharacters(playerid) {
 	ShowCharSelDialog(playerid);
 	FadePlayerScreen(playerid, FadeBack, 0x00000000, 200, 50);
 	return 1;
+}
+
+Fade:PlayerCreateCharacter(playerid) {
+	AuthData[playerid][Creating] = 1;
+	ShowCharCreateDialog(playerid);
+	SpawnPlayer(playerid);
+	SetPlayerTeam(playerid, NO_TEAM);
+	SetPlayerColor(playerid, COLOR_WHITE);
+	SetPlayerSkin(playerid, 2);
+	SetPlayerInterior(playerid, 15);
+	SetPlayerPos(playerid, 217.6, -101, 1005);
+	SetPlayerFacingAngle(playerid, 45);
+	SetPlayerVirtualWorld(playerid, 100+playerid);
+	SetPlayerCameraPos(playerid, 215, -98, 1006);
+	SetPlayerCameraLookAt(playerid, 1000, -625, 1000);
+	TogglePlayerControllable(playerid, false);
+	ApplyAnimation(playerid, "BAR", "Barcustom_loop", 4.1, 1, 1, 1, 1, 0, 1);
+	FadePlayerScreen(playerid, FadeBack, 0x00000000, 200, 50);
+	return 1;
+}
+
+Fade:NewCharacterCreated(playerid)
+{
+    AuthData[playerid][Joined] = 1;
+    //SetSpawnInfo(playerid, NO_TEAM, CreateCharData[playerid][Skin]);
+    
+    // Reset
+    format(CreateCharData[playerid][Name], MAX_PLAYER_NAME+1, "");
+	format(CreateCharData[playerid][Description], 256, "");
+	format(CreateCharData[playerid][Birthday], 16, "");
+	CreateCharData[playerid][Gender] = 0;
+	CreateCharData[playerid][BDay] = 0;
+	CreateCharData[playerid][BMonth] = 0;
+	CreateCharData[playerid][BYear] = 0;
+	CreateCharData[playerid][Nation] = 0;
+	CreateCharData[playerid][Skin] = 2;
+
+    FadePlayerScreen(playerid, FadeBack, 0x00000000, 200, 50);
 }
 
 Dialog:Login_Pass(playerid, response, listitem, inputtext[]) {
@@ -866,11 +905,11 @@ Dialog:Char_Create(playerid, response, listitem, inputtext[])  {
 	else {
 		switch(listitem) {
 			case 0: Dialog_Show(playerid, cCreate_Name, DS_INPUT, ""COL_AQUA"TEN NHAN VAT", "\\c"COL_WHITE"Nhap ten cho nhan vat cua ban. "COL_GREEN"Vi du: Ho_Ten.", "Xong", "Quay lai");
-			case 1:	Dialog_Show(playerid, cCreate_Desc, DS_INPUT, ""COL_AQUA"MO TA NHAN VAT", "\\c"COL_WHITE"Nhap mo ta ve nhan vat cua ban (co the bo qua):", "Xong", "Quay lai");
-			case 2: Dialog_Show(playerid, cCreate_Gender, DS_LIST, ""COL_AQUA"CHON GIOI TINH", "Nam\nNu\nKhac", "Chon", "Quay lai");
-			case 3: ShowBMonthDialog(playerid);
-			case 4: Dialog_Show(playerid, cCreate_Nation, DS_LIST, ""COL_AQUA"CHON QUOC GIA", "Los Santos\nSan Fierro\nLas Venturas\nCountryside (Nong thon)", "Chon", "Quay lai");
-			case 5: Dialog_Show(playerid, cCreate_Skin, DS_LIST, ""COL_AQUA"CHON TRANG PHUC", "Trang phuc nam\nTrang phuc nu", "Chon", "Quay lai");
+			case 1: Dialog_Show(playerid, cCreate_Gender, DS_LIST, ""COL_AQUA"CHON GIOI TINH", "Nam\nNu\nKhac", "Chon", "Quay lai");
+			case 2: ShowBMonthDialog(playerid);
+			case 3: Dialog_Show(playerid, cCreate_Nation, DS_LIST, ""COL_AQUA"CHON QUOC GIA", "Los Santos\nSan Fierro\nLas Venturas\nCountryside (Nong thon)", "Chon", "Quay lai");
+			case 4: Dialog_Show(playerid, cCreate_Skin, DS_LIST, ""COL_AQUA"CHON TRANG PHUC", "Trang phuc nam\nTrang phuc nu", "Chon", "Quay lai");
+			case 5:	Dialog_Show(playerid, cCreate_Desc, DS_INPUT, ""COL_AQUA"MO TA NHAN VAT", "\\c"COL_WHITE"Nhap mo ta ve nhan vat cua ban (co the bo qua):", "Xong", "Quay lai");
 			case 6: {
 				format(Q@, 64, ""COL_AQUA"NHAN VAT %d: Tao nhan vat", AuthData[playerid][Selected]);
 				Dialog_Show(playerid, cCreate_Confirm, DS_MSGBOX, Q@, ""COL_WHITE"\\cBan da chac chan rang cac thong tin cua nhan vat la chinh xac khong?\n"COL_WHITE"Bam "COL_GREEN"'Co' "COL_WHITE"de tao nhan vat, bam "COL_LIGHTRED"'Khong' "COL_WHITE"de quay lai va chinh sua thong tin.", "Co", "Khong");
@@ -912,35 +951,24 @@ Dialog:cCreate_Desc(playerid, response, listitem, inputtext[]) {
 Dialog:cCreate_Gender(playerid, response, listitem, inputtext[]) {
 	if(!response) ShowCharCreateDialog(playerid);
 	else {
-		switch(listitem) {
-			case 0: CreateCharData[playerid][Gender] = 1, ShowCharCreateDialog(playerid);
-			case 1: CreateCharData[playerid][Gender] = 2, ShowCharCreateDialog(playerid);
-			case 2: CreateCharData[playerid][Gender] = 3, ShowCharCreateDialog(playerid);
-		}
+		CreateCharData[playerid][Gender] = listitem+1;
+		ShowCharCreateDialog(playerid);
 	}
 }
 
 Dialog:cCreate_BMonth(playerid, response, listitem, inputtext[]) {
     if(!response) ShowCharCreateDialog(playerid);
     else {
-        forloop(i,0,12) {
-            if(listitem == i) {
-                CreateCharData[playerid][BMonth] = i+1;
-                ShowBDayDialog(playerid);
-            }
-        }
+        CreateCharData[playerid][BMonth] = listitem+1;
+        ShowBDayDialog(playerid);
     }
 }
 
 Dialog:cCreate_BDay(playerid, response, listitem, inputtext[]) {
 	if(!response) ShowBMonthDialog(playerid);
     else {
-        forloop(i,0,31) {
-            if(listitem == i) {
-                CreateCharData[playerid][BDay] = i+1;
-                ShowBYearDialog(playerid);
-            }
-        }
+        CreateCharData[playerid][BDay] = listitem+1;
+        ShowBYearDialog(playerid);
     }
     
 }
@@ -951,25 +979,17 @@ Dialog:cCreate_BYear(playerid, response, listitem, inputtext[]) {
         new currentyear, a, b;
         getdate(currentyear, a, b);
         #pragma unused a, b
-        forloop(i,0,64) { // 17 yo - 80 yo ( i max = 80 - 17 + 1 )
-            if(listitem == i) {
-                CreateCharData[playerid][BYear] = currentyear-(80-i);
-                format(CreateCharData[playerid][Birthday], 16, "%02d-%02d-%04d", CreateCharData[playerid][BDay], CreateCharData[playerid][BMonth], CreateCharData[playerid][BYear]);
-                ShowCharCreateDialog(playerid);
-            }
-        }
+        CreateCharData[playerid][BYear] = currentyear-(80-listitem);
+        format(CreateCharData[playerid][Birthday], 16, "%02d-%02d-%04d", CreateCharData[playerid][BDay], CreateCharData[playerid][BMonth], CreateCharData[playerid][BYear]);
+        ShowCharCreateDialog(playerid);
     }
 }
 
 Dialog:cCreate_Nation(playerid, response, listitem, inputtext[]) {
 	if(!response) ShowCharCreateDialog(playerid);
 	else {
-		switch(listitem) {
-			case 0: CreateCharData[playerid][Nation] = 1, ShowCharCreateDialog(playerid);
-			case 1: CreateCharData[playerid][Nation] = 2, ShowCharCreateDialog(playerid);
-			case 2: CreateCharData[playerid][Nation] = 3, ShowCharCreateDialog(playerid);
-			case 3: CreateCharData[playerid][Nation] = 4, ShowCharCreateDialog(playerid);
-		}
+		CreateCharData[playerid][Nation] = listitem+1;
+		ShowCharCreateDialog(playerid);
 	}
 }
 
@@ -977,8 +997,8 @@ Dialog:cCreate_Skin(playerid, response, listitem, inputtext[]) {
 	if(!response) ShowCharCreateDialog(playerid);
 	else {
 		switch(listitem) {
-			case 0: ShowCharCreateMaleSkins(playerid);
-			case 1: ShowCharCreateFemaleSkins(playerid);
+			case 0: ShowModelSelectionMenu(playerid, MaleSkinList, "Trang phuc nam", 0x1C2024FF, 0x88888899, COLOR_WHITE);
+			case 1: ShowModelSelectionMenu(playerid, FemaleSkinList, "Trang phuc nu", 0x1C2024FF, 0x88888899, COLOR_WHITE);
 		}
 	}
 }
@@ -991,23 +1011,6 @@ Dialog:cCreate_Confirm(playerid, response, listitem, inputtext[]) {
 			ShowCharCreateDialog(playerid);
 			return 1;
 		}
-		else {}//CreateCharacterForPlayer(playerid, CreateCharInfo[playerid][Name], AuthInfo[playerid][Selected]);
+		else CreateCharacterForPlayer(playerid, CreateCharData[playerid][Name], AuthData[playerid][Selected]);
 	}
-}
-
-Fade:PlayerCreateCharacter(playerid) {
-	AuthData[playerid][Creating] = 1;
-	ShowCharCreateDialog(playerid);
-	SetPlayerTeam(playerid, NO_TEAM);
-	SetPlayerColor(playerid, COLOR_WHITE);
-	SetPlayerSkin(playerid, 2);
-	SetPlayerInterior(playerid, 15);
-	SetPlayerPos(playerid, 217.6, -101, 1005);
-	SetPlayerFacingAngle(playerid, 45);
-	SetPlayerVirtualWorld(playerid, 100+playerid);
-	SetPlayerCameraPos(playerid, 215, -98, 1006);
-	SetPlayerCameraLookAt(playerid, 1000, -625, 1000);
-	TogglePlayerControllable(playerid, false);
-	ApplyAnimation(playerid, "BAR", "Barcustom_loop", 4.1, 1, 1, 1, 1, 0, 1);
-	FadePlayerScreen(playerid, FadeBack, 0x00000000, 200, 50);
 }

@@ -13,6 +13,10 @@
 #define SERVER_WEBSITE "\"http://rp.sapg.vn\""
 #define SERVER_VERSION "SAPG v1.415"
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 #include <a_samp>
 #undef MAX_PLAYERS
 #define MAX_PLAYERS (50)
@@ -36,7 +40,8 @@
 #include <eDialog> // Easy Dialog
 #include <mDialog> // Preview Model Dialog
 #include <playertd> // Player textdraw
-#include <eSelection> // Selection menu
+#include <mSelection> // Selection menu
+//#include <eSelection> // Selection menu
 #include <notification> // Textdraw notification
 #include <MenuStore> // Menu store texdraw
 #include <progress2> // Progress bar
@@ -54,14 +59,20 @@
 #include <YSI_Coding/y_timers> // task, ptask, timer - (pause, resume, defer, repeat, stop)
 #include <YSI_Coding/y_hooks> // hook, hook function, hook callback
 
-#include "include/main0.pwn" // Load trước main()
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+#include "include/defines.pwn"
+#include "include/variables.pwn"
+
 main() {
 	printf("[S] %s da khoi dong thanh cong", SERVER_NAME);
 	printf("[S] Phien ban %s", SERVER_VERSION);
 }
-#include "include/main1.pwn" // Load sau main()
 
-#include "../config/skins.pwn"
+#include "include/callbacks.pwn"
+#include "include/functions.pwn"
 
 #include "include/core/timer.pwn"
 #include "include/core/chat.pwn"

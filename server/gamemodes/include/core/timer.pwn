@@ -2,12 +2,12 @@
 #include <YSI_Coding/y_hooks>
 
 timer UnFreezePlayer[1000](playerid) {
-	DeletePVar(playerid, "FreezeProtection");
+	DeletePVar(playerid, #FreezeProtection);
 	TogglePlayerControllable(playerid, true);
 }
 
 FreezePlayer(playerid, time) {
-	SetPVarInt(playerid, "FreezeProtection", 1);
+	SetPVarInt(playerid, #FreezeProtection, 1);
 	TogglePlayerControllable(playerid, false);
 	defer UnFreezePlayer[time](playerid);
 }

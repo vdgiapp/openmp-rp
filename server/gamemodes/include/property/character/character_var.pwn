@@ -9,7 +9,7 @@ enum characterInfo {
 	Gender,
 	Nation,
 	Description[512],
-	SkinID,
+	Skin,
 	IsGuided,
 	Level[16],
 	Respects,

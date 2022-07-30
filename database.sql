@@ -3,14 +3,14 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th7 30, 2022 lúc 09:27 PM
+-- Thời gian đã tạo: Th7 30, 2022 lúc 07:34 PM
 -- Phiên bản máy phục vụ: 10.1.38-MariaDB
 -- Phiên bản PHP: 7.3.2
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
 START TRANSACTION;
-SET time_zone = "+00:00";
+SET time_zone = "+07:00";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -38,7 +38,7 @@ CREATE TABLE `accounts` (
   `Email` varchar(64) COLLATE utf8mb4_vietnamese_ci NOT NULL,
   `BanData` varchar(128) COLLATE utf8mb4_vietnamese_ci NOT NULL,
   `BanReason` varchar(512) COLLATE utf8mb4_vietnamese_ci NOT NULL,
-  `LastLogin` varchar(32) COLLATE utf8mb4_vietnamese_ci NOT NULL,
+  `LastTimeLogged` varchar(32) COLLATE utf8mb4_vietnamese_ci NOT NULL,
   `DateCreated` varchar(32) COLLATE utf8mb4_vietnamese_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
 
@@ -46,8 +46,8 @@ CREATE TABLE `accounts` (
 -- Đang đổ dữ liệu cho bảng `accounts`
 --
 
-INSERT INTO `accounts` (`UID`, `Account`, `Online`, `Password`, `Password2`, `EnablePass2`, `Email`, `BanData`, `BanReason`, `LastLogin`, `DateCreated`) VALUES
-(1, 'vdgiapp', 0, '47A098BEC5DF36D2ACE0AACBB6BA9A83907298619913393CD19F489E200046A6', '66595AF2140492D5D19A980352DD16D491E62067A8FAC4D1B3D8C84617C70BE0', 0, 'vdgiapp@gmail.com', '0 0 0 0 none 0 0 0', '', '02 14 32 31 07 2022', ''),
+INSERT INTO `accounts` (`UID`, `Account`, `Online`, `Password`, `Password2`, `EnablePass2`, `Email`, `BanData`, `BanReason`, `LastTimeLogged`, `DateCreated`) VALUES
+(1, 'vdgiapp', 0, '47A098BEC5DF36D2ACE0AACBB6BA9A83907298619913393CD19F489E200046A6', '66595AF2140492D5D19A980352DD16D491E62067A8FAC4D1B3D8C84617C70BE0', 0, 'vdgiapp@gmail.com', '0 0 0 0 none 0 0 0', '', '00 06 20 31 07 2022', ''),
 (2, 'redshank', 0, '47A098BEC5DF36D2ACE0AACBB6BA9A83907298619913393CD19F489E200046A6', '', 0, 'redshankseries@gmail.com', '0 0 0 0 none 0 0 0', '', '', ''),
 (3, 'minecraft', 0, '47A098BEC5DF36D2ACE0AACBB6BA9A83907298619913393CD19F489E200046A6', '', 0, 'minecraft151607389@gmail.com', '0 0 0 0 none 0 0 0', '', '22 17 30 29 07 2022', ''),
 (4, 'android', 0, '47A098BEC5DF36D2ACE0AACBB6BA9A83907298619913393CD19F489E200046A6', '', 0, 'tuilagiaptbz@gmail.com', '0 0 0 0 none 0 0 0', '', '22 27 39 30 07 2022', '');
@@ -65,11 +65,12 @@ CREATE TABLE `characters` (
   `Name` varchar(25) COLLATE utf8mb4_vietnamese_ci NOT NULL,
   `Nick` varchar(25) COLLATE utf8mb4_vietnamese_ci NOT NULL,
   `DateCreated` varchar(32) COLLATE utf8mb4_vietnamese_ci NOT NULL,
+  `LastTimePlayed` varchar(32) COLLATE utf8mb4_vietnamese_ci NOT NULL,
   `Birthday` varchar(16) COLLATE utf8mb4_vietnamese_ci NOT NULL,
   `Gender` int(11) NOT NULL,
   `Nation` int(11) NOT NULL,
   `Description` varchar(512) COLLATE utf8mb4_vietnamese_ci NOT NULL,
-  `SkinID` int(11) NOT NULL,
+  `Skin` int(11) NOT NULL,
   `IsGuided` int(11) NOT NULL,
   `Level` varchar(16) COLLATE utf8mb4_vietnamese_ci NOT NULL,
   `Respects` int(11) NOT NULL,
@@ -121,7 +122,7 @@ CREATE TABLE `serverinfo` (
 --
 
 INSERT INTO `serverinfo` (`UID`, `Registered`, `CharCreated`, `Day`, `Logged`) VALUES
-(1, 4, 0, 31, 10);
+(1, 4, 0, 31, 2);
 
 --
 -- Chỉ mục cho các bảng đã đổ
