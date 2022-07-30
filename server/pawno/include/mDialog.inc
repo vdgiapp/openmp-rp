@@ -1,18 +1,22 @@
-#if defined previewmodel_dialog_included
-	#endinput
-#endif
-#define previewmodel_dialog_included
+
 
 /**************************************/
 // PreviewModelDialog.inc - v4.6 - Last Updated: 29 March, 2018 - By Gammix
 /***************************************/
 
+#if defined previewmodel_dialog_included
+	#endinput
+#endif
+#define previewmodel_dialog_included
+
+/*
 // by BigETI
 #if defined __MEMORY_INCLUDED__
 	#endinput
 #else
-	#include <memory>
+	#tryinclude <memory>
 #endif
+*/
 
 // definitions
 #if !defined MAX_DIALOG_PREVIEW_MODELS

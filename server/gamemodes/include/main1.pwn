@@ -21,12 +21,15 @@ public OnGameModeInit() {
 
 	// Log files
 	fcreate("logs/auth.log");
+
+	// Set account offline
+	mysql_tquery(Database, "UPDATE `accounts` SET `Online`='0'");
 	
 	return 1;
 }
 
 public OnGameModeExit() {
-	foreach(new playerid : Player) OnPlayerDisconnect(playerid, 1);
+	foreach(new playerid : Player) OnPlayerDisconnect(playerid, 0);
 	return 1;
 }
 

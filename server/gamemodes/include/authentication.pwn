@@ -15,18 +15,18 @@ enum authinfo {
 }
 new AuthData[MAX_PLAYERS][authinfo];
 
-enum createCharInfo {
+enum createCharInf {
 	Name[MAX_PLAYER_NAME+1],
-	Description[64],
-	Gender[16],
-	Nation[16],
-	Bday,
-	Bmonth,
-	Byear,
+	Description[256],
+	Gender,
+	Nation,
+	BDay,
+	BMonth,
+	BYear,
 	Birthday[16],
 	SkinID
 }
-static CreateCharData[MAX_PLAYERS][createCharInfo];
+static CreateCharData[MAX_PLAYERS][createCharInf];
 
 enum tmpCharacterInfo {
 	Available,
@@ -334,12 +334,10 @@ hook OnPlayerConnect(playerid) {
 			mysql_tquery(Database, Q@);
 		}
 		if(isbanned == 1) {
-			ShowLoginDialog(playerid);
 			ErrorMsg(playerid, "Tai khoan nay da bi khoa. Hay truy cap vao dien dan de xem thong tin chi tiet hon.");
 			return KickPlayer(playerid, 500);
 		}
 		if(online == 1) {
-			ShowLoginDialog(playerid);
 			ErrorMsg(playerid, "Tai khoan nay dang truc tuyen. Ban khong the dang nhap vao tai khoan nay.");
 			return KickPlayer(playerid, 500);
 		}
@@ -414,6 +412,17 @@ hook function ResetPlayerVars(playerid) {
 	}
 
 	PlayerTextDrawDestroy(playerid, Auth_PlayerName[playerid]);
+
+	format(CreateCharData[playerid][Name], MAX_PLAYER_NAME+1, "");
+	format(CreateCharData[playerid][Description], 256, "");
+	format(CreateCharData[playerid][Birthday], 16, "");
+	CreateCharData[playerid][Gender] = 0;
+	CreateCharData[playerid][BDay] = 0;
+	CreateCharData[playerid][BMonth] = 0;
+	CreateCharData[playerid][BYear] = 0;
+	CreateCharData[playerid][SkinID] = 2;
+	CreateCharData[playerid][Nation] = 0;
+
 	continue(playerid);
 }
 
@@ -503,6 +512,21 @@ ShowEmailDialog(playerid) {
 }
 
 ShowCharCreateDialog(playerid) {
+	static gender[16];
+	switch(CreateCharData[playerid][Gender])  {
+		case 1: format(gender, sizeof gender, "Nam");
+		case 2: format(gender, sizeof gender, "Nu");
+		case 3: format(gender, sizeof gender, "Khac");
+	}
+
+	static nation[16];
+	switch(CreateCharData[playerid][Nation])  {
+		case 1: format(nation, sizeof nation, "Los Santos");
+		case 2: format(nation, sizeof nation, "San Fierro");
+		case 3: format(nation, sizeof nation, "Las Venturas");
+		case 4: format(nation, sizeof nation, "Countryside");
+	}
+
     format(Q@, 1024, "Ten nhan vat\t%s\n\
         Tieu su nhan vat\n\
         Gioi tinh\t%s\n\
@@ -511,11 +535,54 @@ ShowCharCreateDialog(playerid) {
         Trang phuc\t%d\n\
         "COL_GREEN"Hoan thanh", 
         CreateCharData[playerid][Name], 
-        CreateCharData[playerid][Gender],
+        gender,
         CreateCharData[playerid][Birthday], 
-        CreateCharData[playerid][Nation],
+        nation,
         CreateCharData[playerid][SkinID]);
 	return Dialog_Show(playerid, Char_Create, DS_TABLIST, ""COL_AQUA"TAO NHAN VAT", Q@, "Chon", "Thoat");
+}
+
+ShowBDayDialog(playerid)
+{
+	static string[512]; format(string, sizeof string, "Ngay 01");
+	switch(CreateCharData[playerid][BMonth]) {
+		case 2:	forloop(i,2,30)	{
+			format(Q@, 32, "\nNgay %02d", i);
+			strcat(string, Q@);
+		}
+		case 1,3,5,7,8,10,12: forloop(i,2,32) {
+			format(Q@, 32, "\nNgay %02d", i);
+			strcat(string, Q@);
+		}
+		case 4,6,9,11: forloop(i,2,31) {
+			format(Q@, 32, "\nNgay %02d", i);
+			strcat(string, Q@);
+		}
+	}
+	Dialog_Show(playerid, cCreate_BDay, DS_LIST, ""COL_AQUA"CHON NGAY SINH", string, "Chon", "Quay lai");
+}
+
+ShowBMonthDialog(playerid)
+{
+	static string[512]; format(string, sizeof string, "Thang 01");
+	forloop(i,2,13) {
+		format(Q@, 32, "\nThang %02d", i);
+		strcat(string, Q@);
+	}
+	Dialog_Show(playerid, cCreate_BMonth, DS_LIST, ""COL_AQUA"CHON THANG SINH", string, "Chon", "Quay lai");
+}
+
+ShowBYearDialog(playerid)
+{
+	static currentyear, a, b;
+	getdate(currentyear, a, b);
+	#pragma unused a, b
+	static string[1024]; format(string, sizeof string, "Nam %d", currentyear-80);
+    forloop(i,currentyear-79,currentyear-17+1) {
+    	format(Q@, 32, "\nNam %d", i);
+    	strcat(string, Q@);
+    }
+	Dialog_Show(playerid, cCreate_BYear, DS_LIST, ""COL_AQUA"CHON NAM SINH", string, "Chon", "Quay lai");
 }
 
 static tmpchardata[MAX_PLAYERS][512];
@@ -643,6 +710,44 @@ Auth_OnPlayerDisconnect(playerid, reason) {
 	ResetPlayerVars(playerid);
 }
 
+ShowCharCreateMaleSkins(playerid) {
+    static List:male; male = list_new();
+
+    forloop(i, 0, sizeof(male_skins)) {
+    	format(Q@, 16, "ID: %d", male_skins[i]);
+    	AddModelMenuItem(male, male_skins[i], Q@);
+    }
+
+    static response[E_MODEL_SELECTION_INFO];
+    await_arr(response) ShowAsyncModelSelectionMenu(playerid, "Trang phuc nam", male);
+
+    if(response[E_MODEL_SELECTION_RESPONSE] == MODEL_RESPONSE_SELECT) {
+    	CreateCharData[playerid][SkinID] = response[E_MODEL_SELECTION_MODELID];
+        SetPlayerSkin(playerid, CreateCharData[playerid][SkinID]);
+        ShowCharCreateDialog(playerid);
+    }
+    if(response[E_MODEL_SELECTION_RESPONSE] == MODEL_RESPONSE_CANCEL) dialog_Char_Create(playerid, true, 5, "");
+}
+
+ShowCharCreateFemaleSkins(playerid) {
+	static List:female; female = list_new();
+
+    forloop(i, 0, sizeof(female_skins)) {
+    	format(Q@, 16, "ID: %d", female_skins[i]);
+    	AddModelMenuItem(female, female_skins[i], Q@);
+    }
+
+    static response[E_MODEL_SELECTION_INFO];
+    await_arr(response) ShowAsyncModelSelectionMenu(playerid, "Trang phuc nu", female);
+
+    if(response[E_MODEL_SELECTION_RESPONSE] == MODEL_RESPONSE_SELECT) {
+    	CreateCharData[playerid][SkinID] = response[E_MODEL_SELECTION_MODELID];
+        SetPlayerSkin(playerid, CreateCharData[playerid][SkinID]);
+        ShowCharCreateDialog(playerid);
+    }
+    if(response[E_MODEL_SELECTION_RESPONSE] == MODEL_RESPONSE_CANCEL) dialog_Char_Create(playerid, true, 5, "");
+}
+
 Fade:tempLoadCharacters(playerid) {
 	SetPlayerTeam(playerid, NO_TEAM);
 	SetPlayerColor(playerid, COLOR_WHITE);
@@ -728,7 +833,7 @@ Dialog:Char_Selection(playerid, response, listitem, inputtext[]) {
 		}
 		else {
 			format(Q@, 64, ""COL_AQUA"NHAN VAT %d: Tao nhan vat", J@);
-			Dialog_Show(playerid, Char_CreateC, DS_MSGBOX, Q@, "Ban co thuc su muon tao nhan vat tai slot nay khong?", "Co", "Khong");
+			Dialog_Show(playerid, Char_CreateC, DS_MSGBOX, Q@, ""COL_WHITE"\\cBan co thuc su muon tao nhan vat tai slot nay khong?", "Co", "Khong");
 		}
 	}
 }
@@ -754,6 +859,140 @@ Dialog:Char_Interact(playerid, response, listitem, inputtext[]) {
 Dialog:Char_CreateC(playerid, response, listitem, inputtext[]) {
 	if(response) FadePlayerScreen(playerid, PlayerCreateCharacter, 0x000000FF, 200, 50);
 	else ShowCharSelDialog(playerid);
+}
+
+Dialog:Char_Create(playerid, response, listitem, inputtext[])  {
+	if(!response) KickPlayer(playerid, 500);
+	else {
+		switch(listitem) {
+			case 0: Dialog_Show(playerid, cCreate_Name, DS_INPUT, ""COL_AQUA"TEN NHAN VAT", "\\c"COL_WHITE"Nhap ten cho nhan vat cua ban. "COL_GREEN"Vi du: Ho_Ten.", "Xong", "Quay lai");
+			case 1:	Dialog_Show(playerid, cCreate_Desc, DS_INPUT, ""COL_AQUA"MO TA NHAN VAT", "\\c"COL_WHITE"Nhap mo ta ve nhan vat cua ban (co the bo qua):", "Xong", "Quay lai");
+			case 2: Dialog_Show(playerid, cCreate_Gender, DS_LIST, ""COL_AQUA"CHON GIOI TINH", "Nam\nNu\nKhac", "Chon", "Quay lai");
+			case 3: ShowBMonthDialog(playerid);
+			case 4: Dialog_Show(playerid, cCreate_Nation, DS_LIST, ""COL_AQUA"CHON QUOC GIA", "Los Santos\nSan Fierro\nLas Venturas\nCountryside (Nong thon)", "Chon", "Quay lai");
+			case 5: Dialog_Show(playerid, cCreate_Skin, DS_LIST, ""COL_AQUA"CHON TRANG PHUC", "Trang phuc nam\nTrang phuc nu", "Chon", "Quay lai");
+			case 6: {
+				format(Q@, 64, ""COL_AQUA"NHAN VAT %d: Tao nhan vat", AuthData[playerid][Selected]);
+				Dialog_Show(playerid, cCreate_Confirm, DS_MSGBOX, Q@, ""COL_WHITE"\\cBan da chac chan rang cac thong tin cua nhan vat la chinh xac khong?\n"COL_WHITE"Bam "COL_GREEN"'Co' "COL_WHITE"de tao nhan vat, bam "COL_LIGHTRED"'Khong' "COL_WHITE"de quay lai va chinh sua thong tin.", "Co", "Khong");
+			}
+		}
+	}
+}
+
+Dialog:cCreate_Name(playerid, response, listitem, inputtext[]) {
+	if(!response) ShowCharCreateDialog(playerid);
+	else {
+		format(Q@, 256, "SELECT * FROM `characters` WHERE `Name`='%s'", inputtext);
+		await mysql_aquery(Database, Q@);
+		if(cache_num_rows()) {
+			format(Q@, 256, "\\c"COL_LIGHTRED"Ten nhan vat "COL_WHITE"%s "COL_LIGHTRED"da ton tai. Vui long chon mot ten khac!\n\\c"COL_WHITE"Nhap ten cho nhan vat cua ban. "COL_GREEN"Vi du: Ho_Ten.", inputtext);
+			Dialog_Show(playerid, cCreate_Name, DS_INPUT, ""COL_AQUA"TEN NHAN VAT", Q@, "Xong", "Quay lai");
+		}
+		else {
+		    if(strlen(inputtext) < 6 || strlen(inputtext) > 24) return Dialog_Show(playerid, cCreate_Name, DS_INPUT, ""COL_AQUA"TEN NHAN VAT", "\\c"COL_LIGHTRED"Ten ban vua nhap phai gom tu 6 den 24 ki tu!\n\\c"COL_WHITE"Nhap ten cho nhan vat cua ban. "COL_GREEN"Vi du: Ho_Ten.", "Xong", "Quay lai");
+		    if(!IsRoleplayName(inputtext)) {
+		    	format(Q@, 256, "\\c"COL_LIGHTRED"Ten nhan vat "COL_WHITE"%s "COL_LIGHTRED"khong hop le hoac Non-RP!\n\\c"COL_WHITE"Nhap ten cho nhan vat cua ban. "COL_GREEN"Vi du: Ho_Ten.", GetRoleplayName(inputtext));
+		    	Dialog_Show(playerid, cCreate_Name, DS_INPUT, ""COL_AQUA"TEN NHAN VAT", Q@, "Xong", "Quay lai");
+		    	return 1;
+		    }
+		    format(CreateCharData[playerid][Name], MAX_PLAYER_NAME+1, "%s", inputtext);
+		    ShowCharCreateDialog(playerid);
+		}
+	}
+}
+
+Dialog:cCreate_Desc(playerid, response, listitem, inputtext[]) {
+	if(!response) ShowCharCreateDialog(playerid);
+	else {
+		format(CreateCharData[playerid][Description], 256, "%s", inputtext);
+		ShowCharCreateDialog(playerid);
+	}
+}
+
+Dialog:cCreate_Gender(playerid, response, listitem, inputtext[]) {
+	if(!response) ShowCharCreateDialog(playerid);
+	else {
+		switch(listitem) {
+			case 0: CreateCharData[playerid][Gender] = 1, ShowCharCreateDialog(playerid);
+			case 1: CreateCharData[playerid][Gender] = 2, ShowCharCreateDialog(playerid);
+			case 2: CreateCharData[playerid][Gender] = 3, ShowCharCreateDialog(playerid);
+		}
+	}
+}
+
+Dialog:cCreate_BMonth(playerid, response, listitem, inputtext[]) {
+    if(!response) ShowCharCreateDialog(playerid);
+    else {
+        forloop(i,0,12) {
+            if(listitem == i) {
+                CreateCharData[playerid][BMonth] = i+1;
+                ShowBDayDialog(playerid);
+            }
+        }
+    }
+}
+
+Dialog:cCreate_BDay(playerid, response, listitem, inputtext[]) {
+	if(!response) ShowBMonthDialog(playerid);
+    else {
+        forloop(i,0,31) {
+            if(listitem == i) {
+                CreateCharData[playerid][BDay] = i+1;
+                ShowBYearDialog(playerid);
+            }
+        }
+    }
+    
+}
+
+Dialog:cCreate_BYear(playerid, response, listitem, inputtext[]) {
+    if(!response) ShowBDayDialog(playerid);
+    else {
+        new currentyear, a, b;
+        getdate(currentyear, a, b);
+        #pragma unused a, b
+        forloop(i,0,64) { // 17 yo - 80 yo ( i max = 80 - 17 + 1 )
+            if(listitem == i) {
+                CreateCharData[playerid][BYear] = currentyear-(80-i);
+                format(CreateCharData[playerid][Birthday], 16, "%02d-%02d-%04d", CreateCharData[playerid][BDay], CreateCharData[playerid][BMonth], CreateCharData[playerid][BYear]);
+                ShowCharCreateDialog(playerid);
+            }
+        }
+    }
+}
+
+Dialog:cCreate_Nation(playerid, response, listitem, inputtext[]) {
+	if(!response) ShowCharCreateDialog(playerid);
+	else {
+		switch(listitem) {
+			case 0: CreateCharData[playerid][Nation] = 1, ShowCharCreateDialog(playerid);
+			case 1: CreateCharData[playerid][Nation] = 2, ShowCharCreateDialog(playerid);
+			case 2: CreateCharData[playerid][Nation] = 3, ShowCharCreateDialog(playerid);
+			case 3: CreateCharData[playerid][Nation] = 4, ShowCharCreateDialog(playerid);
+		}
+	}
+}
+
+Dialog:cCreate_Skin(playerid, response, listitem, inputtext[]) {
+	if(!response) ShowCharCreateDialog(playerid);
+	else {
+		switch(listitem) {
+			case 0: ShowCharCreateMaleSkins(playerid);
+			case 1: ShowCharCreateFemaleSkins(playerid);
+		}
+	}
+}
+
+Dialog:cCreate_Confirm(playerid, response, listitem, inputtext[]) {
+	if(!response) ShowCharCreateDialog(playerid);
+	else {
+		if(isnull(CreateCharData[playerid][Name]) || !CreateCharData[playerid][Gender] || !CreateCharData[playerid][Nation] || isnull(CreateCharData[playerid][Birthday])) {
+			ErrorMsg(playerid, "Ban chua hoan thanh tat ca thong tin co ban ve nhan vat.");
+			ShowCharCreateDialog(playerid);
+			return 1;
+		}
+		else {}//CreateCharacterForPlayer(playerid, CreateCharInfo[playerid][Name], AuthInfo[playerid][Selected]);
+	}
 }
 
 Fade:PlayerCreateCharacter(playerid) {

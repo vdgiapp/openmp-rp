@@ -1987,6 +1987,31 @@ stock GetVehicleComponentPrice(componentid){
 	}
 #endif
 
+//Detect YSF.inc
+#if !defined _YSF_included
+	
+	#define GetVehicleInterior(%0)	GetVehiclePropertyValue((%0),e_VEHICLE_INTERIOR)
+	#define GetVehiclePaintjob(%0)	GetVehiclePropertyValue((%0),e_VEHICLE_PAINTJOB)
+
+	stock GetVehicleColor(vehicleid,&color1,&color2){
+		if(IsValidVehicle(vehicleid)){
+			color1 = GetVehiclePropertyValue(vehicleid,e_VEHICLE_COLOR_1);
+			color2 = GetVehiclePropertyValue(vehicleid,e_VEHICLE_COLOR_2);
+			return 1;
+		}
+		return 0;
+	}
+	
+	stock bool:IsVehicleOccupied(vehicleid){
+		EVF::Foreach(i){
+			if(IsPlayerInVehicle(i,vehicleid)){
+				return true;
+			}
+		}
+		return false;
+	}
+#endif
+
 #define EVF_GetVehicleInterior(%0)	GetVehiclePropertyValue((%0),e_VEHICLE_INTERIOR)
 #define EVF_GetVehiclePaintjob(%0)	GetVehiclePropertyValue((%0),e_VEHICLE_PAINTJOB)
 

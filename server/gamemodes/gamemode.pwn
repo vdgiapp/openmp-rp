@@ -61,6 +61,8 @@ main() {
 }
 #include "include/main1.pwn" // Load sau main()
 
+#include "../config/skins.pwn"
+
 #include "include/core/timer.pwn"
 #include "include/core/chat.pwn"
 #include "include/core/damage.pwn"

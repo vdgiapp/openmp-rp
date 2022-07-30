@@ -2,6 +2,8 @@
 #include <YSI_Coding/y_hooks>
 
 // +-+-+-+-+- MAIN DEFINES +-+-+-+-+-
+DEFINE_HOOK_REPLACEMENT(Selection, Sel);
+
 #define function%0(%1) 			forward%0(%1); public%0(%1) 		// function
 #define forloop(%0,%1,%2) 		for(new %0 = %1; %0 < %2; %0++) 	// for loop normal
 #define ClientMsg 				SendClientMessagef
@@ -16,6 +18,7 @@
 #define DS_MSGBOX 				DIALOG_STYLE_MSGBOX
 #define DS_INPUT 				DIALOG_STYLE_INPUT
 #define DS_PASS 				DIALOG_STYLE_PASSWORD
+#define DS_MODEL				DIALOG_STYLE_PREVIEW_MODEL
 
 // +-+-+-+-+- COLORS +-+-+-+-+-
 #define COL_WHITE 				"{FFFFFF}"
@@ -25,7 +28,8 @@
 #define COL_GREEN2 				"{29B32E}"
 #define COL_GREEN3 				"{6FA828}"
 #define COL_LIGHTBLUE 			"{00CED1}"
-#define COL_YELLOW 				"{FFF982}"
+#define COL_YELLOW 				"{FFFF00}"
+#define COL_YELLOW2				"{FFF982}"
 #define COL_ORANGE 				"{E68C0E}"
 #define COL_BLUE 				"{39AACC}"
 #define COL_AQUA				"{039DFC}"
