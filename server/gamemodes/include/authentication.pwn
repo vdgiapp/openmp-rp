@@ -364,7 +364,7 @@ hook OnPlayerConnect(playerid) {
 	PlayerTextDrawSetOutline(playerid, Auth_PlayerName[playerid], 0);
 	PlayerTextDrawSetShadow(playerid, Auth_PlayerName[playerid], 0);
 	PlayerTextDrawAlignment(playerid, Auth_PlayerName[playerid], 1);
-	PlayerTextDrawColor(playerid, Auth_PlayerName[playerid], 1296911871);
+	PlayerTextDrawColor(playerid, Auth_PlayerName[playerid], -1);
 	PlayerTextDrawBackgroundColor(playerid, Auth_PlayerName[playerid], 255);
 	PlayerTextDrawBoxColor(playerid, Auth_PlayerName[playerid], 50);
 	PlayerTextDrawUseBox(playerid, Auth_PlayerName[playerid], 0);
@@ -997,8 +997,8 @@ Dialog:cCreate_Skin(playerid, response, listitem, inputtext[]) {
 	if(!response) ShowCharCreateDialog(playerid);
 	else {
 		switch(listitem) {
-			case 0: ShowModelSelectionMenu(playerid, MaleSkinList, "Trang phuc nam", 0x1C2024FF, 0x88888899, COLOR_WHITE);
-			case 1: ShowModelSelectionMenu(playerid, FemaleSkinList, "Trang phuc nu", 0x1C2024FF, 0x88888899, COLOR_WHITE);
+			case 0: ShowModelSelectionMenu(playerid, MaleSkinList, "Trang phuc nam");
+			case 1: ShowModelSelectionMenu(playerid, FemaleSkinList, "Trang phuc nu");
 		}
 	}
 }

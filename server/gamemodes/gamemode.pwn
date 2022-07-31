@@ -40,7 +40,7 @@
 #include <eDialog> // Easy Dialog
 #include <mDialog> // Preview Model Dialog
 #include <playertd> // Player textdraw
-#include <mSelection> // Selection menu
+#include <UmSelection> // Upgraded model selection
 //#include <eSelection> // Selection menu
 #include <notification> // Textdraw notification
 #include <MenuStore> // Menu store texdraw
