@@ -9,8 +9,6 @@ DEFINE_HOOK_REPLACEMENT(Selection, Sel);
 #define ClientMsg 				SendClientMessagef
 #define ServerMsg 				SendClientMessageToAllf
 
-#define FLOAT_INFINITY 			(Float:0x7F800000)
-
 // +-+-+-+-+- DIALOG STYLES +-+-+-+-+-
 #define DS_LIST 				DIALOG_STYLE_LIST
 #define DS_TABLIST 				DIALOG_STYLE_TABLIST

@@ -9,9 +9,9 @@
 #define YSI_YES_HEAP_MALLOC // NO/YES HEAP MEMORY ALLOCATION
 
 #define SERVER_NAME "San Andreas Playground: Roleplay"
-#define SERVER_SNAME "SA PG.VN"
-#define SERVER_WEBSITE "\"http://rp.sapg.vn\""
-#define SERVER_VERSION "SAPG v1.415"
+#define SERVER_SNAME "SAP-RP.VN"
+#define SERVER_WEBSITE "\"http://sap-rp.vn\""
+#define SERVER_VERSION "SAP:RP v1.415"
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -19,7 +19,7 @@
 
 #include <a_samp>
 #undef MAX_PLAYERS
-#define MAX_PLAYERS (50)
+#define MAX_PLAYERS (100)
 #include <memory> // Memory access
 #include <sscanf> // sscanf 2
 #include <strlib> // SA-MP string libraby
@@ -32,10 +32,13 @@
 #include <pp_mysql> // PAWN plus MySQL
 #include <callbacks> // More callbacks
 #include <sampvoice> // SA-MP voice
+#include <mapandreas> // Map Andreas
+#include <colandreas> // Collision
 #include <ysf> // Y-Less server functions
 #include <evf> // Extended vehicles functions
 #include <streamer> // Streamer plugins
 #include <streamerf> // Streamer more functions
+#include <streamerfix> // CreateDynamicObject fix
 #include <cDialog> // Center text in dialog '\\c'
 #include <eDialog> // Easy Dialog
 #include <mDialog> // Preview Model Dialog
@@ -54,6 +57,9 @@
 #include <mapfix> // Texture bug fixes
 #include <stamina> // Player stamina
 
+#include <gettime> // Simple gettime, getdate
+#include <filelog> // Simple file log
+
 #include <YSI_Data/y_iterate> // or YSI_Data/y_foreach (instead of foreach)
 #include <YSI_Coding/y_va> // Variable arguments (va_args<>, va_format, va_start<3>)
 #include <YSI_Coding/y_timers> // task, ptask, timer - (pause, resume, defer, repeat, stop)
@@ -62,6 +68,9 @@
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+#include "map_exteriors.pwn"
+#include "map_interiors.pwn"	
 
 #include "include/defines.pwn"
 #include "include/variables.pwn"

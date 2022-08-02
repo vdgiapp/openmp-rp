@@ -5,10 +5,10 @@
 public OnGameModeInit() {
 	Database = mysql_connect(host_mysql, user_mysql, pass_mysql, dbase_mysql);
     if(Database == MYSQL_INVALID_HANDLE || mysql_errno(Database) != 0) {
-        printf("[S] Ket noi den co so du lieu khong thanh cong!");
+        printf("[S] Ket noi den co so du lieu khong thanh cong!\n");
         return mysql_close(Database);
     }
-    printf("[S] Ket noi den co so du lieu thanh cong!");
+    printf("[S] Ket noi den co so du lieu thanh cong!\n");
     pp_use_funcidx(true);
 	ShowNameTags(true);
 	SetNameTagDrawDistance(NAMETAG_DISTANCE);
@@ -20,19 +20,27 @@ public OnGameModeInit() {
 	SetModeRestartTime(20.0); // default: 12.0
 
 	// Log files
+	printf("Checking log files...\n");
 	fcreate("logs/auth.log");
 
-	// Set account offline
+	// Set account status
+	printf("Changing accounts status...\n");
 	mysql_tquery(Database, "UPDATE `accounts` SET `Online`='0'");
 
 	// Load maps
-	printf("[LOADING EXTERIORS]");
-	SendRconCommand("loadfs ../scriptfiles/maps/exterior/CityHall.amx");
+	printf("Loading exteriors...\n");
+	MappingExt_OnGameModeInit();
+	printf("Loading interiors...\n");
+	MappingInt_OnGameModeInit();
 
 	// Load lists
+	printf("Loading UmSelection lists...\n");
 	MaleSkinList = LoadModelSelectionMenu("config/male_skins_list.txt");
 	FemaleSkinList = LoadModelSelectionMenu("config/female_skins_list.txt");
-	
+
+	// Streamer
+	Streamer_SetMaxItems(STREAMER_TYPE_OBJECT, -1);
+    Streamer_SetVisibleItems(STREAMER_TYPE_OBJECT, 2000);
 	return 1;
 }
 
@@ -43,6 +51,8 @@ public OnGameModeExit() {
 
 public OnPlayerConnect(playerid)
 {
+	MappingExt_OnPlayerConnect(playerid);
+	MappingInt_OnPlayerConnect(playerid);
 	return 1;
 }
 

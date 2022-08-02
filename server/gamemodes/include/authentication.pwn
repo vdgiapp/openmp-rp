@@ -45,22 +45,23 @@ static 	Text:AuthTD_MiscTD[10],
 		PlayerText:Auth_PlayerName[MAX_PLAYERS];
 
 timer GetSvInfo[1000]() {
-	static day, month, year;
+	static day, month, year, str[64];
 	getdate(year, month, day);
 	#pragma unused year, month
 
 	await mysql_aquery(Database, "SELECT * FROM `serverinfo`");
 
-	format(Q@, 16, "%d", cache_value_int(0, "Registered"));
-	TextDrawSetString(Auth_Registered, Q@);
-	format(Q@, 16, "%d", cache_value_int(0, "CharCreated"));
-	TextDrawSetString(Auth_CharCreated, Q@);
+	format(str, sizeof str, "%d", cache_value_int(0, "Registered"));
+	TextDrawSetString(Auth_Registered, str);
+	format(str, sizeof str, "%d", cache_value_int(0, "CharCreated"));
+	TextDrawSetString(Auth_CharCreated, str);
 
 	if(cache_value_int(0, "Day") != day) {
-		format(Q@, 64, "UPDATE `serverinfo` SET `Day`='%d', `Logged`='0'", day);
-		mysql_tquery(Database, Q@);
+		format(str, sizeof str, "UPDATE `serverinfo` SET `Day`='%d', `Logged`='0'", day);
+		mysql_tquery(Database, str);
 	}
-	format(Q@, 16, "%d", cache_value_int(0, "Logged")); TextDrawSetString(Auth_LoggedToday, Q@);
+	format(str, sizeof str, "%d", cache_value_int(0, "Logged")); TextDrawSetString(Auth_LoggedToday, str);
+	format(str, sizeof str, "%d", GetPlayersOnline()); TextDrawSetString(Auth_PlayersOnline, str);
 }
 
 hook OnGameModeInit()
@@ -191,7 +192,7 @@ hook OnGameModeInit()
 	TextDrawSetProportional(AuthTD_MiscTD[6], 1);
 	TextDrawSetSelectable(AuthTD_MiscTD[6], 0);
 
-	Auth_Registered = TextDrawCreate(15.000000, 162.000000, "0");
+	Auth_Registered = TextDrawCreate(15.000000, 162.000000, "?");
 	TextDrawFont(Auth_Registered, 1);
 	TextDrawLetterSize(Auth_Registered, 0.245829, 1.250000);
 	TextDrawTextSize(Auth_Registered, 645.000000, 17.000000);
@@ -205,7 +206,7 @@ hook OnGameModeInit()
 	TextDrawSetProportional(Auth_Registered, 1);
 	TextDrawSetSelectable(Auth_Registered, 0);
 
-	Auth_CharCreated = TextDrawCreate(108.000000, 162.000000, "0");
+	Auth_CharCreated = TextDrawCreate(108.000000, 162.000000, "?");
 	TextDrawFont(Auth_CharCreated, 1);
 	TextDrawLetterSize(Auth_CharCreated, 0.245829, 1.250000);
 	TextDrawTextSize(Auth_CharCreated, 645.000000, 17.000000);
@@ -233,7 +234,7 @@ hook OnGameModeInit()
 	TextDrawSetProportional(Auth_PlayersOnline, 1);
 	TextDrawSetSelectable(Auth_PlayersOnline, 0);
 
-	Auth_LoggedToday = TextDrawCreate(15.000000, 204.000000, "0");
+	Auth_LoggedToday = TextDrawCreate(15.000000, 204.000000, "?");
 	TextDrawFont(Auth_LoggedToday, 1);
 	TextDrawLetterSize(Auth_LoggedToday, 0.245829, 1.250000);
 	TextDrawTextSize(Auth_LoggedToday, 645.000000, 17.000000);
@@ -314,8 +315,9 @@ hook OnPlayerConnect(playerid) {
 	SetRandomName(playerid, "Unknown_", 100000, 999999);
 
 	// Check if player is a newbie or old member
-	format(Q@, 256, "SELECT * FROM `accounts` WHERE `Account`='%s'", AuthData[playerid][Account]);
-	await mysql_aquery(Database, Q@);
+	static str[256];
+	format(str, sizeof str, "SELECT * FROM `accounts` WHERE `Account`='%s'", AuthData[playerid][Account]);
+	await mysql_aquery(Database, str);
 
 	if(cache_num_rows()) {
 		static isbanned, banday, banmonth, banyear, banby[32], banreason[128],
@@ -330,8 +332,8 @@ hook OnPlayerConnect(playerid) {
 		AuthData[playerid][EnablePass2] = cache_value_int(0, "EnablePass2");
 		if((day >= unbanday && month >= unbanmonth && year >= unbanyear) || (day < unbanday && month > unbanmonth && year >= unbanyear)) {
 			isbanned = 0;
-			format(Q@, 256, "UPDATE `accounts` SET `BanData`='0 0 0 0 none 0 0 0' WHERE `Account`='%s'", AuthData[playerid][Account]);
-			mysql_tquery(Database, Q@);
+			format(str, sizeof str, "UPDATE `accounts` SET `BanData`='0 0 0 0 none 0 0 0' WHERE `Account`='%s'", AuthData[playerid][Account]);
+			mysql_tquery(Database, str);
 		}
 		if(isbanned == 1) {
 			ErrorMsg(playerid, "Tai khoan nay da bi khoa. Hay truy cap vao dien dan de xem thong tin chi tiet hon.");
@@ -356,8 +358,8 @@ hook OnPlayerConnect(playerid) {
 	TogglePlayerControllable(playerid, false);
 	//CheckVoiceChat(playerid);
 
-	format(Q@, MAX_PLAYER_NAME+1, "~w~%s", AuthData[playerid][Account]);
-	Auth_PlayerName[playerid] = CreatePlayerTextDraw(playerid, 15.000000, 97.000000, Q@);
+	format(str, sizeof str, "~w~%s", AuthData[playerid][Account]);
+	Auth_PlayerName[playerid] = CreatePlayerTextDraw(playerid, 15.000000, 97.000000, str);
 	PlayerTextDrawFont(playerid, Auth_PlayerName[playerid], 1);
 	PlayerTextDrawLetterSize(playerid, Auth_PlayerName[playerid], 0.362500, 1.700000);
 	PlayerTextDrawTextSize(playerid, Auth_PlayerName[playerid], 630.000000, 200.000000);
@@ -386,12 +388,13 @@ hook OnPlayerConnect(playerid) {
 
 Auth_OnPlayerDisconnect(playerid, reason) {
 	if(AuthData[playerid][Logged]) {
-		format(Q@, 256, "UPDATE `accounts` SET `Online`='0' WHERE `Account`='%s'", AuthData[playerid][Account]);
-		await mysql_aquery(Database, Q@);
+		static str[256];
+		format(str, sizeof str, "UPDATE `accounts` SET `Online`='0' WHERE `Account`='%s'", AuthData[playerid][Account]);
+		await mysql_aquery(Database, str);
 		switch(reason) {
 			case 0: flog("logs/auth.log", "[AUTH] Tai khoan \"%s\" da dang xuat khoi tro choi (mat ket noi).", AuthData[playerid][Account]);
 			case 1: flog("logs/auth.log", "[AUTH] Tai khoan \"%s\" da dang xuat khoi tro choi (thoat game).", AuthData[playerid][Account]);
-			case 2: flog("logs/auth.log", "[AUTH] Tai khoan \"%s\" da dang xuat khoi tro choi (kick / ban).", AuthData[playerid][Account]);
+			case 2: flog("logs/auth.log", "[AUTH] Tai khoan \"%s\" da dang xuat khoi tro choi (kick/ban).", AuthData[playerid][Account]);
 		}
 		//Save if(IsPlayerInGame(playerid)) SaveCharacterInfoData(playerid, log_Account[playerid], char_Selected[playerid]);
 	}
@@ -472,9 +475,10 @@ IsPlayerInGame(playerid) {
 }
 
 GetRoleplayName(const name[]) {
-    format(Q@, MAX_PLAYER_NAME+1, "%s", name);
-    strreplace(Q@, "_", " ");
-    return Q@;
+	static str[MAX_PLAYER_NAME+1];
+    format(str, sizeof str, "%s", name);
+    strreplace(str, "_", " ");
+    return str;
 }
 
 IsRoleplayName(const name[], max_unders = 2) {
@@ -521,28 +525,32 @@ IsValidEmail(const email[]) {
 
 SetRandomName(playerid, name[], min_int, max_int)
 {
-	format(Q@, MAX_PLAYER_NAME+1 , "%s%d", name, min_int + random(max_int - min_int));
-	switch(SetPlayerName(playerid, Q@)) {
+	static str[MAX_PLAYER_NAME+1];
+	format(str, sizeof str, "%s%d", name, min_int + random(max_int - min_int));
+	switch(SetPlayerName(playerid, str)) {
 		case -1: return SetRandomName(playerid, name, min_int, max_int);
 	}
 }
 
 CheckPlayerNameToLogin(playerid) {
 	// Check if player is a newbie or old member
-	format(Q@, 256, "SELECT * FROM `accounts` WHERE `Account`='%s'", AuthData[playerid][Account]);
-	await mysql_aquery(Database, Q@);
+	static str[256];
+	format(str, sizeof str, "SELECT * FROM `accounts` WHERE `Account`='%s'", AuthData[playerid][Account]);
+	await mysql_aquery(Database, str);
 	if(cache_num_rows()) return ShowLoginDialog(playerid);
 	else return ShowRegisterDialog(playerid);
 }
 
 ShowLoginDialog(playerid) {
-	format(Q@, 256, "\\c"COL_WHITE"Chao mung ban da quay tro lai may chu, "COL_GREEN"%s\n\\c"COL_WHITE"Hay nhap mat khau cua ban de dang nhap vao tro choi!", AuthData[playerid][Account]);
-	Dialog_Show(playerid, Login_Pass, DS_PASS, ""COL_AQUA""SERVER_NAME"", Q@, "Xong", "Dong");
+	static str[256];
+	format(str, sizeof str, "\\c"COL_WHITE"Chao mung ban da quay tro lai may chu, "COL_GREEN"%s\n\\c"COL_WHITE"Hay nhap mat khau cua ban de dang nhap vao tro choi!", AuthData[playerid][Account]);
+	Dialog_Show(playerid, Login_Pass, DS_PASS, ""COL_AQUA""SERVER_NAME"", str, "Xong", "Dong");
 }
 
 ShowRegisterDialog(playerid) {
-	format(Q@, 256, "\\c"COL_WHITE"Chao mung ban da den may chu, "COL_GREEN"%s\n\\c"COL_WHITE"Hay nhap mat khau cua ban de dang ky tai khoan moi!", AuthData[playerid][Account]);
-	Dialog_Show(playerid, Register_Pass, DS_PASS, ""COL_AQUA""SERVER_NAME"", Q@, "Xong", "Dong");
+	static str[256];
+	format(str, sizeof str, "\\c"COL_WHITE"Chao mung ban da den may chu, "COL_GREEN"%s\n\\c"COL_WHITE"Hay nhap mat khau cua ban de dang ky tai khoan moi!", AuthData[playerid][Account]);
+	Dialog_Show(playerid, Register_Pass, DS_PASS, ""COL_AQUA""SERVER_NAME"", str, "Xong", "Dong");
 }
 
 ShowEmailDialog(playerid) {
@@ -565,7 +573,8 @@ ShowCharCreateDialog(playerid) {
 		case 4: format(nation, sizeof nation, "Countryside");
 	}
 
-    format(Q@, 1024, "Ten nhan vat\t%s\n\
+	static str[1024];
+    format(str, sizeof str, "Ten nhan vat\t%s\n\
         Gioi tinh\t%s\n\
         Ngay sinh\t%s\n\
         Quoc tich\t%s\n\
@@ -575,73 +584,56 @@ ShowCharCreateDialog(playerid) {
         CreateCharData[playerid][Name], gender,
         CreateCharData[playerid][Birthday], 
         nation, CreateCharData[playerid][Skin]);
-	return Dialog_Show(playerid, Char_Create, DS_TABLIST, ""COL_AQUA"TAO NHAN VAT", Q@, "Chon", "Thoat");
+	return Dialog_Show(playerid, Char_Create, DS_TABLIST, ""COL_AQUA"TAO NHAN VAT", str, "Chon", "Thoat");
 }
 
-ShowBDayDialog(playerid)
-{
+ShowBDayDialog(playerid) {
 	static string[512]; format(string, sizeof string, "Ngay 01");
 	switch(CreateCharData[playerid][BMonth]) {
-		case 2:	forloop(i,2,30)	{
-			format(Q@, 32, "\nNgay %02d", i);
-			strcat(string, Q@);
-		}
-		case 1,3,5,7,8,10,12: forloop(i,2,32) {
-			format(Q@, 32, "\nNgay %02d", i);
-			strcat(string, Q@);
-		}
-		case 4,6,9,11: forloop(i,2,31) {
-			format(Q@, 32, "\nNgay %02d", i);
-			strcat(string, Q@);
-		}
+		case 2:	forloop(i,2,30)	{ format(string, sizeof string, "%s\nNgay %02d", string, i); }
+		case 1,3,5,7,8,10,12: forloop(i,2,32) { format(string, sizeof string, "%s\nNgay %02d", string, i); }
+		case 4,6,9,11: forloop(i,2,31) { format(string, sizeof string, "%s\nNgay %02d", string, i); }
 	}
 	Dialog_Show(playerid, cCreate_BDay, DS_LIST, ""COL_AQUA"CHON NGAY SINH", string, "Chon", "Quay lai");
 }
 
-ShowBMonthDialog(playerid)
-{
+ShowBMonthDialog(playerid) {
 	static string[512]; format(string, sizeof string, "Thang 01");
-	forloop(i,2,13) {
-		format(Q@, 32, "\nThang %02d", i);
-		strcat(string, Q@);
-	}
+	forloop(i,2,13) { format(string, sizeof string, "%s\nThang %02d", string, i); }
 	Dialog_Show(playerid, cCreate_BMonth, DS_LIST, ""COL_AQUA"CHON THANG SINH", string, "Chon", "Quay lai");
 }
 
-ShowBYearDialog(playerid)
-{
+ShowBYearDialog(playerid) {
 	static currentyear, a, b;
 	getdate(currentyear, a, b);
 	#pragma unused a, b
 	static string[1024]; format(string, sizeof string, "Nam %d", currentyear-80);
-    forloop(i,currentyear-79,currentyear-17+1) {
-    	format(Q@, 32, "\nNam %d", i);
-    	strcat(string, Q@);
-    }
+    forloop(i,currentyear-79,currentyear-17+1) { format(string, sizeof string, "%s\nNam %d", string, i); }
 	Dialog_Show(playerid, cCreate_BYear, DS_LIST, ""COL_AQUA"CHON NAM SINH", string, "Chon", "Quay lai");
 }
 
-static tmpchardata[MAX_PLAYERS][512];
 ShowCharSelDialog(playerid) {
-	format(tmpchardata[playerid], 512, "Slot\tTen nhan vat\tCap do");
+	static tmpchardata[512];
+	format(tmpchardata, 512, "Slot\tTen nhan vat\tCap do");
 	forloop(i, 0, 3) {
-		J@ = i+1;
-		format(Q@, 128, "SELECT * FROM `characters` WHERE `Account`='%s' AND `Slot`='%d'", AuthData[playerid][Account], J@);
-		await mysql_aquery(Database, Q@);
+		static str[512];
+		static slot; slot = i+1;
+		format(str, sizeof str, "SELECT * FROM `characters` WHERE `Account`='%s' AND `Slot`='%d'", AuthData[playerid][Account], slot);
+		await mysql_aquery(Database, str);
 		if(cache_num_rows()) {
 			sscanf(cache_value_string(0, "Level"), "ii", tmpCharacterData[playerid][i][Level], tmpCharacterData[playerid][i][Available]);
 			tmpCharacterData[playerid][i][Available] = 1;
 			format(tmpCharacterData[playerid][i][Name], 25, "%s", cache_value_string(0, "Name"));
-			format(Q@, 512, "\n%d\t%s\t \tLevel %d", J@, GetRoleplayName(tmpCharacterData[playerid][i][Name]), tmpCharacterData[playerid][i][Level]);
-			strcat(tmpchardata[playerid], Q@);
-			if(i >= 2) return Dialog_Show(playerid, Char_Selection, DS_HEADERS, ""COL_AQUA"CHON NHAN VAT", tmpchardata[playerid], "Chon", "Thoat");
+			format(str, sizeof str, "\n%d\t%s\t \tLevel %d", slot, GetRoleplayName(tmpCharacterData[playerid][i][Name]), tmpCharacterData[playerid][i][Level]);
+			strcat(tmpchardata, str);
+			if(i >= 2) return Dialog_Show(playerid, Char_Selection, DS_HEADERS, ""COL_AQUA"CHON NHAN VAT", tmpchardata, "Chon", "Thoat");
 		}
 		else {
 			tmpCharacterData[playerid][i][Available] = 0;
 			format(tmpCharacterData[playerid][i][Name], 25, "");
-			format(Q@, 512, "\n"COL_GREY"%d\t"COL_GREY"%s", J@, "Tao nhan vat");
-			strcat(tmpchardata[playerid], Q@);
-			if(i >= 2) return Dialog_Show(playerid, Char_Selection, DS_HEADERS, ""COL_AQUA"CHON NHAN VAT", tmpchardata[playerid], "Chon", "Thoat");
+			format(str, sizeof str, "\n"COL_GREY"%d\t"COL_GREY"%s", slot, "Tao nhan vat");
+			strcat(tmpchardata, str);
+			if(i >= 2) return Dialog_Show(playerid, Char_Selection, DS_HEADERS, ""COL_AQUA"CHON NHAN VAT", tmpchardata, "Chon", "Thoat");
 		}
 	}
 }
@@ -651,8 +643,9 @@ LoginSuccess(playerid) {
 	getdate(year, month, day);
 	gettime(hour, minute, second);
 
-	format(Q@, 256, "UPDATE `accounts` SET `Online`='1', `LastTimeLogged`='%02d %02d %02d %02d %02d %04d' WHERE `Account`='%s'", hour, minute, second, day, month, year, AuthData[playerid][Account]);
-	mysql_tquery(Database, Q@);
+	static str[256];
+	format(str, sizeof str, "UPDATE `accounts` SET `Online`='1', `LastTimeLogged`='%02d %02d %02d %02d %02d %04d' WHERE `Account`='%s'", hour, minute, second, day, month, year, AuthData[playerid][Account]);
+	mysql_tquery(Database, str);
 	mysql_tquery(Database, "UPDATE `serverinfo` SET `Logged`=`Logged`+1");
 
 	SuccessMsg(playerid, "Dang nhap vao tai khoan thanh cong. Chuc ban choi game vui ve.");
@@ -682,30 +675,30 @@ LoginSuccess(playerid) {
 }
 
 CheckToRegister(playerid) {
-	format(Q@, 256, "SELECT * FROM `accounts` WHERE `Email`='%s'", AuthData[playerid][Email]);
-	await mysql_aquery(Database, Q@);
+	static str[1024];
+	format(str, sizeof str, "SELECT * FROM `accounts` WHERE `Email`='%s'", AuthData[playerid][Email]);
+	await mysql_aquery(Database, str);
 	if(cache_num_rows()) {
 		ShowEmailDialog(playerid);
 		return ErrorMsg(playerid, "Email nay da duoc dung de dang ky. Vui long su dung email khac!");
 	}
-
-	format(Q@, 256, "SELECT * FROM `accounts` WHERE `Account`='%s'", AuthData[playerid][Account]);
-	await mysql_aquery(Database, Q@);
+	format(str, sizeof str, "SELECT * FROM `accounts` WHERE `Account`='%s'", AuthData[playerid][Account]);
+	await mysql_aquery(Database, str);
 	if(!cache_num_rows()) {
 		static day, month, year, hour, minute, second;
 		getdate(year, month, day);
 		gettime(hour, minute, second);
-		SHA256_PassHash("", AuthData[playerid][Password], Q@, 65);
-		format(Q@, 1024, "INSERT INTO `accounts` (`Account`, `Password`, `EnablePass2`, `Email`) VALUES ('%s', '%s', '0', '%s')", AuthData[playerid][Account], Q@, AuthData[playerid][Email]);
-		mysql_tquery(Database, Q@);
+		SHA256_PassHash(AuthData[playerid][Password], "", str, sizeof str);
+		format(str, sizeof str, "INSERT INTO `accounts` (`Account`, `Password`, `EnablePass2`, `Email`) VALUES ('%s', '%s', '0', '%s')", AuthData[playerid][Account], str, AuthData[playerid][Email]);
+		mysql_tquery(Database, str);
 		SuccessMsg(playerid, "Tai khoan cua ban da duoc dang ky thanh cong.");
 		flog("logs/auth.log", "[AUTH] Tai khoan \"%s\" da duoc dang ky thanh cong.", AuthData[playerid][Account]);
 		PlayerPlaySound(playerid, 1084, 0, 0, 0);
 		SetRandomName(playerid, "Logged_", 100000, 999999);
 		
-		format(Q@, 512, "UPDATE `accounts` SET `Online`='1', `LastLogin`='%02d %02d %02d %02d %02d %04d', `DateCreated`='%02d %02d %02d %02d %02d %04d' WHERE `Account`='%s'", \
+		format(str, sizeof str, "UPDATE `accounts` SET `Online`='1', `LastLogin`='%02d %02d %02d %02d %02d %04d', `DateCreated`='%02d %02d %02d %02d %02d %04d' WHERE `Account`='%s'", \
 			hour, minute, second, day, month, year, hour, minute, second, day, month, year, AuthData[playerid][Account]);
-		mysql_tquery(Database, Q@);
+		mysql_tquery(Database, str);
 		mysql_tquery(Database, "UPDATE `serverinfo` SET `Registered`=`Registered`+1");
 
 		forloop(i, 0, 10) TextDrawHideForPlayer(playerid, AuthTD_MiscTD[i]);
@@ -732,20 +725,45 @@ CheckToRegister(playerid) {
     return 1;
 }
 
-CreateCharacterForPlayer(playerid, name[], slot)
-{
-	AuthData[playerid][Creating] = 0;
-
+CreateCharacterForPlayer(playerid, name[], slot) {
+	static str[2048];
 	static ye, mo, da, ho, mi, se, crtdate[32], lastpl[32];
+
+    AuthData[playerid][Creating] = 0;
+    CancelSelectTextDraw(playerid);
+
     gettime(ho, mi, se); getdate(ye, mo, da);
     format(crtdate, sizeof crtdate, "%02d %02d %02d %02d %02d %04d", ho, mi, se, da, mo, ye);
     format(lastpl, sizeof lastpl, "%02d %02d %02d %02d %02d %04d", ho, mi, se, da, mo, ye);
-    CancelSelectTextDraw(playerid);
+    
     flog("logs/auth.log", "[AUTH] Tai khoan \"%s\" da tao mot nhan vat tai slot %d: %s", AuthData[playerid][Account], slot, GetRoleplayName(name));
-    format(Q@, 2048, "INSERT INTO `characters` (`Slot`,`Account`,`DateCreated`,`LastTimePlayed`,`Name`,`Description`,`Level`,`Gender`,`Birthday`,`Nation`,`Skin`) VALUES ('%d','%s','%s','%s','%s','%s','1 0','%d','%s','%d','%d')", slot, AuthData[playerid][Account], crtdate, lastpl, CreateCharData[playerid][Name], CreateCharData[playerid][Description], CreateCharData[playerid][Gender], CreateCharData[playerid][Birthday], CreateCharData[playerid][Nation], CreateCharData[playerid][Skin]);
-    mysql_tquery(Database, Q@);
+    format(str, sizeof str, "INSERT INTO `characters` \
+    	(`Slot`, `Account`, `DateCreated`, `LastTimePlayed`, \
+    	`Name`, `Description`, `Level`, `Gender`, `Birthday`, \
+    	`Nation`, `Skin`, `Cash`, `Coins`, `LicenseData`, \
+    	`PhoneData`, `MuteData`, `ImprisonData`, `Hunger`, \
+    	`Thirst`, `Stamina`, `Health`, `Armour`, 'FightStyle') \
+    	VALUES ('%d', '%s', '%s', '%s', '%s', '%s', '1 0', \
+    	'%d', '%s', '%d', '%d', '1000', '10', '0 0 0 0 0 0', \
+    	'0 000000 0', '0 0', '0 0 0 0', '1000', '1000', '10', \
+    	'100', '0', '4')", \
+    	slot, AuthData[playerid][Account], crtdate, lastpl, \
+    	CreateCharData[playerid][Name], CreateCharData[playerid][Description], \
+    	CreateCharData[playerid][Gender], CreateCharData[playerid][Birthday], \
+    	CreateCharData[playerid][Nation], CreateCharData[playerid][Skin]);
+    mysql_tquery(Database, str);
 
-    FadePlayerScreen(playerid, NewCharacterCreated, 0x000000FF, 200, 50);
+    format(CreateCharData[playerid][Name], MAX_PLAYER_NAME+1, "");
+	format(CreateCharData[playerid][Description], 256, "");
+	format(CreateCharData[playerid][Birthday], 16, "");
+	CreateCharData[playerid][Gender] = 0;
+	CreateCharData[playerid][BDay] = 0;
+	CreateCharData[playerid][BMonth] = 0;
+	CreateCharData[playerid][BYear] = 0;
+	CreateCharData[playerid][Nation] = 0;
+	CreateCharData[playerid][Skin] = 2;
+
+    FadePlayerScreen(playerid, LoadCharacterData, 0x000000FF, 200, 50);
     return 1;
 }
 
@@ -783,38 +801,33 @@ Fade:PlayerCreateCharacter(playerid) {
 	return 1;
 }
 
-Fade:NewCharacterCreated(playerid)
-{
-    AuthData[playerid][Joined] = 1;
+Fade:LoadCharacterData(playerid) {
+	static str[128];
+
+	AuthData[playerid][Joined] = 1;
+
+	format(str, sizeof str, "SELECT * FROM `characters` WHERE `Name` = '%s' AND `Slot` = '%d'", AuthData[playerid][Account], AuthData[playerid][Selected]);
+	await mysql_aquery(Database, str);
     //SetSpawnInfo(playerid, NO_TEAM, CreateCharData[playerid][Skin]);
-    
-    // Reset
-    format(CreateCharData[playerid][Name], MAX_PLAYER_NAME+1, "");
-	format(CreateCharData[playerid][Description], 256, "");
-	format(CreateCharData[playerid][Birthday], 16, "");
-	CreateCharData[playerid][Gender] = 0;
-	CreateCharData[playerid][BDay] = 0;
-	CreateCharData[playerid][BMonth] = 0;
-	CreateCharData[playerid][BYear] = 0;
-	CreateCharData[playerid][Nation] = 0;
-	CreateCharData[playerid][Skin] = 2;
 
     FadePlayerScreen(playerid, FadeBack, 0x00000000, 200, 50);
+    return 1;
 }
 
 Dialog:Login_Pass(playerid, response, listitem, inputtext[]) {
 	if(response) {
-		SHA256_PassHash(inputtext, "", Q@, 65);
+		static str[65];
+		SHA256_PassHash(inputtext, "", str, sizeof str);
 
-		if(!isequal(Q@, AuthData[playerid][Password], true)) {
+		if(!isequal(str, AuthData[playerid][Password], true)) {
 			AuthData[playerid][Attempt]++;
 			if(AuthData[playerid][Attempt] >= 3) {
-				format(Q@, 64, "Ban da bi kick vi nhap sai mat khau %d lan.", AuthData[playerid][Attempt]);
-				ErrorMsg(playerid, Q@);
+				format(str, sizeof str, "Ban da bi kick vi nhap sai mat khau %d lan.", AuthData[playerid][Attempt]);
+				ErrorMsg(playerid, str);
 				return KickPlayer(playerid, 500);
 			}
-			format(Q@, 64, "Ban da nhap sai mat khau %d lan, vui long thu lai.", AuthData[playerid][Attempt]);
-			ErrorMsg(playerid, Q@);
+			format(str, sizeof str, "Ban da nhap sai mat khau %d lan, vui long thu lai.", AuthData[playerid][Attempt]);
+			ErrorMsg(playerid, str);
 			return ShowLoginDialog(playerid);
 		}
 		else {
@@ -827,8 +840,9 @@ Dialog:Login_Pass(playerid, response, listitem, inputtext[]) {
 Dialog:Login_Pass2(playerid, response, listitem, inputtext[]) {
 	if(!response) return KickPlayer(playerid, 500);
 	else {
-		SHA256_PassHash(inputtext, "", Q@, 65);
-		if(isequal(Q@, AuthData[playerid][Password2], true)) return LoginSuccess(playerid);
+		static str[65];
+		SHA256_PassHash(inputtext, "", str, sizeof str);
+		if(isequal(str, AuthData[playerid][Password2], true)) return LoginSuccess(playerid);
 		else {
 			Dialog_Show(playerid, Login_Pass2, DS_PASS,""COL_AQUA"He thong bao mat cap 2", ""COL_WHITE"Hay nhap mat khau bao mat cap 2 cua ban de tiep tuc:", "Xong", "Thoat");
 			return ErrorMsg(playerid, "Mat khau bao mat cap 2 ban vua nhap khong dung.");
@@ -864,15 +878,15 @@ Dialog:Register_Email(playerid, response, listitem, inputtext[]) {
 Dialog:Char_Selection(playerid, response, listitem, inputtext[]) {
 	if(!response) return KickPlayer(playerid, 500);
 	else {
-		J@ = listitem+1;
-		AuthData[playerid][Selected] = J@;
+		static str[64];
+		AuthData[playerid][Selected] = listitem+1;
 		if(tmpCharacterData[playerid][listitem][Available]) {
-			format(Q@, 64, ""COL_AQUA"NHAN VAT %d: %s", J@, GetRoleplayName(tmpCharacterData[playerid][listitem][Name]));
-			Dialog_Show(playerid, Char_Interact, DS_LIST, Q@, ""COL_GREEN"Tham gia tro choi\n"COL_RED"Xoa nhan vat", "Chon", "Quay lai");
+			format(str, sizeof str, ""COL_AQUA"NHAN VAT %d: %s", AuthData[playerid][Selected], GetRoleplayName(tmpCharacterData[playerid][listitem][Name]));
+			Dialog_Show(playerid, Char_Interact, DS_LIST, str, ""COL_GREEN"Tham gia tro choi\n"COL_RED"Xoa nhan vat", "Chon", "Quay lai");
 		}
 		else {
-			format(Q@, 64, ""COL_AQUA"NHAN VAT %d: Tao nhan vat", J@);
-			Dialog_Show(playerid, Char_CreateC, DS_MSGBOX, Q@, ""COL_WHITE"\\cBan co thuc su muon tao nhan vat tai slot nay khong?", "Co", "Khong");
+			format(str, sizeof str, ""COL_AQUA"NHAN VAT %d: Tao nhan vat", AuthData[playerid][Selected]);
+			Dialog_Show(playerid, Char_CreateC, DS_MSGBOX, str, ""COL_WHITE"\\cBan co thuc su muon tao nhan vat tai slot nay khong?", "Co", "Khong");
 		}
 	}
 }
@@ -880,6 +894,7 @@ Dialog:Char_Selection(playerid, response, listitem, inputtext[]) {
 Dialog:Char_Interact(playerid, response, listitem, inputtext[]) {
 	if(!response) return ShowCharSelDialog(playerid);
 	else {
+		static str[128];
 		switch(listitem) {
 			case 0: {
 				flog("logs/auth.log", "[AUTH] Tai khoan \"%s\" da dang nhap vao tro choi voi nhan vat %d: %s", AuthData[playerid][Account], AuthData[playerid][Selected], GetRoleplayName(tmpCharacterData[playerid][AuthData[playerid][Selected]-1][Name]));
@@ -887,8 +902,8 @@ Dialog:Char_Interact(playerid, response, listitem, inputtext[]) {
 			}
 			case 1: {
 				flog("logs/auth.log", "[AUTH] Tai khoan \"%s\" da xoa nhan vat tai slot %d: %s", AuthData[playerid][Account], AuthData[playerid][Selected], GetRoleplayName(tmpCharacterData[playerid][AuthData[playerid][Selected]-1][Name]));
-				format(Q@, 128, "DELETE FROM `characters` WHERE `Name`='%s'", tmpCharacterData[playerid][AuthData[playerid][Selected]-1][Name]);
-				mysql_tquery(Database, Q@);
+				format(str, sizeof str, "DELETE FROM `characters` WHERE `Name`='%s'", tmpCharacterData[playerid][AuthData[playerid][Selected]-1][Name]);
+				mysql_tquery(Database, str);
 				ShowCharSelDialog(playerid);
 			}
 		}
@@ -911,8 +926,9 @@ Dialog:Char_Create(playerid, response, listitem, inputtext[])  {
 			case 4: Dialog_Show(playerid, cCreate_Skin, DS_LIST, ""COL_AQUA"CHON TRANG PHUC", "Trang phuc nam\nTrang phuc nu", "Chon", "Quay lai");
 			case 5:	Dialog_Show(playerid, cCreate_Desc, DS_INPUT, ""COL_AQUA"MO TA NHAN VAT", "\\c"COL_WHITE"Nhap mo ta ve nhan vat cua ban (co the bo qua):", "Xong", "Quay lai");
 			case 6: {
-				format(Q@, 64, ""COL_AQUA"NHAN VAT %d: Tao nhan vat", AuthData[playerid][Selected]);
-				Dialog_Show(playerid, cCreate_Confirm, DS_MSGBOX, Q@, ""COL_WHITE"\\cBan da chac chan rang cac thong tin cua nhan vat la chinh xac khong?\n"COL_WHITE"Bam "COL_GREEN"'Co' "COL_WHITE"de tao nhan vat, bam "COL_LIGHTRED"'Khong' "COL_WHITE"de quay lai va chinh sua thong tin.", "Co", "Khong");
+				static str[64];
+				format(str, sizeof str, ""COL_AQUA"NHAN VAT %d: Tao nhan vat", AuthData[playerid][Selected]);
+				Dialog_Show(playerid, cCreate_Confirm, DS_MSGBOX, str, ""COL_WHITE"\\cBan da chac chan rang cac thong tin cua nhan vat la chinh xac khong?\n\\c"COL_WHITE"Bam "COL_GREEN"'Co' "COL_WHITE"de tao nhan vat, bam "COL_LIGHTRED"'Khong' "COL_WHITE"de quay lai va chinh sua thong tin.", "Co", "Khong");
 			}
 		}
 	}
@@ -921,17 +937,18 @@ Dialog:Char_Create(playerid, response, listitem, inputtext[])  {
 Dialog:cCreate_Name(playerid, response, listitem, inputtext[]) {
 	if(!response) ShowCharCreateDialog(playerid);
 	else {
-		format(Q@, 256, "SELECT * FROM `characters` WHERE `Name`='%s'", inputtext);
-		await mysql_aquery(Database, Q@);
+		static str[256];
+		format(str, sizeof str, "SELECT * FROM `characters` WHERE `Name`='%s'", inputtext);
+		await mysql_aquery(Database, str);
 		if(cache_num_rows()) {
-			format(Q@, 256, "\\c"COL_LIGHTRED"Ten nhan vat "COL_WHITE"%s "COL_LIGHTRED"da ton tai. Vui long chon mot ten khac!\n\\c"COL_WHITE"Nhap ten cho nhan vat cua ban. "COL_GREEN"Vi du: Ho_Ten.", inputtext);
-			Dialog_Show(playerid, cCreate_Name, DS_INPUT, ""COL_AQUA"TEN NHAN VAT", Q@, "Xong", "Quay lai");
+			format(str, sizeof str, "\\c"COL_LIGHTRED"Ten nhan vat "COL_WHITE"%s "COL_LIGHTRED"da ton tai. Vui long chon mot ten khac!\n\\c"COL_WHITE"Nhap ten cho nhan vat cua ban. "COL_GREEN"Vi du: Ho_Ten.", inputtext);
+			Dialog_Show(playerid, cCreate_Name, DS_INPUT, ""COL_AQUA"TEN NHAN VAT", str, "Xong", "Quay lai");
 		}
 		else {
 		    if(strlen(inputtext) < 6 || strlen(inputtext) > 24) return Dialog_Show(playerid, cCreate_Name, DS_INPUT, ""COL_AQUA"TEN NHAN VAT", "\\c"COL_LIGHTRED"Ten ban vua nhap phai gom tu 6 den 24 ki tu!\n\\c"COL_WHITE"Nhap ten cho nhan vat cua ban. "COL_GREEN"Vi du: Ho_Ten.", "Xong", "Quay lai");
 		    if(!IsRoleplayName(inputtext)) {
-		    	format(Q@, 256, "\\c"COL_LIGHTRED"Ten nhan vat "COL_WHITE"%s "COL_LIGHTRED"khong hop le hoac Non-RP!\n\\c"COL_WHITE"Nhap ten cho nhan vat cua ban. "COL_GREEN"Vi du: Ho_Ten.", GetRoleplayName(inputtext));
-		    	Dialog_Show(playerid, cCreate_Name, DS_INPUT, ""COL_AQUA"TEN NHAN VAT", Q@, "Xong", "Quay lai");
+		    	format(str, sizeof str, "\\c"COL_LIGHTRED"Ten nhan vat "COL_WHITE"%s "COL_LIGHTRED"khong hop le hoac Non-RP!\n\\c"COL_WHITE"Nhap ten cho nhan vat cua ban. "COL_GREEN"Vi du: Ho_Ten.", GetRoleplayName(inputtext));
+		    	Dialog_Show(playerid, cCreate_Name, DS_INPUT, ""COL_AQUA"TEN NHAN VAT", str, "Xong", "Quay lai");
 		    	return 1;
 		    }
 		    format(CreateCharData[playerid][Name], MAX_PLAYER_NAME+1, "%s", inputtext);
