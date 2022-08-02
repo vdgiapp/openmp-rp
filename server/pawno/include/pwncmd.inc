@@ -81,14 +81,17 @@
         #define ALIAS:%0(%1) alias:%0(%1)
         #define altx:%0(%1) alias:%0(%1)
         #define ALTX:%0(%1) alias:%0(%1)
+        #define Altx:%0(%1) alias:%0(%1)
 
         #define flags:%0(%1) \
             forward pc_flags_%0(); \
             public pc_flags_%0() \
                 PC_SetFlags(#%0, %1);
 
+        #define Cmd cmd
         #define CMD cmd
         #define COMMAND cmd
+
 
         #define callcmd::%0(%1) \
             pc_cmd_%0(%1)
