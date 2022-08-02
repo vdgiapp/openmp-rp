@@ -2,6 +2,17 @@
 #include <YSI_Coding/y_hooks>
 
 // +-+-+-+-+- Addition Functions +-+-+-+-+-
+
+FreezePlayer(playerid, time) {
+    SetPVarInt(playerid, #Freezing, 1);
+    TogglePlayerControllable(playerid, false);
+    defer UnFreezePlayer[time](playerid);
+}
+
+KickPlayer(playerid, time) {
+    defer tKickPlayer[time](playerid);
+}
+
 GivePlayerHealth(playerid, Float:hp) {
 	static Float:ohp;
 	GetPlayerHealth(playerid, ohp);
@@ -74,8 +85,7 @@ GetXYZFromAngle(&Float:posX, &Float:posY, &Float:posZ, Float:angle, Float:height
 	posZ += (distance * floatsin(height, degrees));
 }
 
-GetWeaponIDFromModel(modelid)
-{
+GetWeaponIDFromModel(modelid) {
 	static wid;
     switch(modelid)
     {
@@ -139,21 +149,37 @@ GlobalMsg(color, const message[], va_args<>) {
 	return 1;
 }
 
-ErrorMsg(playerid, const string[]) {
+ErrorMsg(playerid, const string[], va_args<>) {
 	static str[256];
-	format(str, sizeof str, ""COL_LIGHTRED"ERROR > "COL_GREY"%s", string);
+    format(str, sizeof str, string, va_start<2>);
+	format(str, sizeof str, ""COL_LIGHTRED"ERROR > "COL_GREY"%s", str);
 	ClientMsg(playerid, -1, str);
 }
 
-SuccessMsg(playerid, const string[]) {
+SuccessMsg(playerid, const string[], va_args<>) {
 	static str[256];
-	format(str, sizeof str, ""COL_GREEN"SUCCESS > "COL_WHITE"%s", string);
+    format(str, sizeof str, string, va_start<2>);
+	format(str, sizeof str, ""COL_GREEN"SUCCESS > "COL_WHITE"%s", str);
 	ClientMsg(playerid, -1, str);
 }
 
-LocalMsg(playerid, const string[]) return ProxDetector(string, 20.0, playerid, COLOR_DIST1, COLOR_DIST2, COLOR_DIST3, COLOR_DIST4, COLOR_DIST5);
-LowMsg(playerid, const string[]) return ProxDetector(string, 8.0, playerid, COLOR_GREY, COLOR_DIST1, COLOR_DIST2, COLOR_DIST3, COLOR_DIST4);
-ShoutMsg(playerid, const string[]) return ProxDetector(string, 50.0, playerid, COLOR_DIST1, COLOR_DIST2, COLOR_DIST3, COLOR_DIST4, COLOR_DIST5);
+LocalMsg(playerid, const string[], va_args<>) {
+    static str[256];
+    format(str, sizeof str, string, va_start<2>);
+    ProxDetector(str, 20.0, playerid, COLOR_DIST1, COLOR_DIST2, COLOR_DIST3, COLOR_DIST4, COLOR_DIST5);
+}
+
+LowMsg(playerid, const string[], va_args<>) {
+    static str[256];
+    format(str, sizeof str, string, va_start<2>);
+    ProxDetector(str, 8.0, playerid, COLOR_DIST1, COLOR_DIST2, COLOR_DIST3, COLOR_DIST4, COLOR_DIST5);
+}
+
+ShoutMsg(playerid, const string[], va_args<>) {
+    static str[256];
+    format(str, sizeof str, string, va_start<2>);
+    ProxDetector(str, 50.0, playerid, COLOR_DIST1, COLOR_DIST2, COLOR_DIST3, COLOR_DIST4, COLOR_DIST5);
+}
 
 ProxDetector(const string[], Float:radi, playerid, col1, col2, col3, col4, col5) {
     if(IsPlayerInGame(playerid)) {
@@ -212,6 +238,6 @@ cache_value_int(row_idx, const column_name[]) {
 
 Float:cache_value_float(row_idx, const column_name[]) {
 	static Float:ret;
-	cache_get_value_name_float(row_idx, column_name[], ret);
+	cache_get_value_name_float(row_idx, column_name, ret);
 	return ret;
 }

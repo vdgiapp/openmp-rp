@@ -51,9 +51,9 @@ _y_va_flog(const file[], const string[], va_args<>)
 	if(temp) {
 		static str[1024];
 		format(str, sizeof str, string, va_start<2>);
+		printf(str);
 		format(str, sizeof str, "[%s] | %s\r\n", now(), str);
 	    fwrite(temp, str);
-	    printf(string);
 	    fclose(temp);
 	    return 1;
 	}

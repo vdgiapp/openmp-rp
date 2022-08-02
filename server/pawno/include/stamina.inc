@@ -60,11 +60,8 @@
 	#define include_g_Stamina
 #endif
 
-
-
-
 #if !defined STAMINA_DEFAULT_RECOVERYTIME
-	#define STAMINA_DEFAULT_RECOVERYTIME    (4000)
+	#define STAMINA_DEFAULT_RECOVERYTIME    (5000)
 #endif
 
 // [Callback]
@@ -158,7 +155,7 @@ stock GivePlayerMaxStamina(playerid, value) // Add / Subtract the player's MAX s
 stock SetPlayerStamina(playerid, value) // Set the player's current stamina (the current stamina cannot be higher than MAX_STAMINA )
 {
 	if(value > GetPVarInt(playerid, "MAX_Stamina")) return SetPVarInt(playerid, "Stamina", GetPVarInt(playerid, "MAX_Stamina")); //if the current stamina exceeds the MAX_STAMINA, set the player's MAX_STAMINA directly to avoid bugs
-	else if(value == 0) OnPlayerStaminaOver(playerid);
+	else if(value == 0) CallLocalFunction("OnPlayerStaminaOver", "i", playerid);
 	SetPVarInt(playerid, "Stamina", value);
 	return 1;
 }

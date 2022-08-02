@@ -20,9 +20,8 @@ MappingInt_OnPlayerConnect(playerid) {
 
 MappingInt_OnGameModeInit() {
 
-	new tmpobjid;
-
 	// Biker's bar
+	new tmpobjid;
 	tmpobjid = CreateStreamedObjectEx(19377, 2065.106445, 2348.542480, -90.281143, 0.000000, 90.000000, 0.000000, 120.00, 120.00); 
 	SetDynamicObjectMaterial(tmpobjid, 0, 14789, "ab_sfgymmain", "gym_floor6", 0x00000000);
 	tmpobjid = CreateStreamedObjectEx(19377, 2057.429443, 2358.174316, -90.281143, 0.000000, 90.000000, 0.000000, 120.00, 120.00); 

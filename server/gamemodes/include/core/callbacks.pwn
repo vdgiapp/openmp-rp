@@ -5,10 +5,10 @@
 public OnGameModeInit() {
 	Database = mysql_connect(host_mysql, user_mysql, pass_mysql, dbase_mysql);
     if(Database == MYSQL_INVALID_HANDLE || mysql_errno(Database) != 0) {
-        printf("[S] Ket noi den co so du lieu khong thanh cong!\n");
+        printf("Ket noi den co so du lieu khong thanh cong!\n");
         return mysql_close(Database);
     }
-    printf("[S] Ket noi den co so du lieu thanh cong!\n");
+    printf("Ket noi den co so du lieu thanh cong!\n");
     pp_use_funcidx(true);
 	ShowNameTags(true);
 	SetNameTagDrawDistance(NAMETAG_DISTANCE);
@@ -40,7 +40,7 @@ public OnGameModeInit() {
 
 	// Streamer
 	Streamer_SetMaxItems(STREAMER_TYPE_OBJECT, -1);
-    Streamer_SetVisibleItems(STREAMER_TYPE_OBJECT, 2000);
+    Streamer_SetVisibleItems(STREAMER_TYPE_OBJECT, 2500);
 	return 1;
 }
 
@@ -59,10 +59,6 @@ public OnPlayerConnect(playerid)
 public OnPlayerDisconnect(playerid, reason) { // 0- Timeout, Crash / 1- Quit / 2- Kick, Ban
 	Auth_OnPlayerDisconnect(playerid, reason);
 	return 1;
-}
-
-public OnPlayerText(playerid, text[]) {
-    return 0;
 }
 
 public OnPlayerRequestSpawn(playerid) {
@@ -87,10 +83,6 @@ public OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, Float:fX, Float:fY
         if(BulletDistanceForHit==0 && (weaponid>21 && weaponid!=35 && weaponid!=42 && weaponid<47)) return 0; //It prevents the bullet from reaching the target player.
     }
     return 1;
-}
-
-public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart) {
-	return 1;
 }
 
 public OnPlayerGiveDamageDynamicActor(playerid, actorid, Float:amount, weaponid, bodypart) {

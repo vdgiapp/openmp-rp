@@ -24,7 +24,7 @@ enum createCharInf {
 	BMonth,
 	BYear,
 	Birthday[16],
-	Skin
+	SkinID
 }
 static CreateCharData[MAX_PLAYERS][createCharInf];
 
@@ -390,7 +390,7 @@ Auth_OnPlayerDisconnect(playerid, reason) {
 	if(AuthData[playerid][Logged]) {
 		static str[256];
 		format(str, sizeof str, "UPDATE `accounts` SET `Online`='0' WHERE `Account`='%s'", AuthData[playerid][Account]);
-		await mysql_aquery(Database, str);
+		mysql_tquery(Database, str);
 		switch(reason) {
 			case 0: flog("logs/auth.log", "[AUTH] Tai khoan \"%s\" da dang xuat khoi tro choi (mat ket noi).", AuthData[playerid][Account]);
 			case 1: flog("logs/auth.log", "[AUTH] Tai khoan \"%s\" da dang xuat khoi tro choi (thoat game).", AuthData[playerid][Account]);
@@ -399,6 +399,7 @@ Auth_OnPlayerDisconnect(playerid, reason) {
 		//Save if(IsPlayerInGame(playerid)) SaveCharacterInfoData(playerid, log_Account[playerid], char_Selected[playerid]);
 	}
 	ResetPlayerVars(playerid);
+	Kick(playerid);
 }
 
 hook OnPlayerClickTextDraw(playerid, Text:clickedid) {
@@ -413,7 +414,7 @@ hook OnPlayerModelSelection(playerid, response, listid, modelid) {
 	if(listid == MaleSkinList) {
 		if(!IsPlayerInGame(playerid)) {
 			if(response) {
-				CreateCharData[playerid][Skin] = modelid;
+				CreateCharData[playerid][SkinID] = modelid;
 				SetPlayerSkin(playerid, modelid);
 				ApplyAnimation(playerid, "BAR", "Barcustom_loop", 4.1, 1, 1, 1, 1, 0, 1);
 				ShowCharCreateDialog(playerid);
@@ -424,7 +425,7 @@ hook OnPlayerModelSelection(playerid, response, listid, modelid) {
 	if(listid == FemaleSkinList) {
 		if(!IsPlayerInGame(playerid)) {
 			if(response) {
-				CreateCharData[playerid][Skin] = modelid;
+				CreateCharData[playerid][SkinID] = modelid;
 				SetPlayerSkin(playerid, modelid);
 				ApplyAnimation(playerid, "BAR", "Barcustom_loop", 4.1, 1, 1, 1, 1, 0, 1);
 				ShowCharCreateDialog(playerid);
@@ -463,7 +464,7 @@ hook function ResetPlayerVars(playerid) {
 	CreateCharData[playerid][BMonth] = 0;
 	CreateCharData[playerid][BYear] = 0;
 	CreateCharData[playerid][Nation] = 0;
-	CreateCharData[playerid][Skin] = 2;
+	CreateCharData[playerid][SkinID] = 2;
 
 	continue(playerid);
 }
@@ -583,7 +584,7 @@ ShowCharCreateDialog(playerid) {
         "COL_GREEN"Hoan thanh", 
         CreateCharData[playerid][Name], gender,
         CreateCharData[playerid][Birthday], 
-        nation, CreateCharData[playerid][Skin]);
+        nation, CreateCharData[playerid][SkinID]);
 	return Dialog_Show(playerid, Char_Create, DS_TABLIST, ""COL_AQUA"TAO NHAN VAT", str, "Chon", "Thoat");
 }
 
@@ -631,7 +632,7 @@ ShowCharSelDialog(playerid) {
 		else {
 			tmpCharacterData[playerid][i][Available] = 0;
 			format(tmpCharacterData[playerid][i][Name], 25, "");
-			format(str, sizeof str, "\n"COL_GREY"%d\t"COL_GREY"%s", slot, "Tao nhan vat");
+			format(str, sizeof str, "\n"COL_GREY"%d\t"COL_GREY"Tao nhan vat", slot);
 			strcat(tmpchardata, str);
 			if(i >= 2) return Dialog_Show(playerid, Char_Selection, DS_HEADERS, ""COL_AQUA"CHON NHAN VAT", tmpchardata, "Chon", "Thoat");
 		}
@@ -696,7 +697,7 @@ CheckToRegister(playerid) {
 		PlayerPlaySound(playerid, 1084, 0, 0, 0);
 		SetRandomName(playerid, "Logged_", 100000, 999999);
 		
-		format(str, sizeof str, "UPDATE `accounts` SET `Online`='1', `LastLogin`='%02d %02d %02d %02d %02d %04d', `DateCreated`='%02d %02d %02d %02d %02d %04d' WHERE `Account`='%s'", \
+		format(str, sizeof str, "UPDATE `accounts` SET `Online`='1', `LastLogin`='%02d %02d %02d %02d %02d %04d', `DateCreated`='%02d %02d %02d %02d %02d %04d' WHERE `Account`='%s'", 
 			hour, minute, second, day, month, year, hour, minute, second, day, month, year, AuthData[playerid][Account]);
 		mysql_tquery(Database, str);
 		mysql_tquery(Database, "UPDATE `serverinfo` SET `Registered`=`Registered`+1");
@@ -740,17 +741,19 @@ CreateCharacterForPlayer(playerid, name[], slot) {
     format(str, sizeof str, "INSERT INTO `characters` \
     	(`Slot`, `Account`, `DateCreated`, `LastTimePlayed`, \
     	`Name`, `Description`, `Level`, `Gender`, `Birthday`, \
-    	`Nation`, `Skin`, `Cash`, `Coins`, `LicenseData`, \
+    	`Nation`, `SkinID`, `Cash`, `Coins`, `LicenseData`, \
     	`PhoneData`, `MuteData`, `ImprisonData`, `Hunger`, \
-    	`Thirst`, `Stamina`, `Health`, `Armour`, 'FightStyle') \
+    	`Thirst`, `Stamina`, `MaxStamina`, `Health`, `Armour`, \
+    	`FightStyle`, `Position`) \
     	VALUES ('%d', '%s', '%s', '%s', '%s', '%s', '1 0', \
-    	'%d', '%s', '%d', '%d', '1000', '10', '0 0 0 0 0 0', \
-    	'0 000000 0', '0 0', '0 0 0 0', '1000', '1000', '10', \
-    	'100', '0', '4')", \
+    	'%d', '%02d %02d %04d', '%d', '%d', '1000', '10', '0 0 0 0 0 0', \
+    	'0 000000 0', '0 0', '0 0 0 0', '1000', '1000', '100', '100', \
+    	'100', '0', '4', '1743 -1862 13.6 0 0 0')", \
     	slot, AuthData[playerid][Account], crtdate, lastpl, \
     	CreateCharData[playerid][Name], CreateCharData[playerid][Description], \
-    	CreateCharData[playerid][Gender], CreateCharData[playerid][Birthday], \
-    	CreateCharData[playerid][Nation], CreateCharData[playerid][Skin]);
+    	CreateCharData[playerid][Gender], CreateCharData[playerid][BDay], \
+    	CreateCharData[playerid][BMonth], CreateCharData[playerid][BYear],\
+    	CreateCharData[playerid][Nation], CreateCharData[playerid][SkinID]);
     mysql_tquery(Database, str);
 
     format(CreateCharData[playerid][Name], MAX_PLAYER_NAME+1, "");
@@ -761,7 +764,7 @@ CreateCharacterForPlayer(playerid, name[], slot) {
 	CreateCharData[playerid][BMonth] = 0;
 	CreateCharData[playerid][BYear] = 0;
 	CreateCharData[playerid][Nation] = 0;
-	CreateCharData[playerid][Skin] = 2;
+	CreateCharData[playerid][SkinID] = 2;
 
     FadePlayerScreen(playerid, LoadCharacterData, 0x000000FF, 200, 50);
     return 1;
@@ -788,7 +791,7 @@ Fade:PlayerCreateCharacter(playerid) {
 	SpawnPlayer(playerid);
 	SetPlayerTeam(playerid, NO_TEAM);
 	SetPlayerColor(playerid, COLOR_WHITE);
-	SetPlayerSkin(playerid, 2);
+	SetPlayerSkin(playerid, CreateCharData[playerid][SkinID]);
 	SetPlayerInterior(playerid, 15);
 	SetPlayerPos(playerid, 217.6, -101, 1005);
 	SetPlayerFacingAngle(playerid, 45);
@@ -799,19 +802,6 @@ Fade:PlayerCreateCharacter(playerid) {
 	ApplyAnimation(playerid, "BAR", "Barcustom_loop", 4.1, 1, 1, 1, 1, 0, 1);
 	FadePlayerScreen(playerid, FadeBack, 0x00000000, 200, 50);
 	return 1;
-}
-
-Fade:LoadCharacterData(playerid) {
-	static str[128];
-
-	AuthData[playerid][Joined] = 1;
-
-	format(str, sizeof str, "SELECT * FROM `characters` WHERE `Name` = '%s' AND `Slot` = '%d'", AuthData[playerid][Account], AuthData[playerid][Selected]);
-	await mysql_aquery(Database, str);
-    //SetSpawnInfo(playerid, NO_TEAM, CreateCharData[playerid][Skin]);
-
-    FadePlayerScreen(playerid, FadeBack, 0x00000000, 200, 50);
-    return 1;
 }
 
 Dialog:Login_Pass(playerid, response, listitem, inputtext[]) {
@@ -897,8 +887,8 @@ Dialog:Char_Interact(playerid, response, listitem, inputtext[]) {
 		static str[128];
 		switch(listitem) {
 			case 0: {
-				flog("logs/auth.log", "[AUTH] Tai khoan \"%s\" da dang nhap vao tro choi voi nhan vat %d: %s", AuthData[playerid][Account], AuthData[playerid][Selected], GetRoleplayName(tmpCharacterData[playerid][AuthData[playerid][Selected]-1][Name]));
-				//LoadCharacterInfoData(playerid, AuthInfo[playerid][Selected]);
+				flog("logs/auth.log", "[AUTH] Tai khoan \"%s\" da tham gia tro choi voi nhan vat %d: %s", AuthData[playerid][Account], AuthData[playerid][Selected], GetRoleplayName(tmpCharacterData[playerid][AuthData[playerid][Selected]-1][Name]));
+				FadePlayerScreen(playerid, LoadCharacterData, 0x000000FF, 200, 50);
 			}
 			case 1: {
 				flog("logs/auth.log", "[AUTH] Tai khoan \"%s\" da xoa nhan vat tai slot %d: %s", AuthData[playerid][Account], AuthData[playerid][Selected], GetRoleplayName(tmpCharacterData[playerid][AuthData[playerid][Selected]-1][Name]));

@@ -12,7 +12,7 @@
 #define currentdate curdate
 #define currenttime	curtime
 
-now() {
+stock now() {
 	static year, month, day, hour, minute, second, str[32];
 	getdate(year, month, day);
 	gettime(hour, minute, second);
@@ -20,14 +20,14 @@ now() {
 	return str;
 }
 
-curdate() {
+stock curdate() {
 	static year, month, day, str[32];
 	getdate(year, month, day);
 	format(str, sizeof str, "%02d/%02d/%d", day, month, year);
 	return str;
 }
 
-curtime() {
+stock curtime() {
 	static hour, minute, second, str[32];
 	gettime(hour, minute, second);
 	format(str, sizeof str, "%02d:%02d:%02d", hour, minute, second);

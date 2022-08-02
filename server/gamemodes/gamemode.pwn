@@ -6,7 +6,7 @@
 
 #define MEMORYSQUEEZE
 #define PP_SYNTAX_AWAIT // ASYNC AWAIT
-#define YSI_YES_HEAP_MALLOC // NO/YES HEAP MEMORY ALLOCATION
+#define YSI_YES_HEAP_MALLOC // HEAP MEMORY ALLOCATION
 
 #define SERVER_NAME "San Andreas Playground: Roleplay"
 #define SERVER_SNAME "SAP-RP.VN"
@@ -38,6 +38,7 @@
 #include <streamerf> // Streamer more functions
 #include <streamerfix> // CreateDynamicObject fix
 
+#include <mapfix> // Texture bug fixes
 #include <physics> // Physics
 #include <mapandreas> // Map Andreas
 #include <colandreas> // Collision
@@ -57,11 +58,11 @@
 #include <nametag> // Set player nametag
 #include <fader> // Fader
 
-#include <mapfix> // Texture bug fixes
-#include <stamina> // Player stamina
-
 #include <gettime> // Simple gettime, getdate
 #include <filelog> // Simple file log
+
+#include <stamina> // Player stamina
+// #include <oxygen> // Player oxygen | Waiting for new Open.MP release
 
 #include <YSI_Data/y_iterate> // or YSI_Data/y_foreach (instead of foreach)
 #include <YSI_Coding/y_va> // Variable arguments (va_args<>, va_format, va_start<3>)
@@ -71,27 +72,30 @@
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
-
+// Map
 #include "map_exteriors.pwn"
 #include "map_interiors.pwn"	
 
-#include "include/defines.pwn"
-#include "include/variables.pwn"
+// Core
+#include "include/core/defines.pwn"
+#include "include/core/variables.pwn"
 
 main() {
-	printf("[S] %s da khoi dong thanh cong", SERVER_NAME);
-	printf("[S] Phien ban %s", SERVER_VERSION);
+	printf("%s da khoi dong thanh cong", SERVER_NAME);
+	printf("Phien ban: %s", SERVER_VERSION);
 }
 
-#include "include/callbacks.pwn"
-#include "include/functions.pwn"
-
+#include "include/core/callbacks.pwn"
 #include "include/core/timer.pwn"
 #include "include/core/chat.pwn"
 #include "include/core/damage.pwn"
 #include "include/core/cmd.pwn"
+#include "include/core/functions.pwn"
 
+// Systems
 #include "include/authentication.pwn"
 
-#include "include/property/character/character.pwn"
+#include "include/character.pwn"
 #include "include/property/house/house.pwn"
+
+#include "include/stamina.pwn"
