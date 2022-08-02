@@ -32,23 +32,26 @@
 #include <pp_mysql> // PAWN plus MySQL
 #include <callbacks> // More callbacks
 #include <sampvoice> // SA-MP voice
-#include <mapandreas> // Map Andreas
-#include <colandreas> // Collision
 #include <ysf> // Y-Less server functions
 #include <evf> // Extended vehicles functions
 #include <streamer> // Streamer plugins
 #include <streamerf> // Streamer more functions
 #include <streamerfix> // CreateDynamicObject fix
+
+#include <physics> // Physics
+#include <mapandreas> // Map Andreas
+#include <colandreas> // Collision
+
 #include <cDialog> // Center text in dialog '\\c'
 #include <eDialog> // Easy Dialog
 #include <mDialog> // Preview Model Dialog
 #include <playertd> // Player textdraw
 #include <UmSelection> // Upgraded model selection
-//#include <eSelection> // Selection menu
 #include <notification> // Textdraw notification
 #include <MenuStore> // Menu store texdraw
 #include <progress2> // Progress bar
 #include <progress3D> // Progress bar 3D
+
 #include <chatbreaker> // Break long chat string
 #include <humanize> // Format something
 #include <nametag> // Set player nametag
