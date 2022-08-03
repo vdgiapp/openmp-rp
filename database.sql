@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th8 03, 2022 lúc 12:04 AM
+-- Thời gian đã tạo: Th8 03, 2022 lúc 03:06 PM
 -- Phiên bản máy phục vụ: 10.1.38-MariaDB
 -- Phiên bản PHP: 7.3.2
 
@@ -47,10 +47,10 @@ CREATE TABLE `accounts` (
 --
 
 INSERT INTO `accounts` (`UID`, `Account`, `Online`, `Password`, `Password2`, `EnablePass2`, `Email`, `BanData`, `BanReason`, `LastTimeLogged`, `DateCreated`) VALUES
-(1, 'vdgiapp', 0, '47A098BEC5DF36D2ACE0AACBB6BA9A83907298619913393CD19F489E200046A6', '66595AF2140492D5D19A980352DD16D491E62067A8FAC4D1B3D8C84617C70BE0', 0, 'vdgiapp@gmail.com', '0 0 0 0 none 0 0 0', '', '04 06 54 03 08 2022', ''),
-(2, 'redshank', 0, '47A098BEC5DF36D2ACE0AACBB6BA9A83907298619913393CD19F489E200046A6', '', 0, 'redshankseries@gmail.com', '0 0 0 0 none 0 0 0', '', '', ''),
+(1, 'vdgiapp', 0, '47A098BEC5DF36D2ACE0AACBB6BA9A83907298619913393CD19F489E200046A6', '66595AF2140492D5D19A980352DD16D491E62067A8FAC4D1B3D8C84617C70BE0', 0, 'vdgiapp@gmail.com', '0 0 0 0 none 0 0 0', '', '19 55 42 03 08 2022', ''),
+(2, 'redshank', 0, '47A098BEC5DF36D2ACE0AACBB6BA9A83907298619913393CD19F489E200046A6', '', 0, 'redshankseries@gmail.com', '0 0 0 0 none 0 0 0', '', '19 46 18 03 08 2022', ''),
 (3, 'minecraft', 0, '47A098BEC5DF36D2ACE0AACBB6BA9A83907298619913393CD19F489E200046A6', '', 0, 'minecraft151607389@gmail.com', '0 0 0 0 none 0 0 0', '', '22 17 30 29 07 2022', ''),
-(4, 'android', 0, '47A098BEC5DF36D2ACE0AACBB6BA9A83907298619913393CD19F489E200046A6', '', 0, 'tuilagiaptbz@gmail.com', '0 0 0 0 none 0 0 0', '', '23 00 58 02 08 2022', '');
+(4, 'android', 0, '47A098BEC5DF36D2ACE0AACBB6BA9A83907298619913393CD19F489E200046A6', '', 0, 'tuilagiaptbz@gmail.com', '0 0 0 0 none 0 0 0', '', '19 32 38 03 08 2022', '');
 
 -- --------------------------------------------------------
 
@@ -82,8 +82,8 @@ CREATE TABLE `characters` (
   `Warns` int(11) NOT NULL,
   `Wanted` int(11) NOT NULL,
   `Arrested` int(11) NOT NULL,
-  `Hunger` float NOT NULL,
-  `Thirst` float NOT NULL,
+  `Hunger` int(11) NOT NULL,
+  `Thirst` int(11) NOT NULL,
   `Stamina` int(11) NOT NULL,
   `MaxStamina` int(11) NOT NULL,
   `Injured` int(11) NOT NULL,
@@ -107,9 +107,10 @@ CREATE TABLE `characters` (
 --
 
 INSERT INTO `characters` (`UID`, `Account`, `Slot`, `Name`, `Nick`, `DateCreated`, `LastTimePlayed`, `Birthday`, `Gender`, `Nation`, `Description`, `SkinID`, `Level`, `Respects`, `JobID`, `FightStyle`, `Playtime`, `Payday`, `RespawnLocation`, `Faction`, `Warns`, `Wanted`, `Arrested`, `Hunger`, `Thirst`, `Stamina`, `MaxStamina`, `Injured`, `Health`, `Armour`, `Position`, `ImprisonData`, `MuteData`, `Cash`, `Coins`, `Bank`, `IDCard`, `LicenseData`, `PhoneData`, `ContactData`, `WalkieTalkieData`) VALUES
-(1, 'vdgiapp', 1, 'Jay_Holt', '', '21 48 54 02 08 2022', '21 48 54 02 08 2022', '09 11 1995', 1, 1, '', 2, '1 0', 0, 0, 4, 0, 0, 0, '', 0, 0, 0, 1000, 1000, 100, 0, 0, 100, 0, '1743 -1862 13.6 0 0 0', '0 0 0 0', '0 0', 1000, 10, '', 0, '0 0 0 0 0 0', '0 000000 0', '', ''),
-(2, 'vdgiapp', 2, 'Tyler_Holt', '', '22 27 32 02 08 2022', '22 27 32 02 08 2022', '09 11 1990', 1, 1, '_', 124, '1 0', 0, 0, 4, 0, 0, 0, '', 0, 0, 0, 1000, 1000, 100, 0, 0, 100, 0, '1743 -1862 13.6 0 0 0', '0 0 0 0', '0 0', 1000, 10, '', 0, '0 0 0 0 0 0', '0 000000 0', '', ''),
-(3, 'android', 1, 'Justin_Barber', '', '23 02 23 02 08 2022', '23 02 23 02 08 2022', '07 08 1987', 1, 1, '', 72, '1 0', 0, 0, 4, 0, 0, 0, '', 0, 0, 0, 1000, 1000, 100, 0, 0, 100, 0, '1743 -1862 13.6 0 0 0', '0 0 0 0', '0 0', 1000, 10, '', 0, '0 0 0 0 0 0', '0 000000 0', '', '');
+(1, 'vdgiapp', 1, 'Jay_Holt', '', '21 48 54 02 08 2022', '21 48 54 02 08 2022', '09 11 1995', 1, 1, '', 2, '1 0', 0, 0, 4, 0, 0, 0, '', 0, 0, 0, 1000, 1000, 100, 100, 0, 100, 0, '1743 -1862 13.6 0 0 0', '0 0 0 0', '0 0', 1000, 10, '', 0, '0 0 0 0 0 0', '0 000000 0', '', ''),
+(2, 'vdgiapp', 2, 'Tyler_Holt', '', '22 27 32 02 08 2022', '22 27 32 02 08 2022', '09 11 1990', 1, 1, '_', 124, '1 0', 0, 0, 4, 0, 0, 0, '', 0, 0, 0, 1000, 1000, 100, 100, 0, 100, 0, '1743 -1862 13.6 0 0 0', '0 0 0 0', '0 0', 1000, 10, '', 0, '0 0 0 0 0 0', '0 000000 0', '', ''),
+(3, 'android', 1, 'Justin_Barber', '', '23 02 23 02 08 2022', '23 02 23 02 08 2022', '07 08 1987', 1, 1, '', 72, '1 0', 0, 0, 4, 0, 0, 0, '', 0, 0, 0, 1000, 1000, 100, 100, 0, 100, 0, '1743 -1862 13.6 0 0 0', '0 0 0 0', '0 0', 1000, 10, '', 0, '0 0 0 0 0 0', '0 000000 0', '', ''),
+(4, 'redshank', 1, 'Dante_Grimes', '', '19 34 27 03 08 2022', '19 34 27 03 08 2022', '03 11 1987', 1, 1, '', 23, '1 0', 0, 0, 4, 0, 0, 0, '', 0, 0, 0, 1000, 1000, 100, 100, 0, 100, 0, '1743 -1862 13.6 0 0 0', '0 0 0 0', '0 0', 1000, 10, '', 0, '0 0 0 0 0 0', '0 000000 0', '', '');
 
 -- --------------------------------------------------------
 
@@ -130,7 +131,7 @@ CREATE TABLE `serverinfo` (
 --
 
 INSERT INTO `serverinfo` (`UID`, `Registered`, `CharCreated`, `Day`, `Logged`) VALUES
-(1, 4, 0, 3, 6);
+(1, 4, 0, 3, 15);
 
 --
 -- Chỉ mục cho các bảng đã đổ
@@ -168,7 +169,7 @@ ALTER TABLE `accounts`
 -- AUTO_INCREMENT cho bảng `characters`
 --
 ALTER TABLE `characters`
-  MODIFY `UID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `UID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT cho bảng `serverinfo`
