@@ -61,13 +61,14 @@
 #include <gettime> // Simple gettime, getdate
 #include <filelog> // Simple file log
 
+#include <cctv> // CCTV 
 #include <stamina> // Player stamina
 // #include <oxygen> // Player oxygen | Waiting for new Open.MP release
 
-#include <YSI_Data/y_iterate> // or YSI_Data/y_foreach (instead of foreach)
-#include <YSI_Coding/y_va> // Variable arguments (va_args<>, va_format, va_start<3>)
-#include <YSI_Coding/y_timers> // task, ptask, timer - (pause, resume, defer, repeat, stop)
-#include <YSI_Coding/y_hooks> // hook, hook function, hook callback
+#include <YSI_Data\y_iterate> // or YSI_Data/y_foreach (instead of foreach)
+#include <YSI_Coding\y_va> // Variable arguments (va_args<>, va_format, va_start<3>)
+#include <YSI_Coding\y_timers> // task, ptask, timer - (pause, resume, defer, repeat, stop)
+#include <YSI_Coding\y_hooks> // hook, hook function, hook callback
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -77,25 +78,26 @@
 #include "map_interiors.pwn"	
 
 // Core
-#include "include/core/defines.pwn"
-#include "include/core/variables.pwn"
+#include "include\core\defines.pwn"
+#include "include\core\variables.pwn"
 
 main() {
 	printf("%s da khoi dong thanh cong", SERVER_NAME);
 	printf("Phien ban: %s", SERVER_VERSION);
 }
 
-#include "include/core/callbacks.pwn"
-#include "include/core/timer.pwn"
-#include "include/core/chat.pwn"
-#include "include/core/damage.pwn"
-#include "include/core/cmd.pwn"
-#include "include/core/functions.pwn"
+#include "include\core\callbacks.pwn"
+#include "include\core\timer.pwn"
+#include "include\core\chat.pwn"
+#include "include\core\damage.pwn"
+#include "include\core\cmd.pwn"
+#include "include\core\functions.pwn"
 
 // Systems
-#include "include/authentication.pwn"
+#include "include\authentication.pwn"
 
-#include "include/character.pwn"
-#include "include/property/house/house.pwn"
+#include "include\character.pwn"
+#include "include\stamina.pwn"
+#include "include\playerhud.pwn"
 
-#include "include/stamina.pwn"
+#include "include\property\house\house.pwn"

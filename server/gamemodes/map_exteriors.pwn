@@ -1,8 +1,8 @@
 
-// Exteriors
-#include <YSI_Coding/y_hooks>
+#include <YSI_Coding\y_hooks>
 
-MappingExt_OnPlayerConnect(playerid) {
+// Exteriors
+hook OnPlayerConnect(playerid) {
 
 	// City Hall LS Ext
 	RemoveBuildingForPlayer(playerid, 4024, 1479.867, -1790.398, 56.023, 0.250);
@@ -202,7 +202,9 @@ MappingExt_OnPlayerConnect(playerid) {
 	return 1;
 }
 
-MappingExt_OnGameModeInit() {
+hook OnGameModeInit() {
+
+	printf("Loading exteriors...\n");
 
 	new object;
 	new tmpobjid;

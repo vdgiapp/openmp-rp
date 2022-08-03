@@ -160,6 +160,7 @@ native Float:GetPlayerZAim(playerid);
 native GetPlayerSurfingOffsets(playerid, &Float:fOffsetX, &Float:fOffsetY = 0.0, &Float:fOffsetZ = 0.0);
 native GetPlayerRotationQuat(playerid, &Float:w, &Float:x = 0.0, &Float:y = 0.0, &Float:z = 0.0);
 native GetPlayerDialogID(playerid);
+native HidePlayerDialog();
 native GetPlayerSpectateID(playerid);
 native GetPlayerSpectateType(playerid);
 native GetPlayerLastSyncedVehicleID(playerid);
@@ -273,10 +274,10 @@ native GetObjectType(playerid, objectid);
 native GetPlayerAttachedObject(playerid, index, &modelid, &bone = 0, &Float:fX = 0.0, &Float:fY = 0.0, &Float:fZ = 0.0, &Float:fRotX = 0.0, &Float:fRotY = 0.0, &Float:fRotZ = 0.0, &Float:fSacleX = 0.0, &Float:fScaleY = 0.0, &Float:fScaleZ = 0.0, &materialcolor1 = 0, &materialcolor2 = 0);
 
 // Per-player attached (aka holding) objects
-//native SetPlayerAttachedObjForPlayer(forplayerid, attachtoplayerid, index, modelid, bone, Float:fOffsetX = 0.0, Float:OffsetY = 0.0, Float:fOffsetZ = 0.0, Float:fRotX = 0.0, Float:fRotY = 0.0, Float:fRotZ = 0.0, Float:fScaleX = 1.0, Float:fScaleY = 1.0, Float:fScaleZ = 1.0, materialcolor1 = 0, materialcolor2 = 0);
-//native GetPlayerAttachedObjForPlayer(forplayerid, attachtoplayerid, index, &modelid, &bone = 0, &Float:fX = 0.0, &Float:fY = 0.0, &Float:fZ = 0.0, &Float:fRotX = 0.0, &Float:fRotY = 0.0, &Float:fRotZ = 0.0, &Float:fSacleX = 0.0, &Float:fScaleY = 0.0, &Float:fScaleZ = 0.0, &materialcolor1 = 0, &materialcolor2 = 0);
-//native RemPlayerAttachedObjForPlayer(forplayerid, removefromplayerid, index);
-//native IsPlayerAttachedObjForPlayer(forplayerid, attachtoplayerid, index);
+native SetPlayerAttachedObjForPlayer(forplayerid, attachtoplayerid, index, modelid, bone, Float:fOffsetX = 0.0, Float:OffsetY = 0.0, Float:fOffsetZ = 0.0, Float:fRotX = 0.0, Float:fRotY = 0.0, Float:fRotZ = 0.0, Float:fScaleX = 1.0, Float:fScaleY = 1.0, Float:fScaleZ = 1.0, materialcolor1 = 0, materialcolor2 = 0);
+native GetPlayerAttachedObjForPlayer(forplayerid, attachtoplayerid, index, &modelid, &bone = 0, &Float:fX = 0.0, &Float:fY = 0.0, &Float:fZ = 0.0, &Float:fRotX = 0.0, &Float:fRotY = 0.0, &Float:fRotZ = 0.0, &Float:fSacleX = 0.0, &Float:fScaleY = 0.0, &Float:fScaleZ = 0.0, &materialcolor1 = 0, &materialcolor2 = 0);
+native RemPlayerAttachedObjForPlayer(forplayerid, removefromplayerid, index);
+native IsPlayerAttachedObjForPlayer(forplayerid, attachtoplayerid, index);
 
 //n_ative AttachPlayerObjectToPlayer(objectplayer, objectid, attachplayer, Float:OffsetX, Float:OffsetY, Float:OffsetZ, Float:rX, Float:rY, Float:rZ);
 native AttachPlayerObjectToObject(playerid, objectid, attachtoid, Float:OffsetX, Float:OffsetY, Float:OffsetZ, Float:RotX, Float:RotY, Float:RotZ, SyncRotation = 1);
@@ -446,7 +447,6 @@ native ShowPickupForPlayer(playerid, pickupid);
 native HidePickupForPlayer(playerid, pickupid);
 native SetPickupForPlayer(playerid, id, model, type, Float:X, Float:Y, Float:Z);
 
-/*
 // Pickups - Player
 native CreatePlayerPickup(playerid, model, type, Float:X, Float:Y, Float:Z, virtualworld = 0);
 native DestroyPlayerPickup(playerid, pickupid);
@@ -456,7 +456,7 @@ native GetPlayerPickupPos(playerid, pickupid, &Float:fX, &Float:fY = 0.0, &Float
 native GetPlayerPickupModel(playerid, pickupid);
 native GetPlayerPickupType(playerid, pickupid);
 native GetPlayerPickupVirtualWorld(playerid, pickupid);
-*/
+
 // Y_Less's model sizes inc
 native GetColCount();
 native Float:GetColSphereRadius(modelid);

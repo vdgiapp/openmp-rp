@@ -1,5 +1,5 @@
 
-#include <YSI_Coding/y_hooks>
+#include <YSI_Coding\y_hooks>
 
 enum characterInfo {
 	Name[MAX_PLAYER_NAME+1],
@@ -22,8 +22,8 @@ enum characterInfo {
 	Warns,
 	Wanted,
 	Arrested,
-	Float:Hunger,
-	Float:Thirst,
+	Hunger,
+	Thirst,
 	Stamina,
 	MaxStamina,
 	Injured,
@@ -75,8 +75,8 @@ Fade:LoadCharacterData(playerid) {
 	CharacterData[playerid][Warns] = cache_value_int(0, "Warns");
 	CharacterData[playerid][Wanted] = cache_value_int(0, "Wanted");
 	CharacterData[playerid][Arrested] = cache_value_int(0, "Arrested");
-	CharacterData[playerid][Hunger] = cache_value_float(0, "Hunger");
-	CharacterData[playerid][Thirst] = cache_value_float(0, "Thirst");
+	CharacterData[playerid][Hunger] = cache_value_int(0, "Hunger");
+	CharacterData[playerid][Thirst] = cache_value_int(0, "Thirst");
 	CharacterData[playerid][Stamina] = cache_value_int(0, "Stamina");
 	CharacterData[playerid][MaxStamina] = cache_value_int(0, "MaxStamina");
 	CharacterData[playerid][Injured] = cache_value_int(0, "Injured");
@@ -106,7 +106,7 @@ Fade:LoadCharacterData(playerid) {
 	SetPlayerScore(playerid, level);
 	SetPlayerTeam(playerid, NO_TEAM);
 	SetPlayerColor(playerid, COLOR_WHITE);
-    SetCameraBehindPlayer(playerid);
+	SetCameraBehindPlayer(playerid);
 
 	SetPlayerName(playerid, CharacterData[playerid][Name]);
 	SetPlayerSkin(playerid, CharacterData[playerid][SkinID]);
@@ -119,6 +119,7 @@ Fade:LoadCharacterData(playerid) {
 	SetPlayerMoney(playerid, CharacterData[playerid][Cash]);
 
 	FreezePlayer(playerid, 7000);
-    FadePlayerScreen(playerid, FadeBack, 0x00000000, 200, 50);
+	ShowPlayerHUD(playerid);
+    FadePlayerScreen(playerid, FadeBack, 0x00000000, 1000, 25);
     return 1;
 }

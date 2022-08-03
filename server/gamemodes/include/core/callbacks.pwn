@@ -1,5 +1,5 @@
 
-#include <YSI_Coding/y_hooks>
+#include <YSI_Coding\y_hooks>
 
 // +-+-+-+-+- Main Callbacks +-+-+-+-+-
 public OnGameModeInit() {
@@ -27,12 +27,6 @@ public OnGameModeInit() {
 	printf("Changing accounts status...\n");
 	mysql_tquery(Database, "UPDATE `accounts` SET `Online`='0'");
 
-	// Load maps
-	printf("Loading exteriors...\n");
-	MappingExt_OnGameModeInit();
-	printf("Loading interiors...\n");
-	MappingInt_OnGameModeInit();
-
 	// Load lists
 	printf("Loading UmSelection lists...\n");
 	MaleSkinList = LoadModelSelectionMenu("config/male_skins_list.txt");
@@ -45,19 +39,16 @@ public OnGameModeInit() {
 }
 
 public OnGameModeExit() {
-	foreach(new playerid : Player) OnPlayerDisconnect(playerid, 0);
+	foreach(new playerid : Player) OnPlayerDisconnect(playerid, 1);
 	return 1;
 }
 
 public OnPlayerConnect(playerid)
 {
-	MappingExt_OnPlayerConnect(playerid);
-	MappingInt_OnPlayerConnect(playerid);
 	return 1;
 }
 
 public OnPlayerDisconnect(playerid, reason) { // 0- Timeout, Crash / 1- Quit / 2- Kick, Ban
-	Auth_OnPlayerDisconnect(playerid, reason);
 	return 1;
 }
 

@@ -1,7 +1,7 @@
 
-// Interiors
-#include <YSI_Coding/y_hooks>
+#include <YSI_Coding\y_hooks>
 
+// Interiors
 stock static CreateStreamedObjectEx(modelid, Float:x, Float:y, Float:z, Float:rx, Float:ry, Float:rz, Float:streamdistance = 300.0, Float:drawdistance = 300.0, vworld = -1, interiorid = -1)
 {
     new Object_ID = CreateDynamicObject(modelid, x, y, z, rx, ry, rz, vworld, interiorid, -1, streamdistance);
@@ -13,12 +13,14 @@ stock static SetDynObjMatText_Replace(objectid, text[], materialindex = 0, mater
 	return SetDynamicObjectMaterialText(objectid, materialindex, text, materialsize, fontface, fontsize, bold, fontcolor, backcolor, textalignment);
 }
 
-MappingInt_OnPlayerConnect(playerid) {
+hook OnPlayerConnect(playerid) {
 
 	return 1;
 }
 
-MappingInt_OnGameModeInit() {
+hook OnGameModeInit() {
+
+	printf("Loading interiors...\n");
 
 	// Biker's bar
 	new tmpobjid;

@@ -1,5 +1,5 @@
 
-#include <YSI_Coding/y_hooks>
+#include <YSI_Coding\y_hooks>
 
 enum authinfo {
 	Account[25],
@@ -386,7 +386,7 @@ hook OnPlayerConnect(playerid) {
 	return 1;
 }
 
-Auth_OnPlayerDisconnect(playerid, reason) {
+hook OnPlayerDisconnect(playerid, reason) {
 	if(AuthData[playerid][Logged]) {
 		static str[256];
 		format(str, sizeof str, "UPDATE `accounts` SET `Online`='0' WHERE `Account`='%s'", AuthData[playerid][Account]);
@@ -672,7 +672,7 @@ LoginSuccess(playerid) {
 	// Set var
 	AuthData[playerid][Logged] = 1;
 
-	FadePlayerScreen(playerid, tempLoadCharacters, 0x000000FF, 200, 50);
+	FadePlayerScreen(playerid, tempLoadCharacters, 0x000000FF, 1000, 25);
 }
 
 CheckToRegister(playerid) {
@@ -721,7 +721,7 @@ CheckToRegister(playerid) {
 		// Set var
 		AuthData[playerid][Logged] = 1;
 
-		FadePlayerScreen(playerid, tempLoadCharacters, 0x000000FF, 200, 50);
+		FadePlayerScreen(playerid, tempLoadCharacters, 0x000000FF, 1000, 25);
 	}
     return 1;
 }
@@ -766,7 +766,7 @@ CreateCharacterForPlayer(playerid, name[], slot) {
 	CreateCharData[playerid][Nation] = 0;
 	CreateCharData[playerid][SkinID] = 2;
 
-    FadePlayerScreen(playerid, LoadCharacterData, 0x000000FF, 200, 50);
+    FadePlayerScreen(playerid, LoadCharacterData, 0x000000FF, 1000, 25);
     return 1;
 }
 
@@ -781,7 +781,7 @@ Fade:tempLoadCharacters(playerid) {
 	SetPlayerCameraLookAt(playerid, 1480, 0, 200);
 	TogglePlayerControllable(playerid, false);
 	ShowCharSelDialog(playerid);
-	FadePlayerScreen(playerid, FadeBack, 0x00000000, 200, 50);
+	FadePlayerScreen(playerid, FadeBack, 0x00000000, 1000, 25);
 	return 1;
 }
 
@@ -800,7 +800,7 @@ Fade:PlayerCreateCharacter(playerid) {
 	SetPlayerCameraLookAt(playerid, 1000, -625, 1000);
 	TogglePlayerControllable(playerid, false);
 	ApplyAnimation(playerid, "BAR", "Barcustom_loop", 4.1, 1, 1, 1, 1, 0, 1);
-	FadePlayerScreen(playerid, FadeBack, 0x00000000, 200, 50);
+	FadePlayerScreen(playerid, FadeBack, 0x00000000, 1000, 25);
 	return 1;
 }
 
@@ -888,7 +888,7 @@ Dialog:Char_Interact(playerid, response, listitem, inputtext[]) {
 		switch(listitem) {
 			case 0: {
 				flog("logs/auth.log", "[AUTH] Tai khoan \"%s\" da tham gia tro choi voi nhan vat %d: %s", AuthData[playerid][Account], AuthData[playerid][Selected], GetRoleplayName(tmpCharacterData[playerid][AuthData[playerid][Selected]-1][Name]));
-				FadePlayerScreen(playerid, LoadCharacterData, 0x000000FF, 200, 50);
+				FadePlayerScreen(playerid, LoadCharacterData, 0x000000FF, 1000, 25);
 			}
 			case 1: {
 				flog("logs/auth.log", "[AUTH] Tai khoan \"%s\" da xoa nhan vat tai slot %d: %s", AuthData[playerid][Account], AuthData[playerid][Selected], GetRoleplayName(tmpCharacterData[playerid][AuthData[playerid][Selected]-1][Name]));
@@ -901,7 +901,7 @@ Dialog:Char_Interact(playerid, response, listitem, inputtext[]) {
 }
 
 Dialog:Char_CreateC(playerid, response, listitem, inputtext[]) {
-	if(response) FadePlayerScreen(playerid, PlayerCreateCharacter, 0x000000FF, 200, 50);
+	if(response) FadePlayerScreen(playerid, PlayerCreateCharacter, 0x000000FF, 1000, 25);
 	else ShowCharSelDialog(playerid);
 }
 
