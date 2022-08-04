@@ -65,7 +65,7 @@
 #include <nametag> // Set player nametag
 #include <fader> // Fader
 
-#include <gettime> // Simple gettime, getdate
+#include <gmtime> // Simple gettime, getdate
 #include <filelog> // Simple file log
 
 #include <cctv> // CCTV 
@@ -88,6 +88,7 @@
 main() {
 	printf("%s da khoi dong thanh cong", SERVER_NAME);
 	printf("Phien ban: %s", SERVER_VERSION);
+	SetTimeZone(7);
 }
 
 #include "include\core\callbacks.pwn"

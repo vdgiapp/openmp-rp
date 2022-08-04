@@ -2,7 +2,8 @@
 #include <YSI_Coding\y_hooks>
 
 ptask Stamina_Update[100](playerid) {
-	if(IsPlayerRunning(playerid)) GivePlayerStamina(playerid, -2);
+	if(IsPlayerSprinting(playerid)) GivePlayerStamina(playerid, -2);
+	if(IsPlayerBunnyhop(playerid)) GivePlayerStamina(playerid, -100);
 	else if(GetPlayerStamina(playerid) < GetPlayerMaxStamina(playerid)) GivePlayerStamina(playerid, 5);
 	return 1;
 }

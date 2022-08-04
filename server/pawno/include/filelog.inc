@@ -3,11 +3,6 @@
 	SIMPLE FILE LOG by Giapp
 */
 
-// gettime.inc
-#if !defined _SIMPLE_GET_TIME___
-	#error [FLOG] You need to include gettime.inc first
-#endif
-
 // Include define
 #if defined _SIMPLE_FILE_LOG_G_
 	#endinput

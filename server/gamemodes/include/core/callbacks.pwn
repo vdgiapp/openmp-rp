@@ -10,10 +10,10 @@ public OnGameModeInit() {
     }
     printf("Ket noi den co so du lieu thanh cong!\n");
 
-    // Settings
+    // AbcXyz
     DisableCrashDetectLongCall();
-    //pp_use_funcidx(true);
 
+    // Settings
 	ShowNameTags(true);
 	SetNameTagDrawDistance(NAMETAG_DISTANCE);
 	ShowPlayerMarkers(false);
@@ -22,6 +22,7 @@ public OnGameModeInit() {
 	AllowInteriorWeapons(1);
 	SetGameModeText(SERVER_VERSION);
 	SetModeRestartTime(20.0); // default: 12.0
+	SetTimeZone(7);
 
 	// Log files
 	printf("Checking log files...\n");
@@ -203,7 +204,7 @@ public OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, Float:fX, Float:fY
         GetPlayerLastShotVectors(playerid, fOriginX, fOriginY, fOriginZ, fHitPosX, fHitPosY, fHitPosZ);
         static Float:BulletDistanceForHit;
         BulletDistanceForHit = GetPlayerDistanceFromPoint(hitid, fHitPosX, fHitPosY, fHitPosZ);
-        if(BulletDistanceForHit==0 && (weaponid>21 && weaponid!=35 && weaponid!=42 && weaponid<47)) return 0; //It prevents the bullet from reaching the target player.
+        if(BulletDistanceForHit==0 && (weaponid>21 && weaponid!=35 && weaponid!=42 && weaponid<47)) return 0;
     }
     return 1;
 }

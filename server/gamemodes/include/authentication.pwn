@@ -66,6 +66,8 @@ function OnGetSvInfo() {
 	}
 	format(str, sizeof str, "%d", cache_value_int(0, "Logged")); TextDrawSetString(Auth_LoggedToday, str);
 	format(str, sizeof str, "%d", GetPlayersOnline()); TextDrawSetString(Auth_PlayersOnline, str);
+
+	
 }
 
 hook OnGameModeInit()

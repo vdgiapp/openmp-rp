@@ -2,8 +2,6 @@
 #include <YSI_Coding\y_hooks>
 
 // +-+-+-+-+- MAIN DEFINES +-+-+-+-+-
-DEFINE_HOOK_REPLACEMENT(Selection, Sel);
-
 #define function%0(%1) 			forward%0(%1); public%0(%1)
 #define ClientMsg 				SendClientMessagef
 #define ServerMsg 				SendClientMessageToAllf
@@ -87,5 +85,5 @@ new MySQL:Database;
 #define AUTH_LOG_FILE 			"logs/auth.log"
 
 // +-+-+-+-+- UMSELECTION LISTS +-+-+-+-+-
-#define MALE_SKIN_LIST 			"config/male_skins_list.txt"
-#define FEMALE_SKIN_LIST		"config/female_skins_list.txt"
+#define MALE_SKIN_LIST 			"lists/male_skins_list.txt"
+#define FEMALE_SKIN_LIST		"lists/female_skins_list.txt"

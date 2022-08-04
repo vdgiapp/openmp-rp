@@ -26,7 +26,7 @@
 
 	-	[+] Functions:
 
-			*- IsPlayerRunning(playerid) 								// Check If the player is running
+			*- IsPlayerSprinting(playerid) 								// Check If the player is sprinting
 
 			*- IsPlayerExhausted(playerid) 								// Check If the player is exhausted
 
@@ -70,15 +70,29 @@ forward OnPlayerStaminaOver(playerid);
 
 
 // [Functions]
-stock IsPlayerRunning(playerid) // Check if the player is running
+stock IsPlayerSprinting(playerid) // Check if the player is sprinting
 {
-    if(!IsPlayerConnected(playerid) || IsPlayerInAnyVehicle(playerid) || IsPlayerExhausted(playerid) || IsPlayerJumping(playerid)) return 0;
-    new keys, updown, leftright;
     new T3D:index = GetPlayerAnimationIndex(playerid);
-    GetPlayerKeys(playerid, keys, updown, leftright);
-    if((((!!updown  || !!leftright) && (keys & KEY_SPRINT)) && GetPlayerSpecialAction(playerid) != SPECIAL_ACTION_USEJETPACK)
-    	|| (T3D:index == 1231 || T3D:index == 1266 || T3D:index == 1196)) return 1;
-    else return 0;
+    if(!IsPlayerConnected(playerid) || IsPlayerExhausted(playerid) || IsPlayerJumping(playerid)) return 0;
+    if(GetPlayerSpecialAction(playerid) == SPECIAL_ACTION_USEJETPACK) return 0;
+
+    if(T3D:index == 1247) return 1; // Run sprinting
+
+    if(IsPlayerInAnyVehicle(playerid)) {
+	    if(T3D:index == 161) return 1; // BMX sprinting
+	    if(T3D:index == 339) return 1; // Bike sprinting
+	    if(T3D:index == 897) return 1; // MTB sprinting
+	}
+    return 0;
+}
+
+stock IsPlayerBunnyhop(playerid) {
+	new T3D:index = GetPlayerAnimationIndex(playerid);
+	if(!IsPlayerInAnyVehicle(playerid)) return 0;
+	if(T3D:index == 146) return 1; // BMX bunnyhop
+	if(T3D:index == 324) return 1; // Bike bunnyhop
+	if(T3D:index == 882) return 1; // BMX bunnyhop
+	return 0;
 }
 
 
