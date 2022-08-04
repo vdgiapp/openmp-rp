@@ -85,7 +85,6 @@ CREATE TABLE `characters` (
   `Hunger` int(11) NOT NULL,
   `Thirst` int(11) NOT NULL,
   `Stamina` int(11) NOT NULL,
-  `MaxStamina` int(11) NOT NULL,
   `Injured` int(11) NOT NULL,
   `Health` float NOT NULL,
   `Armour` float NOT NULL,
@@ -106,11 +105,11 @@ CREATE TABLE `characters` (
 -- Đang đổ dữ liệu cho bảng `characters`
 --
 
-INSERT INTO `characters` (`UID`, `Account`, `Slot`, `Name`, `Nick`, `DateCreated`, `LastTimePlayed`, `Birthday`, `Gender`, `Nation`, `Description`, `SkinID`, `Level`, `Respects`, `JobID`, `FightStyle`, `Playtime`, `Payday`, `RespawnLocation`, `Faction`, `Warns`, `Wanted`, `Arrested`, `Hunger`, `Thirst`, `Stamina`, `MaxStamina`, `Injured`, `Health`, `Armour`, `Position`, `ImprisonData`, `MuteData`, `Cash`, `Coins`, `Bank`, `IDCard`, `LicenseData`, `PhoneData`, `ContactData`, `WalkieTalkieData`) VALUES
-(1, 'vdgiapp', 1, 'Jay_Holt', '', '21 48 54 02 08 2022', '21 48 54 02 08 2022', '09 11 1995', 1, 1, '', 2, '1 0', 0, 0, 4, 0, 0, 0, '', 0, 0, 0, 1000, 1000, 100, 100, 0, 100, 0, '1743 -1862 13.6 0 0 0', '0 0 0 0', '0 0', 1000, 10, '', 0, '0 0 0 0 0 0', '0 000000 0', '', ''),
-(2, 'vdgiapp', 2, 'Tyler_Holt', '', '22 27 32 02 08 2022', '22 27 32 02 08 2022', '09 11 1990', 1, 1, '_', 124, '1 0', 0, 0, 4, 0, 0, 0, '', 0, 0, 0, 1000, 1000, 100, 100, 0, 100, 0, '1743 -1862 13.6 0 0 0', '0 0 0 0', '0 0', 1000, 10, '', 0, '0 0 0 0 0 0', '0 000000 0', '', ''),
-(3, 'android', 1, 'Justin_Barber', '', '23 02 23 02 08 2022', '23 02 23 02 08 2022', '07 08 1987', 1, 1, '', 72, '1 0', 0, 0, 4, 0, 0, 0, '', 0, 0, 0, 1000, 1000, 100, 100, 0, 100, 0, '1743 -1862 13.6 0 0 0', '0 0 0 0', '0 0', 1000, 10, '', 0, '0 0 0 0 0 0', '0 000000 0', '', ''),
-(4, 'redshank', 1, 'Dante_Grimes', '', '19 34 27 03 08 2022', '19 34 27 03 08 2022', '03 11 1987', 1, 1, '', 23, '1 0', 0, 0, 4, 0, 0, 0, '', 0, 0, 0, 1000, 1000, 100, 100, 0, 100, 0, '1743 -1862 13.6 0 0 0', '0 0 0 0', '0 0', 1000, 10, '', 0, '0 0 0 0 0 0', '0 000000 0', '', '');
+INSERT INTO `characters` (`UID`, `Account`, `Slot`, `Name`, `Nick`, `DateCreated`, `LastTimePlayed`, `Birthday`, `Gender`, `Nation`, `Description`, `SkinID`, `Level`, `Respects`, `JobID`, `FightStyle`, `Playtime`, `Payday`, `RespawnLocation`, `Faction`, `Warns`, `Wanted`, `Arrested`, `Hunger`, `Thirst`, `Stamina`, `Injured`, `Health`, `Armour`, `Position`, `ImprisonData`, `MuteData`, `Cash`, `Coins`, `Bank`, `IDCard`, `LicenseData`, `PhoneData`, `ContactData`, `WalkieTalkieData`) VALUES
+(1, 'vdgiapp', 1, 'Jay_Holt', '', '21 48 54 02 08 2022', '21 48 54 02 08 2022', '09 11 1995', 1, 1, '', 2, '1 0', 0, 0, 4, 0, 0, 0, '', 0, 0, 0, 1000, 1000, 1000, 0, 100, 0, '1743 -1862 13.6 0 0 0', '0 0 0 0', '0 0', 1000, 10, '', 0, '0 0 0 0 0 0', '0 000000 0', '', ''),
+(2, 'vdgiapp', 2, 'Tyler_Holt', '', '22 27 32 02 08 2022', '22 27 32 02 08 2022', '09 11 1990', 1, 1, '_', 124, '1 0', 0, 0, 4, 0, 0, 0, '', 0, 0, 0, 1000, 1000, 1000, 0, 100, 0, '1743 -1862 13.6 0 0 0', '0 0 0 0', '0 0', 1000, 10, '', 0, '0 0 0 0 0 0', '0 000000 0', '', ''),
+(3, 'android', 1, 'Justin_Barber', '', '23 02 23 02 08 2022', '23 02 23 02 08 2022', '07 08 1987', 1, 1, '', 72, '1 0', 0, 0, 4, 0, 0, 0, '', 0, 0, 0, 1000, 1000, 1000, 0, 100, 0, '1743 -1862 13.6 0 0 0', '0 0 0 0', '0 0', 1000, 10, '', 0, '0 0 0 0 0 0', '0 000000 0', '', ''),
+(4, 'redshank', 1, 'Dante_Grimes', '', '19 34 27 03 08 2022', '19 34 27 03 08 2022', '03 11 1987', 1, 1, '', 23, '1 0', 0, 0, 4, 0, 0, 0, '', 0, 0, 0, 1000, 1000, 1000, 0, 100, 0, '1743 -1862 13.6 0 0 0', '0 0 0 0', '0 0', 1000, 10, '', 0, '0 0 0 0 0 0', '0 000000 0', '', '');
 
 -- --------------------------------------------------------
 

@@ -70,14 +70,14 @@ forward OnPlayerStaminaOver(playerid);
 
 
 // [Functions]
-
 stock IsPlayerRunning(playerid) // Check if the player is running
 {
-    if(!IsPlayerConnected(playerid) || IsPlayerInAnyVehicle(playerid) || IsPlayerExhausted(playerid)) return 0;
-
+    if(!IsPlayerConnected(playerid) || IsPlayerInAnyVehicle(playerid) || IsPlayerExhausted(playerid) || IsPlayerJumping(playerid)) return 0;
     new keys, updown, leftright;
+    new T3D:index = GetPlayerAnimationIndex(playerid);
     GetPlayerKeys(playerid, keys, updown, leftright);
-    if(keys & KEY_SPRINT && GetPlayerSpecialAction(playerid) != SPECIAL_ACTION_USEJETPACK) return 1;
+    if((((!!updown  || !!leftright) && (keys & KEY_SPRINT)) && GetPlayerSpecialAction(playerid) != SPECIAL_ACTION_USEJETPACK)
+    	|| (T3D:index == 1231 || T3D:index == 1266 || T3D:index == 1196)) return 1;
     else return 0;
 }
 
@@ -102,7 +102,7 @@ public SetPlayerExhausted(playerid, bool:Exhausted)  // If true the player will 
 		SetPVarInt(playerid, "Exhausted", 1);
 		SetTimerEx("SetPlayerExhausted", STAMINA_DEFAULT_RECOVERYTIME, false, "ib", playerid, false);
 	}
-	else SetPVarInt(playerid, "Exhausted", 0), ClearAnimations(playerid);
+	else SetPVarInt(playerid, "Exhausted", 0); //ClearAnimations(playerid);
 	return 1;
 }
 
@@ -128,7 +128,7 @@ stock GivePlayerStamina(playerid, value) // Add / Subtract the player's current 
 	new stamina = GetPVarInt(playerid, "Stamina");
 
 	if(stamina == -1) return 1;
-	if(stamina + value == 0) return CallLocalFunction("OnPlayerStaminaOver", "i", playerid);
+	if(stamina + value <= 0) return SetPVarInt(playerid, "Stamina", 0), CallLocalFunction("OnPlayerStaminaOver", "i", playerid);
 	if(stamina + value <= GetPVarInt(playerid, "MAX_Stamina")) 
 	{
 		stamina = stamina+value;
@@ -155,7 +155,7 @@ stock GivePlayerMaxStamina(playerid, value) // Add / Subtract the player's MAX s
 stock SetPlayerStamina(playerid, value) // Set the player's current stamina (the current stamina cannot be higher than MAX_STAMINA )
 {
 	if(value > GetPVarInt(playerid, "MAX_Stamina")) return SetPVarInt(playerid, "Stamina", GetPVarInt(playerid, "MAX_Stamina")); //if the current stamina exceeds the MAX_STAMINA, set the player's MAX_STAMINA directly to avoid bugs
-	else if(value == 0) CallLocalFunction("OnPlayerStaminaOver", "i", playerid);
+	else if(value <= 0) CallLocalFunction("OnPlayerStaminaOver", "i", playerid), SetPVarInt(playerid, "Stamina", 0);
 	SetPVarInt(playerid, "Stamina", value);
 	return 1;
 }

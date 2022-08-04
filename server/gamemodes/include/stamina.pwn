@@ -1,15 +1,18 @@
 
 #include <YSI_Coding\y_hooks>
 
-hook OnPlayerUpdate(playerid)
-{
-	if(IsPlayerRunning(playerid)) GivePlayerStamina(playerid, -1);
-	if(GetPlayerStamina(playerid) < GetPlayerMaxStamina(playerid)) GivePlayerStamina(playerid, 1);
+ptask Stamina_Update[100](playerid) {
+	if(IsPlayerRunning(playerid)) GivePlayerStamina(playerid, -2);
+	else if(GetPlayerStamina(playerid) < GetPlayerMaxStamina(playerid)) GivePlayerStamina(playerid, 5);
 	return 1;
 }
 
-public OnPlayerStaminaOver(playerid)
-{
+public OnPlayerJump(playerid) {
+	GivePlayerStamina(playerid, -100);
+	return 1;
+}
+
+public OnPlayerStaminaOver(playerid) {
 	SetPlayerExhausted(playerid, true);
 	return 1;
 }

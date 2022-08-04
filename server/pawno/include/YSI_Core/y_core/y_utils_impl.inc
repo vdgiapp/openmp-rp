@@ -83,7 +83,13 @@ Optional plugins:
 #define FLOAT_INFINITY                  (Float:0x7F800000)
 #define FLOAT_NEG_INFINITY              (Float:0xFF800000)
 #define FLOAT_NEGATIVE_INFINITY         (Float:0xFF800000)
-#define FLOAT_NAN                       (Float:0x7FFFFFFF)
+
+#if !defined FLOAT_NAN
+	#define FLOAT_NAN (Float:0x7FFFFFFF)
+#endif
+
+//#define FLOAT_NAN                       (Float:0x7FFFFFFF)
+
 #define FLOAT_NOT_A_NUMBER              (Float:0x7FFFFFFF)
 #define FLOAT_QNAN                      (Float:0x7FFFFFFF)
 #define FLOAT_QUIET_NAN                 (Float:0x7FFFFFFF)
@@ -92,7 +98,12 @@ Optional plugins:
 #define FLOAT_SIGNALING_NAN             (Float:0x7FBFFFFF)
 #define FLOAT_SIGNALING_NOT_A_NUMBER    (Float:0x7FBFFFFF)
 #define FLOAT_E                         (Float:0x402DF854) // e
-#define FLOAT_PI                        (Float:0x40490FDB) // pi
+
+#if !defined FLOAT_PI
+	#define FLOAT_PI (Float:0x40490FDB)
+#endif
+//#define FLOAT_PI                        (Float:0x40490FDB) // pi
+
 #define FLOAT_ROOT_2                    (Float:0x3FB504F3) // sqrt(2)
 #define FLOAT_EPSILON                   (Float:0x00000001) // https://en.wikipedia.org/wiki/Machine_epsilon
 
@@ -506,7 +517,6 @@ P:D(bool:IsOdd(value));
 /*-------------------------------------------------------------------------*//**
  * <param name="value">Value to check if is even.</param>
  *//*------------------------------------------------------------------------**/
-
 P:D(bool:IsEven(value));
 #define IsEven(%0) (~(%0)&1)
 

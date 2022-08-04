@@ -9,7 +9,11 @@ public OnGameModeInit() {
         return mysql_close(Database);
     }
     printf("Ket noi den co so du lieu thanh cong!\n");
-    pp_use_funcidx(true);
+
+    // Settings
+    DisableCrashDetectLongCall();
+    //pp_use_funcidx(true);
+
 	ShowNameTags(true);
 	SetNameTagDrawDistance(NAMETAG_DISTANCE);
 	ShowPlayerMarkers(false);
@@ -21,7 +25,7 @@ public OnGameModeInit() {
 
 	// Log files
 	printf("Checking log files...\n");
-	fcreate("logs/auth.log");
+	fcreate(AUTH_LOG_FILE);
 
 	// Set account status
 	printf("Changing accounts status...\n");
@@ -29,12 +33,12 @@ public OnGameModeInit() {
 
 	// Load lists
 	printf("Loading UmSelection lists...\n");
-	MaleSkinList = LoadModelSelectionMenu("config/male_skins_list.txt");
-	FemaleSkinList = LoadModelSelectionMenu("config/female_skins_list.txt");
+	MaleSkinList = LoadModelSelectionMenu(MALE_SKIN_LIST);
+	FemaleSkinList = LoadModelSelectionMenu(FEMALE_SKIN_LIST);
 
 	// Streamer
 	Streamer_SetMaxItems(STREAMER_TYPE_OBJECT, -1);
-    Streamer_SetVisibleItems(STREAMER_TYPE_OBJECT, 2500);
+    Streamer_SetVisibleItems(STREAMER_TYPE_OBJECT, 2200);
 	return 1;
 }
 
@@ -43,21 +47,149 @@ public OnGameModeExit() {
 	return 1;
 }
 
+public OnPlayerRequestClass(playerid, classid) {
+	return 0;
+}
+
 public OnPlayerConnect(playerid)
 {
 	return 1;
 }
 
-public OnPlayerDisconnect(playerid, reason) { // 0- Timeout, Crash / 1- Quit / 2- Kick, Ban
+public OnPlayerDisconnect(playerid, reason) {
+	return 1;
+}
+
+public OnPlayerSpawn(playerid) {
+	return 1;
+}
+
+public OnPlayerDeath(playerid, killerid, reason) {
+	return 1;
+}
+
+public OnVehicleSpawn(vehicleid) {
+	return 1;
+}
+
+public OnVehicleDeath(vehicleid, killerid) {
+	return 1;
+}
+
+public OnPlayerText(playerid, text[]) {
+	return 0;
+}
+
+public OnPlayerCommandText(playerid, cmdtext[]) {
+	return 0;
+}
+
+public OnPlayerEnterVehicle(playerid, vehicleid, ispassenger) {
+	return 1;
+}
+
+public OnPlayerExitVehicle(playerid, vehicleid) {
+	return 1;
+}
+
+public OnPlayerStateChange(playerid, newstate, oldstate) {
+	return 1;
+}
+
+public OnPlayerEnterCheckpoint(playerid) {
+	return 1;
+}
+
+public OnPlayerLeaveCheckpoint(playerid) {
+	return 1;
+}
+
+public OnPlayerEnterRaceCheckpoint(playerid) {
+	return 1;
+}
+
+public OnPlayerLeaveRaceCheckpoint(playerid) {
+	return 1;
+}
+
+public OnRconCommand(cmd[]) {
 	return 1;
 }
 
 public OnPlayerRequestSpawn(playerid) {
-	return 0;
+	return 1;
 }
 
-public OnPlayerRequestClass(playerid) {
-	return 0;
+public OnObjectMoved(objectid) {
+	return 1;
+}
+
+public OnPlayerObjectMoved(playerid, objectid) {
+	return 1;
+}
+
+public OnPlayerPickUpPickup(playerid, pickupid) {
+	return 1;
+}
+
+public OnVehicleMod(playerid, vehicleid, componentid) {
+	return 1;
+}
+
+public OnVehiclePaintjob(playerid, vehicleid, paintjobid) {
+	return 1;
+}
+
+public OnVehicleRespray(playerid, vehicleid, color1, color2) {
+	return 1;
+}
+
+public OnPlayerSelectedMenuRow(playerid, row) {
+	return 1;
+}
+
+public OnPlayerExitedMenu(playerid) {
+	return 1;
+}
+
+public OnPlayerInteriorChange(playerid, newinteriorid, oldinteriorid) {
+	return 1;
+}
+
+public OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
+	return 1;
+}
+
+public OnRconLoginAttempt(ip[], password[], success) {
+	return 1;
+}
+
+public OnPlayerUpdate(playerid) {
+	return 1;
+}
+
+public OnPlayerStreamIn(playerid, forplayerid) {
+	return 1;
+}
+
+public OnPlayerStreamOut(playerid, forplayerid) {
+	return 1;
+}
+
+public OnVehicleStreamIn(vehicleid, forplayerid) {
+	return 1;
+}
+
+public OnVehicleStreamOut(vehicleid, forplayerid) {
+	return 1;
+}
+
+public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
+	return 1;
+}
+
+public OnPlayerClickPlayer(playerid, clickedplayerid, source) {
+	return 1;
 }
 
 public OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, Float:fX, Float:fY, Float:fZ) {

@@ -13,6 +13,12 @@ KickPlayer(playerid, time) {
     defer tKickPlayer[time](playerid);
 }
 
+GetPlayerZone(playerid) {
+    new MapZone:zone = GetPlayerMapZone(playerid);
+    new name[MAX_MAP_ZONE_NAME]; GetMapZoneName(zone, name);
+    return name;
+}
+
 GivePlayerHealth(playerid, Float:hp) {
 	static Float:ohp;
 	GetPlayerHealth(playerid, ohp);
@@ -34,16 +40,6 @@ PlayerName(playerid) {
 	static name[MAX_PLAYER_NAME+1];
 	GetPlayerName(playerid, name, sizeof name);
 	return name;
-}
-
-GetPlayerZone(playerid) {
-    new ret[32] = "_";
-    new MapZone:zone = GetPlayerMapZone(playerid);
-    if(zone == INVALID_MAP_ZONE_ID) return ret;
-    new name[MAX_MAP_ZONE_NAME];
-    GetMapZoneName(zone, name);
-    format(ret, sizeof ret, "%s", name);
-    return ret;
 }
 
 fNumber(number) {

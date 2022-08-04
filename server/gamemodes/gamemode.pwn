@@ -7,6 +7,7 @@
 #define MEMORYSQUEEZE
 #define PP_SYNTAX_AWAIT // ASYNC AWAIT
 #define YSI_YES_HEAP_MALLOC // HEAP MEMORY ALLOCATION
+#define CGEN_MEMORY	(20000)
 
 #define SERVER_NAME "San Andreas Playground: Roleplay"
 #define SERVER_SNAME "SAP-RP.VN"
@@ -29,19 +30,25 @@
 #include <pwnraknet> // PAWN RakNet
 #include <pwnplus> // PAWN plus
 #include <pwncmd> // PAWN commands
-#include <pp_mysql> // PAWN plus MySQL
 #include <callbacks> // More callbacks
 #include <sampvoice> // SA-MP voice
-#include <ysf> // Y-Less server functions
-#include <evf> // Extended vehicles functions
-#include <streamer> // Streamer plugins
-#include <streamerf> // Streamer more functions
-#include <streamerfix> // CreateDynamicObject fix
 
+#include <YSI_Data\y_iterate> // or YSI_Data/y_foreach (instead of foreach)
+#include <YSI_Coding\y_va> // Variable arguments (va_args<>, va_format, va_start<3>)
+#include <YSI_Coding\y_timers> // task, ptask, timer - (pause, resume, defer, repeat, stop)
+#include <YSI_Coding\y_hooks> // hook, hook function, hook callback
+
+#include <ysf> // Y-Less server functions
 #include <mapfix> // Texture bug fixes
 #include <physics> // Physics
 #include <mapandreas> // Map Andreas
 #include <colandreas> // Collision
+#include <3dtryg> // 3DTryG
+#include <evf> // Extended vehicles functions
+#include <nvs> // Vehicle streamer
+#include <streamer> // Streamer plugins
+#include <streamerf> // Streamer more functions
+#include <streamerfix> // CreateDynamicObject fix
 
 #include <cDialog> // Center text in dialog '\\c'
 #include <eDialog> // Easy Dialog
@@ -63,15 +70,12 @@
 
 #include <cctv> // CCTV 
 #include <stamina> // Player stamina
+#include <walkstyles> // Player walking style
 // #include <oxygen> // Player oxygen | Waiting for new Open.MP release
-
-#include <YSI_Data\y_iterate> // or YSI_Data/y_foreach (instead of foreach)
-#include <YSI_Coding\y_va> // Variable arguments (va_args<>, va_format, va_start<3>)
-#include <YSI_Coding\y_timers> // task, ptask, timer - (pause, resume, defer, repeat, stop)
-#include <YSI_Coding\y_hooks> // hook, hook function, hook callback
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 // Map
 #include "map_exteriors.pwn"
@@ -96,8 +100,9 @@ main() {
 // Systems
 #include "include\authentication.pwn"
 
-#include "include\character.pwn"
 #include "include\stamina.pwn"
+#include "include\character.pwn"
 #include "include\playerhud.pwn"
 
 #include "include\property\house\house.pwn"
+

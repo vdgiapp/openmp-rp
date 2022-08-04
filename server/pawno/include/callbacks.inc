@@ -812,7 +812,6 @@ public OnPlayerUpdate(playerid)
 			{
    				Callback_SetFlag(playerid, e_bReloading, false);
 			}
-
 		    for(new i = 0; i < sizeof(s_aVendingMachines); i ++)
 		    {
 		        if(IsPlayerInRangeOfPoint(playerid, 2.0, s_aVendingMachines[i][e_VENDING_MACHINE_X], s_aVendingMachines[i][e_VENDING_MACHINE_Y], s_aVendingMachines[i][e_VENDING_MACHINE_Z]))
@@ -825,7 +824,6 @@ public OnPlayerUpdate(playerid)
 					}
 				}
 			}
-
 			if((GetConnectedTime(playerid) - s_aPlayerTickInfo[playerid][e_PLAYER_LAST_JUMP] >= 1000) && IsPlayerJumping(playerid))
 			{
    				CallLocalFunction("OnPlayerJump", "i", playerid);

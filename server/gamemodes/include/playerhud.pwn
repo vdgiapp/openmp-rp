@@ -311,8 +311,8 @@ hook OnPlayerUpdate(playerid) {
 		}
 
 		static maxsta5pt, stamina;
-		maxsta5pt = floatround(CharacterData[playerid][MaxStamina]/20);
-		stamina = CharacterData[playerid][Stamina];
+		maxsta5pt = floatround(GetPlayerMaxStamina(playerid)/20);
+		stamina = GetPlayerStamina(playerid);//CharacterData[playerid][Stamina];
 		if(stamina <= 0) 									PlayerTextDrawSetString(playerid, HUD_Stamina[playerid], "");
 		if(1 <= stamina <= maxsta5pt*1) 					PlayerTextDrawSetString(playerid, HUD_Stamina[playerid], "l");
 		if(maxsta5pt+1 <= stamina <= maxsta5pt*2) 			PlayerTextDrawSetString(playerid, HUD_Stamina[playerid], "ll");
@@ -342,6 +342,7 @@ hook OnPlayerUpdate(playerid) {
 			format(str, sizeof str, "%d", floatround(EVF::GetVehicleSpeed(vehid)));
 			PlayerTextDrawSetString(playerid, HUD_VehSpeed[playerid], str);
 		}
+
 		PlayerTextDrawSetString(playerid, HUD_Zone[playerid], GetPlayerZone(playerid));
 
 		static level, exp;
@@ -355,6 +356,7 @@ hook OnPlayerUpdate(playerid) {
 		format(str, sizeof str, "%02d:%02d", hour, minute);
 		PlayerTextDrawSetString(playerid, HUD_WatchTime[playerid], str);
 	}
+	return 1;
 }
 
 ShowPlayerHUD(playerid) {

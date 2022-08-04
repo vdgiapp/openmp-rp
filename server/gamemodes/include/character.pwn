@@ -50,8 +50,11 @@ Fade:LoadCharacterData(playerid) {
 	AuthData[playerid][Joined] = 1;
 
 	format(str, sizeof str, "SELECT * FROM `characters` WHERE `Account` = '%s' AND `Slot` = '%d'", AuthData[playerid][Account], AuthData[playerid][Selected]);
-	await mysql_aquery(Database, str);
+	mysql_tquery(Database, str, "OnGetCharacterData", "i", playerid);
+    return 1;
+}
 
+function OnGetCharacterData(playerid) {
 	static level, exp;
 	static Float:posx, Float:posy, Float:posz, Float:angle, world, int;
 
@@ -111,15 +114,24 @@ Fade:LoadCharacterData(playerid) {
 	SetPlayerName(playerid, CharacterData[playerid][Name]);
 	SetPlayerSkin(playerid, CharacterData[playerid][SkinID]);
 	SetPlayerHealth(playerid, CharacterData[playerid][Health]);
-	SetPlayerArmour(playerid, CharacterData[playerid][Armour]);
-	SetPlayerStamina(playerid, CharacterData[playerid][Stamina]);
-	SetPlayerMaxStamina(playerid, CharacterData[playerid][MaxStamina]);
+	SetPlayerArmour(playerid, CharacterData[playerid][Armour]);	
+	SetPlayerMaxStamina(playerid, CharacterData[playerid][Stamina]);
+	SetPlayerStamina(playerid, GetPlayerMaxStamina(playerid));
 	SetPlayerFightingStyle(playerid, CharacterData[playerid][FightStyle]);
 	SetPlayerWantedLevel(playerid, CharacterData[playerid][Wanted]);
 	SetPlayerMoney(playerid, CharacterData[playerid][Cash]);
 
 	FreezePlayer(playerid, 7000);
 	ShowPlayerHUD(playerid);
+
+	// Defer timer
+	Stamina_Update(playerid);
+
     FadePlayerScreen(playerid, FadeBack, 0x00000000, 1000, 25);
     return 1;
+}
+
+hook OnPlayerSpawn(playerid) {
+	SetPlayerSkin(playerid, CharacterData[playerid][SkinID]);
+	return 1;
 }
