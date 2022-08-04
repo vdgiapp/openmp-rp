@@ -360,7 +360,7 @@ hook OnPlayerModelSelection(playerid, response, listid, modelid) {
 			if(response) {
 				CreateCharData[playerid][SkinID] = modelid;
 				SetPlayerSkin(playerid, modelid);
-				ApplyAnimation(playerid, "BAR", "Barcustom_loop", 4.1, 1, 1, 1, 1, 0, 1);
+				ApplyAnimation(playerid, "ped", "car_hookertalk", 4.1, 1, 1, 1, 1, 0, 1);
 				ShowCharCreateDialog(playerid);
 			}
 			else dialog_Char_Create(playerid, true, 4, "");
@@ -371,7 +371,7 @@ hook OnPlayerModelSelection(playerid, response, listid, modelid) {
 			if(response) {
 				CreateCharData[playerid][SkinID] = modelid;
 				SetPlayerSkin(playerid, modelid);
-				ApplyAnimation(playerid, "BAR", "Barcustom_loop", 4.1, 1, 1, 1, 1, 0, 1);
+				ApplyAnimation(playerid, "ped", "car_hookertalk", 4.1, 1, 1, 1, 1, 0, 1);
 				ShowCharCreateDialog(playerid);
 			}
 			else dialog_Char_Create(playerid, true, 4, "");
@@ -852,7 +852,7 @@ Fade:PlayerCreateCharacter(playerid) {
 	SetPlayerCameraPos(playerid, 215, -98, 1006);
 	SetPlayerCameraLookAt(playerid, 1000, -625, 1000);
 	TogglePlayerControllable(playerid, false);
-	ApplyAnimation(playerid, "BAR", "Barcustom_loop", 4.1, 1, 1, 1, 1, 0, 1);
+	ApplyAnimation(playerid, "ped", "car_hookertalk", 4.1, 1, 1, 1, 1, 0, 1);
 	FadePlayerScreen(playerid, FadeBack, 0x00000000, 1000, 25);
 	return 1;
 }

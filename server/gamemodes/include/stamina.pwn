@@ -3,6 +3,8 @@
 
 ptask Stamina_Update[100](playerid) {
 	if(IsPlayerSprinting(playerid)) GivePlayerStamina(playerid, -2);
+	if(STA_IsPlayerSwimming(playerid)) GivePlayerStamina(playerid, -2);
+	if(IsPlayerRolling(playerid)) GivePlayerStamina(playerid, -100);
 	if(IsPlayerBunnyhop(playerid)) GivePlayerStamina(playerid, -100);
 	else if(GetPlayerStamina(playerid) < GetPlayerMaxStamina(playerid)) GivePlayerStamina(playerid, 5);
 	return 1;

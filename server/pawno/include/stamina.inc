@@ -72,27 +72,70 @@ forward OnPlayerStaminaOver(playerid);
 // [Functions]
 stock IsPlayerSprinting(playerid) // Check if the player is sprinting
 {
-    new T3D:index = GetPlayerAnimationIndex(playerid);
     if(!IsPlayerConnected(playerid) || IsPlayerExhausted(playerid) || IsPlayerJumping(playerid)) return 0;
     if(GetPlayerSpecialAction(playerid) == SPECIAL_ACTION_USEJETPACK) return 0;
 
-    if(T3D:index == 1247) return 1; // Run sprinting
+    if(1246 <= GetPlayerAnimationIndex(playerid) <= 1248) return 1; // Run sprinting
 
     if(IsPlayerInAnyVehicle(playerid)) {
-	    if(T3D:index == 161) return 1; // BMX sprinting
-	    if(T3D:index == 339) return 1; // Bike sprinting
-	    if(T3D:index == 897) return 1; // MTB sprinting
+	    if(GetPlayerAnimationIndex(playerid) == 161) return 1; // BMX sprinting
+	    if(GetPlayerAnimationIndex(playerid) == 339) return 1; // Bike sprinting
+	    if(GetPlayerAnimationIndex(playerid) == 897) return 1; // MTB sprinting
 	}
     return 0;
 }
 
+
+stock IsPlayerClimbing(playerid) {
+	return (GetPlayerAnimationIndex(playerid) == 1061 
+		|| GetPlayerAnimationIndex(playerid) == 1062 
+		|| GetPlayerAnimationIndex(playerid) == 1064 
+		|| GetPlayerAnimationIndex(playerid) 
+		|| GetPlayerAnimationIndex(playerid) == 1066);
+}
+
+
+stock IsPlayerRolling(playerid) {
+	return (1069 <= GetPlayerAnimationIndex(playerid) <= 1070);
+}
+
+
 stock IsPlayerBunnyhop(playerid) {
-	new T3D:index = GetPlayerAnimationIndex(playerid);
 	if(!IsPlayerInAnyVehicle(playerid)) return 0;
-	if(T3D:index == 146) return 1; // BMX bunnyhop
-	if(T3D:index == 324) return 1; // Bike bunnyhop
-	if(T3D:index == 882) return 1; // BMX bunnyhop
+	if(GetPlayerAnimationIndex(playerid) == 146) return 1; // BMX bunnyhop
+	if(GetPlayerAnimationIndex(playerid) == 324) return 1; // Bike bunnyhop
+	if(GetPlayerAnimationIndex(playerid) == 882) return 1; // BMX bunnyhop
 	return 0;
+}
+
+
+stock STA_IsPlayerSwimming(playerid) {
+	if(IsPlayerUnderWater(playerid)) {
+		if(GetPlayerAnimationIndex(playerid) == 1539 
+		|| GetPlayerAnimationIndex(playerid) == 1540 
+		|| GetPlayerAnimationIndex(playerid) == 1544)
+		return 1;
+	}
+	return 0;
+}
+
+
+stock IsPlayerUnderWater(playerid) {
+	new Float:x, Float:y, Float:z, Float:retx[10], Float:rety[10], Float:retz[10], Float: retdist[10], modelids[10];
+	GetPlayerPos(playerid, x, y, z);
+	new collisions = CA_RayCastMultiLine(x, y, z+0.7, x, y, z+1000.0, retx, rety, retz, retdist, modelids, 10);
+
+	if (collisions)
+	{
+		for(new i = 0; i < collisions; i++)
+		{
+			if (modelids[i] == WATER_OBJECT)
+			{
+				return (true);
+			}
+		}
+	}
+	return (false);
 }
 
 
@@ -108,6 +151,16 @@ public SetPlayerExhausted(playerid, bool:Exhausted)  // If true the player will 
 {
 	if(Exhausted) 
 	{
+		if(IsPlayerUnderWater(playerid)) {
+			TogglePlayerControllable(playerid,0);
+			TogglePlayerControllable(playerid,1);
+
+			ApplyAnimation(playerid, "SWIM", "Swim_Glide", 4.1, 0, 1, 1, 0, STAMINA_DEFAULT_RECOVERYTIME, 1);
+
+			SetPVarInt(playerid, "Exhausted", 1);
+			SetTimerEx("SetPlayerExhausted", STAMINA_DEFAULT_RECOVERYTIME, false, "ib", playerid, false);
+			return 1;
+		}
 		TogglePlayerControllable(playerid,0);
 		TogglePlayerControllable(playerid,1);
 
