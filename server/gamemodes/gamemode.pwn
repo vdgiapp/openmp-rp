@@ -69,9 +69,7 @@
 #include <filelog> // Simple file log
 
 #include <cctv> // CCTV 
-#include <stamina> // Player stamina
 #include <walkstyles> // Player walking style
-// #include <oxygen> // Player oxygen | Waiting for new Open.MP release
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -82,8 +80,7 @@
 #include "map_interiors.pwn"	
 
 // Core
-#include "include\core\defines.pwn"
-#include "include\core\variables.pwn"
+#include "include\core\macro.pwn"
 
 main() {
 	printf("%s da khoi dong thanh cong", SERVER_NAME);
@@ -91,19 +88,16 @@ main() {
 	SetTimeZone(7);
 }
 
-#include "include\core\callbacks.pwn"
 #include "include\core\timer.pwn"
-#include "include\core\chat.pwn"
-#include "include\core\damage.pwn"
-#include "include\core\cmd.pwn"
-#include "include\core\functions.pwn"
+#include "include\core\callback.pwn" 
+#include "include\core\function.pwn"
 
 // Systems
 #include "include\authentication.pwn"
 
-#include "include\stamina.pwn"
 #include "include\character.pwn"
 #include "include\playerhud.pwn"
 
 #include "include\property\house\house.pwn"
 
+#include "include\player\player_entry.pwn"

@@ -6,6 +6,9 @@
 #define ClientMsg 				SendClientMessagef
 #define ServerMsg 				SendClientMessageToAllf
 
+#define PRESSED(%0) (((newkeys & (%0)) == (%0)) && ((oldkeys & (%0)) != (%0)))
+#define MULTIPLE(%0) ((newkeys & %0) && (oldkeys & %0))
+
 // +-+-+-+-+- DIALOG STYLES +-+-+-+-+-
 #define DS_LIST 				DIALOG_STYLE_LIST
 #define DS_TABLIST 				DIALOG_STYLE_TABLIST
@@ -71,6 +74,9 @@
 #define COLOR_SERVER       		(0xFFFF90FF) // 6688FF
 #define COLOR_DEPARTMENT   		(0xF0CC00FF)
 #define COLOR_ADMINCHAT    		(0x33EE33FF)
+#define COLOR_OOC 				(0xB1C8FBAA)
+#define COLOR_PMOUT 			(0xF6EA51AA)
+#define COLOR_PMIN 				(0xF6D600AA)
 
 // +-+-+-+-+- CONFIGS +-+-+-+-+-
 new MySQL:Database;
@@ -87,3 +93,7 @@ new MySQL:Database;
 // +-+-+-+-+- UMSELECTION LISTS +-+-+-+-+-
 #define MALE_SKIN_LIST 			"lists/male_skins_list.txt"
 #define FEMALE_SKIN_LIST		"lists/female_skins_list.txt"
+
+
+new MaleSkinList = mS_INVALID_LISTID,
+	FemaleSkinList = mS_INVALID_LISTID;

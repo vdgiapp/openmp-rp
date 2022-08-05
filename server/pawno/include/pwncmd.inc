@@ -72,16 +72,16 @@
             forward pc_cmd_%0(%1); \
             public pc_cmd_%0(%1)
 
-        #define alias:%0(%1) \
+        #define alias:%0(%1); \
             forward pc_alias_%0(); \
             public pc_alias_%0() \
                 PC_RegAlias(#%0, %1);
 
-        #define Alias:%0(%1) alias:%0(%1)
-        #define ALIAS:%0(%1) alias:%0(%1)
-        #define altx:%0(%1) alias:%0(%1)
-        #define ALTX:%0(%1) alias:%0(%1)
-        #define Altx:%0(%1) alias:%0(%1)
+        #define Alias alias
+        #define ALIAS alias
+        #define altx alias
+        #define ALTX alias
+        #define Altx alias
 
         #define flags:%0(%1) \
             forward pc_flags_%0(); \

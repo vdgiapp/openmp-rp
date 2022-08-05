@@ -12,6 +12,7 @@ public OnGameModeInit() {
 
     // AbcXyz
     DisableCrashDetectLongCall();
+    pp_use_funcidx(true);
 
     // Settings
 	ShowNameTags(true);
@@ -39,7 +40,7 @@ public OnGameModeInit() {
 
 	// Streamer
 	Streamer_SetMaxItems(STREAMER_TYPE_OBJECT, -1);
-    Streamer_SetVisibleItems(STREAMER_TYPE_OBJECT, 2200);
+    Streamer_SetVisibleItems(STREAMER_TYPE_OBJECT, 2000);
 	return 1;
 }
 
@@ -158,6 +159,7 @@ public OnPlayerInteriorChange(playerid, newinteriorid, oldinteriorid) {
 }
 
 public OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
+	if(!IsPlayerInGame(playerid)) return 0;
 	return 1;
 }
 
@@ -211,4 +213,16 @@ public OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, Float:fX, Float:fY
 
 public OnPlayerGiveDamageDynamicActor(playerid, actorid, Float:amount, weaponid, bodypart) {
 	return 0;
+}
+
+public OnPlayerCommandPerformed(playerid, cmd[], params[], result, flags)
+{
+	if(!IsPlayerInGame(playerid)) return 0;
+	if(result == -1) return ErrorMsg(playerid, "Cau lenh /%s khong ton tai. Hay su dung lenh /help de xem danh sach cac lenh.", cmd);
+	return 1;
+}
+
+public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart) {
+	if(!IsPlayerInGame(playerid)) return 0;
+	return 1;
 }

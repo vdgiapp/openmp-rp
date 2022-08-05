@@ -39,8 +39,25 @@ enum characterInfo {
 	LicenseData[32],
 	PhoneData[32],
 	ContactData[1024],
-	WalkieTalkieData[64]
+	WalkieTalkieData[64],
+	Settings,
+
+	// not save
+	CmdCD
 }
+
+/*
+togOOC, // +
+togAdv, // +
+togGov, // +
+togPM, // +
+togAdm, // +
+togNews, // +
+togHUD, // +
+togFaction, // + 
+togService
+*/
+
 new CharacterData[MAX_PLAYERS][characterInfo];
 
 // Load char data
@@ -96,6 +113,7 @@ function OnGetCharacterData(playerid) {
 	format(CharacterData[playerid][PhoneData], 32, "%s", cache_value_string(0, "PhoneData"));
 	format(CharacterData[playerid][ContactData], 1024, "%s", cache_value_string(0, "ContactData"));
 	format(CharacterData[playerid][WalkieTalkieData], 64, "%s", cache_value_string(0, "WalkieTalkieData"));
+	format(CharacterData[playerid][Settings], 128, "%s", cache_value_string(0, "Settings"));
 
 	sscanf(CharacterData[playerid][Position], "ffffii", posx, posy, posz, angle, world, int);
 	sscanf(CharacterData[playerid][Level], "ii", level, exp);
@@ -115,8 +133,6 @@ function OnGetCharacterData(playerid) {
 	SetPlayerSkin(playerid, CharacterData[playerid][SkinID]);
 	SetPlayerHealth(playerid, CharacterData[playerid][Health]);
 	SetPlayerArmour(playerid, CharacterData[playerid][Armour]);	
-	SetPlayerMaxStamina(playerid, CharacterData[playerid][Stamina]);
-	SetPlayerStamina(playerid, GetPlayerMaxStamina(playerid));
 	SetPlayerFightingStyle(playerid, CharacterData[playerid][FightStyle]);
 	SetPlayerWantedLevel(playerid, CharacterData[playerid][Wanted]);
 	SetPlayerMoney(playerid, CharacterData[playerid][Cash]);
@@ -124,14 +140,16 @@ function OnGetCharacterData(playerid) {
 	FreezePlayer(playerid, 7000);
 	ShowPlayerHUD(playerid);
 
-	// Defer timer
-	Stamina_Update(playerid);
-
     FadePlayerScreen(playerid, FadeBack, 0x00000000, 1000, 25);
     return 1;
 }
 
 hook OnPlayerSpawn(playerid) {
 	SetPlayerSkin(playerid, CharacterData[playerid][SkinID]);
+	return 1;
+}
+
+hook function ResetPlayerVars(playerid) {
+	CharacterData[playerid][CmdCD] = 0;
 	return 1;
 }

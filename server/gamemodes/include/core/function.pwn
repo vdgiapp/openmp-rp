@@ -144,6 +144,11 @@ GetPlayersOnline() {
 	return count;
 }
 
+FirstUpper(str[256]) {
+    str[0] = toupper(str[0]);
+    return str;
+}
+
 ResetPlayerVars(playerid) { }
 
 GlobalMsg(color, const message[], va_args<>) {
@@ -169,62 +174,11 @@ SuccessMsg(playerid, const string[], va_args<>) {
 	ClientMsg(playerid, -1, str);
 }
 
-LocalMsg(playerid, const string[], va_args<>) {
+UsageMsg(playerid, const string[], va_args<>) {
     static str[256];
     format(str, sizeof str, string, va_start<2>);
-    ProxDetector(str, 20.0, playerid, COLOR_DIST1, COLOR_DIST2, COLOR_DIST3, COLOR_DIST4, COLOR_DIST5);
-}
-
-LowMsg(playerid, const string[], va_args<>) {
-    static str[256];
-    format(str, sizeof str, string, va_start<2>);
-    ProxDetector(str, 8.0, playerid, COLOR_DIST1, COLOR_DIST2, COLOR_DIST3, COLOR_DIST4, COLOR_DIST5);
-}
-
-ShoutMsg(playerid, const string[], va_args<>) {
-    static str[256];
-    format(str, sizeof str, string, va_start<2>);
-    ProxDetector(str, 50.0, playerid, COLOR_DIST1, COLOR_DIST2, COLOR_DIST3, COLOR_DIST4, COLOR_DIST5);
-}
-
-ProxDetector(const string[], Float:radi, playerid, col1, col2, col3, col4, col5) {
-    if(IsPlayerInGame(playerid)) {
-        static Float:posx, Float:posy, Float:posz;
-        static Float:oldposx, Float:oldposy, Float:oldposz;
-        static Float:tempposx, Float:tempposy, Float:tempposz;
-        GetPlayerPos(playerid, oldposx, oldposy, oldposz);
-        foreach(new i : Player) {
-            if(IsPlayerInGame(i)) {
-                if(!GetPVarInt(playerid, #BigEar)) {
-                    GetPlayerPos(i, posx, posy, posz);
-                    tempposx = (oldposx -posx);
-                    tempposy = (oldposy -posy);
-                    tempposz = (oldposz -posz);
-                    if (((tempposx < radi/16) && (tempposx > -radi/16)) && ((tempposy < radi/16) && (tempposy > -radi/16)) && ((tempposz < radi/16) && (tempposz > -radi/16))) {
-                        if((GetPlayerVirtualWorld(i) == GetPlayerVirtualWorld(playerid)) && 
-                        	(GetPlayerInterior(i) == GetPlayerInterior(playerid))) ClientMsg(i, col1, string);
-                    }
-                    else if (((tempposx < radi/8) && (tempposx > -radi/8)) && ((tempposy < radi/8) && (tempposy > -radi/8)) && ((tempposz < radi/8) && (tempposz > -radi/8))) {
-                        if((GetPlayerVirtualWorld(i) == GetPlayerVirtualWorld(playerid)) && 
-                        	(GetPlayerInterior(i) == GetPlayerInterior(playerid))) ClientMsg(i, col2, string);
-                    }
-                    else if (((tempposx < radi/4) && (tempposx > -radi/4)) && ((tempposy < radi/4) && (tempposy > -radi/4)) && ((tempposz < radi/4) && (tempposz > -radi/4))) {
-                        if((GetPlayerVirtualWorld(i) == GetPlayerVirtualWorld(playerid)) && 
-                        	(GetPlayerInterior(i) == GetPlayerInterior(playerid))) ClientMsg(i, col3, string);
-                    }
-                    else if (((tempposx < radi/2) && (tempposx > -radi/2)) && ((tempposy < radi/2) && (tempposy > -radi/2)) && ((tempposz < radi/2) && (tempposz > -radi/2))) {
-                        if((GetPlayerVirtualWorld(i) == GetPlayerVirtualWorld(playerid)) && 
-                        	(GetPlayerInterior(i) == GetPlayerInterior(playerid))) ClientMsg(i, col4, string);
-                    }
-                    else if (((tempposx < radi) && (tempposx > -radi)) && ((tempposy < radi) && (tempposy > -radi)) && ((tempposz < radi) && (tempposz > -radi))) {
-                        if((GetPlayerVirtualWorld(i) == GetPlayerVirtualWorld(playerid)) && 
-                        	(GetPlayerInterior(i) == GetPlayerInterior(playerid))) ClientMsg(i, col5, string);
-                    }
-                }
-                else ClientMsg(i, col1, string);
-            }
-        }
-    }
+    format(str, sizeof str, "USAGE: %s", str);
+    ClientMsg(playerid, COLOR_GREY, str);
 }
 
 Fade:FadeBack(playerid) return 1;

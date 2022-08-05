@@ -311,8 +311,8 @@ hook OnPlayerUpdate(playerid) {
 		}
 
 		static maxsta5pt, stamina;
-		maxsta5pt = floatround(GetPlayerMaxStamina(playerid)/20);
-		stamina = GetPlayerStamina(playerid);//CharacterData[playerid][Stamina];
+		maxsta5pt = floatround(1000/20);
+		stamina = CharacterData[playerid][Stamina];
 		if(stamina <= 0) 									PlayerTextDrawSetString(playerid, HUD_Stamina[playerid], "");
 		if(1 <= stamina <= maxsta5pt*1) 					PlayerTextDrawSetString(playerid, HUD_Stamina[playerid], "l");
 		if(maxsta5pt+1 <= stamina <= maxsta5pt*2) 			PlayerTextDrawSetString(playerid, HUD_Stamina[playerid], "ll");
