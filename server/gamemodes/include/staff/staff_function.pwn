@@ -1,18 +1,21 @@
 
-hook OnGameModeInit() {
+Staff_OnGameModeInit() {
 	for(new id = 0; id < MAX_STAFF_ID; id++) {
 		static str[128]; format(str, sizeof str, "SELECT * FROM `staff` WHERE `SID` = '%d'", id);
 		mysql_tquery(Database, str, "OnGetAdminData", "i", id);
 	}
+	return 1;
 }
 
 function OnGetAdminData(id) {
 	if(cache_num_rows()) {
-		cache_get_value_name(0, "Account", StaffData[id][Account], 25);
-		cache_get_value_name(0, "Nick", StaffData[id][Nick], 25);
+		format(StaffData[id][Account], 25, "%s", cache_value_string(0, "Account"));
+		format(StaffData[id][Nick], 25, "%s", cache_value_string(0, "Nick"));
 		StaffData[id][Rank] = cache_value_int(0, "Rank");
 		StaffData[id][Helped] = cache_value_int(0, "Helped");
+		printf("Get Staff Data - ID: %d", id);
 	}
+	return 1;
 }
 
 GetStaffID(playerid) {
@@ -85,11 +88,11 @@ SetStaffDuty(playerid, bool:status) {
 		StaffData[id][OnDuty] = status;
 		if(status) {
 			SetPlayerName(playerid, StaffData[id][Nick]);
-			MsgToAdmin(COLOR_LIGHTRED, "ADMIN: [%s] %s da on-duty.", GetStaffRankName(StaffData[id][Rank]), StaffData[id][Nick]);
+			MsgToAdmin(COLOR_LIGHTRED, "STAFF > [%s] %s da on-duty.", GetStaffRankName(StaffData[id][Rank]), StaffData[id][Nick]);
 		}
 		if(!status) {
 			SetPlayerName(playerid, CharacterData[playerid][Name]);
-			MsgToAdmin(COLOR_LIGHTRED, "ADMIN: [%s] %s da off-duty.", GetStaffRankName(StaffData[id][Rank]), StaffData[id][Nick]);		
+			MsgToAdmin(COLOR_LIGHTRED, "STAFF > [%s] %s da off-duty.", GetStaffRankName(StaffData[id][Rank]), StaffData[id][Nick]);
 		}
 	}
 }
@@ -112,11 +115,4 @@ GetStaffSettings(playerid, type[]) {
 		if(isequal(type, "togKill")) return StaffData[id][togKill];
 		if(isequal(type, "togNewb")) return StaffData[id][togNewb];
 	}
-}
-
-Cmd:aduty(playerid, params[]) {
-	// test
-	if(!IsHelper(playerid)) return NotAdminMsg(playerid);
-	SetStaffDuty(playerid, true);
-	return 1;
 }

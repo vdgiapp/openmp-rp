@@ -13,7 +13,10 @@ public OnGameModeInit() {
 
     printf("Ket noi den co so du lieu thanh cong!\n");
 
-    // AbcXyz
+	// Admin SQL
+	Staff_OnGameModeInit();
+
+    //
     DisableCrashDetectLongCall();
     pp_use_funcidx(true);
 

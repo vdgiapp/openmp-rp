@@ -479,7 +479,7 @@ function OnCheckingPlayerAccount(playerid) {
 }
 
 IsPlayerInGame(playerid) {
-	if(IsPlayerConnected(playerid) && AuthData[playerid][Logged] && 
+	if(IsPlayerConnected(playerid) && AuthData[playerid][Logged] &&
 		AuthData[playerid][Joined]) return true;
 	return false;
 }
@@ -517,19 +517,19 @@ IsValidAccount(const str[]) {
 
 IsValidEmail(const input[]) {
 	/*
-	if(strfind(email, "@gmail.com") != -1 || 
-		strfind(email, "@outlook.com") != -1 || 
-		strfind(email, "@hotmail.com") != -1 || 
-		strfind(email, "@protonmail.com") != -1 || 
-		strfind(email, "@protonmail.ch") != -1 || 
-		strfind(email, "@yahoo.com") != -1 || 
-		strfind(email, "@zohomail.com") != -1 || 
-		strfind(email, "@zoho.com") != -1 || 
-		strfind(email, "@yandex.com") != -1 || 
-		strfind(email, "@icloud.com") != -1 || 
+	if(strfind(email, "@gmail.com") != -1 ||
+		strfind(email, "@outlook.com") != -1 ||
+		strfind(email, "@hotmail.com") != -1 ||
+		strfind(email, "@protonmail.com") != -1 ||
+		strfind(email, "@protonmail.ch") != -1 ||
+		strfind(email, "@yahoo.com") != -1 ||
+		strfind(email, "@zohomail.com") != -1 ||
+		strfind(email, "@zoho.com") != -1 ||
+		strfind(email, "@yandex.com") != -1 ||
+		strfind(email, "@icloud.com") != -1 ||
 		strfind(email, "@gmx.com") != -1 ||
-		strfind(email, "@gmx.us") != -1 || 
-		strfind(email, "@aol.com") != -1 || 
+		strfind(email, "@gmx.us") != -1 ||
+		strfind(email, "@aol.com") != -1 ||
 		strfind(email, "@aim.com") != -1) return 1;
 	return 0;
 	*/
@@ -604,9 +604,9 @@ ShowCharCreateDialog(playerid) {
         Quoc tich\t%s\n\
         Trang phuc\t%d\n\
         Mo ta nhan vat\n\
-        "COL_GREEN"Hoan thanh", 
+        "COL_GREEN"Hoan thanh",
         CreateCharData[playerid][Name], gender,
-        CreateCharData[playerid][Birthday], 
+        CreateCharData[playerid][Birthday],
         nation, CreateCharData[playerid][SkinID]);
 	return Dialog_Show(playerid, Char_Create, DS_TABLIST, ""COL_AQUA"TAO NHAN VAT", str, "Chon", "Thoat");
 }
@@ -728,8 +728,8 @@ function OnCheckAccountToReg(playerid) {
 		flog(AUTH_LOG_FILE, "[AUTH] Tai khoan \"%s\" da duoc dang ky thanh cong.", AuthData[playerid][Account]);
 		PlayerPlaySound(playerid, 1084, 0, 0, 0);
 		SetRandomName(playerid, "Logged_", 100000, 999999);
-		
-		format(str, sizeof str, "UPDATE `accounts` SET `Online`='1', `LastLogin`='%02d %02d %02d %02d %02d %04d', `DateCreated`='%02d %02d %02d %02d %02d %04d' WHERE `Account`='%s'", 
+
+		format(str, sizeof str, "UPDATE `accounts` SET `Online`='1', `LastLogin`='%02d %02d %02d %02d %02d %04d', `DateCreated`='%02d %02d %02d %02d %02d %04d' WHERE `Account`='%s'",
 			hour, minute, second, day, month, year, hour, minute, second, day, month, year, AuthData[playerid][Account]);
 		mysql_tquery(Database, str);
 		mysql_tquery(Database, "UPDATE `serverinfo` SET `Registered`=`Registered`+1");
@@ -767,7 +767,7 @@ CreateCharacterForPlayer(playerid, name[], slot) {
     gettime(ho, mi, se); getdate(ye, mo, da);
     format(crtdate, sizeof crtdate, "%02d %02d %02d %02d %02d %04d", ho, mi, se, da, mo, ye);
     format(lastpl, sizeof lastpl, "%02d %02d %02d %02d %02d %04d", ho, mi, se, da, mo, ye);
-    
+
     flog(AUTH_LOG_FILE, "[AUTH] Tai khoan \"%s\" da tao mot nhan vat tai slot %d: %s", AuthData[playerid][Account], slot, GetRoleplayName(name));
     format(str, sizeof str, "INSERT INTO `characters` \
     	(`Slot`, `Account`, `DateCreated`, `LastTimePlayed`, \
@@ -784,7 +784,7 @@ CreateCharacterForPlayer(playerid, name[], slot) {
     	CreateCharData[playerid][Name], CreateCharData[playerid][Description],
     	CreateCharData[playerid][Gender], CreateCharData[playerid][BDay],
     	CreateCharData[playerid][BMonth], CreateCharData[playerid][BYear],
-    	CreateCharData[playerid][Nation], CreateCharData[playerid][SkinID], 
+    	CreateCharData[playerid][Nation], CreateCharData[playerid][SkinID],
     	E_WALKING_STYLE_DEFAULT);
     mysql_tquery(Database, str);
 
@@ -1012,7 +1012,7 @@ Dialog:cCreate_BDay(playerid, response, listitem, inputtext[]) {
         CreateCharData[playerid][BDay] = listitem+1;
         ShowBYearDialog(playerid);
     }
-    
+
 }
 
 Dialog:cCreate_BYear(playerid, response, listitem, inputtext[]) {

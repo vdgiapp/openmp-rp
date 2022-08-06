@@ -37,7 +37,6 @@ function OnGetCharacterData(playerid) {
 	CharacterData[playerid][Hunger] = cache_value_int(0, "Hunger");
 	CharacterData[playerid][Thirst] = cache_value_int(0, "Thirst");
 	CharacterData[playerid][Stamina] = cache_value_int(0, "Stamina");
-	CharacterData[playerid][MaxStamina] = cache_value_int(0, "MaxStamina");
 	CharacterData[playerid][Injured] = cache_value_int(0, "Injured");
 	CharacterData[playerid][Health] = cache_value_float(0, "Health");
 	CharacterData[playerid][Armour] = cache_value_float(0, "Armour");
@@ -69,7 +68,7 @@ function OnGetCharacterData(playerid) {
 	SetPlayerName(playerid, CharacterData[playerid][Name]);
 	SetPlayerSkin(playerid, CharacterData[playerid][SkinID]);
 	SetPlayerHealth(playerid, CharacterData[playerid][Health]);
-	SetPlayerArmour(playerid, CharacterData[playerid][Armour]);	
+	SetPlayerArmour(playerid, CharacterData[playerid][Armour]);
 	SetPlayerFightingStyle(playerid, CharacterData[playerid][FightStyle]);
 	SetPlayerWantedLevel(playerid, CharacterData[playerid][Wanted]);
 	SetPlayerMoney(playerid, CharacterData[playerid][Cash]);

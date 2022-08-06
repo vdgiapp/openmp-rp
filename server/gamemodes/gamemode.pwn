@@ -66,7 +66,7 @@
 #include <nametag> // Set player nametag
 #include <fader> // Fader
 
-#include <gmtime> // Simple gettime, getdate
+#include <gmtime> // gettime, getdate by time zone
 #include <filelog> // Simple file log
 
 #include <cctv> // CCTV
@@ -98,6 +98,6 @@ main() {
 
 #include "include\player\player_entry.pwn"
 
-#include "include\admin\admin_entry.pwn"
+#include "include\staff\staff_entry.pwn"
 
 #include "include\misc\playerhud.pwn"

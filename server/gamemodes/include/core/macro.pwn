@@ -80,7 +80,7 @@ new MySQL:Database;
 #define host_mysql 				"localhost"
 #define user_mysql 				"root"
 #define pass_mysql 				""
-#define dbase_mysql 			"sa-mp"
+#define dbase_mysql 			"sap-rp"
 
 #define NAMETAG_DISTANCE		(20)
 
