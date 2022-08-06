@@ -61,7 +61,7 @@
         "on_foot_sync_rate": 30,
         "player_marker_sync_rate": 2500,
         "player_timeout": 10000,
-        "stream_radius": 200.0,
+        "stream_radius": 300.0,
         "stream_rate": 1000,
         "time_sync_rate": 30000,
         "use_lan_mode": false

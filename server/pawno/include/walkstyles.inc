@@ -26,7 +26,6 @@
 		#if defined WStyle_OnGameModeInit
 			WStyle_OnGameModeInit();
 		#endif
-		print("[2.0.2] Walking styles loaded");
 		return 1;
 	}
 #endif

@@ -7,7 +7,7 @@
 #define MEMORYSQUEEZE
 #define PP_SYNTAX_AWAIT // ASYNC AWAIT
 #define YSI_YES_HEAP_MALLOC // HEAP MEMORY ALLOCATION
-#define CGEN_MEMORY	(20000)
+#define CGEN_MEMORY	(150000)
 
 #define SERVER_NAME "San Andreas Playground: Roleplay"
 #define SERVER_SNAME "SAP-RP.VN"
@@ -48,6 +48,7 @@
 #include <nvs> // Vehicle streamer
 #include <streamer> // Streamer plugins
 #include <streamerf> // Streamer more functions
+#include <streamertp> // Streamer teleport
 #include <streamerfix> // CreateDynamicObject fix
 
 #include <cDialog> // Center text in dialog '\\c'
@@ -75,10 +76,6 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-// Map
-#include "map_exteriors.pwn"
-#include "map_interiors.pwn"	
-
 // Core
 #include "include\core\macro.pwn"
 
@@ -95,9 +92,12 @@ main() {
 // Systems
 #include "include\authentication.pwn"
 
-#include "include\character.pwn"
-#include "include\playerhud.pwn"
+#include "include\character\character_entry.pwn"
 
 #include "include\property\house\house.pwn"
 
 #include "include\player\player_entry.pwn"
+
+#include "include\admin\admin_entry.pwn"
+
+#include "include\misc\playerhud.pwn"

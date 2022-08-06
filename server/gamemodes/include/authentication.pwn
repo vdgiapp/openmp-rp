@@ -66,8 +66,6 @@ function OnGetSvInfo() {
 	}
 	format(str, sizeof str, "%d", cache_value_int(0, "Logged")); TextDrawSetString(Auth_LoggedToday, str);
 	format(str, sizeof str, "%d", GetPlayersOnline()); TextDrawSetString(Auth_PlayersOnline, str);
-
-	
 }
 
 hook OnGameModeInit()
@@ -360,7 +358,6 @@ hook OnPlayerModelSelection(playerid, response, listid, modelid) {
 			if(response) {
 				CreateCharData[playerid][SkinID] = modelid;
 				SetPlayerSkin(playerid, modelid);
-				ApplyAnimation(playerid, "ped", "car_hookertalk", 4.1, 1, 1, 1, 1, 0, 1);
 				ShowCharCreateDialog(playerid);
 			}
 			else dialog_Char_Create(playerid, true, 4, "");
@@ -371,7 +368,6 @@ hook OnPlayerModelSelection(playerid, response, listid, modelid) {
 			if(response) {
 				CreateCharData[playerid][SkinID] = modelid;
 				SetPlayerSkin(playerid, modelid);
-				ApplyAnimation(playerid, "ped", "car_hookertalk", 4.1, 1, 1, 1, 1, 0, 1);
 				ShowCharCreateDialog(playerid);
 			}
 			else dialog_Char_Create(playerid, true, 4, "");
@@ -779,16 +775,17 @@ CreateCharacterForPlayer(playerid, name[], slot) {
     	`Nation`, `SkinID`, `Cash`, `Coins`, `LicenseData`, \
     	`PhoneData`, `MuteData`, `ImprisonData`, `Hunger`, \
     	`Thirst`, `Stamina`, `Health`, `Armour`, \
-    	`FightStyle`, `Position`) \
+    	`FightStyle`, `WalkStyle`, `Position`) \
     	VALUES ('%d', '%s', '%s', '%s', '%s', '%s', '1 0', \
     	'%d', '%02d %02d %04d', '%d', '%d', '1000', '10', '0 0 0 0 0 0', \
     	'0 000000 0', '0 0', '0 0 0 0', '1000', '1000', '1000', \
-    	'100', '0', '4', '1743 -1862 13.6 0 0 0')", \
-    	slot, AuthData[playerid][Account], crtdate, lastpl, \
-    	CreateCharData[playerid][Name], CreateCharData[playerid][Description], \
-    	CreateCharData[playerid][Gender], CreateCharData[playerid][BDay], \
-    	CreateCharData[playerid][BMonth], CreateCharData[playerid][BYear],\
-    	CreateCharData[playerid][Nation], CreateCharData[playerid][SkinID]);
+    	'100', '0', '4', '%d', '1743 -1862 13.6 0 0 0')",
+    	slot, AuthData[playerid][Account], crtdate, lastpl,
+    	CreateCharData[playerid][Name], CreateCharData[playerid][Description],
+    	CreateCharData[playerid][Gender], CreateCharData[playerid][BDay],
+    	CreateCharData[playerid][BMonth], CreateCharData[playerid][BYear],
+    	CreateCharData[playerid][Nation], CreateCharData[playerid][SkinID], 
+    	E_WALKING_STYLE_DEFAULT);
     mysql_tquery(Database, str);
 
     format(CreateCharData[playerid][Name], MAX_PLAYER_NAME+1, "");
@@ -844,7 +841,7 @@ Fade:PlayerCreateCharacter(playerid) {
 	SpawnPlayer(playerid);
 	SetPlayerTeam(playerid, NO_TEAM);
 	SetPlayerColor(playerid, COLOR_WHITE);
-	SetPlayerSkin(playerid, CreateCharData[playerid][SkinID]);
+	SetPlayerSkin(playerid, 2);
 	SetPlayerInterior(playerid, 15);
 	SetPlayerPos(playerid, 217.6, -101, 1005);
 	SetPlayerFacingAngle(playerid, 45);
@@ -852,7 +849,6 @@ Fade:PlayerCreateCharacter(playerid) {
 	SetPlayerCameraPos(playerid, 215, -98, 1006);
 	SetPlayerCameraLookAt(playerid, 1000, -625, 1000);
 	TogglePlayerControllable(playerid, false);
-	ApplyAnimation(playerid, "ped", "car_hookertalk", 4.1, 1, 1, 1, 1, 0, 1);
 	FadePlayerScreen(playerid, FadeBack, 0x00000000, 1000, 25);
 	return 1;
 }

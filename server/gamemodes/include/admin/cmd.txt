@@ -1,0 +1,92 @@
+﻿/god:là on /off chức năng bất tử
+/fly: là on/off chức nang bay
+/kick: cái này ai cũng pek rồi
+/ban: là banned người khác
+/unban: un banned
+/unbanip:un banned IP
+/freeze: làm cho người khác bất tĩnh
+/unfreeze: ngược lại với cái trên
+/sjail: Jail với thời gian tùy thích, 9999999 cũng dc :)) 
+/slap: làm 1 cú kick bay lên trời :))
+/warn: cho 1 cảnh cáo (3 cảnh cáo là bị banned)
+/gethere: Tele người khác tới chổ mình
+/goto: đi đến địa điểm nào đó (phải có trong danh sách /goto)
+/gotoid: tele tới người chơi mà mình muốn gặp
+/check: kiểm tra thông tin người khác
+/jetpack: set tên lửa mini
+/gotoplayerscar: tele tới xe của người chơi nào đó ….
+/xembaocao: xem báo cáo
+/listgun: kiểm tra súng của….player
+/noooc: on/off kênh chatt ooc
+/nonewbie: on/off kênh chat newb
+/fine: phạt tiền
+/spec: theo giỏi người chơi
+/takeadminweapons: lấy lại súng ( súng của admin set mới dc )
+/sendtols: Tele player về LS
+/sendtosf: Tele player về SF
+/veh: spawn xe
+/countdown: đếm ngược ( 3 2 1 Go!! ấy )
+/setskin: set trang phục
+/mole: SMS (555)
+/getcar: spawn xe nào đó lại ngay chổ mình
+/entercar: vào xe nhanh hoặc đúng hơn là từ xa
+/release: thả ra tù
+/gotoco:tele tới tạo độ…..
+/respawncar: RS xe về lại chổ ban đầu
+/asellhouse: take nhà người khác :))
+/setarmorall: set giáp cho all
+/setarmor: set giáp
+/sethp : set máu
+/setname : set tên
+/givenos: give nitro
+/fixveh: sửa chiếc xe lại như mới
+/fixvehall: sửa tất cả xe lại như mới
+/setmoney : set tiền
+/givemoney: cho tiền
+/givegun : set súng
+/destroycar: xóa xe Spawn
+/destroycars: xóa tất cả xe đã Spawn
+/eventhelp: trợ giúp event
+/facban:banned faction
+/createpvehicle: set xe cho player (trong gara luôn)
+/destroypvehicle: xóa xe trong gara xe của player
+/fackick: kick faction
+/hedit : edit nhà
+/gotomapicon: đi đến lối vào nào đó
+/gangwarn: cho gang 1 cảnh cáo
+/gangunban: un banned gang
+/weather : bầu trời
+/weatherall: chỉnh bầu trời cho all
+/tod : chỉnh thời gian
+/facunban : un banned faction
+/giftall : tặng quà cho all
+/respawnallcars: RS tất cả xe về vị trí ban đầu
+/setcolor: set màu chữ của tên
+/clearallreports: xóa tất cả báo cáo
+/createdealership: làm shop xe
+/destroydealership: xóa shop xe
+/createcdveh: spawn xe cho shop
+/destroycdveh: xóa xe của shop
+/editcardealership: menu chỉnh shop xe, gồm: spawn xe sau khi mua, xe mới cho shop, giá shop xe, …
+/giftreset: RS thời gian nhận quà
+/makevip: set VIP
+/makeadvisor: set advisor
+/makehelper : Set helper
+/makemoderator: set moderator
+/suspend : giống banned
+/unsuspend: un suspend
+/makefacmod: set mod cho faction
+/makegangmod: set mod gang
+/makeadmin: set admin
+/slowgmx: loading lại server, giống Reset server ấy
+/gedit: edit gate
+/createpvehicle : Refund xe
+/setstat : Give 1 số vật phẩm
+/ar : Chấp nhận báo cáo
+/tr : Từ chối báo cáo
+/giveobject : Give object cho player
+/gotoco : Đi đến bằng toạ độ x,y,z
+/givefamily , /fcreate , /createfamily , /givegang : Tạo gangster
+/makeleader : Thêm leader cho factiob
+/makeleader [id_player] [id_faction] 0 : Take leader
+/givenos : Thêm nitro vào car .

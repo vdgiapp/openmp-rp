@@ -3,11 +3,14 @@
 
 // +-+-+-+-+- Main Callbacks +-+-+-+-+-
 public OnGameModeInit() {
+
 	Database = mysql_connect(host_mysql, user_mysql, pass_mysql, dbase_mysql);
+
     if(Database == MYSQL_INVALID_HANDLE || mysql_errno(Database) != 0) {
         printf("Ket noi den co so du lieu khong thanh cong!\n");
         return mysql_close(Database);
     }
+
     printf("Ket noi den co so du lieu thanh cong!\n");
 
     // AbcXyz
@@ -39,8 +42,9 @@ public OnGameModeInit() {
 	FemaleSkinList = LoadModelSelectionMenu(FEMALE_SKIN_LIST);
 
 	// Streamer
-	Streamer_SetMaxItems(STREAMER_TYPE_OBJECT, -1);
-    Streamer_SetVisibleItems(STREAMER_TYPE_OBJECT, 2000);
+	Streamer_SetVisibleItems(STREAMER_TYPE_OBJECT, 2000);
+	Streamer_SetRadiusMultiplier(STREAMER_TYPE_OBJECT, 2.0);
+
 	return 1;
 }
 

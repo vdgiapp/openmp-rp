@@ -1,65 +1,4 @@
 
-#include <YSI_Coding\y_hooks>
-
-enum characterInfo {
-	Name[MAX_PLAYER_NAME+1],
-	Nick[MAX_PLAYER_NAME+1],
-	DateCreated[32],
-	LastTimePlayed[32],
-	Birthday[16],
-	Gender,
-	Nation,
-	Description[512],
-	SkinID,
-	Level[16],
-	Respects,
-	JobID,
-	FightStyle,
-	Playtime,
-	Payday,
-	RespawnLocation,
-	Faction,
-	Warns,
-	Wanted,
-	Arrested,
-	Hunger,
-	Thirst,
-	Stamina,
-	MaxStamina,
-	Injured,
-	Float:Health,
-	Float:Armour,
-	Position[128],
-	ImprisonData[128],
-	MuteData[16],
-	Cash,
-	Coins,
-	Bank[32],
-	IDCard,
-	LicenseData[32],
-	PhoneData[32],
-	ContactData[1024],
-	WalkieTalkieData[64],
-	Settings,
-
-	// not save
-	CmdCD
-}
-
-/*
-togOOC, // +
-togAdv, // +
-togGov, // +
-togPM, // +
-togAdm, // +
-togNews, // +
-togHUD, // +
-togFaction, // + 
-togService
-*/
-
-new CharacterData[MAX_PLAYERS][characterInfo];
-
 // Load char data
 Fade:LoadCharacterData(playerid) {
 	static str[128];
@@ -72,11 +11,10 @@ Fade:LoadCharacterData(playerid) {
 }
 
 function OnGetCharacterData(playerid) {
-	static level, exp;
+	static str[128], level, exp;
 	static Float:posx, Float:posy, Float:posz, Float:angle, world, int;
 
 	format(CharacterData[playerid][Name], MAX_PLAYER_NAME+1, "%s", cache_value_string(0, "Name"));
-	format(CharacterData[playerid][Nick], MAX_PLAYER_NAME+1, "%s", cache_value_string(0, "Nick"));
 	format(CharacterData[playerid][DateCreated], 32, "%s", cache_value_string(0, "DateCreated"));
 	format(CharacterData[playerid][LastTimePlayed], 32, "%s", cache_value_string(0, "LastTimePlayed"));
 	format(CharacterData[playerid][Birthday], 16, "%s", cache_value_string(0, "Birthday"));
@@ -88,6 +26,7 @@ function OnGetCharacterData(playerid) {
 	CharacterData[playerid][Respects] = cache_value_int(0, "Respects");
 	CharacterData[playerid][JobID] = cache_value_int(0, "JobID");
 	CharacterData[playerid][FightStyle] = cache_value_int(0, "FightStyle");
+	CharacterData[playerid][WalkStyle] = cache_value_int(0, "WalkStyle");
 	CharacterData[playerid][Playtime] = cache_value_int(0, "Playtime");
 	CharacterData[playerid][Payday] = cache_value_int(0, "Payday");
 	CharacterData[playerid][RespawnLocation] = cache_value_int(0, "RespawnLocation");
@@ -120,9 +59,7 @@ function OnGetCharacterData(playerid) {
 
 	SpawnPlayer(playerid);
 	CancelSelectTextDraw(playerid);
-	SetPlayerVirtualWorld(playerid, world);
-	SetPlayerInterior(playerid, int);
-	SetPlayerPos(playerid, posx, posy, posz);
+	SetPlayerCompensatedPos(playerid, posx, posy, posz, 10, world, int);
 	SetPlayerFacingAngle(playerid, angle);
 	SetPlayerScore(playerid, level);
 	SetPlayerTeam(playerid, NO_TEAM);
@@ -136,20 +73,13 @@ function OnGetCharacterData(playerid) {
 	SetPlayerFightingStyle(playerid, CharacterData[playerid][FightStyle]);
 	SetPlayerWantedLevel(playerid, CharacterData[playerid][Wanted]);
 	SetPlayerMoney(playerid, CharacterData[playerid][Cash]);
+	SetWalkingStyle(playerid, e_WALKING_STYLES:CharacterData[playerid][WalkStyle]);
 
-	FreezePlayer(playerid, 7000);
+	format(str, sizeof str, "~w~Chao mung~n~~y~%s", PlayerName(playerid));
+	GameTextForPlayer(playerid, str, 6000, 1);
+	FreezePlayer(playerid, 6000);
 	ShowPlayerHUD(playerid);
 
     FadePlayerScreen(playerid, FadeBack, 0x00000000, 1000, 25);
     return 1;
-}
-
-hook OnPlayerSpawn(playerid) {
-	SetPlayerSkin(playerid, CharacterData[playerid][SkinID]);
-	return 1;
-}
-
-hook function ResetPlayerVars(playerid) {
-	CharacterData[playerid][CmdCD] = 0;
-	return 1;
 }

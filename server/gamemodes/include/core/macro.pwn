@@ -6,9 +6,6 @@
 #define ClientMsg 				SendClientMessagef
 #define ServerMsg 				SendClientMessageToAllf
 
-#define PRESSED(%0) (((newkeys & (%0)) == (%0)) && ((oldkeys & (%0)) != (%0)))
-#define MULTIPLE(%0) ((newkeys & %0) && (oldkeys & %0))
-
 // +-+-+-+-+- DIALOG STYLES +-+-+-+-+-
 #define DS_LIST 				DIALOG_STYLE_LIST
 #define DS_TABLIST 				DIALOG_STYLE_TABLIST
@@ -93,7 +90,6 @@ new MySQL:Database;
 // +-+-+-+-+- UMSELECTION LISTS +-+-+-+-+-
 #define MALE_SKIN_LIST 			"lists/male_skins_list.txt"
 #define FEMALE_SKIN_LIST		"lists/female_skins_list.txt"
-
 
 new MaleSkinList = mS_INVALID_LISTID,
 	FemaleSkinList = mS_INVALID_LISTID;
