@@ -332,12 +332,12 @@ hook OnPlayerDisconnect(playerid, reason) {
 		static str[256];
 		format(str, sizeof str, "UPDATE `accounts` SET `Online`='0' WHERE `Account`='%s'", AuthData[playerid][Account]);
 		mysql_tquery(Database, str);
+		SaveCharacterData(playerid);
 		switch(reason) {
 			case 0: flog(AUTH_LOG_FILE, "[AUTH] Tai khoan \"%s\" da dang xuat khoi tro choi (mat ket noi).", AuthData[playerid][Account]);
 			case 1: flog(AUTH_LOG_FILE, "[AUTH] Tai khoan \"%s\" da dang xuat khoi tro choi (thoat game).", AuthData[playerid][Account]);
 			case 2: flog(AUTH_LOG_FILE, "[AUTH] Tai khoan \"%s\" da dang xuat khoi tro choi (kick/ban).", AuthData[playerid][Account]);
 		}
-		//Save if(IsPlayerInGame(playerid)) SaveCharacterInfoData(playerid, log_Account[playerid], char_Selected[playerid]);
 	}
 	ResetPlayerVars(playerid);
 	Kick(playerid);

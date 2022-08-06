@@ -48,6 +48,13 @@ IsAdmin(playerid) {
 	return false;
 }
 
+IsStaffDuty(playerid) {
+	static id;
+	if((id = GetStaffID(playerid)) == -1) return -1;
+	if((id = GetStaffID(playerid)) != -1 && StaffData[id][OnDuty]) return 1;
+	if((id = GetStaffID(playerid)) != -1 && !StaffData[id][OnDuty]) return 0;
+}
+
 IsHelper(playerid) {
 	static id;
 	if((id = GetStaffID(playerid)) != -1 && StaffData[id][Rank] >= HELPER_RANK) return true;
@@ -82,17 +89,18 @@ ToggleStaffNick(playerid, bool:toggle) {
 	}
 }
 
-SetStaffDuty(playerid, bool:status) {
+ToggleStaffDuty(playerid) {
 	static id, str[256];
 	if((id = GetStaffID(playerid)) != -1 && IsHelper(playerid)) {
-		StaffData[id][OnDuty] = status;
-		if(status) {
+		if(!StaffData[id][OnDuty]) {
 			SetPlayerName(playerid, StaffData[id][Nick]);
-			MsgToAdmin(COLOR_LIGHTRED, "STAFF > [%s] %s da on-duty.", GetStaffRankName(StaffData[id][Rank]), StaffData[id][Nick]);
+			MsgToAdmin(COLOR_LIGHTRED, "STAFF > \"%s\" %s da on-duty.", GetStaffRankName(StaffData[id][Rank]), StaffData[id][Nick]);
+			return StaffData[id][OnDuty] = true;
 		}
-		if(!status) {
+		if(StaffData[id][OnDuty]) {
 			SetPlayerName(playerid, CharacterData[playerid][Name]);
-			MsgToAdmin(COLOR_LIGHTRED, "STAFF > [%s] %s da off-duty.", GetStaffRankName(StaffData[id][Rank]), StaffData[id][Nick]);
+			MsgToAdmin(COLOR_LIGHTRED, "STAFF > \"%s\" %s da off-duty.", GetStaffRankName(StaffData[id][Rank]), StaffData[id][Nick]);
+			return StaffData[id][OnDuty] = false;
 		}
 	}
 }

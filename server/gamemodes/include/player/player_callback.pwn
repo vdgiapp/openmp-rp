@@ -13,7 +13,7 @@ Cmd:b(playerid, params[]) {
 
 	if(isnull(str)) return UsageMsg(playerid, "/b [noi dung]");
 
-    format(str, sizeof str, "(( [%d] %s : %s ))", playerid, GetRoleplayName(PlayerName(playerid)), FirstUpper(str));
+    format(str, sizeof str, "(( [%d] %s: %s ))", playerid, GetRoleplayName(PlayerName(playerid)), FirstUpper(str));
     ProxDetector(str, 20.0, playerid, COLOR_WHITE, COLOR_WHITE, COLOR_WHITE, COLOR_WHITE, COLOR_WHITE);
 	return 1;
 }
@@ -125,7 +125,7 @@ Cmd:ooc(playerid, params[]) {
     #pragma unused togAdv, togGov, togPM, togAdm, togNews, togHUD, togFaction, togService
 
     if(!togOOC) return ErrorMsg(playerid, "Ban can phai bat tinh nang tro chuyen OOC trong cai dat.");
-    
+
     format(str, sizeof(str), "OOC > [%d] %s: %s", playerid, GetRoleplayName(PlayerName(playerid)), FirstUpper(str));
     GlobalMsg(COLOR_OOC, str);
     return 1;
@@ -190,6 +190,6 @@ Cmd:menu(playerid, params[]) {
 
 Alias:stats("stat", "thongtin", "info");
 Cmd:stats(playerid, params) {
-    
+
     return 1;
 }

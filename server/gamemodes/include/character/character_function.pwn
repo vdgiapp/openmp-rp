@@ -82,3 +82,17 @@ function OnGetCharacterData(playerid) {
     FadePlayerScreen(playerid, FadeBack, 0x00000000, 1000, 25);
     return 1;
 }
+
+SaveCharacterData(playerid) {
+
+	if(!IsPlayerInGame(playerid)) return 0;
+
+	static account[25], slot;
+	format(account, sizeof account, "%s", AuthData[playerid][Account]);
+	slot = AuthData[playerid][Selected];
+
+	
+
+
+	return 1;
+}
