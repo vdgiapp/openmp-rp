@@ -69,7 +69,7 @@
 #include <gmtime> // Simple gettime, getdate
 #include <filelog> // Simple file log
 
-#include <cctv> // CCTV 
+#include <cctv> // CCTV
 #include <walkstyles> // Player walking style
 
 
@@ -86,7 +86,7 @@ main() {
 }
 
 #include "include\core\timer.pwn"
-#include "include\core\callback.pwn" 
+#include "include\core\callback.pwn"
 #include "include\core\function.pwn"
 
 // Systems
