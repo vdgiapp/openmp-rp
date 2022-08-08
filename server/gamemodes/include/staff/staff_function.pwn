@@ -2,12 +2,12 @@
 Staff_OnGameModeInit() {
 	for(new id = 0; id < MAX_STAFF_ID; id++) {
 		static str[128]; format(str, sizeof str, "SELECT * FROM `staff` WHERE `SID` = '%d'", id);
-		mysql_tquery(Database, str, "OnGetAdminData", "i", id);
+		mysql_tquery(Database, str, "OnGetStaffData", "i", id);
 	}
 	return 1;
 }
 
-function OnGetAdminData(id) {
+function OnGetStaffData(id) {
 	if(cache_num_rows()) {
 		format(StaffData[id][Account], 25, "%s", cache_value_string(0, "Account"));
 		format(StaffData[id][Nick], 25, "%s", cache_value_string(0, "Nick"));
@@ -55,10 +55,11 @@ IsStaffOnDuty(playerid) {
 	if((id = GetStaffID(playerid)) != -1 && !StaffData[id][OnDuty]) return 0;
 }
 
-GetHelppedAmount(playerid) {
+IsStaffSpectating(playerid) {
 	static id;
-	if((id = GetStaffID(playerid)) != -1 && IsStaff(playerid, HELPER_RANK)) return StaffData[id][Helped];
-	return 0;
+	if((id = GetStaffID(playerid)) == -1) return -1;
+	if((id = GetStaffID(playerid)) != -1 && StaffData[id][Spectating]) return 1;
+	if((id = GetStaffID(playerid)) != -1 && !StaffData[id][Spectating]) return 0;
 }
 
 MsgToAdmin(color, msg[], va_args<>) {
@@ -71,49 +72,13 @@ NoPermsMsg(playerid) {
 	ErrorMsg(playerid, "Ban khong du tham quyen de su dung lenh nay.");
 }
 
-ToggleStaffNick(playerid, bool:toggle) {
-	static id;
-	if(!toggle) SetPlayerName(playerid, CharacterData[playerid][Name]);
-	if(toggle) {
-		if((id = GetStaffID(playerid)) != -1 && IsStaff(playerid, TRIAL_ADMIN_RANK)) {
-			SetPlayerName(playerid, StaffData[id][Nick]);
-			return true;
-		}
-		return false;
-	}
-}
-
-ToggleStaffDuty(playerid) {
-	static id, str[256];
-	if((id = GetStaffID(playerid)) != -1 && IsStaff(playerid, HELPER_RANK)) {
-		if(!StaffData[id][OnDuty]) {
-			MsgToAdmin(COLOR_LIGHTRED, "STAFF > \"%s\" %s da on-duty.", GetStaffRankName(StaffData[id][Rank]), StaffData[id][Nick]);
-			return StaffData[id][OnDuty] = true;
-		}
-		if(StaffData[id][OnDuty]) {
-			MsgToAdmin(COLOR_LIGHTRED, "STAFF > \"%s\" %s da off-duty.", GetStaffRankName(StaffData[id][Rank]), StaffData[id][Nick]);
-			return StaffData[id][OnDuty] = false;
-		}
-	}
-}
-
-ToggleStaffSetting(playerid, type[], bool:value) {
-	static id;
-	if((id = GetStaffID(playerid)) != -1 && IsStaff(playerid, HELPER_RANK)) {
-		if(isequal(type, "togPM")) StaffData[id][togPM] = value;
-		if(isequal(type, "togCMD")) StaffData[id][togCMD] = value;
-		if(isequal(type, "togKill")) StaffData[id][togKill] = value;
-		if(isequal(type, "togNewb")) StaffData[id][togNewb] = value;
-	}
-}
-
 GetStaffSetting(playerid, type[]) {
 	static id;
 	if((id = GetStaffID(playerid)) != -1 && IsStaff(playerid, HELPER_RANK)) {
-		if(isequal(type, "togPM")) return StaffData[id][togPM];
-		if(isequal(type, "togCMD")) return StaffData[id][togCMD];
-		if(isequal(type, "togKill")) return StaffData[id][togKill];
-		if(isequal(type, "togNewb")) return StaffData[id][togNewb];
+		if(isequal(type, #togPM)) return StaffData[id][togPM];
+		if(isequal(type, #togCMD)) return StaffData[id][togCMD];
+		if(isequal(type, #togKill)) return StaffData[id][togKill];
+		if(isequal(type, #togNewb)) return StaffData[id][togNewb];
 	}
 }
 
@@ -134,7 +99,7 @@ SendStaffCMD(playerid, cmd[]) {
 		static sid; sid = GetStaffID(playerid);
 		if(sid == -1) break;
 		if(IsStaff(p, TRIAL_ADMIN_RANK) && GetStaffSetting(playerid, #togCMD)) {
-			static str[128]; format(str, sizeof str, "@ \"%s\" %s da su dung lenh /%s", GetStaffRankName(StaffData[sid][Rank]), StaffData[sid][Nick], cmd);
+			static str[128]; format(str, sizeof str, "@ %s %s da su dung lenh: %s", GetStaffRankName(StaffData[sid][Rank]), StaffData[sid][Nick], cmd);
 			ClientMsg(p, COLOR_GREY, str);
 		}
 	}

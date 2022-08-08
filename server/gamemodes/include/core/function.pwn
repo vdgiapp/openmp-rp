@@ -31,6 +31,18 @@ GivePlayerArmour(playerid, Float:ar) {
 	return SetPlayerArmour(playerid, floatadd(oar, ar));
 }
 
+Float:PlayerHealth(playerid) {
+	static Float:hp;
+	GetPlayerHealth(playerid, hp);
+	return hp;
+}
+
+Float:PlayerArmour(playerid) {
+	static Float:ar;
+	GetPlayerArmour(playerid, ar);
+	return ar;
+}
+
 SetPlayerMoney(playerid, money) {
 	ResetPlayerMoney(playerid);
 	GivePlayerMoney(playerid, money);
@@ -170,7 +182,7 @@ ErrorMsg(playerid, const string[], va_args<>) {
 SuccessMsg(playerid, const string[], va_args<>) {
 	static str[256];
     format(str, sizeof str, string, va_start<2>);
-	format(str, sizeof str, ""COL_GREEN"SUCCESS > "COL_WHITE"%s", str);
+	format(str, sizeof str, ""COL_GREEN"SUCCESS > "COL_GREY"%s", str);
 	ClientMsg(playerid, -1, str);
 }
 

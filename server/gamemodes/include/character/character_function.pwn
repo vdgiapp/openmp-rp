@@ -58,7 +58,7 @@ function OnGetCharacterData(playerid) {
 
 	SpawnPlayer(playerid);
 	CancelSelectTextDraw(playerid);
-	SetPlayerCompensatedPos(playerid, posx, posy, posz, 10, world, int);
+	SetPlayerCompensatedPos(playerid, posx, posy, posz, 7000, world, int);
 	SetPlayerFacingAngle(playerid, angle);
 	SetPlayerScore(playerid, level);
 	SetPlayerTeam(playerid, NO_TEAM);
@@ -76,7 +76,6 @@ function OnGetCharacterData(playerid) {
 
 	format(str, sizeof str, "~w~Chao mung~n~~y~%s", PlayerName(playerid));
 	GameTextForPlayer(playerid, str, 6000, 1);
-	FreezePlayer(playerid, 6000);
 	ShowPlayerHUD(playerid);
 
     FadePlayerScreen(playerid, FadeBack, 0x00000000, 1000, 25);
@@ -91,7 +90,7 @@ SaveCharacterData(playerid) {
 	format(account, sizeof account, "%s", AuthData[playerid][Account]);
 	slot = AuthData[playerid][Selected];
 
-	
+
 
 
 	return 1;

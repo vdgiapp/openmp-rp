@@ -18,13 +18,19 @@ enum ENUM_ADMIN_INFO {
 	Rank,
 	Helped,
 
-	// Not save
+	// Settings
 	bool:OnDuty,
 	bool:togPM,
 	bool:togCMD,
 	bool:togKill,
 	bool:togNewb,
+
+	//
 	bool:Spectating,
-	bool:God
+	bool:GodMode,
+	bool:ClickTP,
+
+	Float:prevHealth,
+	Float:prevArmour,
 }
 new StaffData[MAX_STAFF_ID][ENUM_ADMIN_INFO];
