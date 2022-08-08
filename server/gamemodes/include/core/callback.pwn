@@ -7,11 +7,11 @@ public OnGameModeInit() {
 	Database = mysql_connect(host_mysql, user_mysql, pass_mysql, dbase_mysql);
 
     if(Database == MYSQL_INVALID_HANDLE || mysql_errno(Database) != 0) {
-        printf("Ket noi den co so du lieu khong thanh cong!\n");
+        printf("Ket noi den co so du lieu khong thanh cong!");
         return mysql_close(Database);
     }
 
-    printf("Ket noi den co so du lieu thanh cong!\n");
+    printf("Ket noi den co so du lieu thanh cong!");
 
 	// Admin SQL
 	Staff_OnGameModeInit();
@@ -32,21 +32,17 @@ public OnGameModeInit() {
 	SetTimeZone(7);
 
 	// Log files
-	printf("Checking log files...\n");
+	printf("Checking log files...");
 	fcreate(AUTH_LOG_FILE);
 
 	// Set account status
-	printf("Changing accounts status...\n");
+	printf("Changing accounts status...");
 	mysql_tquery(Database, "UPDATE `accounts` SET `Online`='0'");
 
 	// Load lists
-	printf("Loading UmSelection lists...\n");
+	printf("Loading UmSelection lists...");
 	MaleSkinList = LoadModelSelectionMenu(MALE_SKIN_LIST);
 	FemaleSkinList = LoadModelSelectionMenu(FEMALE_SKIN_LIST);
-
-	// Streamer
-	Streamer_SetVisibleItems(STREAMER_TYPE_OBJECT, 2000);
-	Streamer_SetRadiusMultiplier(STREAMER_TYPE_OBJECT, 2.0);
 
 	return 1;
 }

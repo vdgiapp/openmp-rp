@@ -13,7 +13,7 @@ function OnGetAdminData(id) {
 		format(StaffData[id][Nick], 25, "%s", cache_value_string(0, "Nick"));
 		StaffData[id][Rank] = cache_value_int(0, "Rank");
 		StaffData[id][Helped] = cache_value_int(0, "Helped");
-		printf("Get Staff Data - ID: %d", id);
+		printf("Staff data id %d loaded", id);
 	}
 	return 1;
 }
@@ -42,46 +42,40 @@ GetStaffRankName(rank) {
 	return name;
 }
 
-IsAdmin(playerid) {
+IsStaff(playerid, rank) {
 	static id;
-	if((id = GetStaffID(playerid)) != -1 && StaffData[id][Rank] >= TRIAL_ADMIN_RANK) return true;
+	if((id = GetStaffID(playerid)) != -1 && StaffData[id][Rank] >= rank) return true;
 	return false;
 }
 
-IsStaffDuty(playerid) {
+IsStaffOnDuty(playerid) {
 	static id;
 	if((id = GetStaffID(playerid)) == -1) return -1;
 	if((id = GetStaffID(playerid)) != -1 && StaffData[id][OnDuty]) return 1;
 	if((id = GetStaffID(playerid)) != -1 && !StaffData[id][OnDuty]) return 0;
 }
 
-IsHelper(playerid) {
-	static id;
-	if((id = GetStaffID(playerid)) != -1 && StaffData[id][Rank] >= HELPER_RANK) return true;
-	return false;
-}
-
 GetHelppedAmount(playerid) {
 	static id;
-	if((id = GetStaffID(playerid)) != -1 && IsHelper(playerid)) return StaffData[playerid][Helped];
+	if((id = GetStaffID(playerid)) != -1 && IsStaff(playerid, HELPER_RANK)) return StaffData[id][Helped];
 	return 0;
 }
 
 MsgToAdmin(color, msg[], va_args<>) {
 	foreach(new p : Player) {
-		if(IsAdmin(p)) return ClientMsg(p, color, msg, va_start<2>);
+		if(IsStaff(p, TRIAL_ADMIN_RANK)) return ClientMsg(p, color, msg, va_start<2>);
 	}
 }
 
-NotAdminMsg(playerid) {
-	ErrorMsg(playerid, "Ban khong co quyen de su dung lenh nay.");
+NoPermsMsg(playerid) {
+	ErrorMsg(playerid, "Ban khong du tham quyen de su dung lenh nay.");
 }
 
 ToggleStaffNick(playerid, bool:toggle) {
 	static id;
 	if(!toggle) SetPlayerName(playerid, CharacterData[playerid][Name]);
 	if(toggle) {
-		if((id = GetStaffID(playerid)) != -1 && IsAdmin(playerid)) {
+		if((id = GetStaffID(playerid)) != -1 && IsStaff(playerid, TRIAL_ADMIN_RANK)) {
 			SetPlayerName(playerid, StaffData[id][Nick]);
 			return true;
 		}
@@ -91,23 +85,21 @@ ToggleStaffNick(playerid, bool:toggle) {
 
 ToggleStaffDuty(playerid) {
 	static id, str[256];
-	if((id = GetStaffID(playerid)) != -1 && IsHelper(playerid)) {
+	if((id = GetStaffID(playerid)) != -1 && IsStaff(playerid, HELPER_RANK)) {
 		if(!StaffData[id][OnDuty]) {
-			SetPlayerName(playerid, StaffData[id][Nick]);
 			MsgToAdmin(COLOR_LIGHTRED, "STAFF > \"%s\" %s da on-duty.", GetStaffRankName(StaffData[id][Rank]), StaffData[id][Nick]);
 			return StaffData[id][OnDuty] = true;
 		}
 		if(StaffData[id][OnDuty]) {
-			SetPlayerName(playerid, CharacterData[playerid][Name]);
 			MsgToAdmin(COLOR_LIGHTRED, "STAFF > \"%s\" %s da off-duty.", GetStaffRankName(StaffData[id][Rank]), StaffData[id][Nick]);
 			return StaffData[id][OnDuty] = false;
 		}
 	}
 }
 
-ToggleStaffSettings(playerid, type[], bool:value) {
+ToggleStaffSetting(playerid, type[], bool:value) {
 	static id;
-	if((id = GetStaffID(playerid)) != -1 && IsHelper(playerid)) {
+	if((id = GetStaffID(playerid)) != -1 && IsStaff(playerid, HELPER_RANK)) {
 		if(isequal(type, "togPM")) StaffData[id][togPM] = value;
 		if(isequal(type, "togCMD")) StaffData[id][togCMD] = value;
 		if(isequal(type, "togKill")) StaffData[id][togKill] = value;
@@ -115,12 +107,45 @@ ToggleStaffSettings(playerid, type[], bool:value) {
 	}
 }
 
-GetStaffSettings(playerid, type[]) {
+GetStaffSetting(playerid, type[]) {
 	static id;
-	if((id = GetStaffID(playerid)) != -1 && IsHelper(playerid)) {
+	if((id = GetStaffID(playerid)) != -1 && IsStaff(playerid, HELPER_RANK)) {
 		if(isequal(type, "togPM")) return StaffData[id][togPM];
 		if(isequal(type, "togCMD")) return StaffData[id][togCMD];
 		if(isequal(type, "togKill")) return StaffData[id][togKill];
 		if(isequal(type, "togNewb")) return StaffData[id][togNewb];
+	}
+}
+
+SendStaffPM(from, to, text[]) {
+	foreach(new p : Player) {
+		static sid; sid = GetStaffID(p);
+		if(sid == -1) continue;
+		if(IsStaff(p, TRIAL_ADMIN_RANK) && GetStaffSetting(p, #togPM)) {
+			static str[128];
+			format(str, sizeof str, "@ (( PM tu %s [%d] den %s [%d]: %s ))", GetRoleplayName(PlayerName(from)), from, GetRoleplayName(PlayerName(to)), to, text);
+			ClientMsg(p, COLOR_GREY, str);
+		}
+	}
+}
+
+SendStaffCMD(playerid, cmd[]) {
+	foreach(new p : Player) {
+		static sid; sid = GetStaffID(playerid);
+		if(sid == -1) break;
+		if(IsStaff(p, TRIAL_ADMIN_RANK) && GetStaffSetting(playerid, #togCMD)) {
+			static str[128]; format(str, sizeof str, "@ \"%s\" %s da su dung lenh /%s", GetStaffRankName(StaffData[sid][Rank]), StaffData[sid][Nick], cmd);
+			ClientMsg(p, COLOR_GREY, str);
+		}
+	}
+}
+
+SendStaffKill(killer, target, weapon) {
+	foreach(new p : Player) {
+		static sid; sid = GetStaffID(p);
+		if(sid == -1) continue;
+		if(IsStaff(p, TRIAL_ADMIN_RANK) && GetStaffSetting(playerid, #togKill)) {
+			SendDeathMessage(killer, target, weapon);
+		}
 	}
 }

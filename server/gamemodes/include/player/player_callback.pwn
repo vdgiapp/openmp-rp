@@ -156,7 +156,7 @@ Cmd:pm(playerid, params[]) {
     ClientMsg(playerid, COLOR_PMOUT, "(( PM cho %s [%d]: %s ))", GetRoleplayName(PlayerName(target)), target, FirstUpper(str));
     PlayerPlaySound(playerid, 4203, 0, 0, 0);
 
-    if(GetStaffSettings(playerid, #togPM)) MsgToAdmin(COLOR_PMIN, "(( PM tu %s [%d] den %s [%d]: %s ))", GetRoleplayName(PlayerName(playerid)), playerid, GetRoleplayName(PlayerName(target)), target, FirstUpper(str));
+    SendStaffPM(playerid, target, FirstUpper(str));
 
     return 1;
 }
@@ -190,6 +190,22 @@ Cmd:menu(playerid, params[]) {
 
 Alias:stats("stat", "thongtin", "info");
 Cmd:stats(playerid, params) {
+
+    return 1;
+}
+
+Alias:streamerfix("sf");
+Cmd:streamerfix(playerid, params) {
+
+	static objects, sid;
+
+	static Float:x, Float:y, Float:z;
+
+    Streamer_SetVisibleItems(STREAMER_TYPE_OBJECT, Streamer_GetVisibleItems(STREAMER_TYPE_OBJECT));
+
+	GetPlayerPos(playerid, x, y, z);
+	Streamer_DestroyAllVisibleItems(playerid, STREAMER_TYPE_OBJECT);
+	Streamer_UpdateEx(playerid, x, y, z, -1, -1, STREAMER_TYPE_OBJECT);
 
     return 1;
 }

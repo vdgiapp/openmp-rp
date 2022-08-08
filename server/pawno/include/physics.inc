@@ -15,7 +15,9 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 
 
-#include <ysf> // replace modelsizes
+#if !defined GetColSphereOffset
+	#error Required <ysf> or <open.mp> or <modelsizes>
+#endif
 
 #pragma compress 1
 
@@ -30,12 +32,12 @@
 #if !defined PHY_TIMER_INTERVAL
 	#define PHY_TIMER_INTERVAL (20)
 #endif
-#if !defined PHY_MAX_WALLS	
+#if !defined PHY_MAX_WALLS
 	#define PHY_MAX_WALLS (512)
 #endif
 #if !defined PHY_MAX_CYLINDERS
 	#define PHY_MAX_CYLINDERS (512)
-#endif		
+#endif
 
 #define PHY_MODE_3D (0)
 #define PHY_MODE_2D (1)
@@ -159,7 +161,7 @@ enum E_PHY_PLAYER
 
 new
 	PHY_Player[MAX_PLAYERS][E_PHY_PLAYER];
-	
+
 
 /* Macros are self-explanatory */
 #define PHY_IsObjectUsingPhysics(%1) (PHY_Object[%1][PHY_Properties] & PHY_OBJECT_USED)
@@ -184,7 +186,7 @@ static
 public OnGameModeInit()
 {
 	SetTimer("PHY_CoreTimer", PHY_TIMER_INTERVAL, true);
-	
+
 	#if defined COLANDREAS
 	CA_Init();
 	#endif
@@ -217,7 +219,7 @@ public PHY_CoreTimer()
 		Float:cy,
 		Float:cz,
 		#endif
-		
+
 		Float:x,
 		Float:y,
 		Float:z,
@@ -257,13 +259,13 @@ public PHY_CoreTimer()
 		if(PHY_Object[a][PHY_Properties] & PHY_OBJECT_USED)
 		{
 			GetObjectPos(a, x, y, z);
-			
+
 			x1 = x + PHY_Object[a][PHY_VX] * (PHY_TIMER_INTERVAL/1000.0);
 			y1 = y + PHY_Object[a][PHY_VY] * (PHY_TIMER_INTERVAL/1000.0);
 			if(PHY_GetObjectMode(a) == PHY_MODE_3D)
 			{
 				z1 = z + PHY_Object[a][PHY_VZ] * (PHY_TIMER_INTERVAL/1000.0);
-				
+
 				if(z1 > PHY_Object[a][PHY_HighZBound])
 				{
 					if(PHY_Object[a][PHY_VZ] > 0)
@@ -299,7 +301,7 @@ public PHY_CoreTimer()
 
 						}
 					}*/
-					
+
 					if(PHY_Object[a][PHY_VZ] > 0)
 					{
 						PHY_Object[a][PHY_VZ] -= PHY_Object[a][PHY_Gravity] * (PHY_TIMER_INTERVAL/1000.0);
@@ -376,13 +378,13 @@ public PHY_CoreTimer()
 
 									CallLocalFunction("PHY_OnObjectCollideWithObject", "dd", a, b);
 								}
-								
+
 								/*
 								// Old algorithm, works good only in 2D
 								dvx = PHY_Object[a][PHY_VX] - PHY_Object[b][PHY_VX];
 								dvy = PHY_Object[a][PHY_VY] - PHY_Object[b][PHY_VY];
 								mag = dvx * dx + dvy * dy;
-								
+
 								if(mag < 0.0)
 								{
 									angle = -atan2(dy, dx);
@@ -421,7 +423,7 @@ public PHY_CoreTimer()
 					if(PHY_GetObjectMode(a) == PHY_MODE_3D)
 						PHY_UpdateBounds(a, x1, y1, z1);
 				}
-				
+
 				if(PHY_IsObjectUsingColAndreasCollisions(a))
 				{
 					mod = floatsqroot(PHY_Object[a][PHY_VX] * PHY_Object[a][PHY_VX] + PHY_Object[a][PHY_VY] * PHY_Object[a][PHY_VY]);
@@ -440,16 +442,16 @@ public PHY_CoreTimer()
 						angle = -angle;
 						PHY_Object[a][PHY_VX] = newvx1 * floatcos(angle, degrees) - newvy1 * floatsin(angle, degrees);
 						PHY_Object[a][PHY_VY] = newvx1 * floatsin(angle, degrees) + newvy1 * floatcos(angle, degrees);
-						
+
 						angle = angle + (newvy1 > 0 ? 90.0 : -90.0);
 						x1 = cx + (PHY_Object[a][PHY_Size] + 0.001) * floatcos(angle, degrees);
 						y1 = cy + (PHY_Object[a][PHY_Size] + 0.001) * floatsin(angle, degrees);
-						
+
 						CallLocalFunction("PHY_OnObjectCollideWithSAWorld", "dfff", a, cx, cy, cz);
 					}
 				}
 				#endif
-				
+
 				if(!PHY_IsObjectGhostWithWalls(a))
 				{
 					foreach(new w : ITER_Wall)
@@ -533,7 +535,7 @@ public PHY_CoreTimer()
 						if((!PHY_Object[a][PHY_World] || !PHY_Player[i][PHY_World] || PHY_Object[a][PHY_World] == PHY_Player[i][PHY_World]))
 						{
 							GetPlayerPos(i, x2, y2, z2);
-								
+
 							if(z2 - PHY_Object[a][PHY_PlayerLowZ] - PHY_Object[a][PHY_Size] < z1 < z2 + PHY_Object[a][PHY_PlayerHighZ] + PHY_Object[a][PHY_Size])
 							{
 								dx = x1 - x2;
@@ -583,11 +585,11 @@ public PHY_CoreTimer()
 					else
 						PHY_ApplyRotation(a, speed, moveangle);
 			}
-			
+
 			PHY_Object[a][PHY_VX] += PHY_Object[a][PHY_AX];
 			PHY_Object[a][PHY_VY] += PHY_Object[a][PHY_AY];
 			PHY_Object[a][PHY_VZ] += PHY_Object[a][PHY_AZ];
-			
+
 			SetObjectPos(a, x1, y1, z1);
 			CallLocalFunction("PHY_OnObjectUpdate", "d", a);
 		}
@@ -621,7 +623,7 @@ stock PHY_InitObject(objectid, modelid = 0, Float:mass = 1.0, Float:size = FLOAT
 		PHY_Object[objectid][PHY_LowZBound] = z;
 		PHY_Object[objectid][PHY_HighZBound] = FLOAT_INFINITY;
 		PHY_Object[objectid][PHY_BoundConst] = 0;
-		
+
 		if(size != size)
 		{
 			if(modelid)
@@ -629,9 +631,9 @@ stock PHY_InitObject(objectid, modelid = 0, Float:mass = 1.0, Float:size = FLOAT
 		}
 		else
 			PHY_Object[objectid][PHY_Size] = size;
-			
+
 		Iter_Add(ITER_Object, objectid);
-				
+
 		return 1;
 	}
 	return 0;
@@ -726,7 +728,7 @@ stock PHY_UseColAndreas(objectid, mode = 1)
 	{
 		new Float:x, Float:y, Float:z;
 		GetObjectPos(objectid, x, y, z);
-		
+
 		switch(mode)
 		{
 			case 0:
@@ -769,10 +771,10 @@ stock PHY_RollObject(objectid, toggle = 1, rollingmode = PHY_ROLLING_MODE_DEFAUL
 			PHY_Object[objectid][PHY_Properties] |= PHY_OBJECT_ROLL;
 		else
 			PHY_Object[objectid][PHY_Properties] &= ~PHY_OBJECT_ROLL;
-			
+
 		if(rollingmode == PHY_ROLLING_MODE_ADVANCED){
 			PHY_Object[objectid][PHY_Properties] |= PHY_OBJECT_ROLLING_MODE;
-			
+
 			new
 				Float:rx, Float:ry, Float:rz;
 			GetObjectRot(objectid, rx, ry, rz);
@@ -886,7 +888,7 @@ stock PHY_ApplyRotation(objectid, Float:speed, Float:moveangle)
 	if(rx < 0.0)
 		rx += 360.0;
 	rz = moveangle;
-		
+
 	SetObjectRot(objectid, rx, ry, rz);
 
 	return 1;
@@ -901,26 +903,26 @@ stock PHY_ApplyQuaternionsRotation(objectid, Float:speed, Float:moveangle)
 		Float:q_roll[4],
 		Float:vx, Float:vy, Float:vz,
 		Float:quat[4];
-		
+
 	dx = floatsin(-moveangle, degrees);
 	dy = floatcos(-moveangle, degrees);
 
 	PHY_vectorcrossp(dx, dy, 0.0, 0.0, 0.0, 1.0, vx, vy, vz);
 	PHY_QuatFromAxisAngle(vx, vy, vz, speed * (PHY_TIMER_INTERVAL/1000.0) * (180.0/3.14159) / PHY_Object[objectid][PHY_Size], q_roll[0], q_roll[1], q_roll[2], q_roll[3]);
-	
+
 	quat[0] = PHY_Object[objectid][PHY_QW];
 	quat[1] = PHY_Object[objectid][PHY_QX];
 	quat[2] = PHY_Object[objectid][PHY_QY];
 	quat[3] = PHY_Object[objectid][PHY_QZ];
 	PHY_GetQuatProduct(quat, q_roll, quat);
-	
+
 	PHY_Object[objectid][PHY_QW] = quat[0];
 	PHY_Object[objectid][PHY_QX] = quat[1];
 	PHY_Object[objectid][PHY_QY] = quat[2];
 	PHY_Object[objectid][PHY_QZ] = quat[3];
-	
+
 	PHY_GetQuaternionAngles(quat[0], quat[1], quat[2], quat[3], rx, ry, rz);
-	
+
 	SetObjectRot(objectid, rx, ry, rz);
 	return 1;
 }
@@ -951,7 +953,7 @@ stock PHY_CreateWall(Float:x1, Float:y1, Float:x2, Float:y2, Float:constant = 1.
 			PHY_Wall[i][PHY_B] = (x2 - x1);
 			PHY_Wall[i][PHY_C] = (y2 - y1) * x1 - (x2 - x1) * y1;*/
 			//PHY_Wall[i][PHY_Q] = -((y2 - y1) * x1)/(x2 - x1) + y1;
-			
+
 			Iter_Add(ITER_Wall, i);
 			return i;
 		}
@@ -1007,7 +1009,7 @@ stock PHY_CreateCylinder(Float:x, Float:y, Float:size, Float:constant = 1.0, Flo
 			PHY_Cylinder[i][PHY_Z1] = low;
 			PHY_Cylinder[i][PHY_Z2] = high;
 			PHY_Cylinder[i][PHY_BounceConst] = constant;
-			
+
 			Iter_Add(ITER_Cylinder, i);
 			return i;
 		}

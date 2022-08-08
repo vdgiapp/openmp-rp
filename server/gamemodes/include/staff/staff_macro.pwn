@@ -24,6 +24,7 @@ enum ENUM_ADMIN_INFO {
 	bool:togCMD,
 	bool:togKill,
 	bool:togNewb,
-	bool:Spectating
+	bool:Spectating,
+	bool:God
 }
 new StaffData[MAX_STAFF_ID][ENUM_ADMIN_INFO];

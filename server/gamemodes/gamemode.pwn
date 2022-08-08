@@ -38,7 +38,7 @@
 #include <YSI_Coding\y_timers> // task, ptask, timer - (pause, resume, defer, repeat, stop)
 #include <YSI_Coding\y_hooks> // hook, hook function, hook callback
 
-#include <ysf> // Y-Less server functions
+#include <open.mp> // YSF included in Open.MP
 #include <mapfix> // Texture bug fixes
 #include <physics> // Physics
 #include <mapandreas> // Map Andreas
