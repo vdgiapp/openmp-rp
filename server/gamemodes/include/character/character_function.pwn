@@ -74,8 +74,8 @@ function OnGetCharacterData(playerid) {
 	SetPlayerMoney(playerid, CharacterData[playerid][Cash]);
 	SetWalkingStyle(playerid, e_WALKING_STYLES:CharacterData[playerid][WalkStyle]);
 
-	format(str, sizeof str, "~w~Chao mung~n~~y~%s", PlayerName(playerid));
-	GameTextForPlayer(playerid, str, 6000, 1);
+	format(str, sizeof str, "Chao mung ban da quay tro lai tro choi, "COL_AQUA"%s", PlayerName(playerid));
+	ClientMsg(playerid, COLOR_WHITE, str);
 	ShowPlayerHUD(playerid);
 
     FadePlayerScreen(playerid, FadeBack, 0x00000000, 1000, 25);
@@ -90,8 +90,24 @@ SaveCharacterData(playerid) {
 	format(account, sizeof account, "%s", AuthData[playerid][Account]);
 	slot = AuthData[playerid][Selected];
 
+	static str[1024], Float:health, Float:armour, Float:angle,
+		Float:x, Float:y, Float:z, world, int;
 
+	GetPlayerHealth(playerid, health);
+	GetPlayerArmour(playerid, armour);
+	GetPlayerPos(playerid, x, y, z);
+	GetPlayerFacingAngle(playerid, angle);
+	world = GetPlayerVirtualWorld(playerid);
+	int = GetPlayerInterior(playerid);
 
+	if(IsStaffGodMode(playerid)) GetStaffPrevHealth(playerid, health), GetStaffPrevArmour(playerid, armour);
+	if(IsStaffSpectating(playerid)) GetStaffPrevHealth(playerid, health), GetStaffPrevArmour(playerid, armour), GetStaffPrevPos(playerid, x, y, z, world, int);
+
+	format(str, sizeof str, "`Position` = '%f %f %f %f %d %d', `SkinID` = '%d'", x, y, z, angle, world, int, GetPlayerSkin(playerid));
+	format(str, sizeof str, "`Hunger` = '%d', `Thirst` = '%d', `Stamina` = '%d', `Injured` = '%d', `Health` = '%f', `Armour` = '%f', %s",
+	CharacterData[playerid][Hunger], CharacterData[playerid][Thirst], CharacterData[playerid][Stamina], CharacterData[playerid][Injured], health, armour, str);
+	format(str, sizeof str, "UPDATE `characters` SET %s WHERE `Account` = '%s' AND `Slot` = '%d'", str, account, slot);
+	mysql_tquery(Database, str);
 
 	return 1;
 }

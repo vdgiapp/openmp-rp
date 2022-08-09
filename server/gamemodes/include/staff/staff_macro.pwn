@@ -32,5 +32,10 @@ enum ENUM_ADMIN_INFO {
 
 	Float:prevHealth,
 	Float:prevArmour,
+	Float:prevPosX,
+	Float:prevPosY,
+	Float:prevPosZ,
+	prevInt,
+	prevVW
 }
 new StaffData[MAX_STAFF_ID][ENUM_ADMIN_INFO];

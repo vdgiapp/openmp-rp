@@ -51,15 +51,46 @@ IsStaff(playerid, rank) {
 IsStaffOnDuty(playerid) {
 	static id;
 	if((id = GetStaffID(playerid)) == -1) return -1;
-	if((id = GetStaffID(playerid)) != -1 && StaffData[id][OnDuty]) return 1;
-	if((id = GetStaffID(playerid)) != -1 && !StaffData[id][OnDuty]) return 0;
+	if(StaffData[id][OnDuty]) return 1;
+	if(!StaffData[id][OnDuty]) return 0;
 }
 
 IsStaffSpectating(playerid) {
 	static id;
 	if((id = GetStaffID(playerid)) == -1) return -1;
-	if((id = GetStaffID(playerid)) != -1 && StaffData[id][Spectating]) return 1;
-	if((id = GetStaffID(playerid)) != -1 && !StaffData[id][Spectating]) return 0;
+	if(StaffData[id][Spectating]) return 1;
+	if(!StaffData[id][Spectating]) return 0;
+}
+
+IsStaffGodMode(playerid) {
+	static id;
+	if((id = GetStaffID(playerid)) == -1) return -1;
+	if(StaffData[id][GodMode]) return 1;
+	if(!StaffData[id][GodMode]) return 0;
+}
+
+GetStaffPrevHealth(playerid, &Float:h) {
+	static id;
+	id = GetStaffID(playerid);
+	if(id != -1) h = StaffData[id][prevHealth];
+}
+
+GetStaffPrevArmour(playerid, &Float:a) {
+	static id;
+	id = GetStaffID(playerid);
+	if(id != -1) a = StaffData[id][prevArmour];
+}
+
+GetStaffPrevPos(playerid, &Float:x, &Float:y, &Float:z, &world, &int) {
+	static id;
+	id = GetStaffID(playerid);
+	if(id != -1) {
+		x = StaffData[id][prevPosX];
+		y = StaffData[id][prevPosY];
+		z = StaffData[id][prevPosZ];
+		world = StaffData[id][prevVW];
+		int = StaffData[id][prevInt];
+	}
 }
 
 MsgToAdmin(color, msg[], va_args<>) {

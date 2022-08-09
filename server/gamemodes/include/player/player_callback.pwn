@@ -1,8 +1,6 @@
 
 hook OnPlayerText(playerid, text[]) {
-    if(!IsPlayerInGame(playerid)) return 0;
-    //if(GetPlayerMuteType(playerid) == 1) return ErrorMsg(playerid, "WARNING: Ban dang bi mute.");
-    callcmd::local(playerid, text);
+    if(IsPlayerInGame(playerid)) callcmd::local(playerid, text);
     return 0;
 }
 
@@ -28,7 +26,7 @@ Cmd:shout(playerid, params[]) {
 
     if(isnull(str)) return UsageMsg(playerid, "/s(hout) [noi dung]");
 
-    format(str, sizeof str, "%s noi to: %s", GetRoleplayName(PlayerName(playerid)), FirstUpper(str));
+    format(str, sizeof str, "%s noi (het to): %s", GetRoleplayName(PlayerName(playerid)), FirstUpper(str));
     ProxDetector(str, 50.0, playerid, COLOR_DIST1, COLOR_DIST2, COLOR_DIST3, COLOR_DIST4, COLOR_DIST5);
     return 1;
 }
@@ -43,7 +41,7 @@ Cmd:low(playerid, params[]) {
 
     if(isnull(str)) return UsageMsg(playerid, "/l(ow) [noi dung]");
 
-    format(str, sizeof str, "%s noi nho: %s", GetRoleplayName(PlayerName(playerid)), FirstUpper(str));
+    format(str, sizeof str, "%s noi (nho): %s", GetRoleplayName(PlayerName(playerid)), FirstUpper(str));
     ProxDetector(str, 8.0, playerid, COLOR_DIST1, COLOR_DIST2, COLOR_DIST3, COLOR_DIST4, COLOR_DIST5);
     return 1;
 }

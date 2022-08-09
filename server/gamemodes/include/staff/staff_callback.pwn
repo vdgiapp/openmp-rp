@@ -1,7 +1,7 @@
 
 hook OnPlayerClickMap(playerid, Float:fX, Float:fY, Float:fZ) {
 	if(IsStaff(playerid, MANAGER_RANK)) {
-		if(StaffData[GetStaffID(playerid)][ClickTP]) SetPlayerCompensatedPosFindZ(playerid, fX, fY, fZ, 1000);
+		if(StaffData[GetStaffID(playerid)][ClickTP] && !IsStaffSpectating(playerid)) SetPlayerCompensatedPosFindZ(playerid, fX, fY, fZ, 1000);
 	}
 	return 1;
 }
@@ -176,6 +176,8 @@ Alias:god("godmode");
 Cmd:god(playerid) {
 
 	if(!IsStaff(playerid, OFFICAL_ADMIN_RANK)) return NoPermsMsg(playerid);
+
+	if(IsStaffSpectating(playerid)) return ErrorMsg(playerid, "Ban can phai thoat khoi che do spec.");
 
 	static sid;	sid = GetStaffID(playerid);
 
@@ -366,6 +368,7 @@ Cmd:x(playerid, params[]) {
 	static Float:x, Float:y, Float:z; GetPlayerPos(playerid, x, y, z);
 
 	if(sscanf(params, "f", newx)) return UsageMsg(playerid, "/x [new x]");
+	if(IsStaffSpectating(playerid)) return ErrorMsg(playerid, "Vui long thoat khoi che do spec.");
 
 	SetPlayerCompensatedPos(playerid, x+newx, y, z, 1000);
 	SendStaffCMDLog(playerid, "x");
@@ -381,6 +384,7 @@ Cmd:y(playerid, params[]) {
 	static Float:x, Float:y, Float:z; GetPlayerPos(playerid, x, y, z);
 
 	if(sscanf(params, "f", newy)) return UsageMsg(playerid, "/y [new y]");
+	if(IsStaffSpectating(playerid)) return ErrorMsg(playerid, "Vui long thoat khoi che do spec.");
 
 	SetPlayerCompensatedPos(playerid, x, y+newy, z, 1000);
 	SendStaffCMDLog(playerid, "y");
@@ -396,6 +400,7 @@ Cmd:z(playerid, params[]) {
 	static Float:x, Float:y, Float:z; GetPlayerPos(playerid, x, y, z);
 
 	if(sscanf(params, "f", newz)) return UsageMsg(playerid, "/z [new z]");
+	if(IsStaffSpectating(playerid)) return ErrorMsg(playerid, "Vui long thoat khoi che do spec.");
 
 	SetPlayerCompensatedPos(playerid, x, y, z+newz, 1000);
 	SendStaffCMDLog(playerid, "z");

@@ -90,12 +90,18 @@ main() {
 #include "include\core\callback.pwn"
 #include "include\core\function.pwn"
 
+/*
+#include "map_exteriors.pwn"
+#include "map_interiors.pwn"
+*/
+
 // Systems
 #include "include\auth\auth_entry.pwn"
 
 #include "include\character\character_entry.pwn"
 
-#include "include\property\house\house.pwn"
+#include "include\property\inventory\inv_entry.pwn"
+#include "include\property\house\house_entry.pwn"
 
 #include "include\player\player_entry.pwn"
 
