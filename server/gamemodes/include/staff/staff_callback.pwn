@@ -33,7 +33,7 @@ Cmd:aooc(playerid) {
 
 	static sid; sid = GetStaffID(playerid);
 
-	SendStaffCMD(playerid, "aooc");
+	SendStaffCMDLog(playerid, "aooc");
 
 	if(ToggleChatOOC) {
 		GlobalMsg(COLOR_LIGHTRED, "%s %s da tat kenh chat ooc (/o).", GetStaffRankName(StaffData[sid][Rank]), StaffData[sid][Nick]);
@@ -53,7 +53,7 @@ Cmd:aduty(playerid, params[]) {
 
 	static sid; sid = GetStaffID(playerid);
 
-	SendStaffCMD(playerid, "aduty");
+	SendStaffCMDLog(playerid, "aduty");
 
 	if(!StaffData[sid][OnDuty]) {
 		MsgToAdmin(COLOR_LIGHTRED, "STAFF > %s %s da on-duty.", GetStaffRankName(StaffData[sid][Rank]), StaffData[sid][Nick]);
@@ -95,7 +95,7 @@ Cmd:streamer(playerid, params[]) {
 
 	MsgToAdmin(COLOR_LIGHTRED, "STAFF > %s %s da thay doi so objects toi da thanh %d", GetStaffRankName(StaffData[sid][Rank]), StaffData[sid][Nick], objects);
 
-	SendStaffCMD(playerid, "streamer");
+	SendStaffCMDLog(playerid, "streamer");
 
 	return 1;
 }
@@ -107,7 +107,7 @@ Cmd:nick(playerid, params[]) {
 	static name[MAX_PLAYER_NAME+1], sid;
 	sid = GetStaffID(playerid);
 
-	SendStaffCMD(playerid, "nick");
+	SendStaffCMDLog(playerid, "nick");
 
 	if(sscanf(params, "s[25]", name)) {
 		if(isnull(StaffData[sid][Nick])) return ErrorMsg(playerid, "Ban chua dat nick cho tai khoan cua ban. Hay su dung /nick [ten] de dat nick.");
@@ -138,7 +138,7 @@ Cmd:setnick(playerid, params[]) {
 	if(sid == -1 || sid2 == -1 || StaffData[sid2][Rank] < StaffData[sid][Rank]) return ErrorMsg(playerid, "Da co loi xay ra.");
 	if(!IsPlayerInGame(target)) return ErrorMsg(playerid, "Nguoi choi do chua dang nhap vao tro choi.");
 
-	SendStaffCMD(playerid, "setnick");
+	SendStaffCMDLog(playerid, "setnick");
 
 	if(isequal(PlayerName(target), StaffData[sid][Nick])) {
 		MsgToAdmin(COLOR_LIGHTRED, "STAFF > %s %s da thay doi nick cua %s thanh %s.", GetStaffRankName(StaffData[sid2][Rank]), StaffData[sid2][Nick], StaffData[sid][Nick], name);
@@ -167,7 +167,7 @@ Cmd:helpamount(playerid, params[]) {
 
 	ClientMsg(playerid, COLOR_GREY, "So lan da help cua %s %s la %d", GetStaffRankName(StaffData[sid][Rank]), StaffData[sid][Nick], StaffData[sid][Helped]);
 
-	SendStaffCMD(playerid, "helpamount");
+	SendStaffCMDLog(playerid, "helpamount");
 
 	return 1;
 }
@@ -179,7 +179,7 @@ Cmd:god(playerid) {
 
 	static sid;	sid = GetStaffID(playerid);
 
-	SendStaffCMD(playerid, "god");
+	SendStaffCMDLog(playerid, "god");
 
 	if(!StaffData[sid][GodMode]) {
 		SuccessMsg(playerid, "Ban da bat che do godmode");
@@ -212,7 +212,7 @@ Cmd:alog(playerid, params[]) {
 
 	static sid; sid = GetStaffID(playerid);
 
-	SendStaffCMD(playerid, "alog");
+	SendStaffCMDLog(playerid, "alog");
 
 	if(type == 1) {
 		if(StaffData[sid][logPM]) {
@@ -274,7 +274,7 @@ Cmd:teleport(playerid, params[]) {
 	if(!IsPlayerInGame(target1) || !IsPlayerInGame(target2)) return ErrorMsg(playerid, "Mot trong hai nguoi choi chua dang nhap vao game.");
 	if(IsStaffSpectating(target1) || IsStaffSpectating(target2)) return ErrorMsg(playerid, "Mot trong hai nguoi choi do dang trong che do spec.");
 
-	SendStaffCMD(playerid, "teleport");
+	SendStaffCMDLog(playerid, "teleport");
 
 	GetPlayerPos(target2, x, y, z);
 	vw = GetPlayerVirtualWorld(target2);
@@ -291,7 +291,7 @@ Cmd:clicktp(playerid) {
 
 	static sid; sid = GetStaffID(playerid);
 
-	SendStaffCMD(playerid, "clicktp");
+	SendStaffCMDLog(playerid, "clicktp");
 
 	if(StaffData[sid][ClickTP]) {
 		SuccessMsg(playerid, "Ban da tat che do click teleport.");
@@ -317,7 +317,7 @@ Cmd:position(playerid, params[]) {
 	if(IsStaffSpectating(target)) return ErrorMsg(playerid, "Nguoi choi do dang trong che do spec.");
 
 	SetPlayerCompensatedPos(target, x, y, z, 1000);
-	SendStaffCMD(playerid, "position");
+	SendStaffCMDLog(playerid, "position");
 
 	return 1;
 }
@@ -335,7 +335,7 @@ Cmd:setint(playerid, params[])  {
 	GetPlayerPos(target, x, y, z);
 
 	SetPlayerCompensatedPos(target, x, y, z, 1000, -1, int);
-	SendStaffCMD(playerid, "setint");
+	SendStaffCMDLog(playerid, "setint");
 
 	return 1;
 }
@@ -353,7 +353,7 @@ Cmd:setvw(playerid, params[])  {
 	GetPlayerPos(target, x, y, z);
 
 	SetPlayerCompensatedPos(target, x, y, z, 1000, vw, -1);
-	SendStaffCMD(playerid, "setvw");
+	SendStaffCMDLog(playerid, "setvw");
 
 	return 1;
 }
@@ -368,7 +368,7 @@ Cmd:x(playerid, params[]) {
 	if(sscanf(params, "f", newx)) return UsageMsg(playerid, "/x [new x]");
 
 	SetPlayerCompensatedPos(playerid, x+newx, y, z, 1000);
-	SendStaffCMD(playerid, "x");
+	SendStaffCMDLog(playerid, "x");
 
 	return 1;
 }
@@ -383,7 +383,7 @@ Cmd:y(playerid, params[]) {
 	if(sscanf(params, "f", newy)) return UsageMsg(playerid, "/y [new y]");
 
 	SetPlayerCompensatedPos(playerid, x, y+newy, z, 1000);
-	SendStaffCMD(playerid, "y");
+	SendStaffCMDLog(playerid, "y");
 
 	return 1;
 }
@@ -398,7 +398,7 @@ Cmd:z(playerid, params[]) {
 	if(sscanf(params, "f", newz)) return UsageMsg(playerid, "/z [new z]");
 
 	SetPlayerCompensatedPos(playerid, x, y, z+newz, 1000);
-	SendStaffCMD(playerid, "z");
+	SendStaffCMDLog(playerid, "z");
 
 	return 1;
 }

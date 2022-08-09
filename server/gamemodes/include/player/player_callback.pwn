@@ -167,7 +167,7 @@ Cmd:pm(playerid, params[]) {
     ClientMsg(playerid, COLOR_PMOUT, "(( PM cho %s [%d]: %s ))", GetRoleplayName(PlayerName(target)), target, FirstUpper(str));
     PlayerPlaySound(playerid, 4203, 0, 0, 0);
 
-    SendStaffPM(playerid, target, FirstUpper(str));
+    SendPMLog(playerid, target, FirstUpper(str));
 
     return 1;
 }

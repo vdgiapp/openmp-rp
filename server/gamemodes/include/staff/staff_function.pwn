@@ -82,36 +82,36 @@ GetStaffSetting(playerid, type[]) {
 	}
 }
 
-SendStaffPM(from, to, text[]) {
+SendPMLog(from, to, text[]) {
 	foreach(new p : Player) {
 		static sid; sid = GetStaffID(p);
 		if(sid == -1) continue;
 		if(IsStaff(p, TRIAL_ADMIN_RANK) && GetStaffSetting(p, #logPM)) {
-			flog(PM_LOG_FILE, "PM tu %s den %s: %s", GetRoleplayName(PlayerName(from)), GetRoleplayName(PlayerName(to)), text);
 			ClientMsg(p, COLOR_GREY, "@ (( PM tu %s [%d] den %s [%d]: %s ))", GetRoleplayName(PlayerName(from)), from, GetRoleplayName(PlayerName(to)), to, text);
 		}
 	}
+	flog(PM_LOG_FILE, "PM tu %s den %s: %s", GetRoleplayName(PlayerName(from)), GetRoleplayName(PlayerName(to)), text);
 }
 
-SendStaffCMD(playerid, cmd[]) {
+SendStaffCMDLog(playerid, cmd[]) {
+	static sid; sid = GetStaffID(playerid);
 	foreach(new p : Player) {
-		static sid; sid = GetStaffID(playerid);
 		if(sid == -1) break;
 		if(IsStaff(p, TRIAL_ADMIN_RANK) && GetStaffSetting(playerid, #logCMD)) {
-			flog(ADM_LOG_FILE, "%s %s [AID: %d] da su dung lenh: %s", GetStaffRankName(StaffData[sid][Rank]), StaffData[sid][Nick], sid, cmd);
 			ClientMsg(p, COLOR_GREY, "@ %s %s da su dung lenh: %s", GetStaffRankName(StaffData[sid][Rank]), StaffData[sid][Nick], cmd);
 
 		}
 	}
+	flog(ADM_LOG_FILE, "%s %s [AID: %d] da su dung lenh: %s", GetStaffRankName(StaffData[sid][Rank]), StaffData[sid][Nick], sid, cmd);
 }
 
-SendStaffKill(killer, target, weapon) {
+SendKillLog(killer, target, weapon) {
 	foreach(new p : Player) {
 		static sid; sid = GetStaffID(p);
 		if(sid == -1) continue;
 		if(IsStaff(p, TRIAL_ADMIN_RANK) && GetStaffSetting(playerid, #logKill)) {
-			flog(DMG_LOG_FILE, "%s da giet %s bang vu khi %d", GetRoleplayName(CharacterData[killer][Name]), GetRoleplayName(CharacterData[target][Name]), WeaponName(weapon));
 			SendDeathMessage(killer, target, weapon);
 		}
 	}
+	flog(DMG_LOG_FILE, "%s da giet %s bang vu khi %d", GetRoleplayName(CharacterData[killer][Name]), GetRoleplayName(CharacterData[target][Name]), WeaponName(weapon));
 }
