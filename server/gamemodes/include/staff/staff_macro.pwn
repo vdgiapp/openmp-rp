@@ -20,10 +20,10 @@ enum ENUM_ADMIN_INFO {
 
 	// Settings
 	bool:OnDuty,
-	bool:togPM,
-	bool:togCMD,
-	bool:togKill,
-	bool:togNewb,
+	bool:logPM,
+	bool:logCMD,
+	bool:logKill,
+	bool:logNewb,
 
 	//
 	bool:Spectating,

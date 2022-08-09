@@ -72,18 +72,24 @@
             "gmtime",
             "memory",
             "sscanf",
-            "crashdetect",
-            "pwnplus",
+            "CrashDetect",
+            "PawnPlus",
+            "PawnRegex",
             "streamer",
-            "playertd",
-            "mysql",
-            "mapandreas",
-            "colandreas"
+            "PlayerTD",
+            "MySQL",
+            "MapAndreas",
+            "ColAndreas"
         ],
         "main_scripts": [
             "gamemode 1"
         ],
         "side_scripts": []
+    },
+    "sampvoice": {
+        "port": 7778,
+        "threads": 4,
+        "updaterate": 30
     },
     "port": 7777,
     "rcon": {

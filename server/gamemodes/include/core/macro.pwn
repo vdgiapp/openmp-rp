@@ -45,10 +45,10 @@
 #define COLOR_YELLOW2 	   		(0xF5DEB3AA)
 #define COLOR_LIGHTYELLOW  		(0xF5DEB3FF)
 #define COLOR_LIGHTYELLOW2 		(0xE0EA64AA)
-#define COLOR_LIGHTYELLOW3 		(0xFF6347AA)
 #define COLOR_GOLD 		   		(0xF6C861AA)
 #define COLOR_GREY         		(0xAFAFAFFF)
 #define COLOR_RED          		(0xFF0000FF)
+#define COLOR_RED2		 		(0xFF6347AA)
 #define COLOR_DARKRED 	   		(0xCD000000)
 #define COLOR_LIGHTRED 	   		(0xFF6347AA)
 #define COLOR_GREEN        		(0x33CC33FF)
@@ -86,6 +86,9 @@ new MySQL:Database;
 
 // +-+-+-+-+- LOG FILES +-+-+-+-+-
 #define AUTH_LOG_FILE 			"logs/auth.log"
+#define DMG_LOG_FILE 			"logs/damage.log"
+#define ADM_LOG_FILE 			"logs/admin.log"
+#define PM_LOG_FILE 			"logs/pm.log"
 
 // +-+-+-+-+- UMSELECTION LISTS +-+-+-+-+-
 #define MALE_SKIN_LIST 			"lists/male_skins_list.txt"
@@ -93,3 +96,5 @@ new MySQL:Database;
 
 new MaleSkinList = mS_INVALID_LISTID,
 	FemaleSkinList = mS_INVALID_LISTID;
+
+new ToggleChatOOC = 0;

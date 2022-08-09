@@ -34,6 +34,9 @@ public OnGameModeInit() {
 	// Log files
 	printf("Checking log files...");
 	fcreate(AUTH_LOG_FILE);
+	fcreate(DMG_LOG_FILE);
+	fcreate(ADM_LOG_FILE);
+	fcreate(PM_LOG_FILE);
 
 	// Set account status
 	printf("Changing accounts status...");

@@ -30,6 +30,7 @@
 #include <pwnraknet> // PAWN RakNet
 #include <pwnplus> // PAWN plus
 #include <pwncmd> // PAWN commands
+#include <pwnregex> // PAWN Regex
 #include <callbacks> // More callbacks
 #include <sampvoice> // SA-MP voice
 
@@ -90,7 +91,7 @@ main() {
 #include "include\core\function.pwn"
 
 // Systems
-#include "include\authentication.pwn"
+#include "include\auth\auth_entry.pwn"
 
 #include "include\character\character_entry.pwn"
 

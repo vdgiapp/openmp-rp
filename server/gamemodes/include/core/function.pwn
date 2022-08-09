@@ -43,6 +43,12 @@ Float:PlayerArmour(playerid) {
 	return ar;
 }
 
+WeaponName(wid) {
+    static str[32];
+    GetWeaponName(wid, str);
+    return str;
+}
+
 SetPlayerMoney(playerid, money) {
 	ResetPlayerMoney(playerid);
 	GivePlayerMoney(playerid, money);
@@ -183,6 +189,13 @@ SuccessMsg(playerid, const string[], va_args<>) {
 	static str[256];
     format(str, sizeof str, string, va_start<2>);
 	format(str, sizeof str, ""COL_GREEN"SUCCESS > "COL_GREY"%s", str);
+	ClientMsg(playerid, -1, str);
+}
+
+NotificationMsg(playerid, const string[], va_args<>) {
+	static str[256];
+    format(str, sizeof str, string, va_start<2>);
+	format(str, sizeof str, ""COLOR_LIGHTYELLOW2"THONG BAO > "COL_GREY"%s", str);
 	ClientMsg(playerid, -1, str);
 }
 

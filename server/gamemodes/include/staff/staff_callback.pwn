@@ -1,8 +1,7 @@
 
 hook OnPlayerClickMap(playerid, Float:fX, Float:fY, Float:fZ) {
 	if(IsStaff(playerid, MANAGER_RANK)) {
-		static sid; sid = GetStaffID(playerid);
-		if(sid != -1 && StaffData[sid][ClickTP]) SetPlayerCompensatedPosFindZ(playerid, fX, fY, fZ, 1000);
+		if(StaffData[GetStaffID(playerid)][ClickTP]) SetPlayerCompensatedPosFindZ(playerid, fX, fY, fZ, 1000);
 	}
 	return 1;
 }
@@ -11,20 +10,48 @@ Cmd:ahelp(playerid) {
 
 	if(!IsStaff(playerid, HELPER_RANK)) return NoPermsMsg(playerid);
 
+	return 1;
+}
+
+Alias:adminchat("achat", "a");
+Cmd:adminchat(playerid, params[]) {
+
+	if(!IsStaff(playerid, HELPER_RANK)) return NoPermsMsg(playerid);
+
+	static sid, str[128]; sid = GetStaffID(playerid);
+
+	format(str, sizeof str, "%s", params);
+	format(str, sizeof str, "ADMIN > (( [%d] %s %s: %s ))", playerid, GetStaffRankName(StaffData[sid][Rank]), StaffData[sid][Nick], params);
+	MsgToAdmin(COLOR_ADMINCHAT, str);
+
+	return 1;
+}
+
+Cmd:aooc(playerid) {
+
+	if(!IsStaff(playerid, OFFICAL_ADMIN_RANK)) return NoPermsMsg(playerid);
+
 	static sid; sid = GetStaffID(playerid);
 
-	if(sid == -1) return ErrorMsg(playerid, "Da co loi xay ra.");
+	SendStaffCMD(playerid, "aooc");
+
+	if(ToggleChatOOC) {
+		GlobalMsg(COLOR_LIGHTRED, "%s %s da tat kenh chat ooc (/o).", GetStaffRankName(StaffData[sid][Rank]), StaffData[sid][Nick]);
+		return ToggleChatOOC = false;
+	}
+	if(!ToggleChatOOC) {
+		GlobalMsg(COLOR_LIGHTRED, "%s %s da bat kenh chat ooc (/o).", GetStaffRankName(StaffData[sid][Rank]), StaffData[sid][Nick]);
+		return ToggleChatOOC = true;
+	}
 
 	return 1;
 }
 
 Cmd:aduty(playerid, params[]) {
-	// test
+
 	if(!IsStaff(playerid, TRIAL_ADMIN_RANK)) return NoPermsMsg(playerid);
 
 	static sid; sid = GetStaffID(playerid);
-
-	if(sid == -1) return ErrorMsg(playerid, "Da co loi xay ra.");
 
 	SendStaffCMD(playerid, "aduty");
 
@@ -46,8 +73,6 @@ Cmd:streamer(playerid, params[]) {
 
 	static objects, sid;
 	sid = GetStaffID(playerid);
-
-	if(sid == -1) return ErrorMsg(playerid, "Da co loi xay ra.");
 
 	if(sscanf(params, "i", objects)) {
 		UsageMsg(playerid, "/streamer [so object toi da]");
@@ -81,8 +106,6 @@ Cmd:nick(playerid, params[]) {
 
 	static name[MAX_PLAYER_NAME+1], sid;
 	sid = GetStaffID(playerid);
-
-	if(sid == -1) return ErrorMsg(playerid, "Da co loi xay ra.");
 
 	SendStaffCMD(playerid, "nick");
 
@@ -156,8 +179,6 @@ Cmd:god(playerid) {
 
 	static sid;	sid = GetStaffID(playerid);
 
-	if(sid == -1) return ErrorMsg(playerid, "Da co loi xay ra.");
-
 	SendStaffCMD(playerid, "god");
 
 	if(!StaffData[sid][GodMode]) {
@@ -177,63 +198,60 @@ Cmd:god(playerid) {
 	return 1;
 }
 
-Alias:atoggle("atog");
-Cmd:atoggle(playerid, params[]) {
+Cmd:alog(playerid, params[]) {
 
 	static type;
 
 	if(!IsStaff(playerid, TRIAL_ADMIN_RANK)) return NoPermsMsg(playerid);
 
 	if(sscanf(params, "d", type)) {
-		UsageMsg(playerid, "/atog(gle) [type]");
+		UsageMsg(playerid, "/alog [type]");
 		UsageMsg(playerid, "1- PM, 2- CMD, 3- Kill, 4- Newb");
 		return 1;
 	}
 
 	static sid; sid = GetStaffID(playerid);
 
-	if(sid == -1) return ErrorMsg(playerid, "Da co loi xay ra.");
-
-	SendStaffCMD(playerid, "atoggle");
+	SendStaffCMD(playerid, "alog");
 
 	if(type == 1) {
-		if(StaffData[sid][togPM]) {
+		if(StaffData[sid][logPM]) {
 			SuccessMsg(playerid, "Ban da tat lich su PM nguoi choi.");
-			return StaffData[sid][togPM] = false;
+			return StaffData[sid][logPM] = false;
 		}
-		if(!StaffData[sid][togPM]) {
+		if(!StaffData[sid][logPM]) {
 			SuccessMsg(playerid, "Ban da bat lich su PM nguoi choi.");
-			return StaffData[sid][togPM] = true;
+			return StaffData[sid][logPM] = true;
 		}
 	}
 	if(type == 2) {
-		if(StaffData[sid][togCMD]) {
+		if(StaffData[sid][logCMD]) {
 			SuccessMsg(playerid, "Ban da tat lich su dung lenh cua admin.");
-			return StaffData[sid][togCMD] = false;
+			return StaffData[sid][logCMD] = false;
 		}
-		if(!StaffData[sid][togCMD]) {
+		if(!StaffData[sid][logCMD]) {
 			SuccessMsg(playerid, "Ban da bat lich su dung lenh cua admin.");
-			return StaffData[sid][togCMD] = true;
+			return StaffData[sid][logCMD] = true;
 		}
 	}
 	if(type == 3) {
-		if(StaffData[sid][togKill]) {
+		if(StaffData[sid][logKill]) {
 			SuccessMsg(playerid, "Ban da tat lich su kill nguoi choi.");
-			return StaffData[sid][togKill] = false;
+			return StaffData[sid][logKill] = false;
 		}
-		if(!StaffData[sid][togKill]) {
+		if(!StaffData[sid][logKill]) {
 			SuccessMsg(playerid, "Ban da bat lich su kill nguoi choi.");
-			return StaffData[sid][togKill] = true;
+			return StaffData[sid][logKill] = true;
 		}
 	}
 	if(type == 4) {
-		if(StaffData[sid][togNewb]) {
+		if(StaffData[sid][logNewb]) {
 			SuccessMsg(playerid, "Ban da tat lich su newbie nguoi choi.");
-			return StaffData[sid][togNewb] = false;
+			return StaffData[sid][logNewb] = false;
 		}
-		if(!StaffData[sid][togNewb]) {
+		if(!StaffData[sid][logNewb]) {
 			SuccessMsg(playerid, "Ban da bat lich su newbie nguoi choi.");
-			return StaffData[sid][togNewb] = true;
+			return StaffData[sid][logNewb] = true;
 		}
 	}
 
@@ -245,6 +263,25 @@ Cmd:teleport(playerid, params[]) {
 
 	if(!IsStaff(playerid, LEAD_ADMIN_RANK)) return NoPermsMsg(playerid);
 
+	static Float:x, Float:y, Float:z;
+	static vw, int;
+
+	static target1, target2;
+
+	if(sscanf(params, "uu", target1, target2)) return UsageMsg(playerid, "/tele(port) [id] [to id]");
+
+	if(target1 == target2) return ErrorMsg(playerid, "Ban khong the tu dich chuyen den chinh minh.");
+	if(!IsPlayerInGame(target1) || !IsPlayerInGame(target2)) return ErrorMsg(playerid, "Mot trong hai nguoi choi chua dang nhap vao game.");
+	if(IsStaffSpectating(target1) || IsStaffSpectating(target2)) return ErrorMsg(playerid, "Mot trong hai nguoi choi do dang trong che do spec.");
+
+	SendStaffCMD(playerid, "teleport");
+
+	GetPlayerPos(target2, x, y, z);
+	vw = GetPlayerVirtualWorld(target2);
+	int = GetPlayerInterior(target2);
+
+	SetPlayerCompensatedPos(target1, x, y, z, 1000, vw, int);
+
 	return 1;
 }
 
@@ -253,8 +290,6 @@ Cmd:clicktp(playerid) {
 	if(!IsStaff(playerid, LEAD_ADMIN_RANK)) return NoPermsMsg(playerid);
 
 	static sid; sid = GetStaffID(playerid);
-
-	if(sid == -1) return ErrorMsg(playerid, "Da co loi xay ra.");
 
 	SendStaffCMD(playerid, "clicktp");
 
@@ -279,7 +314,6 @@ Cmd:position(playerid, params[]) {
 	static Float:x, Float:y, Float:z;
 
 	if(sscanf(params, "dfff", target, x, y, z)) return UsageMsg(playerid, "/pos(ition) [id] [x] [y] [z]");
-
 	if(IsStaffSpectating(target)) return ErrorMsg(playerid, "Nguoi choi do dang trong che do spec.");
 
 	SetPlayerCompensatedPos(target, x, y, z, 1000);
@@ -296,7 +330,6 @@ Cmd:setint(playerid, params[])  {
 	static Float:x, Float:y, Float:z;
 
 	if(sscanf(params, "dd", target, int)) return UsageMsg(playerid, "/setint [id] [int]");
-
 	if(IsStaffSpectating(target)) return ErrorMsg(playerid, "Nguoi choi do dang trong che do spec.");
 
 	GetPlayerPos(target, x, y, z);
@@ -315,7 +348,6 @@ Cmd:setvw(playerid, params[])  {
 	static Float:x, Float:y, Float:z;
 
 	if(sscanf(params, "dd", target, vw)) return UsageMsg(playerid, "/setvw [id] [world]");
-
 	if(IsStaffSpectating(target)) return ErrorMsg(playerid, "Nguoi choi do dang trong che do spec.");
 
 	GetPlayerPos(target, x, y, z);

@@ -126,8 +126,19 @@ Cmd:ooc(playerid, params[]) {
 
     if(!togOOC) return ErrorMsg(playerid, "Ban can phai bat tinh nang tro chuyen OOC trong cai dat.");
 
-    format(str, sizeof(str), "OOC > [%d] %s: %s", playerid, GetRoleplayName(PlayerName(playerid)), FirstUpper(str));
-    GlobalMsg(COLOR_OOC, str);
+    if(!ToggleChatOOC) return ErrorMsg(playerid, "Kenh chat OOC hien tai da bi tat.");
+
+    foreach(new p : Player) {
+        static togOOC2, togAdv, togGov, togPM, togAdm, togNews, togHUD, togFaction, togService;
+        sscanf(CharacterData[p][Settings], "iiiiiiiii", togOOC2, togAdv, togGov, togPM, togAdm, togNews, togHUD, togFaction, togService);
+        #pragma unused togAdv, togGov, togPM, togAdm, togNews, togHUD, togFaction, togService
+
+        if(togOOC2) {
+            format(str, sizeof(str), "OOC > (( [%d] %s: %s ))", playerid, GetRoleplayName(PlayerName(playerid)), FirstUpper(str));
+            ClientMsg(p, COLOR_OOC, str);
+        }
+    }
+
     return 1;
 }
 
