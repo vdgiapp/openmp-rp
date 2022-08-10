@@ -1,8 +1,10 @@
 
+
 /*
 	S A - M P   S E R V E R   R O L E P L A Y
 	W I T H   O P E N . M P   B Y   G I A P P
 */
+
 
 #define MEMORYSQUEEZE
 #define PP_SYNTAX_AWAIT // ASYNC AWAIT
@@ -98,8 +100,10 @@ main() {
 // Systems
 #include "include\auth\auth_entry.pwn"
 
+// Character
 #include "include\character\character_entry.pwn"
 
+// Property
 #include "include\property\inventory\inv_entry.pwn"
 #include "include\property\house\house_entry.pwn"
 

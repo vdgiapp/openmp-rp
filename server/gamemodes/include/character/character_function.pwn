@@ -74,8 +74,9 @@ function OnGetCharacterData(playerid) {
 	SetPlayerMoney(playerid, CharacterData[playerid][Cash]);
 	SetWalkingStyle(playerid, e_WALKING_STYLES:CharacterData[playerid][WalkStyle]);
 
-	format(str, sizeof str, "Chao mung ban da quay tro lai tro choi, "COL_AQUA"%s", PlayerName(playerid));
-	ClientMsg(playerid, COLOR_WHITE, str);
+	format(str, sizeof str, "Dang nhap thanh cong voi nhan vat %d: "COL_AQUA"%s", AuthData[playerid][Selected], GetRoleplayName(CharacterData[playerid][Name]));
+	for(new i; i < 100; i++) ClientMsg(playerid, -1, " ");
+	ClientMsg(playerid, COLOR_GREY, str);
 	ShowPlayerHUD(playerid);
 
     FadePlayerScreen(playerid, FadeBack, 0x00000000, 1000, 25);
