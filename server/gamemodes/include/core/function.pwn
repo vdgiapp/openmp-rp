@@ -60,6 +60,12 @@ PlayerName(playerid) {
 	return name;
 }
 
+SwapInt(&var1, &var2) {
+    static tmp; tmp = var1;
+    var1 = var2;
+    var2 = tmp;
+}
+
 fNumber(number) {
 	static result[64];
 	HumanizeThousand(number, result, sizeof result, ",");

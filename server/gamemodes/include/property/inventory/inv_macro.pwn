@@ -4,14 +4,14 @@
 enum invItemInf {
     ItemID,
     Amount, // So luong
-    Durable, // Do ben
+    Float:Durable, // Do ben
 
     GunAmmo, // Dan trong sung
     MagAmmo, // Bang dan
 }
 new InventoryData[MAX_PLAYERS][MAX_INV_ITEMS][invItemInf];
 
-new const InvItemName[][] = {
+new const InvItemName[] = {
 
     " ", //                                 0
     "Brass Knuckles", //                    1
@@ -82,38 +82,38 @@ new const InvItemName[][] = {
 
     // Micro Uzi Mag
     ".22 LR", // 25v
-    ".22 LR Ext", // 50v
+    ".22 LR Ext", // 50v                    55
     "9×21mm", // 20v - dmg > .22 LR
-    "9×21mm Ext", // 40v                    55
+    "9×21mm Ext", // 40v
 
     // MP5 Mag
     "10mm Auto", // 20v
     "10mm Auto Ext", // 30v
-    ".40 S&W", // 20v - dmg > 10mm
+    ".40 S&W", // 20v - dmg > 10mm          60
     ".40 S&W Ext", // 30v
 
     // AK-47 Mag
-    "7.62×39mm", // 20v                     60
+    "7.62×39mm", // 20v
     "7.62×39mm Ext", // 30v
 
     // M4 Mag
     "5.56×45mm NATO", // 30v
 
     // Tec-9 Mag
-    "9x19mm", // 32v
+    "9x19mm", // 32v                        65
     "9x19mm Ext", // 50v
 
     // Country rifle
-    ".219 Zipper", // 6v                     65
+    ".219 Zipper", // 6v
     ".338 Marlin Express", // 6v - higher dmg
 
     // Sniper rifle
     ".308 Winchester", // 6v
-    ".30-06 Springfield", // 6v - higher dmg
+    ".30-06 Springfield", // 6v - higher dmg        70
 
     // Health, Armour
-    "Bo cuu thuong",
-    "Bang cap cuu", //                      70
+    "Bo cuu thuong", //
+    "Bang cap cuu", //
     "Bo sua chua giap",
 
     // Food, Drink
