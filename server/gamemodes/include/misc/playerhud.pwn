@@ -349,7 +349,7 @@ hook OnPlayerUpdate(playerid) {
 		sscanf(CharacterData[playerid][Level], "ii", level, exp);
 		format(str, sizeof str, "Lv.%d", level);
 		PlayerTextDrawSetString(playerid, HUD_Level[playerid], str);
-		
+
 		static hour, minute, second;
 		gettime(hour, minute, second);
 		#pragma unused second
@@ -367,13 +367,13 @@ ShowPlayerHUD(playerid) {
 	PlayerTextDrawShow(playerid, HUD_StaminaBG[playerid]);
 	PlayerTextDrawShow(playerid, HUD_Stamina[playerid]);
 	PlayerTextDrawShow(playerid, HUD_Level[playerid]);
+	if(IsPlayerHaveGPS(playerid)) PlayerTextDrawShow(playerid, HUD_Zone[playerid]);
+	if(IsPlayerHaveWatch(playerid)) PlayerTextDrawShow(playerid, HUD_WatchTime[playerid]);
 	/*
 	PlayerTextDrawShow(playerid, HUD_VehName[playerid]);
 	PlayerTextDrawShow(playerid, HUD_VehFuel[playerid]);
 	PlayerTextDrawShow(playerid, HUD_VehBattery[playerid]);
 	PlayerTextDrawShow(playerid, HUD_VehSpeed[playerid]);
-	PlayerTextDrawShow(playerid, HUD_Zone[playerid]);
-	PlayerTextDrawShow(playerid, HUD_WatchTime[playerid]);
 	PlayerTextDrawShow(playerid, AnnounceMessage[playerid]);
 	*/
 }

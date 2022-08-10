@@ -2,7 +2,7 @@
 #define MAX_INV_ITEMS   (200) // a.k.a Max items
 
 enum invItemInf {
-    ID,
+    ItemID,
     Amount, // So luong
     Durable, // Do ben
 
@@ -10,8 +10,6 @@ enum invItemInf {
     MagAmmo, // Bang dan
 }
 new InventoryData[MAX_PLAYERS][MAX_INV_ITEMS][invItemInf];
-
-new bool:IsPlayerViewingInventory[MAX_PLAYERS];
 
 new const InvItemName[][] = {
 
@@ -28,8 +26,8 @@ new const InvItemName[][] = {
 
     "Dien thoai", //                        10
     "Van truot",
-    "Sandwich - Food",
-    "Cafe - Drink",
+    "May nghe nhac",
+    "Boombox",
 
     "Flower",
     "Cane", //                              15
@@ -37,14 +35,14 @@ new const InvItemName[][] = {
     "Smoke Grenade",
     "Motolov Cocktail",
 
-    "Nuoc khoang - Drink",
-    "Bread - Food", //                      20
-    "Chocolate - Food",
+    "Bo dam",
+    "Dinh vi GPS", //                       20
+    "Dong ho",
 
     "Colt M1911",
     "Colt M1911 Silenced",
     "Desert Eagle",
-    "Wooden Ithaca 37", //                  25
+    "Ithaca 37", //                  25
     "Sawnoff Shotgun",
     "Franchi SPAS-12",
     "Micro Uzi",
@@ -111,6 +109,34 @@ new const InvItemName[][] = {
 
     // Sniper rifle
     ".308 Winchester", // 6v
-    ".30-06 Springfield" // 6v - higher dmg
+    ".30-06 Springfield", // 6v - higher dmg
+
+    // Health, Armour
+    "Bo cuu thuong",
+    "Bang cap cuu", //                      70
+    "Bo sua chua giap",
+
+    // Food, Drink
+    "Qua tao",
+    "Qua cam",
+    "Dua hau",
+    "Sandwich nuong", //                    75
+    "Banh mi",
+    "Chocolate",
+    "Pizza",
+    "Ca hoi song",
+    "Ca hoi nuong", //                      80
+    "Ca thu song",
+    "Ca thu nuong",
+    "Nuoc khoang",
+    "Nuoc tang luc",
+    "Sprunk", //                            85
+    "Cocicola",
+    "Ca phe",
+    "Sua tuoi",
+
+    // Misc
+    "Cay but",
+    "O khoa", //                            90
 
 };
