@@ -3,7 +3,7 @@ Alias:inventory("inv");
 Cmd:inventory(playerid) {
     if(!IsPlayerInGame(playerid)) return 0;
     ClearDialogListitems(playerid);
-    AddDialogListitem(playerid, "     Vat pham\tDo ben\tCon lai");
+    AddDialogListitem(playerid, "  Vat pham\tDo ben\tCon lai");
     SortPlayerInventory(playerid);
 	for(new i = 0; i < MAX_INV_ITEMS; i++) {
         if(InventoryData[playerid][i][ItemID]) {
@@ -15,13 +15,13 @@ Cmd:inventory(playerid) {
             magammo = InventoryData[playerid][i][MagAmmo];
             format(itemname, sizeof itemname, "%s", InvItemName[itemid]);
             if(amount > 1) {
-                if(IsMagazineItem(itemid)) AddDialogListitem(playerid, "%d/ %s (%d)\t%d%%\t%d", i, itemname, amount, durable, magammo);
-                else AddDialogListitem(playerid, "%d/ %s (%d)\t%d%%\t", i, itemname, amount, durable);
+                if(IsMagazineItem(itemid)) AddDialogListitem(playerid, "  %s (%d)\t%d%%\t%d", itemname, amount, durable, magammo);
+                else AddDialogListitem(playerid, "  %s (%d)\t%d%%\t", itemname, amount, durable);
             }
             else {
-                if(IsGunItem(itemid)) AddDialogListitem(playerid, "%d/ %s\t%d%%\t%d", i, itemname, durable, gunammo);
-                if(IsMagazineItem(itemid)) AddDialogListitem(playerid, "%d/ %s\t \t%d", i, itemname, magammo);
-                if(!IsGunItem(itemid) && !IsMagazineItem(itemid)) AddDialogListitem(playerid, "%d/ %s\t%d%%\t", i, itemname, durable);
+                if(IsGunItem(itemid)) AddDialogListitem(playerid, "  %s\t%d%%\t%d", itemname, durable, gunammo);
+                if(IsMagazineItem(itemid)) AddDialogListitem(playerid, "  %s\t \t%d", itemname, magammo);
+                if(!IsGunItem(itemid) && !IsMagazineItem(itemid)) AddDialogListitem(playerid, "  %s\t%d%%\t", itemname, durable);
             }
         }
 	}

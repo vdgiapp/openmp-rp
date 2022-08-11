@@ -5,7 +5,7 @@ Fade:LoadCharacterData(playerid) {
 
 	AuthData[playerid][Joined] = 1;
 
-	format(str, sizeof str, "SELECT * FROM `characters` WHERE `Account` = '%s' AND `Slot` = '%d'", AuthData[playerid][Account], AuthData[playerid][Selected]);
+	mysql_format(Database, str, sizeof str, "SELECT * FROM `characters` WHERE `Account` = '%s' AND `Slot` = '%d'", AuthData[playerid][Account], AuthData[playerid][Selected]);
 	mysql_tquery(Database, str, "OnGetCharacterData", "i", playerid);
     return 1;
 }
@@ -106,10 +106,10 @@ SaveCharacterData(playerid) {
 	if(IsStaffGodMode(playerid)) GetStaffPrevHealth(playerid, health), GetStaffPrevArmour(playerid, armour);
 	if(IsStaffSpectating(playerid)) GetStaffPrevHealth(playerid, health), GetStaffPrevArmour(playerid, armour), GetStaffPrevPos(playerid, x, y, z, world, int);
 
-	format(str, sizeof str, "`Position` = '%f %f %f %f %d %d', `SkinID` = '%d'", x, y, z, angle, world, int, GetPlayerSkin(playerid));
-	format(str, sizeof str, "`Hunger` = '%d', `Thirst` = '%d', `Stamina` = '%d', `Injured` = '%d', `Health` = '%f', `Armour` = '%f', %s",
+	mysql_format(Database, str, sizeof str, "`Position` = '%f %f %f %f %d %d', `SkinID` = '%d'", x, y, z, angle, world, int, GetPlayerSkin(playerid));
+	mysql_format(Database, str, sizeof str, "`Hunger` = '%d', `Thirst` = '%d', `Stamina` = '%d', `Injured` = '%d', `Health` = '%f', `Armour` = '%f', %s",
 	CharacterData[playerid][Hunger], CharacterData[playerid][Thirst], CharacterData[playerid][Stamina], CharacterData[playerid][Injured], health, armour, str);
-	format(str, sizeof str, "UPDATE `characters` SET %s WHERE `Account` = '%s' AND `Slot` = '%d'", str, account, slot);
+	mysql_format(Database, str, sizeof str, "UPDATE `characters` SET %s WHERE `Account` = '%s' AND `Slot` = '%d'", str, account, slot);
 	mysql_tquery(Database, str);
 
 	return 1;

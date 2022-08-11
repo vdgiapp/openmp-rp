@@ -286,7 +286,7 @@ hook OnPlayerConnect(playerid) {
 	SetRandomName(playerid, "Unknown_", 100000, 999999);
 
 	// Check if player is a newbie or old member
-	format(str, sizeof str, "SELECT * FROM `accounts` WHERE `Account`='%s'", AuthData[playerid][Account]);
+	mysql_format(Database, str, sizeof str, "SELECT * FROM `accounts` WHERE `Account`='%s'", AuthData[playerid][Account]);
 	mysql_tquery(Database, str, "OnCheckingPlayerAccount", "i", playerid);
 	return 1;
 }
@@ -444,7 +444,7 @@ Dialog:Char_Interact(playerid, response, listitem, inputtext[]) {
 			}
 			case 1: {
 				flog(AUTH_LOG_FILE, "[AUTH] Tai khoan \"%s\" da xoa nhan vat tai slot %d: %s", AuthData[playerid][Account], AuthData[playerid][Selected], GetRoleplayName(tmpCharacterData[playerid][AuthData[playerid][Selected]-1][Name]));
-				format(str, sizeof str, "DELETE FROM `characters` WHERE `Name`='%s'", tmpCharacterData[playerid][AuthData[playerid][Selected]-1][Name]);
+				mysql_format(Database, str, sizeof str, "DELETE FROM `characters` WHERE `Name`='%s'", tmpCharacterData[playerid][AuthData[playerid][Selected]-1][Name]);
 				mysql_tquery(Database, str);
 				ShowCharSelDialog(playerid);
 			}
@@ -480,7 +480,7 @@ Dialog:cCreate_Name(playerid, response, listitem, inputtext[]) {
 	if(!response) ShowCharCreateDialog(playerid);
 	else {
 		static str[256];
-		format(str, sizeof str, "SELECT * FROM `characters` WHERE `Name`='%s'", inputtext);
+		mysql_format(Database, str, sizeof str, "SELECT * FROM `characters` WHERE `Name`='%s'", inputtext);
 		mysql_tquery(Database, str, "OnCheckNewCharName", "is", playerid, inputtext);
 	}
 }

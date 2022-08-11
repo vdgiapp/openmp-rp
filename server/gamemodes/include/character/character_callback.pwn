@@ -12,7 +12,7 @@ hook function ResetPlayerVars(playerid) {
 hook OnPlayerDisconnect(playerid, reason) {
 	if(AuthData[playerid][Logged]) {
 		static str[256];
-		format(str, sizeof str, "UPDATE `accounts` SET `Online`='0' WHERE `Account`='%s'", AuthData[playerid][Account]);
+		mysql_format(Database, str, sizeof str, "UPDATE `accounts` SET `Online`='0' WHERE `Account`='%s'", AuthData[playerid][Account]);
 		mysql_tquery(Database, str);
 		SaveCharacterData(playerid);
 		switch(reason) {

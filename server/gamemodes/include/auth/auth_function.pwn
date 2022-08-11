@@ -13,7 +13,7 @@ function OnGetSvInfo() {
 	TextDrawSetString(Auth_CharCreated, str);
 
 	if(cache_value_int(0, "Day") != day) {
-		format(str, sizeof str, "UPDATE `serverinfo` SET `Day`='%d', `Logged`='0'", day);
+		mysql_format(Database, str, sizeof str, "UPDATE `serverinfo` SET `Day`='%d', `Logged`='0'", day);
 		mysql_tquery(Database, str);
 	}
 	format(str, sizeof str, "%d", cache_value_int(0, "Logged")); TextDrawSetString(Auth_LoggedToday, str);
@@ -97,7 +97,7 @@ IsPlayerInGame(playerid) {
 
 GetRoleplayName(const name[]) {
 	static str[MAX_PLAYER_NAME+1];
-    format(str, sizeof str, "%s", name);
+    mysql_format(Database, str, sizeof str, "%s", name);
     strreplace(str, "_", " ");
     return str;
 }
@@ -138,7 +138,7 @@ SetRandomName(playerid, name[], min_int, max_int)
 CheckPlayerNameToLogin(playerid) {
 	// Check if player is a newbie or old member
 	static str[256];
-	format(str, sizeof str, "SELECT * FROM `accounts` WHERE `Account`='%s'", AuthData[playerid][Account]);
+	mysql_format(Database, str, sizeof str, "SELECT * FROM `accounts` WHERE `Account`='%s'", AuthData[playerid][Account]);
 	mysql_tquery(Database, str, "OnCheckPNameToLog", "i", playerid);
 }
 
@@ -222,7 +222,7 @@ ShowCharSelDialog(playerid) {
 	format(AuthData[playerid][CharSel], 512, "Slot\tTen nhan vat\tCap do");
 	for(new i = 1; i < 4; i++) {
 		static str[512];
-		format(str, sizeof str, "SELECT * FROM `characters` WHERE `Account`='%s' AND `Slot`='%d'", AuthData[playerid][Account], i);
+		mysql_format(Database, str, sizeof str, "SELECT * FROM `characters` WHERE `Account`='%s' AND `Slot`='%d'", AuthData[playerid][Account], i);
 		mysql_tquery(Database, str, "OnGetCharTmpData", "ii", playerid, i);
 	}
 }
@@ -252,7 +252,7 @@ LoginSuccess(playerid) {
 	gettime(hour, minute, second);
 
 	static str[256];
-	format(str, sizeof str, "UPDATE `accounts` SET `Online`='1', `LastTimeLogged`='%02d %02d %02d %02d %02d %04d' WHERE `Account`='%s'", hour, minute, second, day, month, year, AuthData[playerid][Account]);
+	mysql_format(Database, str, sizeof str, "UPDATE `accounts` SET `Online`='1', `LastTimeLogged`='%02d %02d %02d %02d %02d %04d' WHERE `Account`='%s'", hour, minute, second, day, month, year, AuthData[playerid][Account]);
 	mysql_tquery(Database, str);
 	mysql_tquery(Database, "UPDATE `serverinfo` SET `Logged`=`Logged`+1");
 
@@ -284,9 +284,9 @@ LoginSuccess(playerid) {
 
 CheckToRegister(playerid) {
 	static str[1024];
-	format(str, sizeof str, "SELECT * FROM `accounts` WHERE `Email`='%s'", AuthData[playerid][Email]);
+	mysql_format(Database, str, sizeof str, "SELECT * FROM `accounts` WHERE `Email` = '%s'", AuthData[playerid][Email]);
 	mysql_tquery(Database, str, "OnCheckEmailToReg", "i", playerid);
-	format(str, sizeof str, "SELECT * FROM `accounts` WHERE `Account`='%s'", AuthData[playerid][Account]);
+	mysql_format(Database, str, sizeof str, "SELECT * FROM `accounts` WHERE `Account`= '%s'", AuthData[playerid][Account]);
 	mysql_tquery(Database, str, "OnCheckAccountToReg", "i", playerid);
 }
 
@@ -304,14 +304,14 @@ function OnCheckAccountToReg(playerid) {
 		getdate(year, month, day);
 		gettime(hour, minute, second);
 		SHA256_PassHash(AuthData[playerid][Password], "", str, sizeof str);
-		format(str, sizeof str, "INSERT INTO `accounts` (`Account`, `Password`, `EnablePass2`, `Email`) VALUES ('%s', '%s', '0', '%s')", AuthData[playerid][Account], str, AuthData[playerid][Email]);
+		mysql_format(Database, str, sizeof str, "INSERT INTO `accounts` (`Account`, `Password`, `EnablePass2`, `Email`) VALUES ('%s', '%s', '0', '%s')", AuthData[playerid][Account], str, AuthData[playerid][Email]);
 		mysql_tquery(Database, str);
 		SuccessMsg(playerid, "Tai khoan cua ban da duoc dang ky thanh cong.");
 		flog(AUTH_LOG_FILE, "[AUTH] Tai khoan \"%s\" da duoc dang ky thanh cong.", AuthData[playerid][Account]);
 		PlayerPlaySound(playerid, 1084, 0, 0, 0);
 		SetRandomName(playerid, "Logged_", 100000, 999999);
 
-		format(str, sizeof str, "UPDATE `accounts` SET `Online`='1', `LastLogin`='%02d %02d %02d %02d %02d %04d', `DateCreated`='%02d %02d %02d %02d %02d %04d' WHERE `Account`='%s'",
+		mysql_format(Database, str, sizeof str, "UPDATE `accounts` SET `Online`='1', `LastLogin`='%02d %02d %02d %02d %02d %04d', `DateCreated`='%02d %02d %02d %02d %02d %04d' WHERE `Account`='%s'",
 			hour, minute, second, day, month, year, hour, minute, second, day, month, year, AuthData[playerid][Account]);
 		mysql_tquery(Database, str);
 		mysql_tquery(Database, "UPDATE `serverinfo` SET `Registered`=`Registered`+1");
@@ -351,7 +351,7 @@ CreateCharacterForPlayer(playerid, name[], slot) {
     format(lastpl, sizeof lastpl, "%02d %02d %02d %02d %02d %04d", ho, mi, se, da, mo, ye);
 
     flog(AUTH_LOG_FILE, "[AUTH] Tai khoan \"%s\" da tao mot nhan vat tai slot %d: %s", AuthData[playerid][Account], slot, GetRoleplayName(name));
-    format(str, sizeof str, "INSERT INTO `characters` \
+    mysql_format(Database, str, sizeof str, "INSERT INTO `characters` \
     	(`Slot`, `Account`, `DateCreated`, `LastTimePlayed`, \
     	`Name`, `Description`, `Level`, `Gender`, `Birthday`, \
     	`Nation`, `SkinID`, `Cash`, `Coins`, `LicenseData`, \
