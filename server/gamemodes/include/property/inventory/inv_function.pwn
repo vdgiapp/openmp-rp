@@ -17,7 +17,7 @@ function OnGetInventoryData(playerid, slot) {
 }
 
 GivePlayerItem(playerid, itemid, amount, Float:durable, gunammo = 0, magammo = 0) {
-    for(new i; i < MAX_INV_ITEMS; i++) {
+    for(new i = 0; i < MAX_INV_ITEMS; i++) {
         if(InventoryData[playerid][i][ItemID]) {
             if(InventoryData[playerid][i][Durable] != 100) continue;
             if(IsGunItem(InventoryData[playerid][i][ItemID])) continue;
@@ -30,13 +30,13 @@ GivePlayerItem(playerid, itemid, amount, Float:durable, gunammo = 0, magammo = 0
             InventoryData[playerid][i][Durable] = durable;
             if(InventoryData[playerid][i][GunAmmo]) InventoryData[playerid][i][GunAmmo] = gunammo;
             if(magammo != 0 && magammo <= GetMagazineSize(InventoryData[playerid][i][ItemID])) InventoryData[playerid][i][MagAmmo] = magammo;
+            return 0;
         }
     }
-    SortPlayerInventory(playerid);
 }
 
 TakePlayerItem(playerid, itemid, amount, Float:durable, magammo = 0) {
-    for(new i; i < MAX_INV_ITEMS; i++) {
+    for(new i = 0; i < MAX_INV_ITEMS; i++) {
         if(InventoryData[playerid][i][ItemID] == itemid
         && InventoryData[playerid][i][Amount] >= amount
         && InventoryData[playerid][i][Durable] >= durable
@@ -50,14 +50,14 @@ TakePlayerItem(playerid, itemid, amount, Float:durable, magammo = 0) {
                 InventoryData[playerid][i][GunAmmo] = 0;
                 InventoryData[playerid][i][MagAmmo] = 0;
             }
+            return 0;
         }
     }
-    SortPlayerInventory(playerid);
 }
 
 SortPlayerInventory(playerid) {
-    for(new i; i < MAX_INV_ITEMS; i++) {
-        for(new u; u < MAX_INV_ITEMS; u++) {
+    for(new i = 0; i < MAX_INV_ITEMS; i++) {
+        for(new u = i+1; u < MAX_INV_ITEMS; u++) {
             if(InventoryData[playerid][i][ItemID]) {
                 if(InventoryData[playerid][i][Durable] != InventoryData[playerid][u][Durable]) continue;
                 if(IsGunItem(InventoryData[playerid][i][ItemID]) || IsGunItem(InventoryData[playerid][u][ItemID])) continue;
