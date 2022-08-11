@@ -78,6 +78,8 @@ function OnGetCharacterData(playerid) {
 	for(new i; i < 100; i++) ClientMsg(playerid, -1, " ");
 	ClientMsg(playerid, COLOR_GREY, str);
 	ShowPlayerHUD(playerid);
+	
+	LoadInventoryData(playerid);
 
     FadePlayerScreen(playerid, FadeBack, 0x00000000, 1000, 25);
     return 1;

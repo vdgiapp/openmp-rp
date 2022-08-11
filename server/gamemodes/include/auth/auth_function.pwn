@@ -380,6 +380,8 @@ CreateCharacterForPlayer(playerid, name[], slot) {
 	CreateCharData[playerid][Nation] = 0;
 	CreateCharData[playerid][SkinID] = 2;
 
+	mysql_tquery(Database, "UPDATE `serverinfo` SET `CharCreated`=`CharCreated`+1");
+
     FadePlayerScreen(playerid, LoadCharacterData, 0x000000FF, 1000, 25);
     return 1;
 }

@@ -1,4 +1,21 @@
 
+LoadInventoryData(playerid) {
+    for(new i = 0; i < MAX_INV_ITEMS; i++) {
+		static str[128]; format(str, sizeof str, "SELECT * FROM `inventory` WHERE `CharName` = '%s' AND `ItemSlot` = '%d'", CharacterData[playerid][Name], i);
+		mysql_tquery(Database, str, "OnGetInventoryData", "ii", playerid, i);
+	}
+    return 1;
+}
+
+function OnGetInventoryData(playerid, slot) {
+    if(!cache_num_rows()) return 0;
+    InventoryData[playerid][slot][ItemID] = cache_value_int(0, "ItemID");
+	InventoryData[playerid][slot][Amount] = cache_value_int(0, "Amount");
+    InventoryData[playerid][slot][Durable] = cache_value_float(0, "Durable");
+    InventoryData[playerid][slot][GunAmmo] = cache_value_int(0, "GunAmmo");
+    InventoryData[playerid][slot][MagAmmo] = cache_value_int(0, "MagAmmo");
+}
+
 GivePlayerItem(playerid, itemid, amount, Float:durable, gunammo = 0, magammo = 0) {
     for(new i; i < MAX_INV_ITEMS; i++) {
         if(InventoryData[playerid][i][ItemID]) {
@@ -11,31 +28,27 @@ GivePlayerItem(playerid, itemid, amount, Float:durable, gunammo = 0, magammo = 0
             InventoryData[playerid][i][ItemID] = itemid;
             InventoryData[playerid][i][Amount] = amount;
             InventoryData[playerid][i][Durable] = durable;
-            if(magammo <= GetMagazineSize(InventoryData[playerid][i][ItemID])) InventoryData[playerid][i][MagAmmo] = magammo;
+            if(InventoryData[playerid][i][GunAmmo]) InventoryData[playerid][i][GunAmmo] = gunammo;
+            if(magammo != 0 && magammo <= GetMagazineSize(InventoryData[playerid][i][ItemID])) InventoryData[playerid][i][MagAmmo] = magammo;
         }
     }
     SortPlayerInventory(playerid);
 }
 
-TakePlayerItem(playerid, itemid, amount, Float:durable, gunammo = 0, magammo = 0) {
+TakePlayerItem(playerid, itemid, amount, Float:durable, magammo = 0) {
     for(new i; i < MAX_INV_ITEMS; i++) {
-        if(!InventoryData[playerid][i][ItemID]) {
-            if(InventoryData[playerid][i][ItemID] == itemid
-            && InventoryData[playerid][i][Amount] >= amount
-            && InventoryData[playerid][i][Durable] >= durable
-            && InventoryData[playerid][i][GunAmmo] >= gunammo
-            && InventoryData[playerid][i][MagAmmo] >= magammo)
-            {
-                InventoryData[playerid][i][Amount] -= amount;
-                InventoryData[playerid][i][Durable] -= durable;
-                InventoryData[playerid][i][GunAmmo] -= gunammo;
-                InventoryData[playerid][i][MagAmmo] -= magammo;
-                if(!InventoryData[playerid][i][Amount]) {
-                    InventoryData[playerid][i][ItemID] = 0;
-                    InventoryData[playerid][i][Durable] = 0;
-                    InventoryData[playerid][i][GunAmmo] = 0;
-                    InventoryData[playerid][i][MagAmmo] = 0;
-                }
+        if(InventoryData[playerid][i][ItemID] == itemid
+        && InventoryData[playerid][i][Amount] >= amount
+        && InventoryData[playerid][i][Durable] >= durable
+        && InventoryData[playerid][i][GunAmmo] >= gunammo
+        && InventoryData[playerid][i][MagAmmo] >= magammo)
+        {
+            GivePlayerItem(playerid, itemid, -amount, durable, 0, -InventoryData[playerid][i][MagAmmo]);
+            if(!InventoryData[playerid][i][Amount]) {
+                InventoryData[playerid][i][ItemID] = 0;
+                InventoryData[playerid][i][Durable] = 0;
+                InventoryData[playerid][i][GunAmmo] = 0;
+                InventoryData[playerid][i][MagAmmo] = 0;
             }
         }
     }
@@ -54,7 +67,7 @@ SortPlayerInventory(playerid) {
             if(!InventoryData[playerid][i][ItemID] && InventoryData[playerid][u][ItemID]) {
                 SwapInt(InventoryData[playerid][u][ItemID], InventoryData[playerid][i][ItemID]);
                 SwapInt(InventoryData[playerid][u][Amount], InventoryData[playerid][i][Amount]);
-                SwapInt(InventoryData[playerid][u][Durable], InventoryData[playerid][i][Durable]);
+                SwapFloat(InventoryData[playerid][u][Durable], InventoryData[playerid][i][Durable]);
                 SwapInt(InventoryData[playerid][u][GunAmmo], InventoryData[playerid][i][GunAmmo]);
                 SwapInt(InventoryData[playerid][u][MagAmmo], InventoryData[playerid][i][MagAmmo]);
             }

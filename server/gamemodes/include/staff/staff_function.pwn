@@ -133,7 +133,7 @@ SendStaffCMDLog(playerid, cmd[]) {
 
 		}
 	}
-	flog(ADM_LOG_FILE, "%s %s [AID: %d] da su dung lenh: %s", GetStaffRankName(StaffData[sid][Rank]), StaffData[sid][Nick], sid, cmd);
+	flog(ADM_LOG_FILE, "%s %s [SID: %d] da su dung lenh: %s", GetStaffRankName(StaffData[sid][Rank]), StaffData[sid][Nick], sid, cmd);
 }
 
 SendKillLog(killer, target, weapon) {

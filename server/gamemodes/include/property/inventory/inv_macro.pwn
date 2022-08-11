@@ -10,8 +10,9 @@ enum invItemInf {
     MagAmmo, // Bang dan
 }
 new InventoryData[MAX_PLAYERS][MAX_INV_ITEMS][invItemInf];
+new InvSelectedItem[MAX_PLAYERS];
 
-new const InvItemName[] = {
+new stock InvItemName[][] = {
 
     " ", //                                 0
     "Brass Knuckles", //                    1
@@ -137,6 +138,6 @@ new const InvItemName[] = {
 
     // Misc
     "Cay but",
-    "O khoa", //                            90
+    "O khoa" //                            90
 
 };

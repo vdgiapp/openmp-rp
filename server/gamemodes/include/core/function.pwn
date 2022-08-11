@@ -61,7 +61,15 @@ PlayerName(playerid) {
 }
 
 SwapInt(&var1, &var2) {
-    static tmp; tmp = var1;
+    static tmp;
+    tmp = var1;
+    var1 = var2;
+    var2 = tmp;
+}
+
+SwapFloat(&Float:var1, &Float:var2) {
+    static Float:tmp;
+    tmp = var1;
     var1 = var2;
     var2 = tmp;
 }
