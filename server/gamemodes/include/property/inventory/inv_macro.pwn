@@ -1,13 +1,12 @@
 
-#define MAX_INV_ITEMS   (200) // a.k.a Max items
+#define MAX_INV_ITEMS   (60)
 
 enum invItemInf {
     ItemID,
     Amount, // So luong
     Float:Durable, // Do ben
-
-    GunAmmo, // Dan trong sung
-    MagAmmo, // Bang dan
+    MagType, // Loai bang dan hien tai trong sung
+    MagAmmo, // Bang dan / dan trong sung
 }
 new InventoryData[MAX_PLAYERS][MAX_INV_ITEMS][invItemInf];
 new InvSelectedItem[MAX_PLAYERS];
@@ -70,7 +69,7 @@ new stock InvItemName[][] = {
 
     // 9mm Mag
     ".45 ACP", // 7v
-    ".45 ACP Ext", // 17v
+    ".45 ACP .ext", // 17v
 
     // Desert Eagle Mag
     ".357 Magnum", // 9.07 mm
@@ -79,65 +78,67 @@ new stock InvItemName[][] = {
     ".44 Magnum", // 10.9mm
 
     // Shotgun + Sawnoff Shotgun + SPAS-12 Mag
-    "12 Gauge",
+    "12-G BIRDSHOT", // 7v
+    "12-G BUCKSHOT",
+    "12-G SLUG", //                         55
 
     // Micro Uzi Mag
     ".22 LR", // 25v
-    ".22 LR Ext", // 50v                    55
+    ".22 LR .ext", // 50v
     "9×21mm", // 20v - dmg > .22 LR
-    "9×21mm Ext", // 40v
+    "9×21mm .ext", // 40v
 
     // MP5 Mag
-    "10mm Auto", // 20v
-    "10mm Auto Ext", // 30v
-    ".40 S&W", // 20v - dmg > 10mm          60
-    ".40 S&W Ext", // 30v
+    "10mm Auto", // 20v                     60
+    "10mm Auto .ext", // 30v
+    ".40 S&W", // 20v - dmg > 10mm
+    ".40 S&W .ext", // 30v
 
     // AK-47 Mag
     "7.62×39mm", // 20v
-    "7.62×39mm Ext", // 30v
+    "7.62×39mm .ext", // 30v                65
 
     // M4 Mag
     "5.56×45mm NATO", // 30v
 
     // Tec-9 Mag
-    "9x19mm", // 32v                        65
-    "9x19mm Ext", // 50v
+    "9x19mm", // 32v
+    "9x19mm .ext", // 50v
 
     // Country rifle
     ".219 Zipper", // 6v
-    ".338 Marlin Express", // 6v - higher dmg
+    ".338 Marlin Express", // 6v - higher dmg       70
 
     // Sniper rifle
     ".308 Winchester", // 6v
-    ".30-06 Springfield", // 6v - higher dmg        70
+    ".30-06 Springfield", // 6v - higher dmg
 
     // Health, Armour
     "Bo cuu thuong", //
     "Bang cap cuu", //
-    "Bo sua chua giap",
+    "Bo sua chua giap", //                  75
 
     // Food, Drink
     "Qua tao",
     "Qua cam",
     "Dua hau",
-    "Sandwich nuong", //                    75
-    "Banh mi",
+    "Sandwich nuong",
+    "Banh mi", //                           80
     "Chocolate",
     "Pizza",
     "Ca hoi song",
-    "Ca hoi nuong", //                      80
-    "Ca thu song",
+    "Ca hoi nuong",
+    "Ca thu song", //                       85
     "Ca thu nuong",
     "Nuoc khoang",
     "Nuoc tang luc",
-    "Sprunk", //                            85
-    "Cocicola",
+    "Sprunk",
+    "Cocicola", //                          90
     "Ca phe",
     "Sua tuoi",
 
     // Misc
     "Cay but",
-    "O khoa" //                            90
+    "O khoa"
 
 };

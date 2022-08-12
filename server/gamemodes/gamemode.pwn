@@ -113,6 +113,8 @@ main() {
 
 #include "include\player\player_entry.pwn"
 
+#include "include\weapon\weapon_entry.pwn"
+
 #include "include\staff\staff_entry.pwn"
 
 #include "include\misc\playerhud.pwn"

@@ -13,6 +13,7 @@ Fade:LoadCharacterData(playerid) {
 function OnGetCharacterData(playerid) {
 	static str[128], level, exp;
 	static Float:posx, Float:posy, Float:posz, Float:angle, world, int;
+	static weaponskill[11];
 
 	format(CharacterData[playerid][Name], MAX_PLAYER_NAME+1, "%s", cache_value_string(0, "Name"));
 	format(CharacterData[playerid][DateCreated], 32, "%s", cache_value_string(0, "DateCreated"));
@@ -27,6 +28,7 @@ function OnGetCharacterData(playerid) {
 	CharacterData[playerid][JobID] = cache_value_int(0, "JobID");
 	CharacterData[playerid][FightStyle] = cache_value_int(0, "FightStyle");
 	CharacterData[playerid][WalkStyle] = cache_value_int(0, "WalkStyle");
+	format(CharacterData[playerid][WeaponSkills], 64, "%s", cache_value_string(0, "WeaponSkills"));
 	CharacterData[playerid][Playtime] = cache_value_int(0, "Playtime");
 	CharacterData[playerid][Payday] = cache_value_int(0, "Payday");
 	CharacterData[playerid][RespawnLocation] = cache_value_int(0, "RespawnLocation");
@@ -55,6 +57,7 @@ function OnGetCharacterData(playerid) {
 
 	sscanf(CharacterData[playerid][Position], "ffffii", posx, posy, posz, angle, world, int);
 	sscanf(CharacterData[playerid][Level], "ii", level, exp);
+	sscanf(CharacterData[playerid][WeaponSkills], "iiiiiiiiiii", weaponskill[0], weaponskill[1], weaponskill[2], weaponskill[3], weaponskill[4], weaponskill[5], weaponskill[6], weaponskill[7], weaponskill[8], weaponskill[9], weaponskill[10]);
 
 	SpawnPlayer(playerid);
 	CancelSelectTextDraw(playerid);
@@ -73,10 +76,13 @@ function OnGetCharacterData(playerid) {
 	SetPlayerWantedLevel(playerid, CharacterData[playerid][Wanted]);
 	SetPlayerMoney(playerid, CharacterData[playerid][Cash]);
 	SetWalkingStyle(playerid, e_WALKING_STYLES:CharacterData[playerid][WalkStyle]);
+	for(new i = 0; i < 11; i++) {
+		SetPlayerSkillLevel(playerid, i, weaponskill[i]);
+	}
 
-	format(str, sizeof str, ""COL_GREEN"Dang nhap thanh cong voi nhan vat %d: "COL_AQUA"%s", AuthData[playerid][Selected], GetRoleplayName(CharacterData[playerid][Name]));
+	format(str, sizeof str, "Dang nhap thanh cong voi nhan vat %d: %s", AuthData[playerid][Selected], GetRoleplayName(CharacterData[playerid][Name]));
+	ShowTDN(playerid, str);
 	for(new i; i < 100; i++) ClientMsg(playerid, -1, " ");
-	ClientMsg(playerid, -1, str);
 	ShowPlayerHUD(playerid);
 
 	LoadInventoryData(playerid);

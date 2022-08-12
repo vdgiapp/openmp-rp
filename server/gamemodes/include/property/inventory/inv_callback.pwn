@@ -2,30 +2,31 @@
 Alias:inventory("inv");
 Cmd:inventory(playerid) {
     if(!IsPlayerInGame(playerid)) return 0;
+    InvSelectedItem[playerid] = -1;
     ClearDialogListitems(playerid);
     AddDialogListitem(playerid, "  Vat pham\tDo ben\tCon lai");
     SortPlayerInventory(playerid);
 	for(new i = 0; i < MAX_INV_ITEMS; i++) {
         if(InventoryData[playerid][i][ItemID]) {
-            static itemname[64], itemid, amount, durable, gunammo, magammo;
+            static itemname[64], itemid, amount, durable, magtype, magammo;
             itemid = InventoryData[playerid][i][ItemID];
             amount = InventoryData[playerid][i][Amount];
             durable = floatround(InventoryData[playerid][i][Durable]);
-            gunammo = InventoryData[playerid][i][GunAmmo];
+            magtype = InventoryData[playerid][i][MagType];
             magammo = InventoryData[playerid][i][MagAmmo];
             format(itemname, sizeof itemname, "%s", InvItemName[itemid]);
             if(amount > 1) {
-                if(IsMagazineItem(itemid)) AddDialogListitem(playerid, "  %s (%d)\t%d%%\t%d", itemname, amount, durable, magammo);
-                else AddDialogListitem(playerid, "  %s (%d)\t%d%%\t", itemname, amount, durable);
+                if(IsMagazineItem(itemid)) AddDialogListitem(playerid, "  %s (x%d)\t%d%%\t%d", itemname, amount, durable, magammo);
+                else AddDialogListitem(playerid, "  %s (x%d)\t%d%%\t", itemname, amount, durable);
             }
             else {
-                if(IsGunItem(itemid)) AddDialogListitem(playerid, "  %s\t%d%%\t%d", itemname, durable, gunammo);
+                if(IsGunItem(itemid)) AddDialogListitem(playerid, "  %s\t%d%%\t%d (%s)", itemname, durable, magammo, InvItemName[magtype]);
                 if(IsMagazineItem(itemid)) AddDialogListitem(playerid, "  %s\t \t%d", itemname, magammo);
                 if(!IsGunItem(itemid) && !IsMagazineItem(itemid)) AddDialogListitem(playerid, "  %s\t%d%%\t", itemname, durable);
             }
         }
 	}
-	ShowPlayerDialogPages(playerid, #InventoryMain, DS_HEADERS, ""COL_AQUA"TUI DO NHAN VAT", "Chon", "Dong", 25, "{F5D400}TRANG SAU", "{F5D400}TRANG TRUOC");
+	ShowPlayerDialogPages(playerid, #InventoryMain, DS_HEADERS, ""COL_AQUA"TUI DO NHAN VAT", "Chon", "Dong", 12, "{F5D400}TRANG SAU", "{F5D400}TRANG TRUOC");
     return 1;
 }
 
@@ -42,5 +43,24 @@ DialogPages:InventoryMain(playerid, response, listitem) {
 }
 
 Dialog:InventoryInteract(playerid, response, listitem, inputtext[]) {
+    static sel; sel = InvSelectedItem[playerid];
     if(!response) return callcmd::inventory(playerid);
+    switch(listitem) {
+        case 0: {
+            static str[64];
+            format(str, sizeof str, ""COL_AQUA"TUI DO > %s > Su dung", InvItemName[InventoryData[playerid][sel][ItemID]]);
+            if(InventoryData[playerid][sel][Amount] > 1) Dialog_Show(playerid, InventoryUseAmount, DS_INPUT, str, "\\cNhap so luong ma ban muon su dung:", "Su dung", "Quay lai");
+            else OnPlayerUseItem(playerid, InventoryData[playerid][sel][ItemID], 1);
+        }
+    }
+    return 1;
+}
+
+Dialog:InventoryUseAmount(playerid, response, listitem, inputtext[]) {
+    static sel; sel = InvSelectedItem[playerid];
+    if(!response) return ndpD_InventoryMain(playerid, true, sel);
+    if(!IsNumeric(inputtext)) return ErrorMsg(playerid, "So luong khong hop le.");
+    if(InventoryData[playerid][sel][Amount] < strval(inputtext)) return ErrorMsg(playerid, "So luong khong hop le.");
+    OnPlayerUseItem(playerid, InventoryData[playerid][sel][ItemID], strval(inputtext));
+    return 1;
 }

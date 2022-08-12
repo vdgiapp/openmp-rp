@@ -13,6 +13,7 @@ enum ENUM_CHARACTER_INFO {
 	JobID,
 	FightStyle,
 	WalkStyle,
+	WeaponSkills[64],
 	Playtime,
 	Payday,
 	RespawnLocation,
@@ -52,7 +53,7 @@ togPM, // +
 togAdm, // +
 togNews, // +
 togHUD, // +
-togFaction, // + 
+togFaction, // +
 togService
 */
 

@@ -22,11 +22,11 @@
 
     Created by ThePez - NaS
 */
- 
+
 #define TD_NOTIFICATION_VERSION_MAJOR (1)
 #define TD_NOTIFICATION_VERSION_MINOR (1)
 #define TD_NOTIFICATION_VERSION_PATCH (0)
- 
+
 #if defined include_td_notification
     #endinput
 #endif
@@ -44,11 +44,11 @@
 #define TDN_PROPORTIONAL 1
 #define TDN_DISTANCE 5
 #define TDN_MODE_DOWN
-#define TDN_TIME 20000
+#define TDN_TIME 10000
 #define MAX_TDN_TEXT 800
 
 #include <tdstrwidth>
- 
+
 enum InformationTDN
 {
     Use,
@@ -88,7 +88,7 @@ public TimerHideTDN(playerid)
     return 0;
 }
 
-forward ShowTDN(playerid, const reason[]); 
+forward ShowTDN(playerid, const reason[]);
 public ShowTDN(playerid, const reason[])
 {
     for(new cycle; cycle < MAX_TDN; cycle++)
@@ -103,60 +103,62 @@ public ShowTDN(playerid, const reason[])
             {
                 switch(reason[pos])
                 {
-                    case 'à': text[pos] = 151;
-                    case 'á': text[pos] = 152;
-                    case 'â': text[pos] = 153;
-                    case 'ä': text[pos] = 154;
-                    case 'À': text[pos] = 128;
-                    case 'Á': text[pos] = 129;
-                    case 'Â': text[pos] = 130;
-                    case 'Ä': text[pos] = 131;
-                    case 'è': text[pos] = 157;
-                    case 'é': text[pos] = 158;
-                    case 'ê': text[pos] = 159;
-                    case 'ë': text[pos] = 160;
-                    case 'È': text[pos] = 134;
-                    case 'É': text[pos] = 135;
-                    case 'Ê': text[pos] = 136;
-                    case 'Ë': text[pos] = 137;
-                    case 'ì': text[pos] = 161;
-                    case 'í': text[pos] = 162;
-                    case 'î': text[pos] = 163;
-                    case 'ï': text[pos] = 164;
-                    case 'Ì': text[pos] = 138;
-                    case 'Í': text[pos] = 139;
-                    case 'Î': text[pos] = 140;
-                    case 'Ï': text[pos] = 141;
-                    case 'ò': text[pos] = 165;
-                    case 'ó': text[pos] = 166;
-                    case 'ô': text[pos] = 167;
-                    case 'ö': text[pos] = 168;
-                    case 'Ò': text[pos] = 142;
-                    case 'Ó': text[pos] = 143;
-                    case 'Ô': text[pos] = 144;
-                    case 'Ö': text[pos] = 145;
-                    case 'ù': text[pos] = 169;
-                    case 'ú': text[pos] = 170;
-                    case 'û': text[pos] = 171;
-                    case 'ü': text[pos] = 172;
-                    case 'Ù': text[pos] = 146;
-                    case 'Ú': text[pos] = 147;
-                    case 'Û': text[pos] = 148;
-                    case 'Ü': text[pos] = 149;
-                    case 'ñ': text[pos] = 174;
-                    case 'Ñ': text[pos] = 173;
-                    case '¡': text[pos] = 64;
-                    case '¿': text[pos] = 175;
+                    /*
+                    case 'ï¿½': text[pos] = 151;
+                    case 'ï¿½': text[pos] = 152;
+                    case 'ï¿½': text[pos] = 153;
+                    case 'ï¿½': text[pos] = 154;
+                    case 'ï¿½': text[pos] = 128;
+                    case 'ï¿½': text[pos] = 129;
+                    case 'ï¿½': text[pos] = 130;
+                    case 'ï¿½': text[pos] = 131;
+                    case 'ï¿½': text[pos] = 157;
+                    case 'ï¿½': text[pos] = 158;
+                    case 'ï¿½': text[pos] = 159;
+                    case 'ï¿½': text[pos] = 160;
+                    case 'ï¿½': text[pos] = 134;
+                    case 'ï¿½': text[pos] = 135;
+                    case 'ï¿½': text[pos] = 136;
+                    case 'ï¿½': text[pos] = 137;
+                    case 'ï¿½': text[pos] = 161;
+                    case 'ï¿½': text[pos] = 162;
+                    case 'ï¿½': text[pos] = 163;
+                    case 'ï¿½': text[pos] = 164;
+                    case 'ï¿½': text[pos] = 138;
+                    case 'ï¿½': text[pos] = 139;
+                    case 'ï¿½': text[pos] = 140;
+                    case 'ï¿½': text[pos] = 141;
+                    case 'ï¿½': text[pos] = 165;
+                    case 'ï¿½': text[pos] = 166;
+                    case 'ï¿½': text[pos] = 167;
+                    case 'ï¿½': text[pos] = 168;
+                    case 'ï¿½': text[pos] = 142;
+                    case 'ï¿½': text[pos] = 143;
+                    case 'ï¿½': text[pos] = 144;
+                    case 'ï¿½': text[pos] = 145;
+                    case 'ï¿½': text[pos] = 169;
+                    case 'ï¿½': text[pos] = 170;
+                    case 'ï¿½': text[pos] = 171;
+                    case 'ï¿½': text[pos] = 172;
+                    case 'ï¿½': text[pos] = 146;
+                    case 'ï¿½': text[pos] = 147;
+                    case 'ï¿½': text[pos] = 148;
+                    case 'ï¿½': text[pos] = 149;
+                    case 'ï¿½': text[pos] = 174;
+                    case 'ï¿½': text[pos] = 173;
+                    case 'ï¿½': text[pos] = 64;
+                    case 'ï¿½': text[pos] = 175;
+                    */
                     case '`': text[pos] = 177;
                     case '&': text[pos] = 38;
                     default:  text[pos] = reason[pos];
                 }
             }
-            
+
             strcat(TextDrawsNotification[playerid][cycle][Text], text, MAX_TDN_TEXT);
- 
+
             TextDrawsNotification[playerid][cycle][Use] = 1;
- 
+
             LinesTDN(playerid, cycle);
 
             #if defined TDN_MODE_DOWN
@@ -170,7 +172,7 @@ public ShowTDN(playerid, const reason[])
 
             MaxPosYTDN(playerid, cycle);
             MinPosYTDN(playerid, cycle);
-            
+
             #endif
 
             TextDrawsNotification[playerid][cycle][Hide] = -1;
@@ -185,7 +187,7 @@ public ShowTDN(playerid, const reason[])
     return -1;
 }
 
-forward ShowTDN_Manual(playerid, const reason[]); 
+forward ShowTDN_Manual(playerid, const reason[]);
 public ShowTDN_Manual(playerid, const reason[])
 {
     for(new cycle; cycle < MAX_TDN; cycle++)
@@ -200,60 +202,62 @@ public ShowTDN_Manual(playerid, const reason[])
             {
                 switch(reason[pos])
                 {
-                    case 'à': text[pos] = 151;
-                    case 'á': text[pos] = 152;
-                    case 'â': text[pos] = 153;
-                    case 'ä': text[pos] = 154;
-                    case 'À': text[pos] = 128;
-                    case 'Á': text[pos] = 129;
-                    case 'Â': text[pos] = 130;
-                    case 'Ä': text[pos] = 131;
-                    case 'è': text[pos] = 157;
-                    case 'é': text[pos] = 158;
-                    case 'ê': text[pos] = 159;
-                    case 'ë': text[pos] = 160;
-                    case 'È': text[pos] = 134;
-                    case 'É': text[pos] = 135;
-                    case 'Ê': text[pos] = 136;
-                    case 'Ë': text[pos] = 137;
-                    case 'ì': text[pos] = 161;
-                    case 'í': text[pos] = 162;
-                    case 'î': text[pos] = 163;
-                    case 'ï': text[pos] = 164;
-                    case 'Ì': text[pos] = 138;
-                    case 'Í': text[pos] = 139;
-                    case 'Î': text[pos] = 140;
-                    case 'Ï': text[pos] = 141;
-                    case 'ò': text[pos] = 165;
-                    case 'ó': text[pos] = 166;
-                    case 'ô': text[pos] = 167;
-                    case 'ö': text[pos] = 168;
-                    case 'Ò': text[pos] = 142;
-                    case 'Ó': text[pos] = 143;
-                    case 'Ô': text[pos] = 144;
-                    case 'Ö': text[pos] = 145;
-                    case 'ù': text[pos] = 169;
-                    case 'ú': text[pos] = 170;
-                    case 'û': text[pos] = 171;
-                    case 'ü': text[pos] = 172;
-                    case 'Ù': text[pos] = 146;
-                    case 'Ú': text[pos] = 147;
-                    case 'Û': text[pos] = 148;
-                    case 'Ü': text[pos] = 149;
-                    case 'ñ': text[pos] = 174;
-                    case 'Ñ': text[pos] = 173;
-                    case '¡': text[pos] = 64;
-                    case '¿': text[pos] = 175;
+                    /*
+                    case 'ï¿½': text[pos] = 151;
+                    case 'ï¿½': text[pos] = 152;
+                    case 'ï¿½': text[pos] = 153;
+                    case 'ï¿½': text[pos] = 154;
+                    case 'ï¿½': text[pos] = 128;
+                    case 'ï¿½': text[pos] = 129;
+                    case 'ï¿½': text[pos] = 130;
+                    case 'ï¿½': text[pos] = 131;
+                    case 'ï¿½': text[pos] = 157;
+                    case 'ï¿½': text[pos] = 158;
+                    case 'ï¿½': text[pos] = 159;
+                    case 'ï¿½': text[pos] = 160;
+                    case 'ï¿½': text[pos] = 134;
+                    case 'ï¿½': text[pos] = 135;
+                    case 'ï¿½': text[pos] = 136;
+                    case 'ï¿½': text[pos] = 137;
+                    case 'ï¿½': text[pos] = 161;
+                    case 'ï¿½': text[pos] = 162;
+                    case 'ï¿½': text[pos] = 163;
+                    case 'ï¿½': text[pos] = 164;
+                    case 'ï¿½': text[pos] = 138;
+                    case 'ï¿½': text[pos] = 139;
+                    case 'ï¿½': text[pos] = 140;
+                    case 'ï¿½': text[pos] = 141;
+                    case 'ï¿½': text[pos] = 165;
+                    case 'ï¿½': text[pos] = 166;
+                    case 'ï¿½': text[pos] = 167;
+                    case 'ï¿½': text[pos] = 168;
+                    case 'ï¿½': text[pos] = 142;
+                    case 'ï¿½': text[pos] = 143;
+                    case 'ï¿½': text[pos] = 144;
+                    case 'ï¿½': text[pos] = 145;
+                    case 'ï¿½': text[pos] = 169;
+                    case 'ï¿½': text[pos] = 170;
+                    case 'ï¿½': text[pos] = 171;
+                    case 'ï¿½': text[pos] = 172;
+                    case 'ï¿½': text[pos] = 146;
+                    case 'ï¿½': text[pos] = 147;
+                    case 'ï¿½': text[pos] = 148;
+                    case 'ï¿½': text[pos] = 149;
+                    case 'ï¿½': text[pos] = 174;
+                    case 'ï¿½': text[pos] = 173;
+                    case 'ï¿½': text[pos] = 64;
+                    case 'ï¿½': text[pos] = 175;
                     case '`': text[pos] = 177;
                     case '&': text[pos] = 38;
+                    */
                     default:  text[pos] = reason[pos];
                 }
             }
 
             strcat(TextDrawsNotification[playerid][cycle][Text], text, MAX_TDN_TEXT);
- 
+
             TextDrawsNotification[playerid][cycle][Use] = 1;
- 
+
             LinesTDN(playerid, cycle);
 
             #if defined TDN_MODE_DOWN
@@ -267,7 +271,7 @@ public ShowTDN_Manual(playerid, const reason[])
 
             MaxPosYTDN(playerid, cycle);
             MinPosYTDN(playerid, cycle);
-            
+
             #endif
 
             CreateTDN(playerid, cycle);
@@ -357,15 +361,15 @@ stock UpdateTDN(playerid)
 
                     MinPosYTDN(playerid, cycle);
                     MaxPosYTDN(playerid, cycle);
-                    
+
                     #endif
 
                     #if defined TDN_MODE_UP
-                    
+
                     MaxPosYTDN(playerid, cycle);
                     MinPosYTDN(playerid, cycle);
-                    
-                    #endif       
+
+                    #endif
                 }
             }
         }
@@ -393,14 +397,14 @@ stock UpdateTDN(playerid)
 
                     MinPosYTDN(playerid, cycle - 1);
                     MaxPosYTDN(playerid, cycle - 1);
-                    
+
                     #endif
 
                     #if defined TDN_MODE_UP
-                    
+
                     MaxPosYTDN(playerid, cycle - 1);
                     MinPosYTDN(playerid, cycle - 1);
-                    
+
                     #endif
                 }
             }
@@ -461,7 +465,7 @@ stock MaxPosYTDN(playerid, TDN)
 stock LinesTDN(playerid, TDN)
 {
     new lines = 1, Float:width, lastspace = -1, supr, len = strlen(TextDrawsNotification[playerid][TDN][Text]);
- 
+
     for(new i = 0; i < len; i ++)
     {
         if(TextDrawsNotification[playerid][TDN][Text][i] == '~')
@@ -487,7 +491,7 @@ stock LinesTDN(playerid, TDN)
             else
             {
                 if(TextDrawsNotification[playerid][TDN][Text][i] == ' ') lastspace = i;
- 
+
                 width += TDN_LETTER_SIZE_X * GetTextDrawCharacterWidth(TextDrawsNotification[playerid][TDN][Text][i], TDN_FONT, bool:TDN_PROPORTIONAL);
 
                 if(width > TDN_SIZE - 3)
@@ -509,9 +513,9 @@ stock LinesTDN(playerid, TDN)
             }
         }
     }
-    
+
     TextDrawsNotification[playerid][TDN][Line] = lines;
- 
+
     return 1;
 }
 
@@ -523,7 +527,7 @@ stock CreateTDN(playerid, TDN)
         {
             PlayerTextDrawDestroy(playerid, TextDrawsNotification[playerid][TDN][TextDraw]);
         }
-    
+
         TextDrawsNotification[playerid][TDN][TextDraw] = CreatePlayerTextDraw(playerid, TDN_POS_X, TextDrawsNotification[playerid][TDN][MinPosY], TextDrawsNotification[playerid][TDN][Text]);
         PlayerTextDrawFont(playerid, TextDrawsNotification[playerid][TDN][TextDraw], TDN_FONT);
         PlayerTextDrawLetterSize(playerid, TextDrawsNotification[playerid][TDN][TextDraw], TDN_LETTER_SIZE_X, TDN_LETTER_SIZE_Y);
@@ -569,7 +573,7 @@ public OnGameModeInit()
 	forward TDN_OnGameModeInit();
 #endif
 
- 
+
 public OnFilterScriptInit()
 {
     for(new playerid = 0; playerid < MAX_PLAYERS; playerid++)
