@@ -9,12 +9,12 @@ enum invItemInf {
     MagAmmo, // Bang dan / dan trong sung
 }
 new InventoryData[MAX_PLAYERS][MAX_INV_ITEMS][invItemInf];
-new InvSelectedItem[MAX_PLAYERS];
+new InvSelectedItem[MAX_PLAYERS]; // selected item slot
 
 new stock InvItemName[][] = {
 
     " ", //                                 0
-    "Brass Knuckles", //                    1
+    "None", //                              1
     "Golf Club",
     "Nightstick",
     "Knife",

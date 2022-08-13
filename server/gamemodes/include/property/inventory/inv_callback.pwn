@@ -26,7 +26,7 @@ Cmd:inventory(playerid) {
             }
         }
 	}
-	ShowPlayerDialogPages(playerid, #InventoryMain, DS_HEADERS, ""COL_AQUA"TUI DO NHAN VAT", "Chon", "Dong", 12, "{F5D400}TRANG SAU", "{F5D400}TRANG TRUOC");
+	ShowPlayerDialogPages(playerid, #InventoryMain, DS_HEADERS, ""COL_AQUA"TUI DO NHAN VAT", "Chon", "Dong", 20, "{F5D400}TRANG SAU", "{F5D400}TRANG TRUOC");
     return 1;
 }
 

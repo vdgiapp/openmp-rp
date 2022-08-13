@@ -133,18 +133,16 @@ OnPlayerUseItem(playerid, itemid, amount) {
     if(!itemid) return 0;
     if(!amount) return 0;
     if(IsGunItem(itemid)) {
-        if(IsWeaponSlotUsedEx(playerid, GetWeaponSlot(itemid))) return ErrorMsg(playerid, "Ban khong the su dung cung mot loai sung.");
-        else {
-            GivePlayerWeaponEx(playerid, itemid, InventoryData[playerid][sel][MagAmmo], InventoryData[playerid][sel][MagType]);
-            TakePlayerItem(playerid, itemid, 1);
-            InventoryData[playerid][sel][MagAmmo] = 0;
-        }
+        switch(GivePlayerWeaponEx(playerid, itemid, InventoryData[playerid][sel][MagAmmo], InventoryData[playerid][sel][MagType])) {
+			case -1: return ErrorMsg(playerid, "Da ton tai vu khi cung loai dang duoc trang bi.");
+			case 0: return ErrorMsg(playerid, "Vu khi nay da duoc trang bi roi.");
+			case 1: {
+	            TakePlayerItem(playerid, itemid, 1);
+	            InventoryData[playerid][sel][MagAmmo] = 0;
+			}
+		}
     }
     if(IsMagazineItem(itemid)) {
-        static wid[13], ammo[13], magtypeid[13];
-        for(new i = 0; i < 13; i++) {
-            GetPlayerWeaponDataEx(playerid, i, wid[i], ammo[i], magtypeid[i]);
-        }
 
         /*
         if(itemid == 47 || itemid == 48) {
