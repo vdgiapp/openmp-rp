@@ -5,20 +5,12 @@
 # Compiled Bytecode, precompiled output and assembly
 gamemode.amx
 
-# binaries
-announce
-samp03svr
-samp-npc
-
 # logs
 logs/
 server_log.txt
 svlog.txt
 crashinfo.txt
 log.txt
-
-# Ban list
-samp.ban
 
 #
 # Common files
