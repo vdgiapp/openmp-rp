@@ -14,10 +14,10 @@
 #define YSI_YES_HEAP_MALLOC // HEAP MEMORY ALLOCATION
 #define CGEN_MEMORY	(150000)
 
-#define SERVER_NAME "San Andreas Playground: Roleplay"
-#define SERVER_SNAME "SAP-RP.VN"
-#define SERVER_WEBSITE "\"http://sap-rp.vn\""
-#define SERVER_VERSION "SAP:RP v1.415"
+#define SERVER_NAME "GTA Playground Vietnam"
+#define SERVER_SNAME "GTAPG.VN"
+#define SERVER_WEBSITE "\"http://gtapg.vn\""
+#define SERVER_VERSION "RP v1.415"
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -112,8 +112,6 @@ main() {
 #include "include\property\house\house_entry.pwn"
 
 #include "include\player\player_entry.pwn"
-
-#include "include\weapon\weapon_entry.pwn"
 
 #include "include\staff\staff_entry.pwn"
 

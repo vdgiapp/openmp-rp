@@ -4,8 +4,8 @@ hook function ResetPlayerVars(playerid) {
         InventoryData[playerid][i][ItemID] = 0;
         InventoryData[playerid][i][Amount] = 0;
         InventoryData[playerid][i][Durable] = 0;
-        InventoryData[playerid][i][MagType] = 0;
-        InventoryData[playerid][i][MagAmmo] = 0;
+        InventoryData[playerid][i][IsEquipped] = 0;
+		InventoryData[playerid][i][MagAmmo] = 0;
     }
 	continue(playerid);
 }
@@ -15,9 +15,8 @@ LoadInventoryData(playerid) {
     for(new i = 0; i < MAX_INV_ITEMS; i++) {
         static str[64];
 		format(str, sizeof str, "Item%d", i);
-		sscanf(cache_value_string(0, str), "ddfdd", InventoryData[playerid][i][ItemID],
-        InventoryData[playerid][i][Amount], InventoryData[playerid][i][Durable],
-        InventoryData[playerid][i][MagType], InventoryData[playerid][i][MagAmmo]);
+		sscanf(cache_value_string(0, str), "ddfdd", InventoryData[playerid][i][ItemID], InventoryData[playerid][i][Amount],
+		InventoryData[playerid][i][Durable], InventoryData[playerid][i][IsEquipped], InventoryData[playerid][i][MagAmmo]);
 	}
     return 1;
 }
@@ -56,7 +55,7 @@ TakePlayerItem(playerid, itemid, amount) {
                 InventoryData[playerid][i][ItemID] = 0;
                 InventoryData[playerid][i][Amount] = 0;
                 InventoryData[playerid][i][Durable] = 0;
-                InventoryData[playerid][i][MagType] = 0;
+				InventoryData[playerid][i][IsEquipped] = 0;
                 InventoryData[playerid][i][MagAmmo] = 0;
             }
             return 1;
@@ -78,7 +77,7 @@ SortPlayerInventory(playerid) {
                 SwapInt(InventoryData[playerid][u][ItemID], InventoryData[playerid][i][ItemID]);
                 SwapInt(InventoryData[playerid][u][Amount], InventoryData[playerid][i][Amount]);
                 SwapFloat(InventoryData[playerid][u][Durable], InventoryData[playerid][i][Durable]);
-                SwapInt(InventoryData[playerid][u][MagType], InventoryData[playerid][i][MagType]);
+				SwapInt(InventoryData[playerid][u][IsEquipped], InventoryData[playerid][i][IsEquipped]);
                 SwapInt(InventoryData[playerid][u][MagAmmo], InventoryData[playerid][i][MagAmmo]);
             }
         }
@@ -133,13 +132,8 @@ OnPlayerUseItem(playerid, itemid, amount) {
     if(!itemid) return 0;
     if(!amount) return 0;
     if(IsGunItem(itemid)) {
-        switch(GivePlayerWeaponEx(playerid, itemid, InventoryData[playerid][sel][MagAmmo], InventoryData[playerid][sel][MagType])) {
-			case -1: return ErrorMsg(playerid, "Da ton tai vu khi cung loai dang duoc trang bi.");
-			case 0: return ErrorMsg(playerid, "Vu khi nay da duoc trang bi roi.");
-			case 1: {
-	            TakePlayerItem(playerid, itemid, 1);
-	            InventoryData[playerid][sel][MagAmmo] = 0;
-			}
+        if(InventoryData[playerid][sel][IsEquipped]) {
+			
 		}
     }
     if(IsMagazineItem(itemid)) {

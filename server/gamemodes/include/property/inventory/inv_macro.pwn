@@ -1,14 +1,14 @@
 
 #define MAX_INV_ITEMS   (60)
 
-enum invItemInf {
+enum ENUM_INVENTORY_INFO {
     ItemID,
     Amount, // So luong
     Float:Durable, // Do ben
-    MagType, // Loai bang dan hien tai trong sung
+    IsEquipped,
     MagAmmo, // Bang dan / dan trong sung
 }
-new InventoryData[MAX_PLAYERS][MAX_INV_ITEMS][invItemInf];
+new InventoryData[MAX_PLAYERS][MAX_INV_ITEMS][ENUM_INVENTORY_INFO];
 new InvSelectedItem[MAX_PLAYERS]; // selected item slot
 
 new stock InvItemName[][] = {
