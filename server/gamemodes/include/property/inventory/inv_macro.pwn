@@ -14,12 +14,12 @@ new InvSelectedItem[MAX_PLAYERS]; // selected item slot
 new stock InvItemName[][] = {
 
     " ", //                                 0
-    "None", //                              1
+    "Brass Knuckles", //                    1
     "Golf Club",
     "Nightstick",
     "Knife",
-    "Baseball Bat", //                      5
-    "Shovel",
+    "Gay bong chay", //                     5
+    "Cai xeng",
     "Pool Cue",
     "Katana",
     "Chainsaw",

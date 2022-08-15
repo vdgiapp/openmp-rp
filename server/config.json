@@ -46,7 +46,7 @@
     },
     "max_bots": 0,
     "max_players": 100,
-    "name": "GTA Playeground Vietnam",
+    "name": "GTA Playground Vietnam",
     "network": {
         "acks_limit": 3000,
         "aiming_sync_rate": 30,

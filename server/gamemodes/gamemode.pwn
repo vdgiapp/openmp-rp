@@ -38,6 +38,7 @@
 #include <pwnregex> // PAWN Regex
 #include <callbacks> // More callbacks
 #include <sampvoice> // SA-MP voice
+//#include <weapon-config> // Weapon config
 
 #include <YSI_Data\y_iterate> // or YSI_Data/y_foreach (instead of foreach)
 #include <YSI_Coding\y_va> // Variable arguments (va_args<>, va_format, va_start<3>)

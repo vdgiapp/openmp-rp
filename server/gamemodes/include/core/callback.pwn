@@ -31,6 +31,16 @@ public OnGameModeInit() {
 	SetModeRestartTime(20.0); // default: 12.0
 	SetTimeZone(7);
 
+	// Weapon config
+	/*
+	SetDamageFeed(false);
+	SetKnifeSync(false);
+	SetCbugAllowed(false);
+	SetVehiclePassengerDamage(true);
+	SetVehicleUnoccupiedDamage(true);
+	SetCustomArmourRules(true, true);
+	*/
+
 	// Server rules
 	AddServerRule("anticheat", "08/22/2022");
 	AddServerRule("streamer", "2.9.5");
@@ -229,10 +239,5 @@ public OnPlayerCommandPerformed(playerid, cmd[], params[], result, flags)
 {
 	if(!IsPlayerInGame(playerid)) return 0;
 	if(result == -1) return ErrorMsg(playerid, "Cau lenh /%s khong ton tai. Hay su dung lenh /help de xem danh sach cac lenh.", cmd);
-	return 1;
-}
-
-public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart) {
-	if(!IsPlayerInGame(playerid)) return 0;
 	return 1;
 }

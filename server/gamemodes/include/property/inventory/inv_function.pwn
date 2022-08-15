@@ -25,7 +25,7 @@ GivePlayerItem(playerid, itemid, amount, Float:durable, gunammo = 0, magtype = 0
     for(new i = 0; i < MAX_INV_ITEMS; i++) {
         if(InventoryData[playerid][i][ItemID]) {
             if(InventoryData[playerid][i][Durable] != 100) continue;
-            if(IsGunItem(InventoryData[playerid][i][ItemID])) continue;
+            if(IsWeaponItem(InventoryData[playerid][i][ItemID])) continue;
             if(InventoryData[playerid][i][MagAmmo] != magammo) continue;
             InventoryData[playerid][i][Amount] += amount;
         }
@@ -69,7 +69,7 @@ SortPlayerInventory(playerid) {
         for(new u = i+1; u < MAX_INV_ITEMS; u++) {
             if(InventoryData[playerid][i][ItemID]) {
                 if(InventoryData[playerid][i][Durable] != InventoryData[playerid][u][Durable]) continue;
-                if(IsGunItem(InventoryData[playerid][i][ItemID]) || IsGunItem(InventoryData[playerid][u][ItemID])) continue;
+                if(IsWeaponItem(InventoryData[playerid][i][ItemID]) || IsWeaponItem(InventoryData[playerid][u][ItemID])) continue;
                 if(InventoryData[playerid][i][MagAmmo] != InventoryData[playerid][u][MagAmmo]) continue;
                 InventoryData[playerid][i][Amount] += InventoryData[playerid][u][Amount];
             }
@@ -93,9 +93,9 @@ IsPlayerHaveItem(playerid, itemid) {
     return false;
 }
 
-IsGunItem(itemid) {
+IsWeaponItem(itemid) {
     switch(itemid) {
-        case 22..34: return true;
+        case 1..34: return true;
         default: return false;
     }
 }
@@ -126,14 +126,38 @@ GetMagazineSize(itemid) {
 IsPlayerHaveGPS(playerid) { return IsPlayerHaveItem(playerid, 20); }
 IsPlayerHaveWatch(playerid) { return IsPlayerHaveItem(playerid, 21); }
 
-OnPlayerUseItem(playerid, itemid, amount) {
-    static sel;
-    sel = InvSelectedItem[playerid];
+OnPlayerUseItem(playerid, sel, amount) {
+    static itemid;
+    itemid = InventoryData[playerid][sel][ItemID];
     if(!itemid) return 0;
     if(!amount) return 0;
-    if(IsGunItem(itemid)) {
+    if(IsWeaponItem(itemid)) {
         if(InventoryData[playerid][sel][IsEquipped]) {
-			
+			SetPlayerArmedWeapon(playerid, itemid);
+			InventoryData[playerid][sel][IsEquipped] = 0;
+			InventoryData[playerid][sel][MagAmmo] = GetPlayerAmmo(playerid);
+			RemovePlayerWeapon(playerid, itemid);
+			return 1;
+		}
+		else {
+			static weapondata[13][2];
+			for(new i = 0; i < MAX_INV_ITEMS; i++) {
+				for(new u = 0; u < 13; u++) {
+					GetPlayerWeaponData(playerid, u, weapondata[u][0], weapondata[u][1]);
+					if(GetWeaponSlot(InventoryData[playerid][i][ItemID]) == GetWeaponSlot(itemid) && GetWeaponSlot(itemid) == u
+					&& GetWeaponSlot(InventoryData[playerid][i][ItemID]) == u && InventoryData[playerid][i][IsEquipped]) {
+						InventoryData[playerid][i][IsEquipped] = 0;
+						InventoryData[playerid][i][MagAmmo] = weapondata[u][1];
+						RemovePlayerWeapon(playerid, InventoryData[playerid][i][ItemID]);
+
+						InventoryData[playerid][sel][IsEquipped] = 1;
+						GivePlayerWeapon(playerid, itemid, InventoryData[playerid][sel][MagAmmo]);
+						return 1;
+					}
+				}
+			}
+			InventoryData[playerid][sel][IsEquipped] = 1;
+			GivePlayerWeapon(playerid, itemid, InventoryData[playerid][sel][MagAmmo]);
 		}
     }
     if(IsMagazineItem(itemid)) {
