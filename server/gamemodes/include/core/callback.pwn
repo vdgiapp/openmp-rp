@@ -31,6 +31,10 @@ public OnGameModeInit() {
 	SetModeRestartTime(20.0); // default: 12.0
 	SetTimeZone(7);
 
+	// Server rules
+	AddServerRule("anticheat", "08/22/2022");
+	AddServerRule("streamer", "2.9.5");
+
 	// Log files
 	printf("Checking log files...");
 	fcreate(AUTH_LOG_FILE);
