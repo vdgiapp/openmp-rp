@@ -118,5 +118,7 @@ SaveCharacterData(playerid) {
 	mysql_format(Database, str, sizeof str, "UPDATE `characters` SET %s WHERE `Account` = '%s' AND `Slot` = '%d'", str, account, slot);
 	mysql_tquery(Database, str);
 
+	SaveInventoryData(playerid);
+
 	return 1;
 }

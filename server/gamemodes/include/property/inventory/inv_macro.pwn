@@ -6,6 +6,7 @@ enum ENUM_INVENTORY_INFO {
     Amount, // So luong
     Float:Durable, // Do ben
     IsEquipped,
+    MagType,
     MagAmmo, // Bang dan / dan trong sung
 }
 new InventoryData[MAX_PLAYERS][MAX_INV_ITEMS][ENUM_INVENTORY_INFO];

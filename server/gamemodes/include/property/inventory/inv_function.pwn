@@ -5,6 +5,7 @@ hook function ResetPlayerVars(playerid) {
         InventoryData[playerid][i][Amount] = 0;
         InventoryData[playerid][i][Durable] = 0;
         InventoryData[playerid][i][IsEquipped] = 0;
+		InventoryData[playerid][i][MagType] = 0;
 		InventoryData[playerid][i][MagAmmo] = 0;
     }
 	continue(playerid);
@@ -15,13 +16,36 @@ LoadInventoryData(playerid) {
     for(new i = 0; i < MAX_INV_ITEMS; i++) {
         static str[64];
 		format(str, sizeof str, "Item%d", i);
-		sscanf(cache_value_string(0, str), "ddfdd", InventoryData[playerid][i][ItemID], InventoryData[playerid][i][Amount],
-		InventoryData[playerid][i][Durable], InventoryData[playerid][i][IsEquipped], InventoryData[playerid][i][MagAmmo]);
+		sscanf(cache_value_string(0, str), "ddfddd", InventoryData[playerid][i][ItemID], InventoryData[playerid][i][Amount],
+		InventoryData[playerid][i][Durable], InventoryData[playerid][i][IsEquipped], InventoryData[playerid][i][MagType], InventoryData[playerid][i][MagAmmo]);
 	}
     return 1;
 }
 
-GivePlayerItem(playerid, itemid, amount, Float:durable, gunammo = 0, magtype = 0, magammo = 0) {
+SaveInventoryData(playerid) {
+	static str[1024], weapondata[13][2];
+	for(new i = 0; i < MAX_INV_ITEMS; i++) {
+		if(IsWeaponItem(InventoryData[playerid][i][ItemID]) && InventoryData[playerid][i][IsEquipped]) {
+			for(new u; u < 13; u++) {
+				GetPlayerWeaponData(playerid, u, weapondata[u][0], weapondata[u][1]);
+				if(GetWeaponSlot(InventoryData[playerid][i][ItemID]) == u) {
+					mysql_format(Database, str, sizeof str, "UPDATE `characters` SET `Item%d` = '%d %d %f 0 %d %d' WHERE `Name` = '%s' AND `Slot` = '%d'", i,
+					InventoryData[playerid][i][ItemID], InventoryData[playerid][i][Amount], InventoryData[playerid][i][Durable],
+					InventoryData[playerid][i][MagType], weapondata[u][1], CharacterData[playerid][Name], AuthData[playerid][Selected]);
+					mysql_tquery(Database, str);
+				}
+			}
+		}
+		else {
+			mysql_format(Database, str, sizeof str, "UPDATE `characters` SET `Item%d` = '%d %d %f %d %d %d' WHERE `Name` = '%s' AND `Slot` = '%d'", i,
+			InventoryData[playerid][i][ItemID], InventoryData[playerid][i][Amount], InventoryData[playerid][i][Durable],
+			InventoryData[playerid][i][IsEquipped], InventoryData[playerid][i][MagType], InventoryData[playerid][i][MagAmmo], CharacterData[playerid][Name], AuthData[playerid][Selected]);
+			mysql_tquery(Database, str);
+		}
+	}
+}
+
+GivePlayerItem(playerid, itemid, amount, Float:durable, magtype = 0, magammo = 0) {
     for(new i = 0; i < MAX_INV_ITEMS; i++) {
         if(InventoryData[playerid][i][ItemID]) {
             if(InventoryData[playerid][i][Durable] != 100) continue;
@@ -33,13 +57,13 @@ GivePlayerItem(playerid, itemid, amount, Float:durable, gunammo = 0, magtype = 0
             InventoryData[playerid][i][ItemID] = itemid;
             InventoryData[playerid][i][Amount] = amount;
             InventoryData[playerid][i][Durable] = durable;
-            if(InventoryData[playerid][i][GunAmmo]) {
-                InventoryData[playerid][i][GunAmmo] = gunammo;
+            if(IsWeaponItem(itemid) && magammo) {
+                InventoryData[playerid][i][MagAmmo] = magammo;
                 InventoryData[playerid][i][MagType] = magtype;
             }
-            if(magammo) {
+            if(IsMagazineItem(itemid) && magammo) {
                 if(magammo <= GetMagazineSize(InventoryData[playerid][i][ItemID])) InventoryData[playerid][i][MagAmmo] = magammo;
-                if(magammo > GetMagazineSize(InventoryData[playerid][i][ItemID])) InventoryData[playerid][i][MagAmmo] = GetMagazineSize(InventoryData[playerid][i][ItemID]);
+                if(magammo > GetMagazineSize(InventoryData[playerid][i][ItemID])) InventoryData[playerid][i][MagAmmo] = GetMagazineSize(itemid);
             }
             return 1;
         }
@@ -51,11 +75,13 @@ TakePlayerItem(playerid, itemid, amount) {
     for(new i = 0; i < MAX_INV_ITEMS; i++) {
         if(InventoryData[playerid][i][ItemID] == itemid && InventoryData[playerid][i][Amount] >= amount) {
             InventoryData[playerid][i][Amount] -= amount;
+			if(IsWeaponItem(itemid) && InventoryData[playerid][i][IsEquipped]) RemovePlayerWeapon(playerid, itemid);
             if(InventoryData[playerid][i][Amount] <= 0) {
                 InventoryData[playerid][i][ItemID] = 0;
                 InventoryData[playerid][i][Amount] = 0;
                 InventoryData[playerid][i][Durable] = 0;
 				InventoryData[playerid][i][IsEquipped] = 0;
+				InventoryData[playerid][i][MagType] = 0;
                 InventoryData[playerid][i][MagAmmo] = 0;
             }
             return 1;
@@ -78,6 +104,7 @@ SortPlayerInventory(playerid) {
                 SwapInt(InventoryData[playerid][u][Amount], InventoryData[playerid][i][Amount]);
                 SwapFloat(InventoryData[playerid][u][Durable], InventoryData[playerid][i][Durable]);
 				SwapInt(InventoryData[playerid][u][IsEquipped], InventoryData[playerid][i][IsEquipped]);
+				SwapInt(InventoryData[playerid][u][MagType], InventoryData[playerid][i][MagType]);
                 SwapInt(InventoryData[playerid][u][MagAmmo], InventoryData[playerid][i][MagAmmo]);
             }
         }
@@ -161,7 +188,7 @@ OnPlayerUseItem(playerid, sel, amount) {
 		}
     }
     if(IsMagazineItem(itemid)) {
-
+		
         /*
         if(itemid == 47 || itemid == 48) {
             static magammo; magammo = InventoryData[playerid][sel][MagAmmo];
@@ -180,4 +207,16 @@ OnPlayerUseItem(playerid, sel, amount) {
         */
     }
     return 1;
+}
+
+OnPlayerViewItemInfo(playerid, sel) {
+
+}
+
+OnPlayerGiveItem(playerid, sel, targetid) {
+
+}
+
+OnPlayerDestroyItem(playerid, sel, amount) {
+
 }

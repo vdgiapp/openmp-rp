@@ -30,6 +30,8 @@ public OnGameModeInit() {
 	SetGameModeText(SERVER_VERSION);
 	SetModeRestartTime(20.0); // default: 12.0
 	SetTimeZone(7);
+	
+	ToggleChatTextReplacement(true);
 
 	// Weapon config
 	/*
@@ -40,10 +42,6 @@ public OnGameModeInit() {
 	SetVehicleUnoccupiedDamage(true);
 	SetCustomArmourRules(true, true);
 	*/
-
-	// Server rules
-	AddServerRule("anticheat", "08/22/2022");
-	AddServerRule("streamer", "2.9.5");
 
 	// Log files
 	printf("Checking log files...");

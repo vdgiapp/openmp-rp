@@ -408,6 +408,12 @@ Cmd:z(playerid, params[]) {
 	return 1;
 }
 
+Cmd:agiveitem(id, p[]) {
+	if(!IsStaff(id, SENIOR_ADMIN_RANK)) return NoPermsMsg(id);
+
+	return 1;
+}
+
 Cmd:sethp(playerid, params[]) {
 
 	return 1;

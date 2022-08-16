@@ -28,8 +28,8 @@ Cmd:inventory(playerid) {
             }
             else {
                 if(IsWeaponItem(itemid)) {
-                    if(!isequip) AddDialogListitem(playerid, " %s\t%d\t%d vien", itemname, durable, magammo);
-                    else AddDialogListitem(playerid, " %s "COL_YELLOW"(DANG TRANG BI)\t%d\t%d vien", itemname, durable, weapondata[GetWeaponSlot(itemid)][1]);
+                    if(!isequip) AddDialogListitem(playerid, " %s\t%d\t%d", itemname, durable, magammo);
+                    else AddDialogListitem(playerid, " %s "COL_YELLOW"(DANG TRANG BI)\t%d\t%d", itemname, durable, weapondata[GetWeaponSlot(itemid)][1]);
                 }
                 if(IsMagazineItem(itemid)) AddDialogListitem(playerid, " %s\t \t%d", itemname, magammo);
                 if(!IsWeaponItem(itemid) && !IsMagazineItem(itemid)) AddDialogListitem(playerid, " %s\t%d\t", itemname, durable);
@@ -64,6 +64,9 @@ Dialog:InventoryInteract(playerid, response, listitem, inputtext[]) {
             if(InventoryData[playerid][sel][Amount] > 1) Dialog_Show(playerid, InventoryUseAmount, DS_INPUT, str, "\\cNhap so luong ma ban muon su dung:", "Su dung", "Quay lai");
             else OnPlayerUseItem(playerid, sel, 1);
         }
+        case 1: OnPlayerViewItemInfo(playerid, sel);
+        //case 2: OnPlayerGiveItem(playerid, sel, targetid);
+        //case 3: OnPlayerDestroyItem(playerid, sel, amount);
     }
     return 1;
 }

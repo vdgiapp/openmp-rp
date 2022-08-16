@@ -164,7 +164,7 @@ native Float:GetPlayerZAim(playerid);
 native GetPlayerSurfingOffsets(playerid, &Float:fOffsetX, &Float:fOffsetY = 0.0, &Float:fOffsetZ = 0.0);
 native GetPlayerRotationQuat(playerid, &Float:w, &Float:x = 0.0, &Float:y = 0.0, &Float:z = 0.0);
 native GetPlayerDialogID(playerid);
-native HidePlayerDialog();
+native HidePlayerDialog(playerid);
 native GetPlayerSpectateID(playerid);
 native GetPlayerSpectateType(playerid);
 native GetPlayerLastSyncedVehicleID(playerid);
