@@ -14,24 +14,25 @@ Cmd:inventory(playerid) {
 	for(new i = 0; i < MAX_INV_ITEMS; i++) {
         if(InventoryData[playerid][i][ItemID]) {
             static weapondata[13][2];
-            static itemname[64], itemid, amount, durable, isequip, magammo;
+            static itemname[64], itemid, amount, durable, isequip, magtype, magammo;
             itemid = InventoryData[playerid][i][ItemID];
             amount = InventoryData[playerid][i][Amount];
             durable = floatround(InventoryData[playerid][i][Durable]);
             isequip = InventoryData[playerid][i][IsEquipped];
+            magtype = InventoryData[playerid][i][MagType];
             magammo = InventoryData[playerid][i][MagAmmo];
             format(itemname, sizeof itemname, "%s", InvItemName[itemid]);
             for(new u = 0; u < 13; u++) { GetPlayerWeaponData(playerid, u, weapondata[u][0], weapondata[u][1]); }
             if(amount > 1) {
-                if(IsMagazineItem(itemid)) AddDialogListitem(playerid, " %s (x%d)\t%d\t%d", itemname, amount, durable, magammo);
-                else AddDialogListitem(playerid, " %s (x%d)\t%d\t", itemname, amount, durable);
+                if(IsMagazineItem(itemid)) AddDialogListitem(playerid, " %s (x%d)\t%d pt\t%d", itemname, amount, durable, magammo);
+                else AddDialogListitem(playerid, " %s (x%d)\t%d pt\t", itemname, amount, durable);
             }
             else {
                 if(IsWeaponItem(itemid)) {
-                    if(!isequip) AddDialogListitem(playerid, " %s\t%d\t%d", itemname, durable, magammo);
-                    else AddDialogListitem(playerid, " %s "COL_YELLOW"(DANG TRANG BI)\t%d\t%d", itemname, durable, weapondata[GetWeaponSlot(itemid)][1]);
+                    if(!isequip) AddDialogListitem(playerid, " %s\t%d pt\t%d (%s)", itemname, durable, magammo, InvItemName[magtype]);
+                    else AddDialogListitem(playerid, " %s "COL_YELLOW"(DANG TRANG BI)\t%d pt\t%d (%s)", itemname, durable, weapondata[GetWeaponSlot(itemid)][1], InvItemName[magtype]);
                 }
-                if(IsMagazineItem(itemid)) AddDialogListitem(playerid, " %s\t \t%d", itemname, magammo);
+                if(IsMagazineItem(itemid)) AddDialogListitem(playerid, " %s\t%d pt\t%d", itemname, durable, magammo);
                 if(!IsWeaponItem(itemid) && !IsMagazineItem(itemid)) AddDialogListitem(playerid, " %s\t%d\t", itemname, durable);
             }
         }
