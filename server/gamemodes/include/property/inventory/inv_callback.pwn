@@ -62,7 +62,10 @@ Dialog:InventoryInteract(playerid, response, listitem, inputtext[]) {
         case 0: {
             static str[64];
             format(str, sizeof str, ""COL_AQUA"TUI DO > %s > Su dung (SL: %d)", InvItemName[InventoryData[playerid][sel][ItemID]], InventoryData[playerid][sel][Amount]);
-            if(InventoryData[playerid][sel][Amount] > 1) Dialog_Show(playerid, InventoryUseAmount, DS_INPUT, str, "\\cNhap so luong ma ban muon su dung:", "Su dung", "Quay lai");
+            if(InventoryData[playerid][sel][Amount] > 1) {
+                if(IsMagazineItem(InventoryData[playerid][sel][ItemID])) OnPlayerUseItem(playerid, sel, 1);
+                else Dialog_Show(playerid, InventoryUseAmount, DS_INPUT, str, "\\cNhap so luong ma ban muon su dung:", "Su dung", "Quay lai");
+            }
             else OnPlayerUseItem(playerid, sel, 1);
         }
         case 1: OnPlayerViewItemInfo(playerid, sel);

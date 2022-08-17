@@ -114,6 +114,8 @@ SortPlayerInventory(playerid) {
                 SwapInt(InventoryData[playerid][u][MagAmmo], InventoryData[playerid][i][MagAmmo]);
             }
         }
+		if(InventoryData[playerid][i][Amount] <= 0) InventoryData[playerid][i][ItemID] = 0, InventoryData[playerid][i][Amount] = 0;
+		if(InventoryData[playerid][i][MagAmmo] <= 0) InventoryData[playerid][i][MagAmmo] = 0, InventoryData[playerid][i][MagType] = 0;
     }
 }
 
@@ -178,6 +180,7 @@ OnPlayerUseItem(playerid, sel, amount) {
     itemid = InventoryData[playerid][sel][ItemID];
     if(!itemid) return 0;
     if(!amount) return 0;
+
     if(IsWeaponItem(itemid)) {
         if(InventoryData[playerid][sel][IsEquipped]) {
 			for(new u = 0; u < 13; u++) {
@@ -191,6 +194,7 @@ OnPlayerUseItem(playerid, sel, amount) {
 			return 1;
 		}
 		else {
+			// loi phan nay
 			for(new i = 0; i < MAX_INV_ITEMS; i++) {
 				for(new u = 0; u < 13; u++) {
 					GetPlayerWeaponData(playerid, u, weapondata[u][0], weapondata[u][1]);
@@ -212,16 +216,21 @@ OnPlayerUseItem(playerid, sel, amount) {
 			SetPlayerAmmo(playerid, itemid, InventoryData[playerid][sel][MagAmmo]);
 		}
     }
+
     if(IsMagazineItem(itemid)) {
 		for(new i = 0; i < MAX_INV_ITEMS; i++) {
-			if(itemid == InventoryData[playerid][i][MagType] && InventoryData[playerid][i][IsEquipped] && IsWeaponItem(InventoryData[playerid][i][ItemID])) {
+			if((itemid == InventoryData[playerid][i][MagType]
+			|| InventoryData[playerid][i][MagType] == 0)
+			&& InventoryData[playerid][i][IsEquipped] && IsWeaponItem(InventoryData[playerid][i][ItemID])) {
 				for(new u = 0; u < 13; u++) {
 					GetPlayerWeaponData(playerid, u, weapondata[u][0], weapondata[u][1]);
 					if(IsWeaponUseMag(InventoryData[playerid][i][ItemID], InventoryData[playerid][i][MagType]) && GetWeaponSlot(InventoryData[playerid][i][ItemID]) == u) {
+						// loi phan nay
 						if(weapondata[u][1] + InventoryData[playerid][sel][MagAmmo] <= GetMagazineSize(itemid)) {
 							GivePlayerWeapon(playerid, InventoryData[playerid][i][ItemID], weapondata[u][1] + InventoryData[playerid][sel][MagAmmo]);
 							SetPlayerAmmo(playerid, InventoryData[playerid][i][ItemID], weapondata[u][1] + InventoryData[playerid][sel][MagAmmo]);
 							InventoryData[playerid][sel][MagAmmo] = 0;
+							ClientMsg(playerid, -1, "weapondata[u][1] + InventoryData[playerid][sel][MagAmmo] <= GetMagazineSize(itemid)");
 						}
 						else {
 							if(weapondata[u][1] >= GetMagazineSize(itemid)) return ErrorMsg(playerid, "Bang dan cua khau sung %s da day (%d vien)", InvItemName[InventoryData[playerid][i][ItemID]], GetMagazineSize(itemid));
@@ -236,7 +245,7 @@ OnPlayerUseItem(playerid, sel, amount) {
 				                	GivePlayerWeapon(playerid, InventoryData[playerid][i][ItemID], GetMagazineSize(itemid));
 									SetPlayerAmmo(playerid, InventoryData[playerid][i][ItemID], GetMagazineSize(itemid));
 				                	InventoryData[playerid][sel][MagAmmo] -= (GetMagazineSize(itemid)-weapondata[u][1]);
-									if(InventoryData[playerid][sel][MagAmmo] <= 0) InventoryData[playerid][sel][MagAmmo] = 0;
+									if(InventoryData[playerid][sel][MagAmmo] <= 0) InventoryData[playerid][sel][MagType] = 0, InventoryData[playerid][sel][MagAmmo] = 0;
 								}
 				            }
 						}
@@ -245,25 +254,7 @@ OnPlayerUseItem(playerid, sel, amount) {
 				return 1;
 			}
 		}
-		ErrorMsg(playerid, "Loai dan khong phu hop voi vu khi hien tai.");
 	}
-        /*
-        if(itemid == 47 || itemid == 48) {
-            static magammo; magammo = InventoryData[playerid][sel][MagAmmo];
-            if(weapons[i][1] + magammo <= GetMagazineSize(itemid)) {
-                SetPlayerAmmo(playerid, weapons[i][0], GetMagazineSize(itemid));
-                InventoryData[playerid][sel][MagAmmo] = 0;
-	        }
-	        if(weapons[i][1] + magammo > GetMagazineSize(itemid)) {
-	            if(weapons[i][1] >= GetMagazineSize(itemid)) return ErrorMsg(playerid, "Bang dan cua khau sung da day (%d vien)", GetMagazineSize(itemid));
-	            else {
-	                SetPlayerAmmo(playerid, weapons[i][0], GetMagazineSize(itemid));
-	                InventoryData[playerid][sel][MagAmmo] -= (GetMagazineSize(itemid)-weapons[i][1]);
-	            }
-	        }
-		}
-        if(InventoryData[playerid][sel][MagAmmo] <= 0) InventoryData[playerid][sel][MagAmmo] = 0;
-        */
     return 1;
 }
 
