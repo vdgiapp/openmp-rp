@@ -122,21 +122,24 @@ new stock InvItemName[][] = {
     // Food, Drink
     "Qua tao",
     "Qua cam",
-    "Dua hau",
-    "Sandwich nuong",
+    "Rau tron",
+    "Sandwich salad",
     "Banh mi", //                           80
-    "Chocolate",
+    "Thit ga ran",
+    "Thit bo nuong",
     "Pizza",
-    "Ca hoi song",
-    "Ca hoi nuong",
-    "Ca thu song", //                       85
-    "Ca thu nuong",
+    "Thit huou rung",
+    "Ca nuong", //                          85
     "Nuoc khoang",
     "Nuoc tang luc",
+    "Nuoc ep hoa qua",
+    "Nuoc co gas",
+    "Ca phe", //                            90
     "Sprunk",
-    "Cocicola", //                          90
-    "Ca phe",
     "Sua tuoi",
+    "Bia tuoi",
+    "Ruou vang",
+    "Ruou vodka", //                        95
 
     // Misc
     "Cay but",

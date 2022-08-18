@@ -15,19 +15,19 @@
  *//** *//*
 Legal:
 	Version: MPL 1.1
-	
-	The contents of this file are subject to the Mozilla Public License Version 
-	1.1 the "License"; you may not use this file except in compliance with 
-	the License. You may obtain a copy of the License at 
+
+	The contents of this file are subject to the Mozilla Public License Version
+	1.1 the "License"; you may not use this file except in compliance with
+	the License. You may obtain a copy of the License at
 	http://www.mozilla.org/MPL/
-	
+
 	Software distributed under the License is distributed on an "AS IS" basis,
 	WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
 	for the specific language governing rights and limitations under the
 	License.
-	
+
 	The Original Code is the YSI framework.
-	
+
 	The Initial Developer of the Original Code is Alex "Y_Less" Cole.
 	Portions created by the Initial Developer are Copyright (c) 2022
 	the Initial Developer. All Rights Reserved.
@@ -134,7 +134,7 @@ Optional plugins:
 		static stock const UNIQUE_SYMBOL_OTHER_VALUE = cellmin;
 		#include "y_unique__900_to_999"
 	#endif
-	
+
 	#endinput
 #endif
 // The non-repeating header.
@@ -182,4 +182,3 @@ static stock const UNIQUE_SYMBOL_DOESNT_EXIST = cellmin;
 		#include "y_unique_entry"
 	#endif
 #endif
-

@@ -360,7 +360,7 @@ CreateCharacterForPlayer(playerid, name[], slot) {
     	`FightStyle`, `WalkStyle`, `Position`) \
     	VALUES ('%d', '%s', '%s', '%s', '%s', '%s', '1 0', \
     	'%d', '%02d %02d %04d', '%d', '%d', '1000', '10', '0 0 0 0 0 0', \
-    	'0 000000 0', '0 0', '0 0 0 0', '1000', '1000', '1000', \
+    	'0 000000 0', '0 0', '0 0 0 0', '100', '100', '100', \
     	'100', '0', '4', '%d', '1743 -1862 13.6 0 0 0')",
     	slot, AuthData[playerid][Account], crtdate, lastpl,
     	CreateCharData[playerid][Name], CreateCharData[playerid][Description],

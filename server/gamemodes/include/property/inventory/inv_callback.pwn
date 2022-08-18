@@ -1,9 +1,4 @@
 
-hook OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, Float:fX, Float:fY, Float:fZ) {
-
-    return 1;
-}
-
 Alias:inventory("inv");
 Cmd:inventory(playerid) {
     if(!IsPlayerInGame(playerid)) return 0;
@@ -48,7 +43,10 @@ DialogPages:InventoryMain(playerid, response, listitem) {
         i = InvSelectedItem[playerid];
         if(!InventoryData[playerid][i][ItemID]) return callcmd::inventory(playerid);
         format(str, sizeof str, ""COL_AQUA"TUI DO > %s", InvItemName[InventoryData[playerid][i][ItemID]]);
-        if(IsWeaponItem(InventoryData[playerid][i][ItemID])) return Dialog_Show(playerid, InventoryInteract, DS_LIST, str, "Su dung vu khi\nThong tin vu khi\nDua vu khi\nPha huy vu khi\nVut bo vu khi", "Chon", "Quay lai");
+        if(IsWeaponItem(InventoryData[playerid][i][ItemID])) {
+            if(!InventoryData[playerid][i][IsEquipped]) return Dialog_Show(playerid, InventoryInteract, DS_LIST, str, "Trang bi vu khi\nThong tin vu khi\nDua vu khi\nPha huy vu khi\nVut bo vu khi", "Chon", "Quay lai");
+            else return Dialog_Show(playerid, InventoryInteract, DS_LIST, str, "Go trang bi vu khi\nThong tin vu khi\nDua vu khi\nPha huy vu khi\nVut bo vu khi", "Chon", "Quay lai");
+        }
         if(IsMagazineItem(InventoryData[playerid][i][ItemID])) return Dialog_Show(playerid, InventoryInteract, DS_LIST, str, "Nap dan vao vu khi\nThong tin bang dan\nDua bang dan\nPha huy bang dan\nVut bo bang dan", "Chon", "Quay lai");
         Dialog_Show(playerid, InventoryInteract, DS_LIST, str, "Su dung vat pham\nThong tin vat pham\nDua vat pham\nTieu huy vat pham\nVut bo vat pham", "Chon", "Quay lai");
     }

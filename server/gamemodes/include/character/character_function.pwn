@@ -36,9 +36,9 @@ function OnGetCharacterData(playerid) {
 	CharacterData[playerid][Warns] = cache_value_int(0, "Warns");
 	CharacterData[playerid][Wanted] = cache_value_int(0, "Wanted");
 	CharacterData[playerid][Arrested] = cache_value_int(0, "Arrested");
-	CharacterData[playerid][Hunger] = cache_value_int(0, "Hunger");
-	CharacterData[playerid][Thirst] = cache_value_int(0, "Thirst");
-	CharacterData[playerid][Stamina] = cache_value_int(0, "Stamina");
+	CharacterData[playerid][Hunger] = cache_value_float(0, "Hunger");
+	CharacterData[playerid][Thirst] = cache_value_float(0, "Thirst");
+	CharacterData[playerid][Stamina] = cache_value_float(0, "Stamina");
 	CharacterData[playerid][Injured] = cache_value_int(0, "Injured");
 	CharacterData[playerid][Health] = cache_value_float(0, "Health");
 	CharacterData[playerid][Armour] = cache_value_float(0, "Armour");
@@ -113,7 +113,7 @@ SaveCharacterData(playerid) {
 	if(IsStaffSpectating(playerid)) GetStaffPrevHealth(playerid, health), GetStaffPrevArmour(playerid, armour), GetStaffPrevPos(playerid, x, y, z, world, int);
 
 	mysql_format(Database, str, sizeof str, "`Position` = '%f %f %f %f %d %d', `SkinID` = '%d'", x, y, z, angle, world, int, GetPlayerSkin(playerid));
-	mysql_format(Database, str, sizeof str, "`Hunger` = '%d', `Thirst` = '%d', `Stamina` = '%d', `Injured` = '%d', `Health` = '%f', `Armour` = '%f', %s",
+	mysql_format(Database, str, sizeof str, "`Hunger` = '%f', `Thirst` = '%f', `Stamina` = '%f', `Injured` = '%d', `Health` = '%f', `Armour` = '%f', %s",
 	CharacterData[playerid][Hunger], CharacterData[playerid][Thirst], CharacterData[playerid][Stamina], CharacterData[playerid][Injured], health, armour, str);
 	mysql_format(Database, str, sizeof str, "UPDATE `characters` SET %s WHERE `Account` = '%s' AND `Slot` = '%d'", str, account, slot);
 	mysql_tquery(Database, str);
