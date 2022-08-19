@@ -262,107 +262,29 @@ hook OnPlayerUpdate(playerid) {
 	static str[128];
 
 	if(IsPlayerInGame(playerid)) {
-		if(IsPlayerTextDrawVisible(playerid, HUD_Hunger[playerid])) {
-			switch(floatround(CharacterData[playerid][Hunger])) {
-				case 0: 		PlayerTextDrawSetString(playerid, HUD_Hunger[playerid], "");
-				case 1..5: 		PlayerTextDrawSetString(playerid, HUD_Hunger[playerid], "l");
-				case 6..10: 	PlayerTextDrawSetString(playerid, HUD_Hunger[playerid], "ll");
-				case 11..15: 	PlayerTextDrawSetString(playerid, HUD_Hunger[playerid], "lll");
-				case 16..20: 	PlayerTextDrawSetString(playerid, HUD_Hunger[playerid], "llll");
-				case 21..25: 	PlayerTextDrawSetString(playerid, HUD_Hunger[playerid], "lllll");
-				case 26..30: 	PlayerTextDrawSetString(playerid, HUD_Hunger[playerid], "llllll");
-				case 31..35: 	PlayerTextDrawSetString(playerid, HUD_Hunger[playerid], "lllllll");
-				case 36..40: 	PlayerTextDrawSetString(playerid, HUD_Hunger[playerid], "llllllll");
-				case 41..45: 	PlayerTextDrawSetString(playerid, HUD_Hunger[playerid], "lllllllll");
-				case 46..50: 	PlayerTextDrawSetString(playerid, HUD_Hunger[playerid], "llllllllll");
-				case 51..55: 	PlayerTextDrawSetString(playerid, HUD_Hunger[playerid], "lllllllllll");
-				case 56..60: 	PlayerTextDrawSetString(playerid, HUD_Hunger[playerid], "llllllllllll");
-				case 61..65: 	PlayerTextDrawSetString(playerid, HUD_Hunger[playerid], "lllllllllllll");
-				case 66..70: 	PlayerTextDrawSetString(playerid, HUD_Hunger[playerid], "llllllllllllll");
-				case 71..75: 	PlayerTextDrawSetString(playerid, HUD_Hunger[playerid], "lllllllllllllll");
-				case 76..80: 	PlayerTextDrawSetString(playerid, HUD_Hunger[playerid], "llllllllllllllll");
-				case 81..85: 	PlayerTextDrawSetString(playerid, HUD_Hunger[playerid], "lllllllllllllllll");
-				case 86..90: 	PlayerTextDrawSetString(playerid, HUD_Hunger[playerid], "llllllllllllllllll");
-				case 91..95: 	PlayerTextDrawSetString(playerid, HUD_Hunger[playerid], "lllllllllllllllllll");
-				case 96..100:	PlayerTextDrawSetString(playerid, HUD_Hunger[playerid], "llllllllllllllllllll");
-			}
-		}
 
-		if(IsPlayerTextDrawVisible(playerid, HUD_Thirst[playerid])) {
-			switch(floatround(CharacterData[playerid][Thirst])) {
-				case 0: 		PlayerTextDrawSetString(playerid, HUD_Thirst[playerid], "");
-				case 1..5: 		PlayerTextDrawSetString(playerid, HUD_Thirst[playerid], "l");
-				case 6..10: 	PlayerTextDrawSetString(playerid, HUD_Thirst[playerid], "ll");
-				case 11..15: 	PlayerTextDrawSetString(playerid, HUD_Thirst[playerid], "lll");
-				case 16..20: 	PlayerTextDrawSetString(playerid, HUD_Thirst[playerid], "llll");
-				case 21..25: 	PlayerTextDrawSetString(playerid, HUD_Thirst[playerid], "lllll");
-				case 26..30: 	PlayerTextDrawSetString(playerid, HUD_Thirst[playerid], "llllll");
-				case 31..35: 	PlayerTextDrawSetString(playerid, HUD_Thirst[playerid], "lllllll");
-				case 36..40: 	PlayerTextDrawSetString(playerid, HUD_Thirst[playerid], "llllllll");
-				case 41..45: 	PlayerTextDrawSetString(playerid, HUD_Thirst[playerid], "lllllllll");
-				case 46..50: 	PlayerTextDrawSetString(playerid, HUD_Thirst[playerid], "llllllllll");
-				case 51..55: 	PlayerTextDrawSetString(playerid, HUD_Thirst[playerid], "lllllllllll");
-				case 56..60: 	PlayerTextDrawSetString(playerid, HUD_Thirst[playerid], "llllllllllll");
-				case 61..65: 	PlayerTextDrawSetString(playerid, HUD_Thirst[playerid], "lllllllllllll");
-				case 66..70: 	PlayerTextDrawSetString(playerid, HUD_Thirst[playerid], "llllllllllllll");
-				case 71..75: 	PlayerTextDrawSetString(playerid, HUD_Thirst[playerid], "lllllllllllllll");
-				case 76..80: 	PlayerTextDrawSetString(playerid, HUD_Thirst[playerid], "llllllllllllllll");
-				case 81..85: 	PlayerTextDrawSetString(playerid, HUD_Thirst[playerid], "lllllllllllllllll");
-				case 86..90: 	PlayerTextDrawSetString(playerid, HUD_Thirst[playerid], "llllllllllllllllll");
-				case 91..95: 	PlayerTextDrawSetString(playerid, HUD_Thirst[playerid], "lllllllllllllllllll");
-				case 96..100:	PlayerTextDrawSetString(playerid, HUD_Thirst[playerid], "llllllllllllllllllll");
-			}
-		}
+		ChangePlayerStatusBar(playerid, HUD_Hunger[playerid], CharacterData[playerid][Hunger], MAX_PLAYER_HUNGER);
+		ChangePlayerStatusBar(playerid, HUD_Thirst[playerid], CharacterData[playerid][Thirst], MAX_PLAYER_THIRST);
+		ChangePlayerStatusBar(playerid, HUD_Stamina[playerid], CharacterData[playerid][Stamina], MAX_PLAYER_STAMINA);
 
-		if(IsPlayerTextDrawVisible(playerid, HUD_Stamina[playerid])) {
-			static maxsta5pt, stamina;
-			maxsta5pt = floatround(100/20);
-			stamina = floatround(CharacterData[playerid][Stamina]);
-			if(stamina <= 0) 									PlayerTextDrawSetString(playerid, HUD_Stamina[playerid], "");
-			if(1 <= stamina <= maxsta5pt*1) 					PlayerTextDrawSetString(playerid, HUD_Stamina[playerid], "l");
-			if(maxsta5pt+1 <= stamina <= maxsta5pt*2) 			PlayerTextDrawSetString(playerid, HUD_Stamina[playerid], "ll");
-			if((maxsta5pt*2)+1 <= stamina <= maxsta5pt*3) 		PlayerTextDrawSetString(playerid, HUD_Stamina[playerid], "lll");
-			if((maxsta5pt*3)+1 <= stamina <= maxsta5pt*4) 		PlayerTextDrawSetString(playerid, HUD_Stamina[playerid], "llll");
-			if((maxsta5pt*4)+1 <= stamina <= maxsta5pt*5) 		PlayerTextDrawSetString(playerid, HUD_Stamina[playerid], "lllll");
-			if((maxsta5pt*5)+1 <= stamina <= maxsta5pt*6) 		PlayerTextDrawSetString(playerid, HUD_Stamina[playerid], "llllll");
-			if((maxsta5pt*6)+1 <= stamina <= maxsta5pt*7) 		PlayerTextDrawSetString(playerid, HUD_Stamina[playerid], "lllllll");
-			if((maxsta5pt*7)+1 <= stamina <= maxsta5pt*8) 		PlayerTextDrawSetString(playerid, HUD_Stamina[playerid], "llllllll");
-			if((maxsta5pt*8)+1 <= stamina <= maxsta5pt*9) 		PlayerTextDrawSetString(playerid, HUD_Stamina[playerid], "lllllllll");
-			if((maxsta5pt*9)+1 <= stamina <= maxsta5pt*10) 		PlayerTextDrawSetString(playerid, HUD_Stamina[playerid], "llllllllll");
-			if((maxsta5pt*10)+1 <= stamina <= maxsta5pt*11) 	PlayerTextDrawSetString(playerid, HUD_Stamina[playerid], "lllllllllll");
-			if((maxsta5pt*11)+1 <= stamina <= maxsta5pt*12) 	PlayerTextDrawSetString(playerid, HUD_Stamina[playerid], "llllllllllll");
-			if((maxsta5pt*12)+1 <= stamina <= maxsta5pt*13) 	PlayerTextDrawSetString(playerid, HUD_Stamina[playerid], "lllllllllllll");
-			if((maxsta5pt*13)+1 <= stamina <= maxsta5pt*14) 	PlayerTextDrawSetString(playerid, HUD_Stamina[playerid], "llllllllllllll");
-			if((maxsta5pt*14)+1 <= stamina <= maxsta5pt*15) 	PlayerTextDrawSetString(playerid, HUD_Stamina[playerid], "lllllllllllllll");
-			if((maxsta5pt*15)+1 <= stamina <= maxsta5pt*16) 	PlayerTextDrawSetString(playerid, HUD_Stamina[playerid], "llllllllllllllll");
-			if((maxsta5pt*16)+1 <= stamina <= maxsta5pt*17) 	PlayerTextDrawSetString(playerid, HUD_Stamina[playerid], "lllllllllllllllll");
-			if((maxsta5pt*17)+1 <= stamina <= maxsta5pt*18) 	PlayerTextDrawSetString(playerid, HUD_Stamina[playerid], "llllllllllllllllll");
-			if((maxsta5pt*18)+1 <= stamina <= maxsta5pt*19) 	PlayerTextDrawSetString(playerid, HUD_Stamina[playerid], "lllllllllllllllllll");
-			if((maxsta5pt*19)+1 <= stamina <= maxsta5pt*20) 	PlayerTextDrawSetString(playerid, HUD_Stamina[playerid], "llllllllllllllllllll");
-		}
-
-		if(IsPlayerInAnyVehicle(playerid) && IsPlayerTextDrawVisible(playerid, HUD_VehName[playerid]) && IsPlayerTextDrawVisible(playerid, HUD_VehSpeed[playerid])) {
+		if(IsPlayerInAnyVehicle(playerid)) {
 			format(str, sizeof str, "%d", floatround(EVF::GetVehicleSpeed(GetPlayerVehicleID(playerid))));
 			PlayerTextDrawSetString(playerid, HUD_VehName[playerid], GetVehicleName(GetPlayerVehicleID(playerid)));
 			PlayerTextDrawSetString(playerid, HUD_VehSpeed[playerid], str);
 		}
 
-		if(IsPlayerTextDrawVisible(playerid, HUD_Zone[playerid])) PlayerTextDrawSetString(playerid, HUD_Zone[playerid], GetPlayerZone(playerid));
+		PlayerTextDrawSetString(playerid, HUD_Zone[playerid], GetPlayerZone(playerid));
 
-		if(IsPlayerTextDrawVisible(playerid, HUD_Level[playerid])) {
-			static level, exp;
-			sscanf(CharacterData[playerid][Level], "ii", level, exp);
-			format(str, sizeof str, "Lv.%d", level);
-			PlayerTextDrawSetString(playerid, HUD_Level[playerid], str);
-		}
+		static level, exp;
+		sscanf(CharacterData[playerid][Level], "ii", level, exp);
+		format(str, sizeof str, "Lv.%d", level);
+		PlayerTextDrawSetString(playerid, HUD_Level[playerid], str);
 
-		if(IsPlayerTextDrawVisible(playerid, HUD_WatchTime[playerid])) {
-			static hour, minute, second;
-			gettime(hour, minute, second);
-			#pragma unused second
-			format(str, sizeof str, "%02d:%02d", hour, minute);
-			PlayerTextDrawSetString(playerid, HUD_WatchTime[playerid], str);
-		}
+		static hour, minute, second;
+		gettime(hour, minute, second);
+		#pragma unused second
+		format(str, sizeof str, "%02d:%02d", hour, minute);
+		PlayerTextDrawSetString(playerid, HUD_WatchTime[playerid], str);
 	}
 	return 1;
 }
@@ -384,4 +306,30 @@ ShowPlayerHUD(playerid) {
 	PlayerTextDrawShow(playerid, HUD_VehSpeed[playerid]);
 	PlayerTextDrawShow(playerid, AnnounceMessage[playerid]);
 	*/
+}
+
+static ChangePlayerStatusBar(playerid, PlayerText:playertd, Float:var, Float:max_var) {
+	static Float:max_var_5p;
+	max_var_5p = max_var/20;
+	if(var <= 0) 									PlayerTextDrawSetString(playerid, playertd, "");
+	if(1 <= var <= max_var_5p*1) 					PlayerTextDrawSetString(playerid, playertd, "l");
+	if(max_var_5p+1 <= var <= max_var_5p*2) 		PlayerTextDrawSetString(playerid, playertd, "ll");
+	if((max_var_5p*2)+1 <= var <= max_var_5p*3) 	PlayerTextDrawSetString(playerid, playertd, "lll");
+	if((max_var_5p*3)+1 <= var <= max_var_5p*4) 	PlayerTextDrawSetString(playerid, playertd, "llll");
+	if((max_var_5p*4)+1 <= var <= max_var_5p*5) 	PlayerTextDrawSetString(playerid, playertd, "lllll");
+	if((max_var_5p*5)+1 <= var <= max_var_5p*6) 	PlayerTextDrawSetString(playerid, playertd, "llllll");
+	if((max_var_5p*6)+1 <= var <= max_var_5p*7) 	PlayerTextDrawSetString(playerid, playertd, "lllllll");
+	if((max_var_5p*7)+1 <= var <= max_var_5p*8) 	PlayerTextDrawSetString(playerid, playertd, "llllllll");
+	if((max_var_5p*8)+1 <= var <= max_var_5p*9) 	PlayerTextDrawSetString(playerid, playertd, "lllllllll");
+	if((max_var_5p*9)+1 <= var <= max_var_5p*10) 	PlayerTextDrawSetString(playerid, playertd, "llllllllll");
+	if((max_var_5p*10)+1 <= var <= max_var_5p*11) 	PlayerTextDrawSetString(playerid, playertd, "lllllllllll");
+	if((max_var_5p*11)+1 <= var <= max_var_5p*12) 	PlayerTextDrawSetString(playerid, playertd, "llllllllllll");
+	if((max_var_5p*12)+1 <= var <= max_var_5p*13) 	PlayerTextDrawSetString(playerid, playertd, "lllllllllllll");
+	if((max_var_5p*13)+1 <= var <= max_var_5p*14) 	PlayerTextDrawSetString(playerid, playertd, "llllllllllllll");
+	if((max_var_5p*14)+1 <= var <= max_var_5p*15) 	PlayerTextDrawSetString(playerid, playertd, "lllllllllllllll");
+	if((max_var_5p*15)+1 <= var <= max_var_5p*16) 	PlayerTextDrawSetString(playerid, playertd, "llllllllllllllll");
+	if((max_var_5p*16)+1 <= var <= max_var_5p*17) 	PlayerTextDrawSetString(playerid, playertd, "lllllllllllllllll");
+	if((max_var_5p*17)+1 <= var <= max_var_5p*18) 	PlayerTextDrawSetString(playerid, playertd, "llllllllllllllllll");
+	if((max_var_5p*18)+1 <= var <= max_var_5p*19) 	PlayerTextDrawSetString(playerid, playertd, "lllllllllllllllllll");
+	if((max_var_5p*19)+1 <= var <= max_var_5p*20) 	PlayerTextDrawSetString(playerid, playertd, "llllllllllllllllllll");
 }

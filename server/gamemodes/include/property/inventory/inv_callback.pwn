@@ -9,26 +9,26 @@ Cmd:inventory(playerid) {
 	for(new i = 0; i < MAX_INV_ITEMS; i++) {
         if(InventoryData[playerid][i][ItemID]) {
             static weapondata[13][2];
-            static itemname[64], itemid, amount, durable, isequip, magtype, magammo;
+            static itemname[64], itemid, amount, Float:durable, isequip, magtype, magammo;
             itemid = InventoryData[playerid][i][ItemID];
             amount = InventoryData[playerid][i][Amount];
-            durable = floatround(InventoryData[playerid][i][Durable]);
+            durable = InventoryData[playerid][i][Durable];
             isequip = InventoryData[playerid][i][IsEquipped];
             magtype = InventoryData[playerid][i][MagType];
             magammo = InventoryData[playerid][i][MagAmmo];
             format(itemname, sizeof itemname, "%s", InvItemName[itemid]);
             for(new u = 0; u < 13; u++) { GetPlayerWeaponData(playerid, u, weapondata[u][0], weapondata[u][1]); }
             if(amount > 1) {
-                if(IsMagazineItem(itemid)) AddDialogListitem(playerid, " %s (x%d)\t%d pt\t%d", itemname, amount, durable, magammo);
-                else AddDialogListitem(playerid, " %s (x%d)\t%d pt\t", itemname, amount, durable);
+                if(IsMagazineItem(itemid)) AddDialogListitem(playerid, " %s (x%d)\t%.2f\t%d", itemname, amount, durable, magammo);
+                else AddDialogListitem(playerid, " %s (x%d)\t%.2f\t", itemname, amount, durable);
             }
             else {
                 if(IsWeaponItem(itemid)) {
-                    if(!isequip) AddDialogListitem(playerid, " %s\t%d pt\t%d (%s)", itemname, durable, magammo, InvItemName[magtype]);
-                    else AddDialogListitem(playerid, " %s "COL_YELLOW"(DANG TRANG BI)\t%d pt\t%d (%s)", itemname, durable, weapondata[GetWeaponSlot(itemid)][1], InvItemName[magtype]);
+                    if(!isequip) AddDialogListitem(playerid, " %s\t%.2f\t%d (%s)", itemname, durable, magammo, InvItemName[magtype]);
+                    else AddDialogListitem(playerid, " %s "COL_YELLOW"(DANG TRANG BI)\t%.2f\t%d (%s)", itemname, durable, weapondata[GetWeaponSlot(itemid)][1], InvItemName[magtype]);
                 }
-                if(IsMagazineItem(itemid)) AddDialogListitem(playerid, " %s\t%d pt\t%d", itemname, durable, magammo);
-                if(!IsWeaponItem(itemid) && !IsMagazineItem(itemid)) AddDialogListitem(playerid, " %s\t%d\t", itemname, durable);
+                else if(IsMagazineItem(itemid)) AddDialogListitem(playerid, " %s\t%.2f\t%d", itemname, durable, magammo);
+                else AddDialogListitem(playerid, " %s\t%.2f\t", itemname, durable);
             }
         }
 	}
@@ -62,7 +62,9 @@ Dialog:InventoryInteract(playerid, response, listitem, inputtext[]) {
             format(str, sizeof str, ""COL_AQUA"TUI DO > %s > Su dung (SL: %d)", InvItemName[InventoryData[playerid][sel][ItemID]], InventoryData[playerid][sel][Amount]);
             if(InventoryData[playerid][sel][Amount] > 1) {
                 if(IsMagazineItem(InventoryData[playerid][sel][ItemID])) OnPlayerUseItem(playerid, sel, 1);
+                else if(IsFoodDrinkItem(InventoryData[playerid][sel][ItemID])) OnPlayerUseItem(playerid, sel, 1);
                 else Dialog_Show(playerid, InventoryUseAmount, DS_INPUT, str, "\\cNhap so luong ma ban muon su dung:", "Su dung", "Quay lai");
+
             }
             else OnPlayerUseItem(playerid, sel, 1);
         }

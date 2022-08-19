@@ -391,7 +391,7 @@ Dialog:Login_Pass2(playerid, response, listitem, inputtext[]) {
 		}
 	}
 }
-
+/*
 Dialog:Register_Pass(playerid, response, listitem, inputtext[]) {
 	if(response) {
 		if(strlen(inputtext) < 6 || strlen(inputtext) > 32 || isnull(inputtext)) {
@@ -416,6 +416,7 @@ Dialog:Register_Email(playerid, response, listitem, inputtext[]) {
 	}
 	else ShowRegisterDialog(playerid);
 }
+*/
 
 Dialog:Char_Selection(playerid, response, listitem, inputtext[]) {
 	if(!response) return KickPlayer(playerid, 500);
@@ -462,10 +463,17 @@ Dialog:Char_Create(playerid, response, listitem, inputtext[])  {
 	else {
 		switch(listitem) {
 			case 0: Dialog_Show(playerid, cCreate_Name, DS_INPUT, ""COL_AQUA"TEN NHAN VAT", "\\c"COL_WHITE"Nhap ten cho nhan vat cua ban. "COL_GREEN"Vi du: Ho_Ten.", "Xong", "Quay lai");
-			case 1: Dialog_Show(playerid, cCreate_Gender, DS_LIST, ""COL_AQUA"CHON GIOI TINH", "Nam\nNu\nKhac", "Chon", "Quay lai");
+			case 1: Dialog_Show(playerid, cCreate_Gender, DS_LIST, ""COL_AQUA"CHON GIOI TINH", "Nam\nNu", "Chon", "Quay lai");
 			case 2: ShowBMonthDialog(playerid);
 			case 3: Dialog_Show(playerid, cCreate_Nation, DS_LIST, ""COL_AQUA"CHON QUOC GIA", "Los Santos\nSan Fierro\nLas Venturas\nCountryside (Nong thon)", "Chon", "Quay lai");
-			case 4: Dialog_Show(playerid, cCreate_Skin, DS_LIST, ""COL_AQUA"CHON TRANG PHUC", "Trang phuc nam\nTrang phuc nu", "Chon", "Quay lai");
+			case 4: //Dialog_Show(playerid, cCreate_Skin, DS_LIST, ""COL_AQUA"CHON TRANG PHUC", "Trang phuc nam\nTrang phuc nu", "Chon", "Quay lai");
+			{
+				switch(CreateCharData[playerid][Gender]) {
+					case 0: return ErrorMsg(playerid, "Ban chua chon gioi tinh cho nhan vat cua ban."), ShowCharCreateDialog(playerid);
+					case 1: ShowModelSelectionMenu(playerid, MaleSkinList, "Trang phuc nam");
+					case 2: ShowModelSelectionMenu(playerid, FemaleSkinList, "Trang phuc nu");
+				}
+			}
 			case 5:	Dialog_Show(playerid, cCreate_Desc, DS_INPUT, ""COL_AQUA"MO TA NHAN VAT", "\\c"COL_WHITE"Nhap mo ta ve nhan vat cua ban (co the bo qua):", "Xong", "Quay lai");
 			case 6: {
 				static str[64];
@@ -538,6 +546,7 @@ Dialog:cCreate_Nation(playerid, response, listitem, inputtext[]) {
 	}
 }
 
+/*
 Dialog:cCreate_Skin(playerid, response, listitem, inputtext[]) {
 	if(!response) ShowCharCreateDialog(playerid);
 	else {
@@ -547,6 +556,7 @@ Dialog:cCreate_Skin(playerid, response, listitem, inputtext[]) {
 		}
 	}
 }
+*/
 
 Dialog:cCreate_Confirm(playerid, response, listitem, inputtext[]) {
 	if(!response) ShowCharCreateDialog(playerid);

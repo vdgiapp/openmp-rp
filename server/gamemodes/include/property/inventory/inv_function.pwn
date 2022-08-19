@@ -94,6 +94,7 @@ SortPlayerInventory(playerid) {
     for(new i = 0; i < MAX_INV_ITEMS; i++) {
         for(new u = i+1; u < MAX_INV_ITEMS; u++) {
             if(InventoryData[playerid][i][ItemID]) {
+				if(InventoryData[playerid][i][ItemID] != InventoryData[playerid][u][ItemID]) continue;
                 if(InventoryData[playerid][i][Durable] != InventoryData[playerid][u][Durable]) continue;
                 if(IsWeaponItem(InventoryData[playerid][i][ItemID]) || IsWeaponItem(InventoryData[playerid][u][ItemID])) continue;
 				//if(IsMagazineItem(InventoryData[playerid][i][ItemID]) || IsMagazineItem(InventoryData[playerid][u][ItemID])) continue;
@@ -149,6 +150,20 @@ IsFoodItem(itemid) {
 	}
 }
 
+IsDrinkItem(itemid) {
+	switch(itemid) {
+		case 86..95: return true;
+		default: return false;
+	}
+}
+
+IsFoodDrinkItem(itemid) {
+	switch(itemid) {
+		case 76..95: return true;
+		default: return false;
+	}
+}
+
 GetRecoverFromItem(itemid, &Float:hunger, &Float:thirst) {
 	hunger = 0;
 	thirst = 0;
@@ -174,13 +189,6 @@ GetRecoverFromItem(itemid, &Float:hunger, &Float:thirst) {
 		case 94: hunger = -1, thirst = 3;
 		case 95: hunger = -2, thirst = 4;
 		default: return 0;
-	}
-}
-
-IsDrinkItem(itemid) {
-	switch(itemid) {
-		case 86..95: return true;
-		default: return false;
 	}
 }
 
@@ -231,6 +239,7 @@ OnPlayerUseItem(playerid, sel, amount) {
 					InventoryData[playerid][sel][IsEquipped] = 0;
 					InventoryData[playerid][sel][MagAmmo] = weapondata[u][1];
 					RemovePlayerWeapon(playerid, itemid);
+					SetPlayerAmmo(playerid, itemid, 0);
 				}
 			}
 			return 1;
@@ -238,10 +247,11 @@ OnPlayerUseItem(playerid, sel, amount) {
 		else {
 			for(new i = 0; i < MAX_INV_ITEMS; i++) {
 				for(new u = 0; u < 13; u++) {
+					// error
 					GetPlayerWeaponData(playerid, u, weapondata[u][0], weapondata[u][1]);
 					if(GetWeaponSlot(InventoryData[playerid][i][ItemID]) == GetWeaponSlot(itemid) && GetWeaponSlot(itemid) == u
 					&& GetWeaponSlot(InventoryData[playerid][i][ItemID]) == u) {
-						if(InventoryData[playerid][i][IsEquipped]) return ErrorMsg(playerid, "Hay go trang bi cua vu khi %s truoc.", InvItemName[InventoryData[playerid][i][ItemID]]);
+						if(InventoryData[playerid][i][IsEquipped] && InventoryData[playerid][i][ItemID] == itemid) return ErrorMsg(playerid, "Hay go trang bi cua vu khi %s truoc.", InvItemName[InventoryData[playerid][i][ItemID]]);
 						if(weapondata[u][0] == itemid) return ErrorMsg(playerid, "Hay go trang bi cua vu khi %s truoc.", InvItemName[InventoryData[playerid][i][ItemID]]);
 						/*
 						InventoryData[playerid][i][IsEquipped] = 0;
@@ -313,11 +323,28 @@ OnPlayerUseItem(playerid, sel, amount) {
 		}
 	}
 
-	if(IsFoodItem(itemid)) {
-
+	if(IsFoodDrinkItem(itemid)) {
+		InventoryData[playerid][sel][Amount]--;
+		if(IsFoodItem(itemid)) {
+			switch(random(2)) {
+				case 0: ApplyAnimation(playerid, "FOOD", "EAT_Burger", 4.1, 0, 0, 0, 0, 0, 1);
+			    case 1: ApplyAnimation(playerid, "FOOD", "EAT_Chicken", 4.1, 0, 0, 0, 0, 0, 1);
+			    case 2: ApplyAnimation(playerid, "FOOD", "EAT_Pizza", 4.1, 0, 0, 0, 0, 0, 1);
+			}
+		}
+		if(IsDrinkItem(itemid)) {
+			switch(CharacterData[playerid][Gender]) {
+				case 1: ApplyAnimation(playerid, "Bar", "dnk_stndM_loop", 4.1, 0, 0, 0, 0, 0, 1);
+				case 2: ApplyAnimation(playerid, "Bar", "dnk_stndF_loop", 4.1, 0, 0, 0, 0, 0, 1);
+			}
+		}
+		static Float:hunger, Float:thirst;
+		GetRecoverFromItem(itemid, hunger, thirst);
+		CharacterData[playerid][Hunger] += hunger;
+		CharacterData[playerid][Thirst] += thirst;
+		if(CharacterData[playerid][Hunger] >= MAX_PLAYER_HUNGER) CharacterData[playerid][Hunger] = MAX_PLAYER_HUNGER;
+		if(CharacterData[playerid][Thirst] >= MAX_PLAYER_THIRST) CharacterData[playerid][Thirst] = MAX_PLAYER_THIRST;
 	}
-
-
 
     return 1;
 }

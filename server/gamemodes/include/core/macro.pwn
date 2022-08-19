@@ -83,6 +83,9 @@ new MySQL:Database;
 #define dbase_mysql 			"sa-mp"
 
 #define NAMETAG_DISTANCE		(20)
+#define MAX_PLAYER_HUNGER 		(100.0)
+#define MAX_PLAYER_THIRST 		(100.0)
+#define MAX_PLAYER_STAMINA 		(100.0)
 
 // +-+-+-+-+- LOG FILES +-+-+-+-+-
 #define AUTH_LOG_FILE 			"logs/auth.log"

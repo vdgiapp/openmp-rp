@@ -144,7 +144,7 @@ CheckPlayerNameToLogin(playerid) {
 
 function OnCheckPNameToLog(playerid) {
 	if(cache_num_rows()) return ShowLoginDialog(playerid);
-	else return ShowRegisterDialog(playerid);
+	else return ErrorMsg(playerid, "Tai khoan nay khong ton tai. Neu ban muon tao tai khoan, hay truy cap vao website "SERVER_WEBSITE" de dang ky.");/* ShowRegisterDialog(playerid); */
 }
 
 ShowLoginDialog(playerid) {
@@ -153,6 +153,7 @@ ShowLoginDialog(playerid) {
 	Dialog_Show(playerid, Login_Pass, DS_PASS, ""COL_AQUA""SERVER_NAME"", str, "Xong", "Dong");
 }
 
+/*
 ShowRegisterDialog(playerid) {
 	static str[256];
 	format(str, sizeof str, "\\c"COL_WHITE"Chao mung ban da den may chu, "COL_GREEN"%s\n\\c"COL_WHITE"Hay nhap mat khau cua ban de dang ky tai khoan moi!", AuthData[playerid][Account]);
@@ -162,13 +163,13 @@ ShowRegisterDialog(playerid) {
 ShowEmailDialog(playerid) {
 	Dialog_Show(playerid, Register_Email, DS_INPUT, ""COL_AQUA""SERVER_NAME"", "\\c"COL_WHITE"Hay nhap email cua ban de hoan thanh qua trinh dang ky tai khoan!", "Xong", "Quay lai");
 }
+*/
 
 ShowCharCreateDialog(playerid) {
 	static gender[16];
 	switch(CreateCharData[playerid][Gender])  {
 		case 1: format(gender, sizeof gender, "Nam");
 		case 2: format(gender, sizeof gender, "Nu");
-		case 3: format(gender, sizeof gender, "Khac");
 	}
 
 	static nation[16];
@@ -187,7 +188,7 @@ ShowCharCreateDialog(playerid) {
         Trang phuc\t%d\n\
         Mo ta nhan vat\n\
         "COL_GREEN"Hoan thanh",
-        CreateCharData[playerid][Name], gender,
+        GetRoleplayName(CreateCharData[playerid][Name]), gender,
         CreateCharData[playerid][Birthday],
         nation, CreateCharData[playerid][SkinID]);
 	return Dialog_Show(playerid, Char_Create, DS_TABLIST, ""COL_AQUA"TAO NHAN VAT", str, "Chon", "Thoat");
@@ -282,6 +283,7 @@ LoginSuccess(playerid) {
 	FadePlayerScreen(playerid, tempLoadCharacters, 0x000000FF, 1000, 25);
 }
 
+/*
 CheckToRegister(playerid) {
 	static str[1024];
 	mysql_format(Database, str, sizeof str, "SELECT * FROM `accounts` WHERE `Email` = '%s'", AuthData[playerid][Email]);
@@ -338,6 +340,7 @@ function OnCheckAccountToReg(playerid) {
 		FadePlayerScreen(playerid, tempLoadCharacters, 0x000000FF, 1000, 25);
 	}
 }
+*/
 
 CreateCharacterForPlayer(playerid, name[], slot) {
 	static str[2048];
@@ -360,13 +363,14 @@ CreateCharacterForPlayer(playerid, name[], slot) {
     	`FightStyle`, `WalkStyle`, `Position`) \
     	VALUES ('%d', '%s', '%s', '%s', '%s', '%s', '1 0', \
     	'%d', '%02d %02d %04d', '%d', '%d', '1000', '10', '0 0 0 0 0 0', \
-    	'0 000000 0', '0 0', '0 0 0 0', '100', '100', '100', \
+    	'0 000000 0', '0 0', '0 0 0 0', '%f', '%f', '%f', \
     	'100', '0', '4', '%d', '1743 -1862 13.6 0 0 0')",
     	slot, AuthData[playerid][Account], crtdate, lastpl,
     	CreateCharData[playerid][Name], CreateCharData[playerid][Description],
     	CreateCharData[playerid][Gender], CreateCharData[playerid][BDay],
     	CreateCharData[playerid][BMonth], CreateCharData[playerid][BYear],
     	CreateCharData[playerid][Nation], CreateCharData[playerid][SkinID],
+		MAX_PLAYER_HUNGER, MAX_PLAYER_THIRST, MAX_PLAYER_STAMINA,
     	E_WALKING_STYLE_DEFAULT);
     mysql_tquery(Database, str);
 
