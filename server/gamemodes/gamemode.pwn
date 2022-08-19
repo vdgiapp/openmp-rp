@@ -11,7 +11,7 @@
 
 #define MEMORYSQUEEZE
 #define PP_SYNTAX_AWAIT // ASYNC AWAIT
-#define YSI_NO_HEAP_MALLOC // HEAP MEMORY ALLOCATION
+#define YSI_YES_HEAP_MALLOC // HEAP MEMORY ALLOCATION
 #define CGEN_MEMORY	(150000)
 
 #define SERVER_NAME "GTA Playground Vietnam"
@@ -90,7 +90,6 @@
 main() {
 	printf("%s da khoi dong thanh cong", SERVER_NAME);
 	printf("Phien ban: %s", SERVER_VERSION);
-	SetTimeZone(7);
 }
 
 #include "include\core\timer.pwn"

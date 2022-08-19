@@ -116,7 +116,31 @@ SortPlayerInventory(playerid) {
             }
         }
 		if(InventoryData[playerid][i][Amount] <= 0) InventoryData[playerid][i][ItemID] = 0, InventoryData[playerid][i][Amount] = 0;
-		if(InventoryData[playerid][i][MagAmmo] <= 0) InventoryData[playerid][i][MagAmmo] = 0, InventoryData[playerid][i][MagType] = 0;
+		if(IsWeaponItem(InventoryData[playerid][i][ItemID])) {
+			if(!InventoryData[playerid][i][IsEquipped] && (InventoryData[playerid][i][MagAmmo] <= 0 || InventoryData[playerid][i][MagType] <= 0)) InventoryData[playerid][i][MagAmmo] = 0, InventoryData[playerid][i][MagType] = 0;
+			if(InventoryData[playerid][i][IsEquipped]) {
+				static weapondata[13][2];
+				for(new u = 0; u < 13; u++) {
+					GetPlayerWeaponData(playerid, u, weapondata[u][0], weapondata[u][1]);
+					if(GetWeaponSlot(InventoryData[playerid][i][ItemID]) == u) {
+						if(weapondata[u][0] <= 0 || weapondata[u][1] <= 0) {
+							 InventoryData[playerid][i][MagAmmo] = 0;
+							 InventoryData[playerid][i][MagType] = 0;
+						}
+					}
+				}
+			}
+		}
+		if(IsMagazineItem(InventoryData[playerid][i][ItemID])) {
+			if(InventoryData[playerid][i][MagAmmo] <= 0) {
+				InventoryData[playerid][i][ItemID] = 0;
+                InventoryData[playerid][i][Amount] = 0;
+                InventoryData[playerid][i][Durable] = 0;
+				InventoryData[playerid][i][IsEquipped] = 0;
+				InventoryData[playerid][i][MagType] = 0;
+                InventoryData[playerid][i][MagAmmo] = 0;
+			}
+		}
     }
 }
 
@@ -193,16 +217,16 @@ GetRecoverFromItem(itemid, &Float:hunger, &Float:thirst) {
 }
 
 IsWeaponUseMag(wid, magid) {
-	if((22 <= wid <= 23) && (47 <= magid <= 48)) return true;
-	if((wid == 24) && (49 <= magid <= 52)) return true;
-	if((25 <= wid <= 27) && (53 <= magid <= 55)) return true;
-	if((wid == 28) && (56 <= magid <= 59)) return true;
-	if((wid == 29) && (60 <= magid <= 63)) return true;
-	if((wid == 30) && (64 <= magid <= 65)) return true;
+	if((22 <= wid <= 23) && (47 <= magid <= 48 || magid == 0)) return true;
+	if((wid == 24) && (49 <= magid <= 52 || magid == 0)) return true;
+	if((25 <= wid <= 27) && (53 <= magid <= 55 || magid == 0)) return true;
+	if((wid == 28) && (56 <= magid <= 59 || magid == 0)) return true;
+	if((wid == 29) && (60 <= magid <= 63 || magid == 0)) return true;
+	if((wid == 30) && (64 <= magid <= 65 || magid == 0)) return true;
 	if((wid == 31) && (magid == 66)) return true;
-	if((wid == 32) && (67 <= magid <= 68)) return true;
-	if((wid == 33) && (69 <= magid <= 70)) return true;
-	if((wid == 34) && (71 <= magid <= 72)) return true;
+	if((wid == 32) && (67 <= magid <= 68 || magid == 0)) return true;
+	if((wid == 33) && (69 <= magid <= 70 || magid == 0)) return true;
+	if((wid == 34) && (71 <= magid <= 72 || magid == 0)) return true;
 	return false;
 }
 
@@ -221,6 +245,8 @@ GetMagazineSize(itemid) {
         default: return 0;
     }
 }
+
+IsEatingOrDrinking(playerid) { return (536 <= GetPlayerAnimationIndex(playerid) <= 538 || 15 <= GetPlayerAnimationIndex(playerid) <= 16); }
 
 IsPlayerHaveGPS(playerid) { return IsPlayerHaveItem(playerid, 20); }
 IsPlayerHaveWatch(playerid) { return IsPlayerHaveItem(playerid, 21); }
@@ -250,14 +276,13 @@ OnPlayerUseItem(playerid, sel, amount) {
 					// error
 					GetPlayerWeaponData(playerid, u, weapondata[u][0], weapondata[u][1]);
 					if(GetWeaponSlot(InventoryData[playerid][i][ItemID]) == GetWeaponSlot(itemid) && GetWeaponSlot(itemid) == u
-					&& GetWeaponSlot(InventoryData[playerid][i][ItemID]) == u) {
-						if(InventoryData[playerid][i][IsEquipped] && InventoryData[playerid][i][ItemID] == itemid) return ErrorMsg(playerid, "Hay go trang bi cua vu khi %s truoc.", InvItemName[InventoryData[playerid][i][ItemID]]);
-						if(weapondata[u][0] == itemid) return ErrorMsg(playerid, "Hay go trang bi cua vu khi %s truoc.", InvItemName[InventoryData[playerid][i][ItemID]]);
-						/*
+					&& GetWeaponSlot(InventoryData[playerid][i][ItemID]) == u && InventoryData[playerid][i][IsEquipped]) {
+						if(weapondata[u][0] || InventoryData[playerid][i][ItemID] == itemid) return ErrorMsg(playerid, "Hay go trang bi cua vu khi %s truoc.", InvItemName[InventoryData[playerid][i][ItemID]]);
+
 						InventoryData[playerid][i][IsEquipped] = 0;
 						InventoryData[playerid][i][MagAmmo] = weapondata[u][1];
 						RemovePlayerWeapon(playerid, InventoryData[playerid][i][ItemID]);
-						*/
+
 						InventoryData[playerid][sel][IsEquipped] = 1;
 						GivePlayerWeapon(playerid, itemid, InventoryData[playerid][sel][MagAmmo]);
 						SetPlayerAmmo(playerid, itemid, InventoryData[playerid][sel][MagAmmo]);
@@ -275,23 +300,26 @@ OnPlayerUseItem(playerid, sel, amount) {
     if(IsMagazineItem(itemid)) {
 		if(!InventoryData[playerid][sel][MagAmmo]) return ErrorMsg(playerid, "So dan trong bang dan %s da het.", InvItemName[itemid]);
 		for(new i = 0; i < MAX_INV_ITEMS; i++) {
-			if((itemid == InventoryData[playerid][i][MagType]
+			if((InventoryData[playerid][i][MagType] == itemid
 			|| InventoryData[playerid][i][MagType] == 0)
-			&& InventoryData[playerid][i][IsEquipped] && IsWeaponItem(InventoryData[playerid][i][ItemID])) {
+			&& InventoryData[playerid][i][IsEquipped]
+			&& IsWeaponItem(InventoryData[playerid][i][ItemID])) {
 				for(new u = 0; u < 13; u++) {
 					GetPlayerWeaponData(playerid, u, weapondata[u][0], weapondata[u][1]);
 					if(IsWeaponUseMag(InventoryData[playerid][i][ItemID], InventoryData[playerid][i][MagType]) && GetWeaponSlot(InventoryData[playerid][i][ItemID]) == u) {
 						if(weapondata[u][1] + InventoryData[playerid][sel][MagAmmo] <= GetMagazineSize(itemid)) {
 							// work
-							if(InventoryData[playerid][sel][Amount] != 1) {
+							if(InventoryData[playerid][sel][Amount] > 1) {
 								GivePlayerWeapon(playerid, InventoryData[playerid][i][ItemID], weapondata[u][1] + InventoryData[playerid][sel][MagAmmo]);
 								SetPlayerAmmo(playerid, InventoryData[playerid][i][ItemID], weapondata[u][1] + InventoryData[playerid][sel][MagAmmo]);
+								InventoryData[playerid][i][MagType] = itemid;
 								InventoryData[playerid][sel][Amount]--;
 								return 1;
 							}
 							else {
 								GivePlayerWeapon(playerid, InventoryData[playerid][i][ItemID], weapondata[u][1] + InventoryData[playerid][sel][MagAmmo]);
 								SetPlayerAmmo(playerid, InventoryData[playerid][i][ItemID], weapondata[u][1] + InventoryData[playerid][sel][MagAmmo]);
+								InventoryData[playerid][i][MagType] = itemid;
 								InventoryData[playerid][sel][MagAmmo] = 0;
 								return 1;
 							}
@@ -299,11 +327,12 @@ OnPlayerUseItem(playerid, sel, amount) {
 						else {
 							if(weapondata[u][1] >= GetMagazineSize(itemid)) return ErrorMsg(playerid, "Bang dan cua khau sung %s da day (%d vien)", InvItemName[InventoryData[playerid][i][ItemID]], GetMagazineSize(itemid));
 				            else {
-								if(InventoryData[playerid][sel][Amount] != 1) {
+								if(InventoryData[playerid][sel][Amount] > 1) {
 									// work
 									GivePlayerWeapon(playerid, InventoryData[playerid][i][ItemID], GetMagazineSize(itemid));
 									SetPlayerAmmo(playerid, InventoryData[playerid][i][ItemID], GetMagazineSize(itemid));
 									InventoryData[playerid][sel][Amount]--;
+									InventoryData[playerid][i][MagType] = itemid;
 									GivePlayerItem(playerid, itemid, 1, 100, 0, InventoryData[playerid][sel][MagAmmo]-(GetMagazineSize(itemid)-weapondata[u][1]));
 									return 1;
 								}
@@ -311,6 +340,7 @@ OnPlayerUseItem(playerid, sel, amount) {
 									// work
 				                	GivePlayerWeapon(playerid, InventoryData[playerid][i][ItemID], GetMagazineSize(itemid));
 									SetPlayerAmmo(playerid, InventoryData[playerid][i][ItemID], GetMagazineSize(itemid));
+									InventoryData[playerid][i][MagType] = itemid;
 				                	InventoryData[playerid][sel][MagAmmo] -= (GetMagazineSize(itemid)-weapondata[u][1]);
 									if(InventoryData[playerid][sel][MagAmmo] <= 0) InventoryData[playerid][sel][MagType] = 0, InventoryData[playerid][sel][MagAmmo] = 0;
 									return 1;
@@ -324,6 +354,7 @@ OnPlayerUseItem(playerid, sel, amount) {
 	}
 
 	if(IsFoodDrinkItem(itemid)) {
+		if(IsEatingOrDrinking(playerid)) return ErrorMsg(playerid, "Vui long doi mot luc truoc thuc hien lai hanh dong nay.");
 		InventoryData[playerid][sel][Amount]--;
 		if(IsFoodItem(itemid)) {
 			switch(random(2)) {
@@ -350,7 +381,7 @@ OnPlayerUseItem(playerid, sel, amount) {
 }
 
 OnPlayerViewItemInfo(playerid, sel) {
-
+	
 }
 
 OnPlayerGiveItem(playerid, sel, targetid) {

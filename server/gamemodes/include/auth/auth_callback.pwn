@@ -281,6 +281,7 @@ hook OnPlayerConnect(playerid) {
 
 	static str[256];
 
+	SetPlayerArmedWeapon(playerid, 0);
 	ResetPlayerVars(playerid);
 	GetPlayerName(playerid, AuthData[playerid][Account], MAX_PLAYER_NAME+1);
 	SetRandomName(playerid, "Unknown_", 100000, 999999);
@@ -288,6 +289,11 @@ hook OnPlayerConnect(playerid) {
 	// Check if player is a newbie or old member
 	mysql_format(Database, str, sizeof str, "SELECT * FROM `accounts` WHERE `Account`='%s'", AuthData[playerid][Account]);
 	mysql_tquery(Database, str, "OnCheckingPlayerAccount", "i", playerid);
+
+	// Preload animation
+	for(new i = 0; i < sizeof(g_aPreloadLibs); i++) {
+	    ApplyAnimation(playerid, g_aPreloadLibs[i], "null", 4.0, 0, 0, 0, 0, 0, 1);
+	}
 	return 1;
 }
 
