@@ -32,8 +32,8 @@ new stock InvItemName[][] = {
 
     "Flower",
     "Cane", //                              15
-    "Grenade",
-    "Smoke Grenade",
+    "Luu dan",
+    "Luu dan khoi",
     "Motolov Cocktail",
 
     "Bo dam",
@@ -43,7 +43,7 @@ new stock InvItemName[][] = {
     "Colt M1911",
     "Colt M1911 Silenced",
     "Desert Eagle",
-    "Ithaca 37", //                  25
+    "Ithaca 37", //                         25
     "Sawnoff Shotgun",
     "Franchi SPAS-12",
     "Micro Uzi",
@@ -54,7 +54,7 @@ new stock InvItemName[][] = {
     "Marlin Model 336", // (Country rifle)
     "Remington Model 700", // (Sniper rifle)
 
-    "Stun Grenade", //                      35
+    "Luu dan choang", //                    35
     "9mm Suppressor",
     "Normal Backpack",
     "Hunter Backpack",

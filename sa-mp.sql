@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th8 13, 2022 lúc 09:04 PM
+-- Thời gian đã tạo: Th8 19, 2022 lúc 10:45 PM
 -- Phiên bản máy phục vụ: 10.4.24-MariaDB
 -- Phiên bản PHP: 8.1.6
 
@@ -50,8 +50,8 @@ CREATE TABLE `accounts` (
 --
 
 INSERT INTO `accounts` (`UID`, `Account`, `DisplayName`, `Online`, `Confirm`, `Token`, `Email`, `Password`, `Password2`, `EnablePass2`, `BanData`, `Birthday`, `BanReason`, `LastTimeLogged`, `DateCreated`) VALUES
-(1, 'vdgiapp', 'Giapp', 0, 1, 'HOMMc9bwTXaTcmUqFsFNM7EwPEfoNsNk', 'vdgiapp@gmail.com', '47a098bec5df36d2ace0aacbb6ba9a83907298619913393cd19f489e200046a6', '66595af2140492d5d19a980352dd16d491e62067a8fac4d1b3d8c84617c70be0', 0, '0 0 0 0 none 0 0 0', '09 11 2004', '', '02 02 17 14 08 2022', ' 01 01 2022'),
-(6, 'redshank', 'Tóc đỏ', 0, 0, 'hc1hlcNYSfJGD683u2YKifyH40YtnQqI', 'redshankseries@gmail.com', '47a098bec5df36d2ace0aacbb6ba9a83907298619913393cd19f489e200046a6', '', 0, '', '', '', '01 28 13 14 08 2022', '14 08 2022');
+(1, 'vdgiapp', 'Giapp', 0, 1, 'HAt3YA9UVtP3h72uWZSiV2i5EJTCxUAr', 'vdgiapp@gmail.com', '47a098bec5df36d2ace0aacbb6ba9a83907298619913393cd19f489e200046a6', '66595af2140492d5d19a980352dd16d491e62067a8fac4d1b3d8c84617c70be0', 0, '0 0 0 0 none 0 0 0', '09 11 2004', '', '03 41 20 20 08 2022', ' 01 01 2022'),
+(6, 'redshank', 'Tóc đỏ', 0, 0, 'nKF1G9PyKWB1mDCZo4THNoWvmI2gptxL', 'redshankseries@gmail.com', '47a098bec5df36d2ace0aacbb6ba9a83907298619913393cd19f489e200046a6', '', 0, '', '', '', '20 15 05 15 08 2022', '14 08 2022');
 
 -- --------------------------------------------------------
 
@@ -95,9 +95,9 @@ CREATE TABLE `characters` (
   `Warns` int(11) NOT NULL,
   `Wanted` int(11) NOT NULL,
   `Arrested` int(11) NOT NULL,
-  `Hunger` int(11) NOT NULL,
-  `Thirst` int(11) NOT NULL,
-  `Stamina` int(11) NOT NULL,
+  `Hunger` float NOT NULL,
+  `Thirst` float NOT NULL,
+  `Stamina` float NOT NULL,
   `Injured` int(11) NOT NULL,
   `Health` float NOT NULL,
   `Armour` float NOT NULL,
@@ -180,7 +180,7 @@ CREATE TABLE `characters` (
 --
 
 INSERT INTO `characters` (`#`, `Account`, `Slot`, `Name`, `DateCreated`, `LastTimePlayed`, `Birthday`, `Gender`, `Nation`, `Description`, `SkinID`, `Level`, `Respects`, `JobID`, `FightStyle`, `WalkStyle`, `WeaponSkills`, `Playtime`, `Payday`, `RespawnLocation`, `Faction`, `Warns`, `Wanted`, `Arrested`, `Hunger`, `Thirst`, `Stamina`, `Injured`, `Health`, `Armour`, `Position`, `ImprisonData`, `MuteData`, `Cash`, `Coins`, `Bank`, `IDCard`, `LicenseData`, `PhoneData`, `ContactData`, `WalkieTalkieData`, `Settings`, `Item0`, `Item1`, `Item2`, `Item3`, `Item4`, `Item5`, `Item6`, `Item7`, `Item8`, `Item9`, `Item10`, `Item11`, `Item12`, `Item13`, `Item14`, `Item15`, `Item16`, `Item17`, `Item18`, `Item19`, `Item20`, `Item21`, `Item22`, `Item23`, `Item24`, `Item25`, `Item26`, `Item27`, `Item28`, `Item29`, `Item30`, `Item31`, `Item32`, `Item33`, `Item34`, `Item35`, `Item36`, `Item37`, `Item38`, `Item39`, `Item40`, `Item41`, `Item42`, `Item43`, `Item44`, `Item45`, `Item46`, `Item47`, `Item48`, `Item49`, `Item50`, `Item51`, `Item52`, `Item53`, `Item54`, `Item55`, `Item56`, `Item57`, `Item58`, `Item59`) VALUES
-(1, 'vdgiapp', 1, 'Jay_Holt', '21 48 54 02 08 2022', '21 48 54 02 08 2022', '09 11 1995', 1, 1, '', 2, '1 0', 0, 0, 4, 0, '0 0 0 0 0 0 0 0 0 0 0', 0, 0, 0, '', 0, 0, 0, 1000, 1000, 1000, 0, 33, 0, '1406.650269 -1815.512939 14.933951 50.376701 0 0', '0 0 0 0', '0 0', 1000, 10, '', 0, '0 0 0 0 0 0', '0 000000 0', '', '', '', '47 3 100.0 0 7', '22 1 100.0 48 17', '85 10 100.0 0 0', '23 1 100.0 47 7', '48 5 100.0 0 17', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '');
+(1, 'vdgiapp', 1, 'Jay_Holt', '21 48 54 02 08 2022', '21 48 54 02 08 2022', '09 11 1995', 1, 1, '', 2, '1 0', 0, 0, 4, 0, '0 0 0 0 0 0 0 0 0 0 0', 0, 0, 0, '', 0, 0, 0, 100, 100, 1000, 0, 100, 0, '-96.062218 24.174948 6.771533 73.355103 0 0', '0 0 0 0', '0 0', 1000, 10, '', 0, '0 0 0 0 0 0', '0 000000 0', '', '', '', '22 1 100.000000 0 48 17', '23 1 100.000000 0 0 0', '23 1 100.000000 0 47 7', '80 82 100.000000 0 0 0', '93 78 100.000000 0 0 0', '47 92 0.000000 0 0 7', '48 95 0.000000 0 0 17', '47 7 100.000000 0 0 6', '5 1 100.000000 0 48 17', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0');
 
 -- --------------------------------------------------------
 
@@ -224,7 +224,7 @@ CREATE TABLE `serverinfo` (
 --
 
 INSERT INTO `serverinfo` (`#`, `Registered`, `CharCreated`, `Day`, `Logged`) VALUES
-(1, 4, 5, 13, 0);
+(1, 5, 5, 20, 20);
 
 -- --------------------------------------------------------
 
@@ -320,7 +320,7 @@ ALTER TABLE `vehicles`
 -- AUTO_INCREMENT cho bảng `accounts`
 --
 ALTER TABLE `accounts`
-  MODIFY `UID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `UID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT cho bảng `businesses`
