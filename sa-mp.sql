@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th8 19, 2022 lúc 10:45 PM
+-- Thời gian đã tạo: Th8 20, 2022 lúc 09:08 PM
 -- Phiên bản máy phục vụ: 10.4.24-MariaDB
 -- Phiên bản PHP: 8.1.6
 
@@ -50,7 +50,7 @@ CREATE TABLE `accounts` (
 --
 
 INSERT INTO `accounts` (`UID`, `Account`, `DisplayName`, `Online`, `Confirm`, `Token`, `Email`, `Password`, `Password2`, `EnablePass2`, `BanData`, `Birthday`, `BanReason`, `LastTimeLogged`, `DateCreated`) VALUES
-(1, 'vdgiapp', 'Giapp', 0, 1, 'HAt3YA9UVtP3h72uWZSiV2i5EJTCxUAr', 'vdgiapp@gmail.com', '47a098bec5df36d2ace0aacbb6ba9a83907298619913393cd19f489e200046a6', '66595af2140492d5d19a980352dd16d491e62067a8fac4d1b3d8c84617c70be0', 0, '0 0 0 0 none 0 0 0', '09 11 2004', '', '03 41 20 20 08 2022', ' 01 01 2022'),
+(1, 'vdgiapp', 'Giapp', 1, 1, 'HAt3YA9UVtP3h72uWZSiV2i5EJTCxUAr', 'vdgiapp@gmail.com', '47a098bec5df36d2ace0aacbb6ba9a83907298619913393cd19f489e200046a6', '66595af2140492d5d19a980352dd16d491e62067a8fac4d1b3d8c84617c70be0', 0, '0 0 0 0 none 0 0 0', '09 11 2004', '', '23 59 57 20 08 2022', ' 01 01 2022'),
 (6, 'redshank', 'Tóc đỏ', 0, 0, 'nKF1G9PyKWB1mDCZo4THNoWvmI2gptxL', 'redshankseries@gmail.com', '47a098bec5df36d2ace0aacbb6ba9a83907298619913393cd19f489e200046a6', '', 0, '', '', '', '20 15 05 15 08 2022', '14 08 2022');
 
 -- --------------------------------------------------------
@@ -180,7 +180,7 @@ CREATE TABLE `characters` (
 --
 
 INSERT INTO `characters` (`#`, `Account`, `Slot`, `Name`, `DateCreated`, `LastTimePlayed`, `Birthday`, `Gender`, `Nation`, `Description`, `SkinID`, `Level`, `Respects`, `JobID`, `FightStyle`, `WalkStyle`, `WeaponSkills`, `Playtime`, `Payday`, `RespawnLocation`, `Faction`, `Warns`, `Wanted`, `Arrested`, `Hunger`, `Thirst`, `Stamina`, `Injured`, `Health`, `Armour`, `Position`, `ImprisonData`, `MuteData`, `Cash`, `Coins`, `Bank`, `IDCard`, `LicenseData`, `PhoneData`, `ContactData`, `WalkieTalkieData`, `Settings`, `Item0`, `Item1`, `Item2`, `Item3`, `Item4`, `Item5`, `Item6`, `Item7`, `Item8`, `Item9`, `Item10`, `Item11`, `Item12`, `Item13`, `Item14`, `Item15`, `Item16`, `Item17`, `Item18`, `Item19`, `Item20`, `Item21`, `Item22`, `Item23`, `Item24`, `Item25`, `Item26`, `Item27`, `Item28`, `Item29`, `Item30`, `Item31`, `Item32`, `Item33`, `Item34`, `Item35`, `Item36`, `Item37`, `Item38`, `Item39`, `Item40`, `Item41`, `Item42`, `Item43`, `Item44`, `Item45`, `Item46`, `Item47`, `Item48`, `Item49`, `Item50`, `Item51`, `Item52`, `Item53`, `Item54`, `Item55`, `Item56`, `Item57`, `Item58`, `Item59`) VALUES
-(1, 'vdgiapp', 1, 'Jay_Holt', '21 48 54 02 08 2022', '21 48 54 02 08 2022', '09 11 1995', 1, 1, '', 2, '1 0', 0, 0, 4, 0, '0 0 0 0 0 0 0 0 0 0 0', 0, 0, 0, '', 0, 0, 0, 100, 100, 1000, 0, 100, 0, '-96.062218 24.174948 6.771533 73.355103 0 0', '0 0 0 0', '0 0', 1000, 10, '', 0, '0 0 0 0 0 0', '0 000000 0', '', '', '', '22 1 100.000000 0 48 17', '23 1 100.000000 0 0 0', '23 1 100.000000 0 47 7', '80 82 100.000000 0 0 0', '93 78 100.000000 0 0 0', '47 92 0.000000 0 0 7', '48 95 0.000000 0 0 17', '47 7 100.000000 0 0 6', '5 1 100.000000 0 48 17', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0');
+(1, 'vdgiapp', 1, 'Jay_Holt', '21 48 54 02 08 2022', '21 48 54 02 08 2022', '09 11 1995', 1, 1, '', 2, '1 0', 0, 0, 4, 0, '0 0 0 0 0 0 0 0 0 0 0', 0, 0, 0, '', 0, 0, 0, 100, 100, 1000, 0, 100, 0, '1180.617554 -1305.038574 14.278259 356.967712 0 0', '0 0 0 0', '0 0', 1000, 10, '', 0, '0 0 0 0 0 0', '0 000000 0', '', '', '', '22 1 100.000000 0 48 17', '23 1 100.000000 0 47 6', '23 1 100.000000 0 47 6', '80 74 100.000000 0 0 0', '93 74 100.000000 0 0 0', '47 92 0.000000 0 0 7', '48 95 0.000000 0 0 17', '47 6 100.000000 0 0 6', '5 1 100.000000 0 48 17', '44 1 0.000000 0 0 0', '45 1 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0', '0 0 0.000000 0 0 0');
 
 -- --------------------------------------------------------
 
@@ -208,6 +208,51 @@ CREATE TABLE `furniture` (
 -- --------------------------------------------------------
 
 --
+-- Cấu trúc bảng cho bảng `houses`
+--
+
+CREATE TABLE `houses` (
+  `#` int(11) NOT NULL,
+  `ID` int(11) NOT NULL,
+  `Created` int(11) NOT NULL,
+  `Owned` int(11) NOT NULL,
+  `Owner` varchar(25) NOT NULL,
+  `Locked` int(11) NOT NULL,
+  `Alarm` int(11) NOT NULL,
+  `Level` int(11) NOT NULL,
+  `Price` int(11) NOT NULL,
+  `IntID` int(11) NOT NULL,
+  `ExteriorX` float NOT NULL,
+  `ExteriorY` float NOT NULL,
+  `ExteriorZ` float NOT NULL,
+  `ExteriorA` float NOT NULL,
+  `ExteriorInt` int(11) NOT NULL,
+  `ExteriorWorld` int(11) NOT NULL,
+  `InteriorX` float NOT NULL,
+  `InteriorY` float NOT NULL,
+  `InteriorZ` float NOT NULL,
+  `InteriorA` float NOT NULL,
+  `InteriorInt` int(11) NOT NULL,
+  `InteriorWorld` int(11) NOT NULL,
+  `LockerX` float NOT NULL,
+  `LockerY` float NOT NULL,
+  `LockerZ` float NOT NULL,
+  `Cash` int(11) NOT NULL,
+  `Item0` text NOT NULL,
+  `Item1` text NOT NULL,
+  `Item2` text NOT NULL,
+  `Item3` text NOT NULL,
+  `Item4` text NOT NULL,
+  `Item5` text NOT NULL,
+  `Item6` text NOT NULL,
+  `Item7` text NOT NULL,
+  `Item8` text NOT NULL,
+  `Item9` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Cấu trúc bảng cho bảng `serverinfo`
 --
 
@@ -224,7 +269,7 @@ CREATE TABLE `serverinfo` (
 --
 
 INSERT INTO `serverinfo` (`#`, `Registered`, `CharCreated`, `Day`, `Logged`) VALUES
-(1, 5, 5, 20, 20);
+(1, 5, 5, 21, 0);
 
 -- --------------------------------------------------------
 
@@ -295,6 +340,12 @@ ALTER TABLE `furniture`
   ADD PRIMARY KEY (`#`);
 
 --
+-- Chỉ mục cho bảng `houses`
+--
+ALTER TABLE `houses`
+  ADD PRIMARY KEY (`#`);
+
+--
 -- Chỉ mục cho bảng `serverinfo`
 --
 ALTER TABLE `serverinfo`
@@ -344,6 +395,12 @@ ALTER TABLE `factions`
 -- AUTO_INCREMENT cho bảng `furniture`
 --
 ALTER TABLE `furniture`
+  MODIFY `#` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT cho bảng `houses`
+--
+ALTER TABLE `houses`
   MODIFY `#` int(11) NOT NULL AUTO_INCREMENT;
 
 --
