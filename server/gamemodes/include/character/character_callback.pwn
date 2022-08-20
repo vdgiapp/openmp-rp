@@ -5,7 +5,7 @@ hook OnPlayerSpawn(playerid) {
 }
 
 hook function ResetPlayerVars(playerid) {
-	CharacterData[playerid][CmdCD] = 0;
+	CharacterData[playerid][HouseEntered] = -1;
 	continue(playerid);
 }
 

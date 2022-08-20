@@ -5,7 +5,7 @@
 	W I T H   O P E N . M P   B Y   G I A P P
 
 	Pawn Dir: OpenMP-Roleplay\server\pawno\pawncc.exe
-	Pawn Options: -d1, -(, -;, -Z
+	Pawn Options: -d1, -(, -;
 */
 
 

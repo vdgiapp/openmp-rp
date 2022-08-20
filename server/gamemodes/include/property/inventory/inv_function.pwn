@@ -339,7 +339,7 @@ Inventory_PlayerUseItem(playerid, sel, amount) {
 	}
 
 	if(Inventory_IsFoodDrink(itemid)) {
-		if(Inventory_IsEatDrink(playerid)) return ErrorMsg(playerid, "Vui long doi mot luc truoc thuc hien lai hanh dong nay.");
+		if(Inventory_IsEatDrink(playerid)) return ShowTDN(playerid, "Vui long doi...");
 		InventoryData[playerid][sel][Amount]--;
 		if(Inventory_IsFood(itemid)) {
 			switch(random(2)) {

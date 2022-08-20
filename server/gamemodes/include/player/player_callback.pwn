@@ -1,6 +1,10 @@
 
 hook OnPlayerText(playerid, text[]) {
-    if(IsPlayerInGame(playerid)) callcmd::local(playerid, text);
+    if(IsPlayerInGame(playerid)) {
+        if(gettime() - GetPVarInt(playerid, #Chat_Cooldown) <= 1) return ShowTDN(playerid, "Vui long doi...");
+    	SetPVarInt(playerid, #Chat_Cooldown, gettime());
+        callcmd::local(playerid, text);
+    }
     return 0;
 }
 

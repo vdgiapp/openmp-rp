@@ -42,7 +42,7 @@ enum ENUM_CHARACTER_INFO {
 	Settings,
 
 	// not save
-	CmdCD
+	HouseEntered
 }
 
 /*

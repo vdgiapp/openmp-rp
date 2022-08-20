@@ -15,6 +15,7 @@ public OnGameModeInit() {
 
 	// Admin SQL
 	Staff_OnGameModeInit();
+	House_OnGameModeInit();
 
     //
     DisableCrashDetectLongCall();
@@ -30,7 +31,7 @@ public OnGameModeInit() {
 	SetGameModeText(SERVER_VERSION);
 	SetModeRestartTime(20.0); // default: 12.0
 	SetTimeZone(7);
-	
+
 	ToggleChatTextReplacement(true);
 
 	// Weapon config
@@ -214,9 +215,9 @@ public OnPlayerClickPlayer(playerid, clickedplayerid, source) {
 }
 
 public OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, Float:fX, Float:fY, Float:fZ) {
+	if(!IsPlayerInGame(playerid)) return 0;
 	// Anti Silent Aimbot
-    if(hittype == BULLET_HIT_TYPE_PLAYER)
-    {
+    if(hittype == BULLET_HIT_TYPE_PLAYER) {
         static
             Float:fOriginX, Float:fOriginY, Float:fOriginZ,
             Float:fHitPosX, Float:fHitPosY, Float:fHitPosZ;
@@ -233,9 +234,21 @@ public OnPlayerGiveDamageDynamicActor(playerid, actorid, Float:amount, weaponid,
 	return 0;
 }
 
-public OnPlayerCommandPerformed(playerid, cmd[], params[], result, flags)
-{
+public OnPlayerCommandPerformed(playerid, cmd[], params[], result, flags) {
 	if(!IsPlayerInGame(playerid)) return 0;
-	if(result == -1) return ErrorMsg(playerid, "Cau lenh /%s khong ton tai. Hay su dung lenh /help de xem danh sach cac lenh.", cmd);
+	if(result == -1) {
+		static str[128];
+		format(str, sizeof str, "Cau lenh /%s khong ton tai.", cmd);
+		return ShowTDN(playerid, str);
+	}
+	return 1;
+}
+
+public OnPlayerCommandReceived(playerid, cmd[], params[], flags) {
+	if(gettime() - GetPVarInt(playerid, #Command_Cooldown) <= 1) {
+		ShowTDN(playerid, "Vui long doi...");
+		return 0;
+	}
+	SetPVarInt(playerid, #Command_Cooldown, gettime());
 	return 1;
 }
