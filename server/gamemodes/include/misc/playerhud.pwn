@@ -297,8 +297,8 @@ ShowPlayerHUD(playerid) {
 	PlayerTextDrawShow(playerid, HUD_StaminaBG[playerid]);
 	PlayerTextDrawShow(playerid, HUD_Stamina[playerid]);
 	PlayerTextDrawShow(playerid, HUD_Level[playerid]);
-	if(IsPlayerHaveGPS(playerid)) PlayerTextDrawShow(playerid, HUD_Zone[playerid]);
-	if(IsPlayerHaveWatch(playerid)) PlayerTextDrawShow(playerid, HUD_WatchTime[playerid]);
+	if(Inventory_HasItem(playerid, 20)) PlayerTextDrawShow(playerid, HUD_Zone[playerid]);
+	if(Inventory_HasItem(playerid, 21)) PlayerTextDrawShow(playerid, HUD_WatchTime[playerid]);
 	/*
 	PlayerTextDrawShow(playerid, HUD_VehName[playerid]);
 	PlayerTextDrawShow(playerid, HUD_VehFuel[playerid]);

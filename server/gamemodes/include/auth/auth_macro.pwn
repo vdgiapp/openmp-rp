@@ -1,5 +1,5 @@
 
-enum authinfo {
+enum ENUM_AUTH_INFO {
 	Account[25],
 	Password[65],
 	Password2[65],
@@ -14,9 +14,9 @@ enum authinfo {
 	// Temp
 	CharSel[512]
 }
-new AuthData[MAX_PLAYERS][authinfo];
+new AuthData[MAX_PLAYERS][ENUM_AUTH_INFO];
 
-enum createCharInf {
+enum ENUM_CCHAR_INFO {
 	Name[MAX_PLAYER_NAME+1],
 	Description[256],
 	Gender,
@@ -27,14 +27,14 @@ enum createCharInf {
 	Birthday[16],
 	SkinID
 }
-new CreateCharData[MAX_PLAYERS][createCharInf];
+new CreateCharData[MAX_PLAYERS][ENUM_CCHAR_INFO];
 
-enum tmpCharacterInfo {
+enum ENUM_TMPCHAR_INFO {
 	Available,
 	Name[MAX_PLAYER_NAME+1],
 	Level[16]
 }
-new tmpCharacterData[MAX_PLAYERS][3][tmpCharacterInfo];
+new tmpCharacterData[MAX_PLAYERS][3][ENUM_TMPCHAR_INFO];
 
 new 	Text:AuthTD_MiscTD[10],
 		Text:Auth_Button,

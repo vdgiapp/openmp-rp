@@ -85,7 +85,7 @@ function OnGetCharacterData(playerid) {
 	for(new i; i < 100; i++) ClientMsg(playerid, -1, " ");
 	ShowPlayerHUD(playerid);
 
-	LoadInventoryData(playerid);
+	Inventory_LoadData(playerid);
 
     FadePlayerScreen(playerid, FadeBack, 0x00000000, 1000, 25);
     return 1;
@@ -118,7 +118,7 @@ SaveCharacterData(playerid) {
 	mysql_format(Database, str, sizeof str, "UPDATE `characters` SET %s WHERE `Account` = '%s' AND `Slot` = '%d'", str, account, slot);
 	mysql_tquery(Database, str);
 
-	SaveInventoryData(playerid);
+	Inventory_SaveData(playerid);
 
 	return 1;
 }
