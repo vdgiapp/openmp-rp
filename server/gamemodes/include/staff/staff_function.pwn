@@ -1,6 +1,6 @@
 
-Staff_OnGameModeInit() {
-	for(new id = 0; id < MAX_STAFF_ID; id++) {
+Staff_LoadData() {
+	for(new id = 0; id < MAX_STAFF; id++) {
 		static str[128]; format(str, sizeof str, "SELECT * FROM `staff` WHERE `SID` = '%d'", id);
 		mysql_tquery(Database, str, "OnGetStaffData", "i", id);
 	}
@@ -13,13 +13,14 @@ function OnGetStaffData(id) {
 		format(StaffData[id][Nick], 25, "%s", cache_value_string(0, "Nick"));
 		StaffData[id][Rank] = cache_value_int(0, "Rank");
 		StaffData[id][Helped] = cache_value_int(0, "Helped");
+		Iter_Add(Staff, id);
 		printf("Staff data id %d loaded", id);
 	}
 	return 1;
 }
 
 GetStaffID(playerid) {
-	for(new id = 0; id < MAX_STAFF_ID; id++) {
+	foreach(new id : Staff) {
 		if(isequal(StaffData[id][Account], AuthData[playerid][Account])) return id;
 	}
 	return -1;

@@ -1,4 +1,15 @@
 
+hook OnGameModeExit() {
+	foreach(new id : Staff) {
+		format(StaffData[id][Account], 25, "");
+		format(StaffData[id][Nick], 25, "");
+		StaffData[id][Rank] = 0;
+		StaffData[id][Helped] = 0;
+		Iter_Remove(Staff, id);
+	}
+	return 1;
+}
+
 hook OnPlayerClickMap(playerid, Float:fX, Float:fY, Float:fZ) {
 	if(IsStaff(playerid, MANAGER_RANK)) {
 		if(StaffData[GetStaffID(playerid)][ClickTP] && !IsStaffSpectating(playerid)) SetPlayerCompensatedPosFindZ(playerid, fX, fY, fZ, 1000);
@@ -408,8 +419,8 @@ Cmd:z(playerid, params[]) {
 	return 1;
 }
 
-Cmd:agiveitem(id, p[]) {
-	if(!IsStaff(id, SENIOR_ADMIN_RANK)) return NoPermsMsg(id);
+Cmd:agiveitem(playerid, params[]) {
+	if(!IsStaff(playerid, SENIOR_ADMIN_RANK)) return NoPermsMsg(playerid);
 
 	return 1;
 }
@@ -434,3 +445,23 @@ Cmd:makeadmin(playerid, params[]) {
 	return 1;
 }
 */
+
+Cmd:ahouse(playerid, params[]) {
+	if(!IsStaff(playerid, OFFICAL_ADMIN_RANK)) return NoPermsMsg(playerid);
+	static type[16], params2[128];
+	if(sscanf(params, "s[16]s[128]", type, params2)) return UsageMsg(playerid, "/ahouse (create/delete/edit)");
+	if(isequal(type, "create")) {
+		static intid, price;
+		if(sscanf(params2, "ii", intid, price)) return UsageMsg(playerid, "/ahouse create [int id] [price]");
+		if(intid >= sizeof(arrHouseInteriors)) return ErrorMsg(playerid, "Interior ID tu 0 - %d.", sizeof(arrHouseInteriors)-1);
+		if(price < 1) return ErrorMsg(playerid, "Gia tien cua ngoi nha phai lon hon 1.");
+		House_Create(playerid, intid, price);
+	}
+	if(isequal(type, "delete")) {
+		static houseid;
+		if(sscanf(params2, "i", houseid)) return UsageMsg(playerid, "/ahouse delete [house id]");
+		if(houseid == -1 || !HouseData[houseid][Created]) return ErrorMsg(playerid, "ID cua ngoi nha khong phu hop.");
+		House_Delete(houseid);
+	}
+	return 1;
+}

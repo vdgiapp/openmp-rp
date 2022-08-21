@@ -13,9 +13,9 @@ public OnGameModeInit() {
 
     printf("Ket noi den co so du lieu thanh cong!");
 
-	// Admin SQL
-	Staff_OnGameModeInit();
-	House_OnGameModeInit();
+	// SQL
+	Staff_LoadData();
+	House_LoadData();
 
     //
     DisableCrashDetectLongCall();

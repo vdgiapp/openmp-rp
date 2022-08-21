@@ -1,5 +1,5 @@
 
-#define MAX_STAFF_ID			(200)
+#define MAX_STAFF				(200)
 
 #define HELPER_RANK				(1)
 #define TRIAL_ADMIN_RANK		(2)
@@ -38,4 +38,5 @@ enum ENUM_ADMIN_INFO {
 	prevInt,
 	prevVW
 }
-new StaffData[MAX_STAFF_ID][ENUM_ADMIN_INFO];
+new StaffData[MAX_STAFF][ENUM_ADMIN_INFO];
+new Iterator:Staff<MAX_STAFF>;

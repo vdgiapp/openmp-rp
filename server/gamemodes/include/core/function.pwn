@@ -240,3 +240,9 @@ Float:cache_value_float(row_idx, const column_name[]) {
 	cache_get_value_name_float(row_idx, column_name, ret);
 	return ret;
 }
+
+mysql_update(MySQL:handle, query[], va_args<>) {
+    static str[4096];
+    mysql_format(Database, str, sizeof str, query, va_start<2>);
+    return mysql_tquery(handle, str);
+}
