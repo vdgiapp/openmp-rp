@@ -43,6 +43,12 @@ Float:PlayerArmour(playerid) {
 	return ar;
 }
 
+ShowTDNx(playerid, str[], va_args<>) {
+    static str1[4096];
+    format(str1, sizeof str1, str, va_start<2>);
+    ShowTDN(playerid, str1);
+}
+
 WeaponName(wid) {
     static str[32];
     GetWeaponName(wid, str);

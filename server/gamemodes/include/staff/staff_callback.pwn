@@ -448,6 +448,8 @@ Cmd:makeadmin(playerid, params[]) {
 
 Cmd:ahouse(playerid, params[]) {
 	if(!IsStaff(playerid, OFFICAL_ADMIN_RANK)) return NoPermsMsg(playerid);
+	Dialog_Show(playerid, HouseAdminMenu, DS_LIST, "ADMIN HOUSE MENU", "Tao mot ngoi nha\nChinh sua mot ngoi nha\nXoa mot ngoi nha", "Chon", "Dong");
+	/*
 	static type[16], params2[128];
 	if(sscanf(params, "s[16]s[128]", type, params2)) return UsageMsg(playerid, "/ahouse (create/delete/edit)");
 	if(isequal(type, "create")) {
@@ -463,5 +465,12 @@ Cmd:ahouse(playerid, params[]) {
 		if(houseid == -1 || !HouseData[houseid][Created]) return ErrorMsg(playerid, "ID cua ngoi nha khong phu hop.");
 		House_Delete(houseid);
 	}
+	if(isequal(type, "edit")) {
+		static houseid;
+		if(sscanf(params2, "i", houseid)) return UsageMsg(playerid, "/ahouse edit [house id]");
+		if(houseid == -1 || !HouseData[houseid][Created]) return ErrorMsg(playerid, "ID cua ngoi nha khong phu hop.");
+		House_AdminEdit(playerid, houseid);
+	}
+	*/
 	return 1;
 }

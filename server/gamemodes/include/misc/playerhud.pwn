@@ -333,3 +333,12 @@ static ChangePlayerStatusBar(playerid, PlayerText:playertd, Float:var, Float:max
 	if((max_var_5p*18)+1 <= var <= max_var_5p*19) 	PlayerTextDrawSetString(playerid, playertd, "lllllllllllllllllll");
 	if((max_var_5p*19)+1 <= var <= max_var_5p*20) 	PlayerTextDrawSetString(playerid, playertd, "llllllllllllllllllll");
 }
+
+public OnPlayerCommandReceived(playerid, cmd[], params[], flags) {
+	if(gettime() - CharacterData[playerid][CmdCD] <= 1) {
+		ShowTDN(playerid, "Vui long doi...");
+		return 0;
+	}
+	CharacterData[playerid][CmdCD] = gettime();
+	return 1;
+}

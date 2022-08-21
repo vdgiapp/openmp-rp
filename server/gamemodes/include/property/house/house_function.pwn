@@ -49,12 +49,12 @@ function OnGetHouseData(hid) {
 
     GetMapZoneName(GetMapZoneAtPoint(HouseData[hid][ExteriorX], HouseData[hid][ExteriorY], HouseData[hid][ExteriorZ]), HouseData[hid][Address]);
 
-    HouseData[hid][ExtCP] = CreateDynamicCP(HouseData[hid][ExteriorX], HouseData[hid][ExteriorY], HouseData[hid][ExteriorZ], HOUSE_CP_SIZE, HouseData[hid][ExteriorWorld], HouseData[hid][ExteriorInt], -1, HOUSE_CP_DISTANCE);
-    HouseData[hid][IntCP] = CreateDynamicCP(HouseData[hid][InteriorX], HouseData[hid][InteriorY], HouseData[hid][InteriorZ], HOUSE_CP_SIZE, HouseData[hid][InteriorWorld], HouseData[hid][InteriorInt], -1);
+    HouseData[hid][ExtPickup] = CreateDynamicPickup(19198, 1, HouseData[hid][ExteriorX], HouseData[hid][ExteriorY], HouseData[hid][ExteriorZ]+0.5, HouseData[hid][ExteriorWorld], HouseData[hid][ExteriorInt], -1, HOUSE_SHOW_DISTANCE);
+    HouseData[hid][IntPickup] = CreateDynamicPickup(19198, 1, HouseData[hid][InteriorX], HouseData[hid][InteriorY], HouseData[hid][InteriorZ]+0.5, HouseData[hid][InteriorWorld], HouseData[hid][InteriorInt], -1, HOUSE_SHOW_DISTANCE);
 
     if(!HouseData[hid][Created]) {
-        DestroyDynamicCP(HouseData[hid][ExtCP]);
-        DestroyDynamicCP(HouseData[hid][IntCP]);
+        DestroyDynamicPickup(HouseData[hid][ExtPickup]);
+		DestroyDynamicPickup(HouseData[hid][IntPickup]);
     }
 
     printf("House ID %d, DbID %d loaded.", hid, HouseData[hid][ID]);
@@ -102,7 +102,15 @@ House_SaveData(hid) {
 	}
 }
 
-House_IsPlayerOutside(playerid, hid) { return IsPlayerInDynamicCP(playerid, HouseData[hid][ExtCP]); }
+House_IsPlayerOutside(playerid, hid, Float:range = 2.0) {
+	return (HouseData[hid][Created] && IsPlayerInRangeOfPoint(playerid, range, HouseData[hid][ExteriorX], HouseData[hid][ExteriorY], HouseData[hid][ExteriorZ])
+	&& GetPlayerVirtualWorld(playerid) == HouseData[hid][ExteriorWorld] && GetPlayerInterior(playerid) == HouseData[hid][ExteriorInt]);
+}
+
+House_IsPlayerInsideExt(playerid, hid, Float:range = 2.0) {
+	return (HouseData[hid][Created] && IsPlayerInRangeOfPoint(playerid, range, HouseData[hid][InteriorX], HouseData[hid][InteriorY], HouseData[hid][InteriorZ])
+	&& GetPlayerVirtualWorld(playerid) == HouseData[hid][InteriorWorld] && GetPlayerInterior(playerid) == HouseData[hid][InteriorInt]);
+}
 
 House_IsPlayerInside(playerid, hid, Float:range = 50.0) { return (HouseData[hid][Created] && IsPlayerInRangeOfPoint(playerid, range, HouseData[hid][InteriorX], HouseData[hid][InteriorY], HouseData[hid][InteriorZ]) && GetPlayerInterior(playerid) == HouseData[hid][InteriorInt] && GetPlayerVirtualWorld(playerid) == HouseData[hid][InteriorWorld]); }
 
@@ -116,64 +124,16 @@ House_Nearest(playerid) {
 	return -1;
 }
 
-House_Create(playerid, intid, price) {
-	static
-	    Float:x,
-	    Float:y,
-	    Float:z,
-		Float:angle;
-
-	if(GetPlayerPos(playerid, x, y, z) && GetPlayerFacingAngle(playerid, angle)) {
-		for(new i = 0; i < MAX_HOUSES; i++) {
-	    	if(!HouseData[i][Created] && i != -1) {
-				Iter_Add(House, i);
-				HouseData[i][ID] = i;
-    	        HouseData[i][Created] = 1;
-        	    HouseData[i][Owned] = 0;
-				format(HouseData[i][Owner], MAX_PLAYER_NAME, "None");
-				HouseData[i][Lights] = 0;
-				HouseData[i][Locked] = 0;
-            	HouseData[i][Price] = price;
-            	HouseData[i][Cash] = 0;
-
-				GetMapZoneName(GetMapZoneAtPoint(x, y, z), HouseData[i][Address]);
-    	        HouseData[i][ExteriorX] = x;
-    	        HouseData[i][ExteriorY] = y;
-    	        HouseData[i][ExteriorZ] = z;
-    	        HouseData[i][ExteriorA] = angle;
-				HouseData[i][ExteriorInt] = GetPlayerInterior(playerid);
-				HouseData[i][ExteriorWorld] = GetPlayerVirtualWorld(playerid);
-
-				HouseData[i][IntID] = intid;
-				HouseData[i][InteriorX] = arrHouseInteriors[intid][X];
-				HouseData[i][InteriorY] = arrHouseInteriors[intid][Y];
-				HouseData[i][InteriorZ] = arrHouseInteriors[intid][Z];
-				HouseData[i][InteriorA] = arrHouseInteriors[intid][A];
-				HouseData[i][InteriorInt] = arrHouseInteriors[intid][Int];
-				HouseData[i][InteriorWorld] = i+1;
-
-				House_Refresh(i);
-				mysql_update(Database, "INSERT INTO `houses` (`ID`) VALUES (%d)", HouseData[i][ID]);
-				House_SaveData(i);
-
-				printf("House ID %d, DbID %d created.", i, HouseData[i][ID]);
-				return i;
-			}
-		}
-	}
-	return -1;
-}
-
 House_Delete(hid) {
 	if (hid != -1 && HouseData[hid][Created]) {
 		printf("House ID %d, DbID %d deleted.", hid, HouseData[hid][ID]);
 		mysql_update(Database, "DELETE FROM `houses` WHERE `ID` = '%d'", HouseData[hid][ID]);
 
-		if (IsValidDynamicCP(HouseData[hid][IntCP]))
-		    DestroyDynamicCP(HouseData[hid][IntCP]);
+		if (IsValidPickup(HouseData[hid][IntPickup]))
+		    DestroyDynamicPickup(HouseData[hid][IntPickup]);
 
-		if (IsValidDynamicCP(HouseData[hid][ExtCP]))
-		    DestroyDynamicCP(HouseData[hid][ExtCP]);
+		if (IsValidPickup(HouseData[hid][ExtPickup]))
+		    DestroyDynamicPickup(HouseData[hid][ExtPickup]);
 
 		HouseData[hid][ID] = -1;
         HouseData[hid][Created] = 0;
@@ -219,13 +179,13 @@ House_Delete(hid) {
 House_Refresh(hid) {
 	if(hid != -1 && HouseData[hid][Created])
 	{
-		if (IsValidDynamicCP(HouseData[hid][IntCP]))
-		    DestroyDynamicCP(HouseData[hid][IntCP]);
+		if (IsValidPickup(HouseData[hid][IntPickup]))
+		    DestroyDynamicPickup(HouseData[hid][IntPickup]);
 
-		if (IsValidDynamicCP(HouseData[hid][ExtCP]))
-		    DestroyDynamicCP(HouseData[hid][ExtCP]);
+		if (IsValidPickup(HouseData[hid][ExtPickup]))
+		    DestroyDynamicPickup(HouseData[hid][ExtPickup]);
 
-		HouseData[hid][ExtCP] = CreateDynamicCP(HouseData[hid][ExteriorX], HouseData[hid][ExteriorY], HouseData[hid][ExteriorZ], HOUSE_CP_SIZE, HouseData[hid][ExteriorWorld], HouseData[hid][ExteriorInt], -1, HOUSE_CP_DISTANCE);
-		HouseData[hid][IntCP] = CreateDynamicCP(HouseData[hid][InteriorX], HouseData[hid][InteriorY], HouseData[hid][InteriorZ], HOUSE_CP_SIZE, HouseData[hid][InteriorWorld], HouseData[hid][InteriorInt], -1);
+			HouseData[hid][ExtPickup] = CreateDynamicPickup(19198, 1, HouseData[hid][ExteriorX], HouseData[hid][ExteriorY], HouseData[hid][ExteriorZ]+0.5, HouseData[hid][ExteriorWorld], HouseData[hid][ExteriorInt], -1, HOUSE_SHOW_DISTANCE);
+		    HouseData[hid][IntPickup] = CreateDynamicPickup(19198, 1, HouseData[hid][InteriorX], HouseData[hid][InteriorY], HouseData[hid][InteriorZ]+0.5, HouseData[hid][InteriorWorld], HouseData[hid][InteriorInt], -1, HOUSE_SHOW_DISTANCE);
 	}
 }

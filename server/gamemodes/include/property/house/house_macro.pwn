@@ -1,6 +1,5 @@
 
-#define HOUSE_CP_DISTANCE			(5)
-#define HOUSE_CP_SIZE 				(1)
+#define HOUSE_SHOW_DISTANCE			(10)
 #define MAX_HOUSES 					(1000)
 
 enum ENUM_HOUSE_INFO {
@@ -21,14 +20,14 @@ enum ENUM_HOUSE_INFO {
 	Float:ExteriorA,
 	ExteriorInt,
 	ExteriorWorld,
-	STREAMER_TAG_CP:ExtCP,
+	STREAMER_TAG_PICKUP:ExtPickup,
 	Float:InteriorX,
 	Float:InteriorY,
 	Float:InteriorZ,
 	Float:InteriorA,
 	InteriorInt,
 	InteriorWorld,
-	STREAMER_TAG_CP:IntCP,
+	STREAMER_TAG_PICKUP:IntPickup,
 	Float:LockerX,
 	Float:LockerY,
 	Float:LockerZ,

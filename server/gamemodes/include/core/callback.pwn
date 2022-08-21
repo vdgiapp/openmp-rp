@@ -243,12 +243,3 @@ public OnPlayerCommandPerformed(playerid, cmd[], params[], result, flags) {
 	}
 	return 1;
 }
-
-public OnPlayerCommandReceived(playerid, cmd[], params[], flags) {
-	if(gettime() - GetPVarInt(playerid, #Command_Cooldown) <= 1) {
-		ShowTDN(playerid, "Vui long doi...");
-		return 0;
-	}
-	SetPVarInt(playerid, #Command_Cooldown, gettime());
-	return 1;
-}
