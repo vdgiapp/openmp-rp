@@ -3,6 +3,7 @@ hook OnGameModeExit() {
 
     foreach(new hid : House) {
 
+        if(!Iter_Contains(House, hid)) continue;
         House_SaveData(hid);
 
         HouseData[hid][ID] = -1;

@@ -1,6 +1,7 @@
 
 hook OnGameModeExit() {
 	foreach(new id : Staff) {
+		if(!Iter_Contains(Staff, id)) continue;
 		format(StaffData[id][Account], 25, "");
 		format(StaffData[id][Nick], 25, "");
 		StaffData[id][Rank] = 0;

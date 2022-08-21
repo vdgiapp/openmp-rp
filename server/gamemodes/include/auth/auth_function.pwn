@@ -280,8 +280,6 @@ LoginSuccess(playerid) {
 	// Set var
 	AuthData[playerid][Logged] = 1;
 
-	TogglePlayerAllDynamicCPs(playerid, true);
-
 	FadePlayerScreen(playerid, tempLoadCharacters, 0x000000FF, 1000, 25);
 }
 

@@ -62,41 +62,41 @@ function OnGetHouseData(hid) {
 }
 
 House_SaveData(hid) {
-	if(hid != -1) {
-		mysql_update(Database, "UPDATE `houses` SET `Created` = '%d' WHERE `ID` = '%d'", HouseData[hid][Created], HouseData[hid][ID]);
-	    mysql_update(Database, "UPDATE `houses` SET `Owned` = '%d' WHERE `ID` = '%d'", HouseData[hid][Owned], HouseData[hid][ID]);
-	    mysql_update(Database, "UPDATE `houses` SET `Owner` = '%s' WHERE `ID` = '%d'", HouseData[hid][Owner], HouseData[hid][ID]);
-	    mysql_update(Database, "UPDATE `houses` SET `Locked` = '%d' WHERE `ID` = '%d'", HouseData[hid][Locked], HouseData[hid][ID]);
-	    mysql_update(Database, "UPDATE `houses` SET `Alarm` = '%d' WHERE `ID` = '%d'", HouseData[hid][Alarm], HouseData[hid][ID]);
-	    mysql_update(Database, "UPDATE `houses` SET `Level` = '%d' WHERE `ID` = '%d'", HouseData[hid][Level], HouseData[hid][ID]);
-	    mysql_update(Database, "UPDATE `houses` SET `Price` = '%d' WHERE `ID` = '%d'", HouseData[hid][Price], HouseData[hid][ID]);
-	    mysql_update(Database, "UPDATE `houses` SET `IntID` = '%d' WHERE `ID` = '%d'", HouseData[hid][IntID], HouseData[hid][ID]);
-	    mysql_update(Database, "UPDATE `houses` SET `ExteriorX` = '%f' WHERE `ID` = '%d'", HouseData[hid][ExteriorX], HouseData[hid][ID]);
-	    mysql_update(Database, "UPDATE `houses` SET `ExteriorY` = '%f' WHERE `ID` = '%d'", HouseData[hid][ExteriorY], HouseData[hid][ID]);
-	    mysql_update(Database, "UPDATE `houses` SET `ExteriorZ` = '%f' WHERE `ID` = '%d'", HouseData[hid][ExteriorZ], HouseData[hid][ID]);
-	    mysql_update(Database, "UPDATE `houses` SET `ExteriorA` = '%f' WHERE `ID` = '%d'", HouseData[hid][ExteriorA], HouseData[hid][ID]);
-	    mysql_update(Database, "UPDATE `houses` SET `ExteriorInt` = '%d' WHERE `ID` = '%d'", HouseData[hid][ExteriorInt], HouseData[hid][ID]);
-	    mysql_update(Database, "UPDATE `houses` SET `ExteriorWorld` = '%d' WHERE `ID` = '%d'", HouseData[hid][ExteriorWorld], HouseData[hid][ID]);
-	    mysql_update(Database, "UPDATE `houses` SET `InteriorX` = '%f' WHERE `ID` = '%d'", HouseData[hid][InteriorX], HouseData[hid][ID]);
-	    mysql_update(Database, "UPDATE `houses` SET `InteriorY` = '%f' WHERE `ID` = '%d'", HouseData[hid][InteriorY], HouseData[hid][ID]);
-	    mysql_update(Database, "UPDATE `houses` SET `InteriorZ` = '%f' WHERE `ID` = '%d'", HouseData[hid][InteriorZ], HouseData[hid][ID]);
-	    mysql_update(Database, "UPDATE `houses` SET `InteriorA` = '%f' WHERE `ID` = '%d'", HouseData[hid][InteriorA], HouseData[hid][ID]);
-	    mysql_update(Database, "UPDATE `houses` SET `InteriorInt` = '%d' WHERE `ID` = '%d'", HouseData[hid][InteriorInt], HouseData[hid][ID]);
-	    mysql_update(Database, "UPDATE `houses` SET `InteriorWorld` = '%d' WHERE `ID` = '%d'", HouseData[hid][InteriorWorld], HouseData[hid][ID]);
-	    mysql_update(Database, "UPDATE `houses` SET `LockerX` = '%f' WHERE `ID` = '%d'", HouseData[hid][LockerX], HouseData[hid][ID]);
-	    mysql_update(Database, "UPDATE `houses` SET `LockerY` = '%f' WHERE `ID` = '%d'", HouseData[hid][LockerY], HouseData[hid][ID]);
-	    mysql_update(Database, "UPDATE `houses` SET `LockerZ` = '%f' WHERE `ID` = '%d'", HouseData[hid][LockerZ], HouseData[hid][ID]);
-	    mysql_update(Database, "UPDATE `houses` SET `Cash` = '%d' WHERE `ID` = '%d'", HouseData[hid][Cash], HouseData[hid][ID]);
-	    mysql_update(Database, "UPDATE `houses` SET `Item0` = '%s' WHERE `ID` = '%d'", HouseData[hid][Item0], HouseData[hid][ID]);
-	    mysql_update(Database, "UPDATE `houses` SET `Item1` = '%s' WHERE `ID` = '%d'", HouseData[hid][Item1], HouseData[hid][ID]);
-	    mysql_update(Database, "UPDATE `houses` SET `Item2` = '%s' WHERE `ID` = '%d'", HouseData[hid][Item2], HouseData[hid][ID]);
-	    mysql_update(Database, "UPDATE `houses` SET `Item3` = '%s' WHERE `ID` = '%d'", HouseData[hid][Item3], HouseData[hid][ID]);
-	    mysql_update(Database, "UPDATE `houses` SET `Item4` = '%s' WHERE `ID` = '%d'", HouseData[hid][Item4], HouseData[hid][ID]);
-	    mysql_update(Database, "UPDATE `houses` SET `Item5` = '%s' WHERE `ID` = '%d'", HouseData[hid][Item5], HouseData[hid][ID]);
-	    mysql_update(Database, "UPDATE `houses` SET `Item6` = '%s' WHERE `ID` = '%d'", HouseData[hid][Item6], HouseData[hid][ID]);
-	    mysql_update(Database, "UPDATE `houses` SET `Item7` = '%s' WHERE `ID` = '%d'", HouseData[hid][Item7], HouseData[hid][ID]);
-	    mysql_update(Database, "UPDATE `houses` SET `Item8` = '%s' WHERE `ID` = '%d'", HouseData[hid][Item8], HouseData[hid][ID]);
-	    mysql_update(Database, "UPDATE `houses` SET `Item9` = '%s' WHERE `ID` = '%d'", HouseData[hid][Item9], HouseData[hid][ID]);
+	if(hid != -1 && hid < MAX_HOUSES) {
+		mysql_update(Database, "UPDATE `houses` SET `Created` = '%d' WHERE `ID` = '%d'", HouseData[hid][Created], hid);
+	    mysql_update(Database, "UPDATE `houses` SET `Owned` = '%d' WHERE `ID` = '%d'", HouseData[hid][Owned], hid);
+	    mysql_update(Database, "UPDATE `houses` SET `Owner` = '%s' WHERE `ID` = '%d'", HouseData[hid][Owner], hid);
+	    mysql_update(Database, "UPDATE `houses` SET `Locked` = '%d' WHERE `ID` = '%d'", HouseData[hid][Locked], hid);
+	    mysql_update(Database, "UPDATE `houses` SET `Alarm` = '%d' WHERE `ID` = '%d'", HouseData[hid][Alarm], hid);
+	    mysql_update(Database, "UPDATE `houses` SET `Level` = '%d' WHERE `ID` = '%d'", HouseData[hid][Level], hid);
+	    mysql_update(Database, "UPDATE `houses` SET `Price` = '%d' WHERE `ID` = '%d'", HouseData[hid][Price], hid);
+	    mysql_update(Database, "UPDATE `houses` SET `IntID` = '%d' WHERE `ID` = '%d'", HouseData[hid][IntID], hid);
+	    mysql_update(Database, "UPDATE `houses` SET `ExteriorX` = '%f' WHERE `ID` = '%d'", HouseData[hid][ExteriorX], hid);
+	    mysql_update(Database, "UPDATE `houses` SET `ExteriorY` = '%f' WHERE `ID` = '%d'", HouseData[hid][ExteriorY], hid);
+	    mysql_update(Database, "UPDATE `houses` SET `ExteriorZ` = '%f' WHERE `ID` = '%d'", HouseData[hid][ExteriorZ], hid);
+	    mysql_update(Database, "UPDATE `houses` SET `ExteriorA` = '%f' WHERE `ID` = '%d'", HouseData[hid][ExteriorA], hid);
+	    mysql_update(Database, "UPDATE `houses` SET `ExteriorInt` = '%d' WHERE `ID` = '%d'", HouseData[hid][ExteriorInt], hid);
+	    mysql_update(Database, "UPDATE `houses` SET `ExteriorWorld` = '%d' WHERE `ID` = '%d'", HouseData[hid][ExteriorWorld], hid);
+	    mysql_update(Database, "UPDATE `houses` SET `InteriorX` = '%f' WHERE `ID` = '%d'", HouseData[hid][InteriorX], hid);
+	    mysql_update(Database, "UPDATE `houses` SET `InteriorY` = '%f' WHERE `ID` = '%d'", HouseData[hid][InteriorY], hid);
+	    mysql_update(Database, "UPDATE `houses` SET `InteriorZ` = '%f' WHERE `ID` = '%d'", HouseData[hid][InteriorZ], hid);
+	    mysql_update(Database, "UPDATE `houses` SET `InteriorA` = '%f' WHERE `ID` = '%d'", HouseData[hid][InteriorA], hid);
+	    mysql_update(Database, "UPDATE `houses` SET `InteriorInt` = '%d' WHERE `ID` = '%d'", HouseData[hid][InteriorInt], hid);
+	    mysql_update(Database, "UPDATE `houses` SET `InteriorWorld` = '%d' WHERE `ID` = '%d'", HouseData[hid][InteriorWorld], hid);
+	    mysql_update(Database, "UPDATE `houses` SET `LockerX` = '%f' WHERE `ID` = '%d'", HouseData[hid][LockerX], hid);
+	    mysql_update(Database, "UPDATE `houses` SET `LockerY` = '%f' WHERE `ID` = '%d'", HouseData[hid][LockerY], hid);
+	    mysql_update(Database, "UPDATE `houses` SET `LockerZ` = '%f' WHERE `ID` = '%d'", HouseData[hid][LockerZ], hid);
+	    mysql_update(Database, "UPDATE `houses` SET `Cash` = '%d' WHERE `ID` = '%d'", HouseData[hid][Cash], hid);
+	    mysql_update(Database, "UPDATE `houses` SET `Item0` = '%s' WHERE `ID` = '%d'", HouseData[hid][Item0], hid);
+	    mysql_update(Database, "UPDATE `houses` SET `Item1` = '%s' WHERE `ID` = '%d'", HouseData[hid][Item1], hid);
+	    mysql_update(Database, "UPDATE `houses` SET `Item2` = '%s' WHERE `ID` = '%d'", HouseData[hid][Item2], hid);
+	    mysql_update(Database, "UPDATE `houses` SET `Item3` = '%s' WHERE `ID` = '%d'", HouseData[hid][Item3], hid);
+	    mysql_update(Database, "UPDATE `houses` SET `Item4` = '%s' WHERE `ID` = '%d'", HouseData[hid][Item4], hid);
+	    mysql_update(Database, "UPDATE `houses` SET `Item5` = '%s' WHERE `ID` = '%d'", HouseData[hid][Item5], hid);
+	    mysql_update(Database, "UPDATE `houses` SET `Item6` = '%s' WHERE `ID` = '%d'", HouseData[hid][Item6], hid);
+	    mysql_update(Database, "UPDATE `houses` SET `Item7` = '%s' WHERE `ID` = '%d'", HouseData[hid][Item7], hid);
+	    mysql_update(Database, "UPDATE `houses` SET `Item8` = '%s' WHERE `ID` = '%d'", HouseData[hid][Item8], hid);
+	    mysql_update(Database, "UPDATE `houses` SET `Item9` = '%s' WHERE `ID` = '%d'", HouseData[hid][Item9], hid);
 
 	    printf("House ID %d, DbID %d saved.", hid, HouseData[hid][ID]);
 	}
@@ -125,7 +125,7 @@ House_Nearest(playerid) {
 }
 
 House_Delete(hid) {
-	if (hid != -1 && HouseData[hid][Created]) {
+	if(hid != -1 && HouseData[hid][Created]) {
 		printf("House ID %d, DbID %d deleted.", hid, HouseData[hid][ID]);
 		mysql_update(Database, "DELETE FROM `houses` WHERE `ID` = '%d'", HouseData[hid][ID]);
 
