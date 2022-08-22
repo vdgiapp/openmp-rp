@@ -1,7 +1,7 @@
 
 hook OnPlayerText(playerid, text[]) {
     if(IsPlayerInGame(playerid)) {
-        if(gettime() - CharacterData[playerid][ChatCD] <= 1) return ShowTDNx(playerid, "Vui long doi...");
+        if(gettime() - CharacterData[playerid][ChatCD] <= 1) return ShowTDNx(playerid, 2000, "Vui long doi...");
     	CharacterData[playerid][ChatCD] = gettime();
         callcmd::local(playerid, text);
     }
@@ -14,8 +14,8 @@ Cmd:enter(playerid, params[]) {
     if(!IsPlayerInAnyVehicle(playerid) && (id = House_Nearest(playerid)) != -1 && House_IsPlayerOutside(playerid, id)) {
         if(!HouseData[id][Created]) return 0;
         if(!HouseData[id][Owned]) return UsageMsg(playerid, "Su dung /xemnha de xem noi that ben trong truoc khi mua nha.");
-        if(HouseData[id][Locked]) return GameTextForPlayerf(playerid, 1000, 1, "~r~Bi khoa");
-        if(isequal(HouseData[id][Owner], CharacterData[playerid][Name])) GameTextForPlayerf(playerid, 1000, 1, "~g~Welcome home");
+        if(HouseData[id][Locked]) return GameTextForPlayerf(playerid, 5000, 6, "~r~Bi khoa");
+        if(isequal(HouseData[id][Owner], CharacterData[playerid][Name])) GameTextForPlayerf(playerid, 5000, 6, "~g~Welcome home");
         SetPlayerCompensatedPos(playerid, HouseData[id][InteriorX], HouseData[id][InteriorY], HouseData[id][InteriorZ], HouseData[id][InteriorA], 3000, HouseData[id][InteriorWorld], HouseData[id][InteriorInt]);
         if(HouseData[id][RadioOn] == 1) PlayAudioStreamForPlayer(playerid, HouseData[id][RadioURL]);
     }

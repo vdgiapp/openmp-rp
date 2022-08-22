@@ -100,6 +100,7 @@ new MySQL:Database;
 new MaleSkinList = mS_INVALID_LISTID,
 	FemaleSkinList = mS_INVALID_LISTID;
 
+new tmpTDN_Str[MAX_PLAYERS][MAX_TDN][4096];
 new ToggleChatOOC = 0;
 
 new const g_aPreloadLibs[][] =

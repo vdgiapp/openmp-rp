@@ -1,4 +1,12 @@
 
+hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
+    if(newkeys & KEY_CTRL_BACK) { // Key H
+        static Float:depth, Float:pdepth;
+        if(!IsPlayerInAnyVehicle(playerid)) callcmd::inventory(playerid);
+    }
+    return 1;
+}
+
 Alias:inventory("inv");
 Cmd:inventory(playerid) {
     if(!IsPlayerInGame(playerid)) return 0;

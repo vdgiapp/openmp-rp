@@ -94,7 +94,7 @@ SaveCharacterData(playerid) {
 
 	if(!IsPlayerInGame(playerid)) return 0;
 
-	static account[25], slot;
+	static account[25], slot, weaponskill[128];
 	format(account, sizeof account, "%s", AuthData[playerid][Account]);
 	slot = AuthData[playerid][Selected];
 
@@ -111,13 +111,30 @@ SaveCharacterData(playerid) {
 	if(IsStaffGodMode(playerid)) GetStaffPrevHealth(playerid, health), GetStaffPrevArmour(playerid, armour);
 	if(IsStaffSpectating(playerid)) GetStaffPrevHealth(playerid, health), GetStaffPrevArmour(playerid, armour), GetStaffPrevPos(playerid, x, y, z, world, int);
 
-	mysql_format(Database, str, sizeof str, "`Position` = '%f %f %f %f %d %d', `SkinID` = '%d'", x, y, z, angle, world, int, GetPlayerSkin(playerid));
-	mysql_format(Database, str, sizeof str, "`Hunger` = '%f', `Thirst` = '%f', `Stamina` = '%f', `Injured` = '%d', `Health` = '%f', `Armour` = '%f', %s",
+	for(new i = 0; i < 11; i++) format(weaponskill, sizeof weaponskill, "%s%d ", weaponskill, GetPlayerSkillLevel(playerid, i));
+
+	format(str, sizeof str, "WHERE `Account` = '%s' AND `Slot` = '%d'", account, slot);
+	mysql_update(Database, "UPDATE `characters` SET `Name` = '%s' %s", CharacterData[playerid][Name], str);
+	mysql_update(Database, "UPDATE `characters` SET `Level` = '%s' %s", CharacterData[playerid][Level], str);
+	mysql_update(Database, "UPDATE `characters` SET `Position` = '%f %f %f %f %d %d' %s", x, y, z, angle, world, int, str);
+	mysql_update(Database, "UPDATE `characters` SET `SkinID` = '%d' %s", GetPlayerSkin(playerid), str);
+	mysql_update(Database, "UPDATE `characters` SET `Hunger` = '%f', `Thirst` = '%f', `Stamina` = '%f', `Injured` = '%d', `Health` = '%f', `Armour` = '%f' %s",
 	CharacterData[playerid][Hunger], CharacterData[playerid][Thirst], CharacterData[playerid][Stamina], CharacterData[playerid][Injured], health, armour, str);
-	mysql_format(Database, str, sizeof str, "UPDATE `characters` SET %s WHERE `Account` = '%s' AND `Slot` = '%d'", str, account, slot);
-	mysql_tquery(Database, str);
+	mysql_update(Database, "UPDATE `characters` SET `Cash` = '%d', `Coins` = '%d' %s", CharacterData[playerid][Cash], CharacterData[playerid][Coins], str);
+	mysql_update(Database, "UPDATE `characters` SET `Birthday` = '%s' %s", CharacterData[playerid][Birthday], str);
+	mysql_update(Database, "UPDATE `characters` SET `Gender` = '%d' %s", CharacterData[playerid][Gender], str);
+	mysql_update(Database, "UPDATE `characters` SET `Nation` = '%d' %s", CharacterData[playerid][Nation], str);
+	mysql_update(Database, "UPDATE `characters` SET `Respects` = '%d' %s", CharacterData[playerid][Respects], str);
+	mysql_update(Database, "UPDATE `characters` SET `JobID` = '%d' %s", CharacterData[playerid][JobID], str);
+	mysql_update(Database, "UPDATE `characters` SET `FightStyle` = '%d' %s", GetPlayerFightingStyle(playerid), str);
+	mysql_update(Database, "UPDATE `characters` SET `WalkStyle` = '%d' %s", GetWalkingStyle(playerid), str);
+	mysql_update(Database, "UPDATE `characters` SET `WeaponSkills` = '%s' %s", weaponskill, str);
 
 	Inventory_SaveData(playerid);
 
+	printf("Account %s with character %s's data saved", account, GetRoleplayName(CharacterData[playerid][Name]));
+
+	ResetPlayerVars(playerid);
+	Kick(playerid);
 	return 1;
 }

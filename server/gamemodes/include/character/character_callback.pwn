@@ -5,14 +5,18 @@ hook OnPlayerSpawn(playerid) {
 }
 
 hook function ResetPlayerVars(playerid) {
+	CharacterData[playerid][ChatCD] = 0;
+	CharacterData[playerid][CmdCD] = 0;
+	CharacterData[playerid][HouseAdminID] = -1;
+	CharacterData[playerid][HouseCreateIntID] = -1;
+	CharacterData[playerid][HouseCreatePrice] = 0;
 	continue(playerid);
 }
 
 public OnPlayerDisconnect(playerid, reason) {
 	if(AuthData[playerid][Logged]) {
 		static str[256];
-		mysql_format(Database, str, sizeof str, "UPDATE `accounts` SET `Online`='0' WHERE `Account`='%s'", AuthData[playerid][Account]);
-		mysql_tquery(Database, str);
+		mysql_update(Database, "UPDATE `accounts` SET `Online`='0' WHERE `Account`='%s'", AuthData[playerid][Account]);
 		SaveCharacterData(playerid);
 		switch(reason) {
 			case 0: flog(AUTH_LOG_FILE, "[AUTH] Tai khoan \"%s\" da dang xuat khoi tro choi (mat ket noi).", AuthData[playerid][Account]);
@@ -20,7 +24,5 @@ public OnPlayerDisconnect(playerid, reason) {
 			case 2: flog(AUTH_LOG_FILE, "[AUTH] Tai khoan \"%s\" da dang xuat khoi tro choi (kick/ban).", AuthData[playerid][Account]);
 		}
 	}
-	ResetPlayerVars(playerid);
-	Kick(playerid);
 	return 1;
 }

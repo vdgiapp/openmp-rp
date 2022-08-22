@@ -305,13 +305,13 @@ Inventory_PlayerUseItem(playerid, sel, amount) {
 									SetPlayerAmmo(playerid, InventoryData[playerid][i][ItemID], weapondata[u][1] + InventoryData[playerid][sel][MagAmmo]);
 									InventoryData[playerid][i][MagType] = itemid;
 									InventoryData[playerid][sel][Amount]--;
-									return ShowTDNx(playerid, "Da nap dan %s vao vu khi %s", InvItemName[itemid], InvItemName[InventoryData[playerid][i][ItemID]]);
+									return ShowTDNx(playerid, 5000, "Da nap dan %s vao vu khi %s", InvItemName[itemid], InvItemName[InventoryData[playerid][i][ItemID]]);
 								}
 								GivePlayerWeapon(playerid, InventoryData[playerid][i][ItemID], weapondata[u][1] + InventoryData[playerid][sel][MagAmmo]);
 								SetPlayerAmmo(playerid, InventoryData[playerid][i][ItemID], weapondata[u][1] + InventoryData[playerid][sel][MagAmmo]);
 								InventoryData[playerid][i][MagType] = itemid;
 								InventoryData[playerid][sel][MagAmmo] = 0;
-								return ShowTDNx(playerid, "Da nap dan %s vao vu khi %s", InvItemName[itemid], InvItemName[InventoryData[playerid][i][ItemID]]);
+								return ShowTDNx(playerid, 5000, "Da nap dan %s vao vu khi %s", InvItemName[itemid], InvItemName[InventoryData[playerid][i][ItemID]]);
 							}
 							if(weapondata[u][1] >= Inventory_GetMagSize(itemid)) return ErrorMsg(playerid, "Bang dan cua khau sung %s da day (%d vien)", InvItemName[InventoryData[playerid][i][ItemID]], Inventory_GetMagSize(itemid));
 							if(InventoryData[playerid][sel][Amount] > 1) {
@@ -320,14 +320,14 @@ Inventory_PlayerUseItem(playerid, sel, amount) {
 								InventoryData[playerid][sel][Amount]--;
 								InventoryData[playerid][i][MagType] = itemid;
 								Inventory_GiveItem(playerid, itemid, 1, 100.0, 0, InventoryData[playerid][sel][MagAmmo]-(Inventory_GetMagSize(itemid)-weapondata[u][1]));
-								return ShowTDNx(playerid, "Da nap dan %s vao vu khi %s", InvItemName[itemid], InvItemName[InventoryData[playerid][i][ItemID]]);
+								return ShowTDNx(playerid, 5000, "Da nap dan %s vao vu khi %s", InvItemName[itemid], InvItemName[InventoryData[playerid][i][ItemID]]);
 							}
 		                	GivePlayerWeapon(playerid, InventoryData[playerid][i][ItemID], Inventory_GetMagSize(itemid));
 							SetPlayerAmmo(playerid, InventoryData[playerid][i][ItemID], Inventory_GetMagSize(itemid));
 							InventoryData[playerid][i][MagType] = itemid;
 		                	InventoryData[playerid][sel][MagAmmo] -= (Inventory_GetMagSize(itemid)-weapondata[u][1]);
 							if(InventoryData[playerid][sel][MagAmmo] <= 0) InventoryData[playerid][sel][MagType] = 0, InventoryData[playerid][sel][MagAmmo] = 0;
-							return ShowTDNx(playerid, "Da nap dan %s vao vu khi %s", InvItemName[itemid], InvItemName[InventoryData[playerid][i][ItemID]]);
+							return ShowTDNx(playerid, 5000, "Da nap dan %s vao vu khi %s", InvItemName[itemid], InvItemName[InventoryData[playerid][i][ItemID]]);
 						}
 					}
 					return 1;
@@ -338,7 +338,7 @@ Inventory_PlayerUseItem(playerid, sel, amount) {
 	}
 
 	if(Inventory_IsFoodDrink(itemid)) {
-		if(Inventory_IsEatDrink(playerid)) return ShowTDNx(playerid, "Vui long doi...");
+		if(Inventory_IsEatDrink(playerid)) return ShowTDNx(playerid, 2000, "Vui long doi...");
 		InventoryData[playerid][sel][Amount]--;
 		if(Inventory_IsFood(itemid)) {
 			switch(random(2)) {
@@ -363,7 +363,7 @@ Inventory_PlayerUseItem(playerid, sel, amount) {
 		if(hunger > 0) format(str, sizeof str, "+%.1f Hunger (%.0f/%.0f)~n~", hunger, CharacterData[playerid][Hunger], MAX_PLAYER_HUNGER);
 		if(thirst < 0) format(str, sizeof str, "%s%.1f Thirst (%.0f/%.0f)", str, thirst, CharacterData[playerid][Thirst], MAX_PLAYER_THIRST);
 		if(thirst > 0) format(str, sizeof str, "%s+%.1f Thirst (%.0f/%.0f)", str, thirst, CharacterData[playerid][Thirst], MAX_PLAYER_THIRST);
-		ShowTDNx(playerid, str);
+		ShowTDNx(playerid, 5000, str);
 	}
 
     return 1;
