@@ -65,6 +65,7 @@ public OnGameModeInit() {
 
 public OnGameModeExit() {
 	foreach(new playerid : Player) OnPlayerDisconnect(playerid, 1);
+	ResetGlobalVars();
 	return 1;
 }
 
@@ -74,10 +75,6 @@ public OnPlayerRequestClass(playerid, classid) {
 
 public OnPlayerConnect(playerid)
 {
-	return 1;
-}
-
-public OnPlayerDisconnect(playerid, reason) {
 	return 1;
 }
 

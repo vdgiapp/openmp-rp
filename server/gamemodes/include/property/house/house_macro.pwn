@@ -20,14 +20,12 @@ enum ENUM_HOUSE_INFO {
 	Float:ExteriorA,
 	ExteriorInt,
 	ExteriorWorld,
-	STREAMER_TAG_PICKUP:ExtPickup,
 	Float:InteriorX,
 	Float:InteriorY,
 	Float:InteriorZ,
 	Float:InteriorA,
 	InteriorInt,
 	InteriorWorld,
-	STREAMER_TAG_PICKUP:IntPickup,
 	Float:LockerX,
 	Float:LockerY,
 	Float:LockerZ,
@@ -41,7 +39,13 @@ enum ENUM_HOUSE_INFO {
 	Item6[64],
 	Item7[64],
 	Item8[64],
-	Item9[64]
+	Item9[64],
+
+	// Not save
+	STREAMER_TAG_PICKUP:ExtPickup,
+	STREAMER_TAG_PICKUP:IntPickup,
+	RadioOn,
+	RadioURL
 }
 new HouseData[MAX_HOUSES][ENUM_HOUSE_INFO];
 new Iterator:House<MAX_HOUSES>;

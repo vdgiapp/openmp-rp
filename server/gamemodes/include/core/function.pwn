@@ -188,6 +188,7 @@ FirstUpper(str[256]) {
 }
 
 ResetPlayerVars(playerid) { }
+ResetGlobalVars() { }
 
 GlobalMsg(color, const message[], va_args<>) {
 	foreach(new playerid : Player) {

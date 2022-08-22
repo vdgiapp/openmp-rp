@@ -13,14 +13,13 @@ function OnGetStaffData(id) {
 		format(StaffData[id][Nick], 25, "%s", cache_value_string(0, "Nick"));
 		StaffData[id][Rank] = cache_value_int(0, "Rank");
 		StaffData[id][Helped] = cache_value_int(0, "Helped");
-		Iter_Add(Staff, id);
 		printf("Staff data id %d loaded", id);
 	}
 	return 1;
 }
 
 GetStaffID(playerid) {
-	foreach(new id : Staff) {
+	for(new id = 0; id < MAX_STAFF; id++) {
 		if(isequal(StaffData[id][Account], AuthData[playerid][Account])) return id;
 	}
 	return -1;

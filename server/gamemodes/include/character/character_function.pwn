@@ -61,8 +61,7 @@ function OnGetCharacterData(playerid) {
 
 	SpawnPlayer(playerid);
 	CancelSelectTextDraw(playerid);
-	SetPlayerCompensatedPos(playerid, posx, posy, posz, 7000, world, int);
-	SetPlayerFacingAngle(playerid, angle);
+	SetPlayerCompensatedPos(playerid, posx, posy, posz, angle, 7000, world, int);
 	SetPlayerScore(playerid, level);
 	SetPlayerTeam(playerid, NO_TEAM);
 	SetPlayerColor(playerid, COLOR_WHITE);

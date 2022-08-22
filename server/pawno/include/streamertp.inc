@@ -78,7 +78,7 @@ stock bool:IsPlayerTeleporting(playerid)
 	return (TP_AwaitingTime[playerid] != 0);
 }
 
-stock SetPlayerCompensatedPos(playerid, Float:X, Float:Y, Float:Z, wait_time = TP_WAIT_TIME, world = -1, interior = -1)
+stock SetPlayerCompensatedPos(playerid, Float:X, Float:Y, Float:Z, Float:A, wait_time = TP_WAIT_TIME, world = -1, interior = -1)
 {
 	if (!IsPlayerConnected(playerid))
 		return 0;
@@ -99,11 +99,13 @@ stock SetPlayerCompensatedPos(playerid, Float:X, Float:Y, Float:Z, wait_time = T
 		SetPlayerInterior(playerid, interior);
 	if(world != -1)
 		SetPlayerVirtualWorld(playerid, world);
+
+	SetPlayerFacingAngle(playerid, A);
 
 	return SetPlayerPos(playerid, X, Y, Z - 0.3);
 }
 
-stock SetPlayerCompensatedPosFindZ(playerid, Float:X, Float:Y, Float:Z, wait_time = TP_WAIT_TIME, world = -1, interior = -1)
+stock SetPlayerCompensatedPosFindZ(playerid, Float:X, Float:Y, Float:Z, Float:A, wait_time = TP_WAIT_TIME, world = -1, interior = -1)
 {
 	if (!IsPlayerConnected(playerid))
 		return 0;
@@ -125,5 +127,7 @@ stock SetPlayerCompensatedPosFindZ(playerid, Float:X, Float:Y, Float:Z, wait_tim
 	if(world != -1)
 		SetPlayerVirtualWorld(playerid, world);
 
+	SetPlayerFacingAngle(playerid, A);
+	
 	return SetPlayerPosFindZ(playerid, X, Y, Z);
 }

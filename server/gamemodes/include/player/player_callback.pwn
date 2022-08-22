@@ -8,6 +8,32 @@ hook OnPlayerText(playerid, text[]) {
     return 0;
 }
 
+Alias:enter("vao");
+Cmd:enter(playerid, params[]) {
+    new id = -1;
+    if(!IsPlayerInAnyVehicle(playerid) && (id = House_Nearest(playerid)) != -1 && House_IsPlayerOutside(playerid, id)) {
+        if(!HouseData[id][Created]) return 0;
+        if(!HouseData[id][Owned]) return UsageMsg(playerid, "Su dung /xemnha de xem noi that ben trong truoc khi mua nha.");
+        if(HouseData[id][Locked]) return GameTextForPlayerf(playerid, 1000, 1, "~r~Bi khoa");
+        if(isequal(HouseData[id][Owner], CharacterData[playerid][Name])) GameTextForPlayerf(playerid, 1000, 1, "~g~Welcome home");
+        SetPlayerCompensatedPos(playerid, HouseData[id][InteriorX], HouseData[id][InteriorY], HouseData[id][InteriorZ], HouseData[id][InteriorA], 3000, HouseData[id][InteriorWorld], HouseData[id][InteriorInt]);
+        if(HouseData[id][RadioOn] == 1) PlayAudioStreamForPlayer(playerid, HouseData[id][RadioURL]);
+    }
+    return 1;
+}
+
+Alias:exit("ra");
+Cmd:exit(playerid, params[]) {
+    new id = -1;
+    if(!IsPlayerInAnyVehicle(playerid) && (id = House_Nearest(playerid)) != -1 && House_IsPlayerInsideExt(playerid, id))	{
+        if(!HouseData[id][Created]) return 0;
+        SetPlayerCompensatedPos(playerid, HouseData[id][ExteriorX], HouseData[id][ExteriorY], HouseData[id][ExteriorZ], HouseData[id][ExteriorA], 3000, HouseData[id][ExteriorWorld], HouseData[id][ExteriorInt]);
+		StopAudioStreamForPlayer(playerid);
+	    return 1;
+	}
+    return 1;
+}
+
 Cmd:b(playerid, params[]) {
 
     static str[256];

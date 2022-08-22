@@ -1,10 +1,9 @@
 
-hook OnGameModeExit() {
+hook function ResetGlobalVars() {
 
-    foreach(new hid : House) {
+    for(new hid = 0; hid < MAX_HOUSES; hid++) {
 
-        if(!Iter_Contains(House, hid)) continue;
-        House_SaveData(hid);
+        if(HouseData[hid][Created]) House_SaveData(hid);
 
         HouseData[hid][ID] = -1;
         HouseData[hid][Created] = 0;
@@ -47,15 +46,13 @@ hook OnGameModeExit() {
         DestroyDynamicPickup(HouseData[hid][ExtPickup]);
         DestroyDynamicPickup(HouseData[hid][IntPickup]);
 
-        Iter_Remove(House, hid);
     }
-    return 1;
+
+    continue();
 }
 
 hook OnPlayerPickUpDynPickup(playerid, STREAMER_TAG_PICKUP:pickupid) {
     if(!IsPlayerInGame(playerid)) return 0;
-    if(gettime() - CharacterData[playerid][PickupCD] <= TDN_TIME) return 0;
-    CharacterData[playerid][PickupCD] = gettime();
 
     static hid;
     if((hid = House_Nearest(playerid)) != -1) {
@@ -114,7 +111,6 @@ Dialog:HouseAdminCreatePrice(playerid, response, listitem, inputtext[]) {
 	if(GetPlayerPos(playerid, x, y, z) && GetPlayerFacingAngle(playerid, angle)) {
 		for(new i = 0; i < MAX_HOUSES; i++) {
 	    	if(!HouseData[i][Created] && i != -1) {
-				Iter_Add(House, i);
 				HouseData[i][ID] = i;
     	        HouseData[i][Created] = 1;
         	    HouseData[i][Owned] = 0;
@@ -238,5 +234,18 @@ Dialog:HouseAEdit_Locker(playerid, response, listitem, inputtext[]) {
     House_Refresh(house);
     House_SaveData(house);
     SuccessMsg(playerid, "Dat vi tri locker cua house id %d thanh cong.", house);
+    return 1;
+}
+
+Alias:lockhouse("khoanha", "hlock", "houselock");
+Cmd:lockhouse(playerid, params[]) {
+    new id = -1;
+    if((id = House_Nearest(playerid)) != -1) {
+        if(!HouseData[id][Created]) return 0;
+        if(!isequal(HouseData[id][Owner], CharacterData[playerid][Name])) return 0;
+        PlayerPlaySound(playerid, 1145, 0, 0, 0);
+        if(HouseData[id][Locked]) return HouseData[id][Locked] = 0, GameTextForPlayerf(playerid, 1000, 1, "~g~Mo khoa");
+        if(!HouseData[id][Locked]) return HouseData[id][Locked] = 1, GameTextForPlayerf(playerid, 1000, 1, "~r~Da khoa");
+    }
     return 1;
 }

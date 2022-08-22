@@ -9,8 +9,6 @@ House_LoadData() {
 
 function OnGetHouseData(hid) {
     if(!cache_num_rows()) return 0;
-
-    Iter_Add(House, hid);
     HouseData[hid][ID] = cache_value_int(0, "ID");
     HouseData[hid][Created] = cache_value_int(0, "Created");
     HouseData[hid][Owned] = cache_value_int(0, "Owned");
@@ -115,10 +113,9 @@ House_IsPlayerInsideExt(playerid, hid, Float:range = 2.0) {
 House_IsPlayerInside(playerid, hid, Float:range = 50.0) { return (HouseData[hid][Created] && IsPlayerInRangeOfPoint(playerid, range, HouseData[hid][InteriorX], HouseData[hid][InteriorY], HouseData[hid][InteriorZ]) && GetPlayerInterior(playerid) == HouseData[hid][InteriorInt] && GetPlayerVirtualWorld(playerid) == HouseData[hid][InteriorWorld]); }
 
 House_Nearest(playerid) {
-    if(CharacterData[playerid][HouseEntered] != -1 && House_IsPlayerInside(playerid, CharacterData[playerid][HouseEntered])) return CharacterData[playerid][HouseEntered];
-    foreach(new i : House) {
+    for(new i = 0; i < MAX_HOUSES; i++) {
 	    if(!HouseData[i][Created]) continue;
-	    if(House_IsPlayerInside(playerid, i)) return i;
+	    if(House_IsPlayerInsideExt(playerid, i)) return i;
 		if(House_IsPlayerOutside(playerid, i)) return i;
 	}
 	return -1;

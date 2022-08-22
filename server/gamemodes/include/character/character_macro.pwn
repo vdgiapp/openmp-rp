@@ -42,10 +42,8 @@ enum ENUM_CHARACTER_INFO {
 	Settings,
 
 	// not save
-	HouseEntered,
 	ChatCD,
 	CmdCD,
-	PickupCD,
 
 	HouseAdminID,
 	HouseCreateIntID,

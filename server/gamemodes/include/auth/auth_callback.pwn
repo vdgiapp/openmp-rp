@@ -264,8 +264,7 @@ hook OnGameModeInit()
 	return 1;
 }
 
-hook OnGameModeExit()
-{
+hook OnGameModeExit() {
 	for(new i = 0; i < 10; i++) TextDrawDestroy(AuthTD_MiscTD[i]);
 	TextDrawDestroy(Auth_Button);
 	TextDrawDestroy(Auth_Button2);

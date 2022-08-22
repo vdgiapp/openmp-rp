@@ -39,4 +39,3 @@ enum ENUM_ADMIN_INFO {
 	prevVW
 }
 new StaffData[MAX_STAFF][ENUM_ADMIN_INFO];
-new Iterator:Staff<MAX_STAFF>;

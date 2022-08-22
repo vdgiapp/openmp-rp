@@ -1,19 +1,17 @@
 
-hook OnGameModeExit() {
-	foreach(new id : Staff) {
-		if(!Iter_Contains(Staff, id)) continue;
+hook function ResetGlobalVars() {
+	for(new id = 0; id < MAX_STAFF; id++) {
 		format(StaffData[id][Account], 25, "");
 		format(StaffData[id][Nick], 25, "");
 		StaffData[id][Rank] = 0;
 		StaffData[id][Helped] = 0;
-		Iter_Remove(Staff, id);
 	}
-	return 1;
+	continue();
 }
 
 hook OnPlayerClickMap(playerid, Float:fX, Float:fY, Float:fZ) {
 	if(IsStaff(playerid, MANAGER_RANK)) {
-		if(StaffData[GetStaffID(playerid)][ClickTP] && !IsStaffSpectating(playerid)) SetPlayerCompensatedPosFindZ(playerid, fX, fY, fZ, 1000);
+		if(StaffData[GetStaffID(playerid)][ClickTP] && !IsStaffSpectating(playerid)) SetPlayerCompensatedPosFindZ(playerid, fX, fY, fZ, 0, 1000);
 	}
 	return 1;
 }
@@ -272,6 +270,20 @@ Cmd:alog(playerid, params[]) {
 	return 1;
 }
 
+Alias:myposition("mypos", "vitricuatoi");
+Cmd:myposition(playerid, params[]) {
+	if(!IsStaff(playerid, OFFICAL_ADMIN_RANK)) return NoPermsMsg(playerid);
+	static Float:x, Float:y, Float:z, Float:a;
+	static vw, int;
+	GetPlayerPos(playerid, x, y, z);
+	GetPlayerFacingAngle(playerid, a);
+	vw = GetPlayerVirtualWorld(playerid);
+	int = GetPlayerInterior(playerid);
+	ClientMsg(playerid, -1, "[Vi tri] X: %f - Y: %f - Z: %f", x, y, z);
+	ClientMsg(playerid, -1, "[Vi tri] A: %f - Int: %d - VW: %d", a, int, vw);
+	return 1;
+}
+
 Alias:teleport("tp", "tele");
 Cmd:teleport(playerid, params[]) {
 
@@ -294,7 +306,7 @@ Cmd:teleport(playerid, params[]) {
 	vw = GetPlayerVirtualWorld(target2);
 	int = GetPlayerInterior(target2);
 
-	SetPlayerCompensatedPos(target1, x, y, z, 1000, vw, int);
+	SetPlayerCompensatedPos(target1, x, y, z, 0, 1000, vw, int);
 
 	return 1;
 }
@@ -330,7 +342,7 @@ Cmd:position(playerid, params[]) {
 	if(sscanf(params, "dfff", target, x, y, z)) return UsageMsg(playerid, "/pos(ition) [id] [x] [y] [z]");
 	if(IsStaffSpectating(target)) return ErrorMsg(playerid, "Nguoi choi do dang trong che do spec.");
 
-	SetPlayerCompensatedPos(target, x, y, z, 1000);
+	SetPlayerCompensatedPos(target, x, y, z, 0, 1000);
 	SendStaffCMDLog(playerid, "position");
 
 	return 1;
@@ -348,7 +360,7 @@ Cmd:setint(playerid, params[])  {
 
 	GetPlayerPos(target, x, y, z);
 
-	SetPlayerCompensatedPos(target, x, y, z, 1000, -1, int);
+	SetPlayerCompensatedPos(target, x, y, z, 0, 1000, -1, int);
 	SendStaffCMDLog(playerid, "setint");
 
 	return 1;
@@ -366,7 +378,7 @@ Cmd:setvw(playerid, params[])  {
 
 	GetPlayerPos(target, x, y, z);
 
-	SetPlayerCompensatedPos(target, x, y, z, 1000, vw, -1);
+	SetPlayerCompensatedPos(target, x, y, z, 0, 1000, vw, -1);
 	SendStaffCMDLog(playerid, "setvw");
 
 	return 1;
@@ -382,7 +394,7 @@ Cmd:x(playerid, params[]) {
 	if(sscanf(params, "f", newx)) return UsageMsg(playerid, "/x [new x]");
 	if(IsStaffSpectating(playerid)) return ErrorMsg(playerid, "Vui long thoat khoi che do spec.");
 
-	SetPlayerCompensatedPos(playerid, x+newx, y, z, 1000);
+	SetPlayerCompensatedPos(playerid, x+newx, y, z, 0, 1000);
 	SendStaffCMDLog(playerid, "x");
 
 	return 1;
@@ -398,7 +410,7 @@ Cmd:y(playerid, params[]) {
 	if(sscanf(params, "f", newy)) return UsageMsg(playerid, "/y [new y]");
 	if(IsStaffSpectating(playerid)) return ErrorMsg(playerid, "Vui long thoat khoi che do spec.");
 
-	SetPlayerCompensatedPos(playerid, x, y+newy, z, 1000);
+	SetPlayerCompensatedPos(playerid, x, y+newy, z, 0, 1000);
 	SendStaffCMDLog(playerid, "y");
 
 	return 1;
@@ -414,7 +426,7 @@ Cmd:z(playerid, params[]) {
 	if(sscanf(params, "f", newz)) return UsageMsg(playerid, "/z [new z]");
 	if(IsStaffSpectating(playerid)) return ErrorMsg(playerid, "Vui long thoat khoi che do spec.");
 
-	SetPlayerCompensatedPos(playerid, x, y, z+newz, 1000);
+	SetPlayerCompensatedPos(playerid, x, y, z+newz, 0, 1000);
 	SendStaffCMDLog(playerid, "z");
 
 	return 1;

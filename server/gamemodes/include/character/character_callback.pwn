@@ -5,11 +5,10 @@ hook OnPlayerSpawn(playerid) {
 }
 
 hook function ResetPlayerVars(playerid) {
-	CharacterData[playerid][HouseEntered] = -1;
 	continue(playerid);
 }
 
-hook OnPlayerDisconnect(playerid, reason) {
+public OnPlayerDisconnect(playerid, reason) {
 	if(AuthData[playerid][Logged]) {
 		static str[256];
 		mysql_format(Database, str, sizeof str, "UPDATE `accounts` SET `Online`='0' WHERE `Account`='%s'", AuthData[playerid][Account]);
