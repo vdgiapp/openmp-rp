@@ -7,7 +7,7 @@ Staff_LoadData() {
 	return 1;
 }
 
-function OnGetStaffData(id) {
+func OnGetStaffData(id) {
 	if(cache_num_rows()) {
 		format(StaffData[id][Account], 25, "%s", cache_value_string(0, "Account"));
 		format(StaffData[id][Nick], 25, "%s", cache_value_string(0, "Nick"));

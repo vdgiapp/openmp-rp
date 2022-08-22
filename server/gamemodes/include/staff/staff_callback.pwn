@@ -461,7 +461,7 @@ Cmd:makeadmin(playerid, params[]) {
 
 Cmd:ahouse(playerid, params[]) {
 	if(!IsStaff(playerid, OFFICAL_ADMIN_RANK)) return NoPermsMsg(playerid);
-	Dialog_Show(playerid, HouseAdminMenu, DS_LIST, "ADMIN HOUSE MENU", "Tao mot ngoi nha\nChinh sua mot ngoi nha\nXoa mot ngoi nha", "Chon", "Dong");
+	Dialog_Show(playerid, HouseAdminMenu, DS_LIST, "ADMIN HOUSE MENU", "Tao mot ngoi nha\nChinh sua mot ngoi nha\nXoa mot ngoi nha\nDich chuyen den mot ngoi nha", "Chon", "Dong");
 	/*
 	static type[16], params2[128];
 	if(sscanf(params, "s[16]s[128]", type, params2)) return UsageMsg(playerid, "/ahouse (create/delete/edit)");

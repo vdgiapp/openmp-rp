@@ -8,6 +8,7 @@ enum ENUM_INVENTORY_INFO {
     IsEquipped,
     MagType,
     MagAmmo, // Bang dan / dan trong sung
+    ExData
 }
 new InventoryData[MAX_PLAYERS][MAX_INV_ITEMS][ENUM_INVENTORY_INFO];
 new InvSelectedItem[MAX_PLAYERS]; // selected item slot
@@ -142,7 +143,7 @@ new stock InvItemName[][] = {
     "Ruou vodka", //                        95
 
     // Misc
-    "Cay but",
-    "O khoa"
+    "Chia khoa nha",
+    "Chia khoa xe"
 
 };

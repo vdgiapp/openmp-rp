@@ -16,7 +16,7 @@ Cmd:inventory(playerid) {
     Inventory_Sort(playerid);
 	for(new i = 0; i < MAX_INV_ITEMS; i++) {
         if(InventoryData[playerid][i][ItemID]) {
-            static weapondata[13][2];
+            static weapondata[13][2], exdata;
             static itemname[64], itemid, amount, Float:durable, isequip, magtype, magammo;
             itemid = InventoryData[playerid][i][ItemID];
             amount = InventoryData[playerid][i][Amount];
@@ -24,12 +24,14 @@ Cmd:inventory(playerid) {
             isequip = InventoryData[playerid][i][IsEquipped];
             magtype = InventoryData[playerid][i][MagType];
             magammo = InventoryData[playerid][i][MagAmmo];
+            exdata = InventoryData[playerid][i][ExData];
             format(itemname, sizeof itemname, "%s", InvItemName[itemid]);
             for(new u = 0; u < 13; u++) { GetPlayerWeaponData(playerid, u, weapondata[u][0], weapondata[u][1]); }
             if(amount > 1) {
-                if(Inventory_IsMagazine(itemid)) AddDialogListitem(playerid, " %s (x%d)\t \t%d / %d", itemname, amount, magammo, Inventory_GetMagSize(itemid));
-                else if(Inventory_IsFoodDrink(itemid)) AddDialogListitem(playerid, " %s (x%d)", itemname, amount);
-                else AddDialogListitem(playerid, " %s (x%d)\t%.2f\t", itemname, amount, durable);
+                if(Inventory_IsMagazine(itemid)) AddDialogListitem(playerid, " %s [x%d]\t \t%d / %d", itemname, amount, magammo, Inventory_GetMagSize(itemid));
+                else if(Inventory_IsFoodDrink(itemid)) AddDialogListitem(playerid, " %s [x%d]", itemname, amount);
+                else if(exdata != -1) AddDialogListitem(playerid, " %s %d [x%d]", itemname, exdata, amount);
+                else AddDialogListitem(playerid, " %s [x%d]\t%.2f\t", itemname, amount, durable);
             }
             else {
                 if(Inventory_IsWeapon(itemid)) {
@@ -38,6 +40,7 @@ Cmd:inventory(playerid) {
                 }
                 else if(Inventory_IsMagazine(itemid)) AddDialogListitem(playerid, " %s\t \t%d / %d", itemname, magammo, Inventory_GetMagSize(itemid));
                 else if(Inventory_IsFoodDrink(itemid)) AddDialogListitem(playerid, " %s", itemname);
+                else if(exdata != -1) AddDialogListitem(playerid, " %s %d", itemname, exdata);
                 else AddDialogListitem(playerid, " %s\t%.2f\t", itemname, durable);
             }
         }

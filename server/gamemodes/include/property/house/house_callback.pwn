@@ -78,25 +78,85 @@ Dialog:HouseAdminMenu(playerid, response, listitem, inputtext[]) {
             case 0: Dialog_Show(playerid, HouseAdminCreateIntID, DS_INPUT, "TAO MOT NGOI NHA", "\\cHay nhap id interior cho ngoi nha:", "Xong", "Quay lai");
             case 1: Dialog_Show(playerid, HouseAdminEditID, DS_INPUT, "CHINH SUA NGOI NHA", "\\cNhap ID cua ngoi nha ma ban muon chinh sua:", "Xong", "Quay lai");
             case 2: Dialog_Show(playerid, HouseAdminDeleteID, DS_INPUT, "XOA MOT NGOI NHA", "\\cNhap ID cua ngoi nha ma ban muon xoa:", "Xong", "Quay lai");
+            case 3: Dialog_Show(playerid, HouseAdminGotoID, DS_INPUT, "DICH CHUYEN DEN MOT NGOI NHA", "\\cNhap ID cua ngoi nha ma ban muon den:", "Xong", "Quay lai");
         }
     }
     return 1;
 }
 
-Dialog:HouseAdminDeleteID(playerid, response, listitem, inputtext[]) {
-    if(!response) return Dialog_Show(playerid, HouseAdminMenu, DS_LIST, "ADMIN HOUSE MENU", "Tao mot ngoi nha\nChinh sua mot ngoi nha\nXoa mot ngoi nha", "Chon", "Dong");
+Dialog:HouseAdminGotoID(playerid, response, listitem, inputtext[]) {
+    if(!response) return Dialog_Show(playerid, HouseAdminMenu, DS_LIST, "ADMIN HOUSE MENU", "Tao mot ngoi nha\nChinh sua mot ngoi nha\nXoa mot ngoi nha\nDich chuyen den mot ngoi nha", "Chon", "Dong");
     if(!IsNumeric(inputtext) || strval(inputtext) == -1) return ErrorMsg(playerid, "ID cua ngoi nha khong hop le.");
-    static house; house = strval(inputtext);
+    static id; id = strval(inputtext);
     static title[32], caption[256];
-    if(!HouseData[house][Created]) return ErrorMsg(playerid, "Ngoi nha nay khong ton tai.");
-    CharacterData[playerid][HouseAdminID] = house;
-    House_Delete(CharacterData[playerid][HouseAdminID]);
+    if(!HouseData[id][Created]) return ErrorMsg(playerid, "Ngoi nha nay khong ton tai.");
+    SetPlayerCompensatedPos(playerid, HouseData[id][ExteriorX], HouseData[id][ExteriorY], HouseData[id][ExteriorZ], HouseData[id][ExteriorA], 3000, HouseData[id][ExteriorWorld], HouseData[id][ExteriorInt]);
+}
+
+Dialog:HouseAdminDeleteID(playerid, response, listitem, inputtext[]) {
+    if(!response) return Dialog_Show(playerid, HouseAdminMenu, DS_LIST, "ADMIN HOUSE MENU", "Tao mot ngoi nha\nChinh sua mot ngoi nha\nXoa mot ngoi nha\nDich chuyen den mot ngoi nha", "Chon", "Dong");
+    if(!IsNumeric(inputtext) || strval(inputtext) == -1) return ErrorMsg(playerid, "ID cua ngoi nha khong hop le.");
+    static hid; hid = strval(inputtext);
+    static title[32], caption[256];
+    if(!HouseData[hid][Created]) return ErrorMsg(playerid, "Ngoi nha nay khong ton tai.");
+
+    CharacterData[playerid][HouseAdminID] = hid;
+
+    SuccessMsg(playerid, "Da xoa thanh cong ngoi nha tai dia chi %d, %s", HouseData[hid][ID], HouseData[hid][Address]);
+
+    if(HouseData[hid][Created]) {
+		printf("House ID %d, DbID %d deleted.", hid, HouseData[hid][ID]);
+		mysql_update(Database, "DELETE FROM `houses` WHERE `ID` = '%d'", HouseData[hid][ID]);
+
+		if (IsValidDynamicPickup(HouseData[hid][IntPickup]))
+		    DestroyDynamicPickup(HouseData[hid][IntPickup]);
+
+		if (IsValidDynamicPickup(HouseData[hid][ExtPickup]))
+		    DestroyDynamicPickup(HouseData[hid][ExtPickup]);
+
+		HouseData[hid][ID] = -1;
+        HouseData[hid][Created] = 0;
+        HouseData[hid][Owned] = 0;
+        format(HouseData[hid][Owner], 25, "");
+        HouseData[hid][Locked] = 0;
+        HouseData[hid][Alarm] =  0;
+        HouseData[hid][Level] =  0;
+        HouseData[hid][Price] =  0;
+        HouseData[hid][IntID] =  0;
+        HouseData[hid][ExteriorX] = 0;
+        HouseData[hid][ExteriorY] = 0;
+        HouseData[hid][ExteriorZ] = 0;
+        HouseData[hid][ExteriorA] = 0;
+        HouseData[hid][ExteriorInt] = 0;
+        HouseData[hid][ExteriorWorld] = 0;
+        HouseData[hid][InteriorX] = 0;
+        HouseData[hid][InteriorY] = 0;
+        HouseData[hid][InteriorZ] = 0;
+        HouseData[hid][InteriorA] = 0;
+        HouseData[hid][InteriorInt] = 0;
+        HouseData[hid][InteriorWorld] = 0;
+        HouseData[hid][LockerX] = 0;
+        HouseData[hid][LockerY] = 0;
+        HouseData[hid][LockerZ] = 0;
+        HouseData[hid][Cash] = 0;
+        format(HouseData[hid][Item0], 64, "");
+        format(HouseData[hid][Item1], 64, "");
+        format(HouseData[hid][Item2], 64, "");
+        format(HouseData[hid][Item3], 64, "");
+        format(HouseData[hid][Item4], 64, "");
+        format(HouseData[hid][Item5], 64, "");
+        format(HouseData[hid][Item6], 64, "");
+        format(HouseData[hid][Item7], 64, "");
+        format(HouseData[hid][Item8], 64, "");
+        format(HouseData[hid][Item9], 64, "");
+        format(HouseData[hid][Address], MAX_MAP_ZONE_NAME, "");
+	}
     CharacterData[playerid][HouseAdminID] = -1;
     return 1;
 }
 
 Dialog:HouseAdminCreateIntID(playerid, response, listitem, inputtext[]) {
-    if(!response) return Dialog_Show(playerid, HouseAdminMenu, DS_LIST, "ADMIN HOUSE MENU", "Tao mot ngoi nha\nChinh sua mot ngoi nha\nXoa mot ngoi nha", "Chon", "Dong");
+    if(!response) return Dialog_Show(playerid, HouseAdminMenu, DS_LIST, "ADMIN HOUSE MENU", "Tao mot ngoi nha\nChinh sua mot ngoi nha\nXoa mot ngoi nha\nDich chuyen den mot ngoi nha", "Chon", "Dong");
     if(strval(inputtext) >= sizeof(arrHouseInteriors) || !IsNumeric(inputtext)) {
         ErrorMsg(playerid, "Interior ID phai tu 0 - %d.", sizeof(arrHouseInteriors)-1);
         return dialog_HouseAdminMenu(playerid, true, 0, "");
@@ -148,6 +208,10 @@ Dialog:HouseAdminCreatePrice(playerid, response, listitem, inputtext[]) {
 				HouseData[i][InteriorInt] = arrHouseInteriors[CharacterData[playerid][HouseCreateIntID]][Int];
 				HouseData[i][InteriorWorld] = i+1;
 
+                HouseData[i][LockerX] = arrHouseInteriors[CharacterData[playerid][HouseCreateIntID]][LX];
+                HouseData[i][LockerY] = arrHouseInteriors[CharacterData[playerid][HouseCreateIntID]][LY];
+                HouseData[i][LockerZ] = arrHouseInteriors[CharacterData[playerid][HouseCreateIntID]][LZ];
+
 				House_Refresh(i);
 				mysql_update(Database, "INSERT INTO `houses` (`ID`) VALUES (%d)", HouseData[i][ID]);
 				House_SaveData(i);
@@ -164,7 +228,7 @@ Dialog:HouseAdminCreatePrice(playerid, response, listitem, inputtext[]) {
 }
 
 Dialog:HouseAdminEditID(playerid, response, listitem, inputtext[]) {
-    if(!response) return Dialog_Show(playerid, HouseAdminMenu, DS_LIST, "ADMIN HOUSE MENU", "Tao mot ngoi nha\nChinh sua mot ngoi nha\nXoa mot ngoi nha", "Chon", "Dong");
+    if(!response) return Dialog_Show(playerid, HouseAdminMenu, DS_LIST, "ADMIN HOUSE MENU", "Tao mot ngoi nha\nChinh sua mot ngoi nha\nXoa mot ngoi nha\nDich chuyen den mot ngoi nha", "Chon", "Dong");
     if(!IsNumeric(inputtext) || strval(inputtext) == -1) return ErrorMsg(playerid, "ID cua ngoi nha khong hop le.");
     static house; house = strval(inputtext);
     static title[32], caption[256];
@@ -188,7 +252,7 @@ Dialog:HouseAdminEdit(playerid, response, listitem, inputtext[]) {
         CharacterData[playerid][HouseAdminID] = -1;
     	CharacterData[playerid][HouseCreateIntID] = -1;
     	CharacterData[playerid][HouseCreatePrice] = 0;
-        return Dialog_Show(playerid, HouseAdminMenu, DS_LIST, "ADMIN HOUSE MENU", "Tao mot ngoi nha\nChinh sua mot ngoi nha\nXoa mot ngoi nha", "Chon", "Dong");
+        return Dialog_Show(playerid, HouseAdminMenu, DS_LIST, "ADMIN HOUSE MENU", "Tao mot ngoi nha\nChinh sua mot ngoi nha\nXoa mot ngoi nha\nDich chuyen den mot ngoi nha", "Chon", "Dong");
     }
     return 1;
 }
@@ -266,15 +330,22 @@ Dialog:HouseAEdit_Locker(playerid, response, listitem, inputtext[]) {
 }
 
 Alias:lockhouse("khoanha", "hlock", "houselock");
-Cmd:lockhouse(playerid, params[]) {
+Cmd:lockhouse(playerid) {
     new id = -1;
     if((id = House_Nearest(playerid)) != -1) {
         if(!HouseData[id][Created]) return 0;
-        if(!isequal(HouseData[id][Owner], CharacterData[playerid][Name])) return ErrorMsg(playerid, "Ban khong phai la chu nha.");
+        if(!HouseData[id][Owned]) return 0;
+        if(!House_IsOwner(playerid, id)) return ErrorMsg(playerid, "Ban khong co chia khoa cua ngoi nha nay.");
         PlayerPlaySound(playerid, 1145, 0, 0, 0);
-        if(HouseData[id][Locked]) return HouseData[id][Locked] = 0, GameTextForPlayerf(playerid, 5000, 6, "~g~Mo khoa");
-        if(!HouseData[id][Locked]) return HouseData[id][Locked] = 1, GameTextForPlayerf(playerid, 5000, 6, "~r~Da khoa");
+        if(HouseData[id][Locked]) return HouseData[id][Locked] = 0, GameTextForPlayerf(playerid, 2000, 6, "~g~Mo khoa");
+        if(!HouseData[id][Locked]) return HouseData[id][Locked] = 1, GameTextForPlayerf(playerid, 2000, 6, "~r~Da khoa");
     }
+    return 1;
+}
+
+Alias:picklockhouse("bekhoanha", "housepicklock", "hpl", "hpicklock");
+Cmd:picklockhouse(playerid, params[]) {
+
     return 1;
 }
 
@@ -283,7 +354,7 @@ Cmd:viewhouse(playerid, params[]) {
     new id = -1;
     if((id = House_Nearest(playerid)) != -1 && House_IsPlayerOutside(playerid, id)) {
         if(!HouseData[id][Created]) return 0;
-        if(isequal(HouseData[id][Owner], CharacterData[playerid][Name])) return ErrorMsg(playerid, "Ban da so huu can nha nay, dung /enter de vao trong nha.");
+        if(House_IsOwner(playerid, id)) return ErrorMsg(playerid, "Ban da so huu can nha nay, dung /enter de vao trong nha.");
         if(HouseData[id][Owned]) return ErrorMsg(playerid, "Can nha nay da co chu so huu, dung /enter de vao trong neu duoc chu nha cho phep.");
         SetPlayerCompensatedPos(playerid, HouseData[id][InteriorX], HouseData[id][InteriorY], HouseData[id][InteriorZ], HouseData[id][InteriorA], 3000, HouseData[id][InteriorWorld], HouseData[id][InteriorInt]);
         if(HouseData[id][RadioOn] == 1) PlayAudioStreamForPlayer(playerid, HouseData[id][RadioURL]);
@@ -296,7 +367,7 @@ Cmd:buyhouse(playerid, params[]) {
     new id = -1;
     if((id = House_Nearest(playerid)) != -1 && House_IsPlayerOutside(playerid, id)) {
         if(!HouseData[id][Created]) return 0;
-        if(isequal(HouseData[id][Owner], CharacterData[playerid][Name])) return ErrorMsg(playerid, "Ban da la chu so huu cua ngoi nha nay roi.");
+        if(House_IsOwner(playerid, id)) return ErrorMsg(playerid, "Ban da la chu so huu cua ngoi nha nay roi.");
         if(HouseData[id][Owned]) return ErrorMsg(playerid, "Ban khong the mua can nha nay vi da co chu so huu.");
         PlayerPlaySound(playerid, 1054, 0, 0, 0);
         HouseData[id][Owned] = 1;

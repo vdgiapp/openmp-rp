@@ -109,6 +109,7 @@ main() {
 
 // Property
 #include "include\property\inventory\inv_entry.pwn"
+#include "include\property\door\door_entry.pwn"
 #include "include\property\house\house_entry.pwn"
 
 #include "include\player\player_entry.pwn"

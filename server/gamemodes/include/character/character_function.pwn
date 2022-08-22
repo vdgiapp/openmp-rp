@@ -10,7 +10,7 @@ Fade:LoadCharacterData(playerid) {
     return 1;
 }
 
-function OnGetCharacterData(playerid) {
+func OnGetCharacterData(playerid) {
 	static str[128], level, exp;
 	static Float:posx, Float:posy, Float:posz, Float:angle, world, int;
 	static weaponskill[11];

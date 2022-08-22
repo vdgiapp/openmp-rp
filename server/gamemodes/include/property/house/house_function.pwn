@@ -7,7 +7,7 @@ House_LoadData() {
 	return 1;
 }
 
-function OnGetHouseData(hid) {
+func OnGetHouseData(hid) {
     if(!cache_num_rows()) return 0;
     HouseData[hid][ID] = cache_value_int(0, "ID");
     HouseData[hid][Created] = cache_value_int(0, "Created");
@@ -49,6 +49,7 @@ function OnGetHouseData(hid) {
 
     HouseData[hid][ExtPickup] = CreateDynamicPickup(19198, 1, HouseData[hid][ExteriorX], HouseData[hid][ExteriorY], HouseData[hid][ExteriorZ]+0.5, HouseData[hid][ExteriorWorld], HouseData[hid][ExteriorInt], -1, HOUSE_SHOW_DISTANCE);
     HouseData[hid][IntPickup] = CreateDynamicPickup(19198, 1, HouseData[hid][InteriorX], HouseData[hid][InteriorY], HouseData[hid][InteriorZ]+0.5, HouseData[hid][InteriorWorld], HouseData[hid][InteriorInt], -1, HOUSE_SHOW_DISTANCE);
+	HouseData[hid][LockerPickup] = CreateDynamicPickup(1277, 1, HouseData[hid][LockerX], HouseData[hid][LockerY], HouseData[hid][LockerZ], HouseData[hid][InteriorWorld], HouseData[hid][InteriorInt]);
 
     if(!HouseData[hid][Created]) {
 		if (IsValidDynamicPickup(HouseData[hid][IntPickup]))
@@ -56,6 +57,9 @@ function OnGetHouseData(hid) {
 
 		if (IsValidDynamicPickup(HouseData[hid][ExtPickup]))
 		    DestroyDynamicPickup(HouseData[hid][ExtPickup]);
+
+		if (IsValidDynamicPickup(HouseData[hid][LockerPickup]))
+			DestroyDynamicPickup(HouseData[hid][LockerPickup]);
     }
 
     printf("House ID %d, DbID %d loaded.", hid, HouseData[hid][ID]);
@@ -124,55 +128,10 @@ House_Nearest(playerid) {
 	return -1;
 }
 
-House_Delete(hid) {
-	if(hid != -1 && HouseData[hid][Created]) {
-		printf("House ID %d, DbID %d deleted.", hid, HouseData[hid][ID]);
-		mysql_update(Database, "DELETE FROM `houses` WHERE `ID` = '%d'", HouseData[hid][ID]);
-
-		if (IsValidDynamicPickup(HouseData[hid][IntPickup]))
-		    DestroyDynamicPickup(HouseData[hid][IntPickup]);
-
-		if (IsValidDynamicPickup(HouseData[hid][ExtPickup]))
-		    DestroyDynamicPickup(HouseData[hid][ExtPickup]);
-
-		HouseData[hid][ID] = -1;
-        HouseData[hid][Created] = 0;
-        HouseData[hid][Owned] = 0;
-        format(HouseData[hid][Owner], 25, "");
-        HouseData[hid][Locked] = 0;
-        HouseData[hid][Alarm] =  0;
-        HouseData[hid][Level] =  0;
-        HouseData[hid][Price] =  0;
-        HouseData[hid][IntID] =  0;
-        HouseData[hid][ExteriorX] = 0;
-        HouseData[hid][ExteriorY] = 0;
-        HouseData[hid][ExteriorZ] = 0;
-        HouseData[hid][ExteriorA] = 0;
-        HouseData[hid][ExteriorInt] = 0;
-        HouseData[hid][ExteriorWorld] = 0;
-        HouseData[hid][InteriorX] = 0;
-        HouseData[hid][InteriorY] = 0;
-        HouseData[hid][InteriorZ] = 0;
-        HouseData[hid][InteriorA] = 0;
-        HouseData[hid][InteriorInt] = 0;
-        HouseData[hid][InteriorWorld] = 0;
-        HouseData[hid][LockerX] = 0;
-        HouseData[hid][LockerY] = 0;
-        HouseData[hid][LockerZ] = 0;
-        HouseData[hid][Cash] = 0;
-        format(HouseData[hid][Item0], 64, "");
-        format(HouseData[hid][Item1], 64, "");
-        format(HouseData[hid][Item2], 64, "");
-        format(HouseData[hid][Item3], 64, "");
-        format(HouseData[hid][Item4], 64, "");
-        format(HouseData[hid][Item5], 64, "");
-        format(HouseData[hid][Item6], 64, "");
-        format(HouseData[hid][Item7], 64, "");
-        format(HouseData[hid][Item8], 64, "");
-        format(HouseData[hid][Item9], 64, "");
-        format(HouseData[hid][Address], MAX_MAP_ZONE_NAME, "");
-	}
-	return 1;
+House_IsOwner(playerid, house) {
+	if(!HouseData[house][Owned] || !HouseData[house][Created]) return false;
+	if(isequal(HouseData[house][Owner], CharacterData[playerid][Name])) return true;
+	return false;
 }
 
 House_Refresh(hid) {
@@ -184,8 +143,12 @@ House_Refresh(hid) {
 		if (IsValidDynamicPickup(HouseData[hid][ExtPickup]))
 		    DestroyDynamicPickup(HouseData[hid][ExtPickup]);
 
+		if (IsValidDynamicPickup(HouseData[hid][LockerPickup]))
+			DestroyDynamicPickup(HouseData[hid][LockerPickup]);
+
 		HouseData[hid][ExtPickup] = CreateDynamicPickup(19198, 1, HouseData[hid][ExteriorX], HouseData[hid][ExteriorY], HouseData[hid][ExteriorZ]+0.5, HouseData[hid][ExteriorWorld], HouseData[hid][ExteriorInt], -1, HOUSE_SHOW_DISTANCE);
 	   	HouseData[hid][IntPickup] = CreateDynamicPickup(19198, 1, HouseData[hid][InteriorX], HouseData[hid][InteriorY], HouseData[hid][InteriorZ]+0.5, HouseData[hid][InteriorWorld], HouseData[hid][InteriorInt], -1, HOUSE_SHOW_DISTANCE);
+		HouseData[hid][LockerPickup] = CreateDynamicPickup(1277, 1, HouseData[hid][LockerX], HouseData[hid][LockerY], HouseData[hid][LockerZ], HouseData[hid][InteriorWorld], HouseData[hid][InteriorInt]);
 	}
 	if(!HouseData[hid][Created]) {
 		if (IsValidDynamicPickup(HouseData[hid][IntPickup]))
@@ -193,5 +156,8 @@ House_Refresh(hid) {
 
 		if (IsValidDynamicPickup(HouseData[hid][ExtPickup]))
 		    DestroyDynamicPickup(HouseData[hid][ExtPickup]);
+
+		if (IsValidDynamicPickup(HouseData[hid][LockerPickup]))
+			DestroyDynamicPickup(HouseData[hid][LockerPickup]);
 	}
 }

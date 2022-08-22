@@ -275,6 +275,9 @@ hook OnPlayerUpdate(playerid) {
 
 		PlayerTextDrawSetString(playerid, HUD_Zone[playerid], GetPlayerZone(playerid));
 
+		if(Inventory_HasItem(playerid, 20) != -1 && !IsPlayerTextDrawVisible(playerid, HUD_Zone[playerid])) PlayerTextDrawShow(playerid, HUD_Zone[playerid]);
+		if(Inventory_HasItem(playerid, 21) != -1 && !IsPlayerTextDrawVisible(playerid, HUD_WatchTime[playerid])) PlayerTextDrawShow(playerid, HUD_WatchTime[playerid]);
+
 		static level, exp;
 		sscanf(CharacterData[playerid][Level], "ii", level, exp);
 		format(str, sizeof str, "Lv.%d", level);
@@ -297,8 +300,6 @@ ShowPlayerHUD(playerid) {
 	PlayerTextDrawShow(playerid, HUD_StaminaBG[playerid]);
 	PlayerTextDrawShow(playerid, HUD_Stamina[playerid]);
 	PlayerTextDrawShow(playerid, HUD_Level[playerid]);
-	if(Inventory_HasItem(playerid, 20)) PlayerTextDrawShow(playerid, HUD_Zone[playerid]);
-	if(Inventory_HasItem(playerid, 21)) PlayerTextDrawShow(playerid, HUD_WatchTime[playerid]);
 	/*
 	PlayerTextDrawShow(playerid, HUD_VehName[playerid]);
 	PlayerTextDrawShow(playerid, HUD_VehFuel[playerid]);

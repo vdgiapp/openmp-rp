@@ -73,8 +73,12 @@ public OnPlayerRequestClass(playerid, classid) {
 	return 0;
 }
 
-public OnPlayerConnect(playerid)
-{
+public OnPlayerConnect(playerid) {
+	return 1;
+}
+
+public OnPlayerDisconnect(playerid, reason) {
+	@OnPlayerDisconnect(playerid, reason);
 	return 1;
 }
 

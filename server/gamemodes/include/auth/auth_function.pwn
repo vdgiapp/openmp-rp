@@ -1,7 +1,7 @@
 
 task GetSvInfo[1000]() mysql_tquery(Database, "SELECT * FROM `serverinfo`", "OnGetSvInfo");
 
-function OnGetSvInfo() {
+func OnGetSvInfo() {
 
 	static day, month, year, str[64];
 	getdate(year, month, day);
@@ -20,7 +20,7 @@ function OnGetSvInfo() {
 	format(str, sizeof str, "%d", GetPlayersOnline()); TextDrawSetString(Auth_PlayersOnline, str);
 }
 
-function OnCheckingPlayerAccount(playerid) {
+func OnCheckingPlayerAccount(playerid) {
 	if(cache_num_rows()) {
 		static isbanned, banday, banmonth, banyear, banby[32], banreason[128],
 			unbanday, unbanmonth, unbanyear, online;
@@ -142,7 +142,7 @@ CheckPlayerNameToLogin(playerid) {
 	mysql_tquery(Database, str, "OnCheckPNameToLog", "i", playerid);
 }
 
-function OnCheckPNameToLog(playerid) {
+func OnCheckPNameToLog(playerid) {
 	if(cache_num_rows()) return ShowLoginDialog(playerid);
 	else return ErrorMsg(playerid, "Tai khoan nay khong ton tai. Neu ban muon tao tai khoan, hay truy cap vao website "SERVER_WEBSITE" de dang ky.");/* ShowRegisterDialog(playerid); */
 }
@@ -228,7 +228,7 @@ ShowCharSelDialog(playerid) {
 	}
 }
 
-function OnGetCharTmpData(playerid, slot) {
+func OnGetCharTmpData(playerid, slot) {
 	static str[256], tmp; tmp = slot-1;
 	if(cache_num_rows()) {
 		sscanf(cache_value_string(0, "Level"), "ii", tmpCharacterData[playerid][tmp][Level], tmpCharacterData[playerid][tmp][Available]);
@@ -390,7 +390,7 @@ CreateCharacterForPlayer(playerid, name[], slot) {
     return 1;
 }
 
-function OnCheckNewCharName(playerid, inputtext[]) {
+func OnCheckNewCharName(playerid, inputtext[]) {
 	static str[256];
 	if(cache_num_rows()) {
 		format(str, sizeof str, "\\c"COL_LIGHTRED"Ten nhan vat "COL_WHITE"%s "COL_LIGHTRED"da ton tai. Vui long chon mot ten khac!\n\\c"COL_WHITE"Nhap ten cho nhan vat cua ban. "COL_GREEN"Vi du: Ho_Ten.", inputtext);

@@ -7,6 +7,7 @@ hook function ResetPlayerVars(playerid) {
         InventoryData[playerid][i][IsEquipped] = 0;
 		InventoryData[playerid][i][MagType] = 0;
 		InventoryData[playerid][i][MagAmmo] = 0;
+		InventoryData[playerid][i][ExData] = -1;
     }
 	continue(playerid);
 }
@@ -16,8 +17,9 @@ Inventory_LoadData(playerid) {
     for(new i = 0; i < MAX_INV_ITEMS; i++) {
         static str[64];
 		format(str, sizeof str, "Item%d", i);
-		sscanf(cache_value_string(0, str), "ddfddd", InventoryData[playerid][i][ItemID], InventoryData[playerid][i][Amount],
-		InventoryData[playerid][i][Durable], InventoryData[playerid][i][IsEquipped], InventoryData[playerid][i][MagType], InventoryData[playerid][i][MagAmmo]);
+		sscanf(cache_value_string(0, str), "ddfdddd", InventoryData[playerid][i][ItemID], InventoryData[playerid][i][Amount],
+		InventoryData[playerid][i][Durable], InventoryData[playerid][i][IsEquipped], InventoryData[playerid][i][MagType],
+		InventoryData[playerid][i][MagAmmo], InventoryData[playerid][i][ExData]);
 	}
     return 1;
 }
@@ -29,28 +31,29 @@ Inventory_SaveData(playerid) {
 			for(new u = 0; u < 13; u++) {
 				GetPlayerWeaponData(playerid, u, weapondata[u][0], weapondata[u][1]);
 				if(GetWeaponSlot(InventoryData[playerid][i][ItemID]) == u) {
-					mysql_format(Database, str, sizeof str, "UPDATE `characters` SET `Item%d` = '%d %d %f 0 %d %d' WHERE `Name` = '%s' AND `Slot` = '%d'", i,
+					mysql_update(Database, "UPDATE `characters` SET `Item%d` = '%d %d %f 0 %d %d %d' WHERE `Name` = '%s' AND `Slot` = '%d'", i,
 					InventoryData[playerid][i][ItemID], InventoryData[playerid][i][Amount], InventoryData[playerid][i][Durable],
-					InventoryData[playerid][i][MagType], weapondata[u][1], CharacterData[playerid][Name], AuthData[playerid][Selected]);
-					mysql_tquery(Database, str);
+					InventoryData[playerid][i][MagType], weapondata[u][1], InventoryData[playerid][i][ExData],
+					CharacterData[playerid][Name], AuthData[playerid][Selected]);
 				}
 			}
 		}
 		else {
-			mysql_format(Database, str, sizeof str, "UPDATE `characters` SET `Item%d` = '%d %d %f %d %d %d' WHERE `Name` = '%s' AND `Slot` = '%d'", i,
+			mysql_update(Database, "UPDATE `characters` SET `Item%d` = '%d %d %f 0 %d %d %d' WHERE `Name` = '%s' AND `Slot` = '%d'", i,
 			InventoryData[playerid][i][ItemID], InventoryData[playerid][i][Amount], InventoryData[playerid][i][Durable],
-			InventoryData[playerid][i][IsEquipped], InventoryData[playerid][i][MagType], InventoryData[playerid][i][MagAmmo], CharacterData[playerid][Name], AuthData[playerid][Selected]);
-			mysql_tquery(Database, str);
+			InventoryData[playerid][i][MagType], InventoryData[playerid][i][MagAmmo], InventoryData[playerid][i][ExData],
+			CharacterData[playerid][Name], AuthData[playerid][Selected]);
 		}
 	}
 }
 
-Inventory_GiveItem(playerid, itemid, amount, Float:durable, magtype = 0, magammo = 0) {
+Inventory_GiveItem(playerid, itemid, amount, Float:durable, exdata = -1, magtype = 0, magammo = 0) {
     for(new i = 0; i < MAX_INV_ITEMS; i++) {
         if(InventoryData[playerid][i][ItemID] == itemid) {
             if(InventoryData[playerid][i][Durable] != 100.00) continue;
             if(Inventory_IsWeapon(itemid)) continue;
             if(InventoryData[playerid][i][MagAmmo] != magammo) continue;
+			if(InventoryData[playerid][i][ExData] != exdata) continue;
             InventoryData[playerid][i][Amount] += amount;
 			return 1;
         }
@@ -58,6 +61,7 @@ Inventory_GiveItem(playerid, itemid, amount, Float:durable, magtype = 0, magammo
             InventoryData[playerid][i][ItemID] = itemid;
             InventoryData[playerid][i][Amount] = amount;
             InventoryData[playerid][i][Durable] = durable;
+			InventoryData[playerid][i][ExData] = exdata;
             if(Inventory_IsWeapon(itemid) && magammo) {
                 InventoryData[playerid][i][MagAmmo] = magammo;
                 InventoryData[playerid][i][MagType] = magtype;
@@ -72,9 +76,11 @@ Inventory_GiveItem(playerid, itemid, amount, Float:durable, magtype = 0, magammo
     return -1;
 }
 
-Inventory_TakeItem(playerid, itemid, amount) {
+Inventory_TakeItem(playerid, itemid, amount, exdata = -1) {
     for(new i = 0; i < MAX_INV_ITEMS; i++) {
-        if(InventoryData[playerid][i][ItemID] == itemid && InventoryData[playerid][i][Amount] >= amount) {
+        if(InventoryData[playerid][i][ItemID] == itemid
+		&& InventoryData[playerid][i][Amount] >= amount
+		&& InventoryData[playerid][i][ExData] == exdata) {
             InventoryData[playerid][i][Amount] -= amount;
 			if(Inventory_IsWeapon(itemid) && InventoryData[playerid][i][IsEquipped]) RemovePlayerWeapon(playerid, itemid);
             if(InventoryData[playerid][i][Amount] <= 0) {
@@ -84,6 +90,7 @@ Inventory_TakeItem(playerid, itemid, amount) {
 				InventoryData[playerid][i][IsEquipped] = 0;
 				InventoryData[playerid][i][MagType] = 0;
                 InventoryData[playerid][i][MagAmmo] = 0;
+				InventoryData[playerid][i][ExData] = -1;
             }
             return 1;
         }
@@ -98,7 +105,7 @@ Inventory_Sort(playerid) {
 				if(InventoryData[playerid][i][ItemID] != InventoryData[playerid][u][ItemID]) continue;
                 if(InventoryData[playerid][i][Durable] != InventoryData[playerid][u][Durable]) continue;
                 if(Inventory_IsWeapon(InventoryData[playerid][i][ItemID]) || Inventory_IsWeapon(InventoryData[playerid][u][ItemID])) continue;
-				//if(Inventory_IsMagazine(InventoryData[playerid][i][ItemID]) || Inventory_IsMagazine(InventoryData[playerid][u][ItemID])) continue;
+				if(InventoryData[playerid][i][ExData] != InventoryData[playerid][u][ExData]) continue;
                 if(InventoryData[playerid][i][MagAmmo] != InventoryData[playerid][u][MagAmmo]) continue;
                 InventoryData[playerid][i][Amount] += InventoryData[playerid][u][Amount];
 				InventoryData[playerid][u][ItemID] = 0;
@@ -106,6 +113,7 @@ Inventory_Sort(playerid) {
 				InventoryData[playerid][u][IsEquipped] = 0;
 				InventoryData[playerid][u][MagType] = 0;
 				InventoryData[playerid][u][MagAmmo] = 0;
+				InventoryData[playerid][u][ExData] = -1;
             }
             if(!InventoryData[playerid][i][ItemID] && InventoryData[playerid][u][ItemID]) {
                 SwapInt(InventoryData[playerid][u][ItemID], InventoryData[playerid][i][ItemID]);
@@ -114,6 +122,7 @@ Inventory_Sort(playerid) {
 				SwapInt(InventoryData[playerid][u][IsEquipped], InventoryData[playerid][i][IsEquipped]);
 				SwapInt(InventoryData[playerid][u][MagType], InventoryData[playerid][i][MagType]);
                 SwapInt(InventoryData[playerid][u][MagAmmo], InventoryData[playerid][i][MagAmmo]);
+				SwapInt(InventoryData[playerid][u][ExData], InventoryData[playerid][i][ExData]);
             }
         }
 		if(InventoryData[playerid][i][Amount] <= 0) InventoryData[playerid][i][ItemID] = 0, InventoryData[playerid][i][Amount] = 0;
@@ -140,23 +149,24 @@ Inventory_Sort(playerid) {
 				InventoryData[playerid][i][IsEquipped] = 0;
 				InventoryData[playerid][i][MagType] = 0;
                 InventoryData[playerid][i][MagAmmo] = 0;
+				InventoryData[playerid][i][ExData] = -1;
 			}
 		}
     }
 }
 
-Inventory_HasItem(playerid, itemid) {
-    for(new i; i < MAX_INV_ITEMS; i++) {
+Inventory_HasItem(playerid, itemid, exdata = -1) {
+    for(new i = 0; i < MAX_INV_ITEMS; i++) {
         if(!InventoryData[playerid][i][ItemID]) continue;
-        if(InventoryData[playerid][i][ItemID] == itemid)
-        return true;
+        if(InventoryData[playerid][i][ItemID] == itemid
+		&& InventoryData[playerid][i][ExData] == exdata) return i;
     }
-    return false;
+    return -1;
 }
 
 Inventory_IsWeapon(itemid) {
     switch(itemid) {
-        case 1..34: return true;
+        case 1..9, 14..18, 22..34: return true;
         default: return false;
     }
 }
@@ -319,7 +329,7 @@ Inventory_PlayerUseItem(playerid, sel, amount) {
 								SetPlayerAmmo(playerid, InventoryData[playerid][i][ItemID], Inventory_GetMagSize(itemid));
 								InventoryData[playerid][sel][Amount]--;
 								InventoryData[playerid][i][MagType] = itemid;
-								Inventory_GiveItem(playerid, itemid, 1, 100.0, 0, InventoryData[playerid][sel][MagAmmo]-(Inventory_GetMagSize(itemid)-weapondata[u][1]));
+								Inventory_GiveItem(playerid, itemid, 1, 100.0, -1, 0, InventoryData[playerid][sel][MagAmmo]-(Inventory_GetMagSize(itemid)-weapondata[u][1]));
 								return ShowTDNx(playerid, 5000, "Da nap dan %s vao vu khi %s", InvItemName[itemid], InvItemName[InventoryData[playerid][i][ItemID]]);
 							}
 		                	GivePlayerWeapon(playerid, InventoryData[playerid][i][ItemID], Inventory_GetMagSize(itemid));
@@ -365,6 +375,8 @@ Inventory_PlayerUseItem(playerid, sel, amount) {
 		if(thirst > 0) format(str, sizeof str, "%s+%.1f Thirst (%.0f/%.0f)", str, thirst, CharacterData[playerid][Thirst], MAX_PLAYER_THIRST);
 		ShowTDNx(playerid, 5000, str);
 	}
+
+	if(itemid == 96) callcmd::lockhouse(playerid);
 
     return 1;
 }
