@@ -1,6 +1,10 @@
 
-#define HOUSE_SHOW_DISTANCE			(10)
+#define HOUSE_SHOW_DISTANCE			(20)
 #define MAX_HOUSES 					(1000)
+#define MAX_HOUSE_INV				(36)
+
+#define HOUSE_UPGR_COST2 			(1000)
+#define HOUSE_UPGR_COST3 			(20000)
 
 enum ENUM_HOUSE_INFO {
 	ID,
@@ -30,16 +34,6 @@ enum ENUM_HOUSE_INFO {
 	Float:LockerY,
 	Float:LockerZ,
 	Cash,
-	Item0[64],
-	Item1[64],
-	Item2[64],
-	Item3[64],
-	Item4[64],
-	Item5[64],
-	Item6[64],
-	Item7[64],
-	Item8[64],
-	Item9[64],
 
 	// Not save
 	STREAMER_TAG_PICKUP:ExtPickup,
@@ -49,7 +43,16 @@ enum ENUM_HOUSE_INFO {
 	RadioURL
 }
 new HouseData[MAX_HOUSES][ENUM_HOUSE_INFO];
-new Iterator:House<MAX_HOUSES>;
+
+enum ENUM_HOUSEINV_INFO {
+	ItemID,
+    Amount, // So luong
+    Float:Durable, // Do ben
+    MagType,
+    MagAmmo, // Bang dan / dan trong sung
+    ExData
+}
+new HouseInventory[MAX_HOUSES][MAX_HOUSE_INV][ENUM_HOUSEINV_INFO];
 
 enum ENUM_HOUSE_INT {
 	Int,

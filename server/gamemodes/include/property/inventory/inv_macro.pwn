@@ -11,7 +11,6 @@ enum ENUM_INVENTORY_INFO {
     ExData
 }
 new InventoryData[MAX_PLAYERS][MAX_INV_ITEMS][ENUM_INVENTORY_INFO];
-new InvSelectedItem[MAX_PLAYERS]; // selected item slot
 
 new stock InvItemName[][] = {
 
@@ -143,7 +142,7 @@ new stock InvItemName[][] = {
     "Ruou vodka", //                        95
 
     // Misc
-    "Chia khoa nha",
-    "Chia khoa xe"
+    "Can xang",
+    "Notepad"
 
 };

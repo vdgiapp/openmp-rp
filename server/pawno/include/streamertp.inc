@@ -101,6 +101,7 @@ stock SetPlayerCompensatedPos(playerid, Float:X, Float:Y, Float:Z, Float:A, wait
 		SetPlayerVirtualWorld(playerid, world);
 
 	SetPlayerFacingAngle(playerid, A);
+	SetCameraBehindPlayer(playerid);
 
 	return SetPlayerPos(playerid, X, Y, Z - 0.3);
 }
@@ -128,6 +129,7 @@ stock SetPlayerCompensatedPosFindZ(playerid, Float:X, Float:Y, Float:Z, Float:A,
 		SetPlayerVirtualWorld(playerid, world);
 
 	SetPlayerFacingAngle(playerid, A);
-	
+	SetCameraBehindPlayer(playerid);
+
 	return SetPlayerPosFindZ(playerid, X, Y, Z);
 }

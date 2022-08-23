@@ -183,6 +183,14 @@ GetWeaponIDFromModel(modelid) {
     return wid;
 }
 
+IsPlayerInRangeOfPlayer(playerid, targetid, Float:range = 2.0) {
+    new Float:px, Float:py, Float:pz;
+    GetPlayerPos(playerid, px, py, pz);
+    return (GetPlayerInterior(playerid) == GetPlayerInterior(targetid)
+    && GetPlayerVirtualWorld(playerid) == GetPlayerVirtualWorld(targetid)
+    && IsPlayerInRangeOfPoint(targetid, range, px, py, pz));
+}
+
 GetPlayersOnline() {
 	static count;
 	count = 0;

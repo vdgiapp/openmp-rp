@@ -49,7 +49,6 @@ enum ENUM_DOOR_INFO {
 	RadioURL
 }
 new DoorData[MAX_DOORS][ENUM_DOOR_INFO];
-new Iterator:Door<MAX_DOORS>;
 
 enum e_InteriorData {
 	e_InteriorName[32],

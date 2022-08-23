@@ -45,9 +45,14 @@ enum ENUM_CHARACTER_INFO {
 	ChatCD,
 	CmdCD,
 
+	InvSelectedItem,
+
+	HouseSelectedItem,
+
 	HouseAdminID,
 	HouseCreateIntID,
 	HouseCreatePrice
+
 }
 
 /*

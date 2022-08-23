@@ -325,11 +325,11 @@ Inventory_PlayerUseItem(playerid, sel, amount) {
 							}
 							if(weapondata[u][1] >= Inventory_GetMagSize(itemid)) return ErrorMsg(playerid, "Bang dan cua khau sung %s da day (%d vien)", InvItemName[InventoryData[playerid][i][ItemID]], Inventory_GetMagSize(itemid));
 							if(InventoryData[playerid][sel][Amount] > 1) {
+								if(Inventory_GiveItem(playerid, itemid, 1, 100.0, -1, 0, InventoryData[playerid][sel][MagAmmo]-(Inventory_GetMagSize(itemid)-weapondata[u][1])) == -1) return ErrorMsg(playerid, "Tui do cua nhan vat da day.");
 								GivePlayerWeapon(playerid, InventoryData[playerid][i][ItemID], Inventory_GetMagSize(itemid));
 								SetPlayerAmmo(playerid, InventoryData[playerid][i][ItemID], Inventory_GetMagSize(itemid));
 								InventoryData[playerid][sel][Amount]--;
 								InventoryData[playerid][i][MagType] = itemid;
-								Inventory_GiveItem(playerid, itemid, 1, 100.0, -1, 0, InventoryData[playerid][sel][MagAmmo]-(Inventory_GetMagSize(itemid)-weapondata[u][1]));
 								return ShowTDNx(playerid, 5000, "Da nap dan %s vao vu khi %s", InvItemName[itemid], InvItemName[InventoryData[playerid][i][ItemID]]);
 							}
 		                	GivePlayerWeapon(playerid, InventoryData[playerid][i][ItemID], Inventory_GetMagSize(itemid));
@@ -376,7 +376,8 @@ Inventory_PlayerUseItem(playerid, sel, amount) {
 		ShowTDNx(playerid, 5000, str);
 	}
 
-	if(itemid == 96) callcmd::lockhouse(playerid);
+	if(itemid == 20) HUD_TogglePlayerGPS(playerid);
+	if(itemid == 21) HUD_TogglePlayerWatch(playerid);
 
     return 1;
 }

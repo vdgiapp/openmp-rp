@@ -78,6 +78,7 @@
 #include <filelog> // Simple file log
 
 #include <cctv> // CCTV
+#include <lights> // Lights controller
 #include <walkstyles> // Player walking style
 
 

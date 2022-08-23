@@ -1,4 +1,14 @@
 
+public OnPlayerCommandReceived(playerid, cmd[], params[], flags) {
+	if(!IsPlayerInGame(playerid)) return 0;
+	if(gettime() - CharacterData[playerid][CmdCD] <= 1) {
+		ShowTDNx(playerid, 2000, "Vui long doi...");
+		return 0;
+	}
+	CharacterData[playerid][CmdCD] = gettime();
+	return 1;
+}
+
 hook OnPlayerText(playerid, text[]) {
     if(IsPlayerInGame(playerid)) {
         if(gettime() - CharacterData[playerid][ChatCD] <= 1) return ShowTDNx(playerid, 2000, "Vui long doi...");
@@ -25,7 +35,7 @@ Cmd:enter(playerid, params[]) {
 Alias:exit("ra");
 Cmd:exit(playerid, params[]) {
     new id = -1;
-    if(!IsPlayerInAnyVehicle(playerid) && (id = House_Nearest(playerid)) != -1 && House_IsPlayerInsideExt(playerid, id))	{
+    if(!IsPlayerInAnyVehicle(playerid) && (id = House_Nearest(playerid)) != -1 && House_IsPlayerNearExt(playerid, id))	{
         if(!HouseData[id][Created]) return 0;
         SetPlayerCompensatedPos(playerid, HouseData[id][ExteriorX], HouseData[id][ExteriorY], HouseData[id][ExteriorZ], HouseData[id][ExteriorA], 3000, HouseData[id][ExteriorWorld], HouseData[id][ExteriorInt]);
 		StopAudioStreamForPlayer(playerid);
@@ -99,9 +109,9 @@ Cmd:ame(playerid, params[]) {
 
     if(isnull(params)) return UsageMsg(playerid, "/ame [hanh dong]");
 
-    format(str, sizeof str, "( %s. )", params);
+    format(str, sizeof str, "* %s.", params);
     SetPlayerChatBubble(playerid, str, COLOR_PURPLE, 20.0, 10000);
-    format(str, sizeof str, "* %s %s", GetRoleplayName(PlayerName(playerid)), params);
+    format(str, sizeof str, "* %s %s.", GetRoleplayName(PlayerName(playerid)), params);
     ClientMsg(playerid, COLOR_PURPLE, str);
     return 1;
 }

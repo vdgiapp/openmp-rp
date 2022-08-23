@@ -9,10 +9,10 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 
 Alias:inventory("inv");
 Cmd:inventory(playerid) {
-    if(!IsPlayerInGame(playerid)) return 0;
-    InvSelectedItem[playerid] = -1;
+    static str[128];
+    CharacterData[playerid][InvSelectedItem] = -1;
     ClearDialogListitems(playerid);
-    AddDialogListitem(playerid, " Vat pham\tDo ben\t ");
+    AddDialogListitem(playerid, ""COL_GREY" Vat pham\tDo ben\t");
     Inventory_Sort(playerid);
 	for(new i = 0; i < MAX_INV_ITEMS; i++) {
         if(InventoryData[playerid][i][ItemID]) {
@@ -45,29 +45,43 @@ Cmd:inventory(playerid) {
             }
         }
 	}
-	ShowPlayerDialogPages(playerid, #InventoryMain, DS_HEADERS, ""COL_AQUA"TUI DO NHAN VAT", "Chon", "Dong", 12, "{F5D400}TRANG SAU", "{F5D400}TRANG TRUOC");
+    format(str, sizeof str, ""COL_AQUA"TUI DO NHAN VAT - "COL_YELLOW"So du: $%s", fNumber(CharacterData[playerid][Cash]));
+    ShowPlayerDialogPages(playerid, #InventoryMain, DS_HEADERS, str, "Chon", "Dong", 12, "{F5D400}TRANG SAU", "{F5D400}TRANG TRUOC");
     return 1;
 }
 
 DialogPages:InventoryMain(playerid, response, listitem) {
     if(response) {
-        static i, str[128];
-        InvSelectedItem[playerid] = listitem;
-        i = InvSelectedItem[playerid];
+        new i, str[128], excap[1024] = "", hid = -1;
+
+        if(!IsPlayerInAnyVehicle(playerid) && (hid = House_Nearest(playerid)) != -1 && House_IsPlayerNearLocker(playerid, hid) && House_IsOwner(playerid, hid)) format(excap, sizeof excap, "%s\n"COL_YELLOW"Cat vao trong nha (ID: %d)", excap, hid);
+
+        CharacterData[playerid][InvSelectedItem] = listitem;
+        i = CharacterData[playerid][InvSelectedItem];
         if(!InventoryData[playerid][i][ItemID]) return callcmd::inventory(playerid);
         format(str, sizeof str, ""COL_AQUA"TUI DO > %s", InvItemName[InventoryData[playerid][i][ItemID]]);
         if(Inventory_IsWeapon(InventoryData[playerid][i][ItemID])) {
-            if(!InventoryData[playerid][i][IsEquipped]) return Dialog_Show(playerid, InventoryInteract, DS_LIST, str, "Trang bi vu khi\nThong tin vu khi\nDua vu khi\nPha huy vu khi\nVut bo vu khi", "Chon", "Quay lai");
-            else return Dialog_Show(playerid, InventoryInteract, DS_LIST, str, "Go trang bi vu khi\nThong tin vu khi\nDua vu khi\nPha huy vu khi\nVut bo vu khi", "Chon", "Quay lai");
+            if(!InventoryData[playerid][i][IsEquipped]) {
+                format(excap, sizeof excap, "Trang bi vu khi\nThong tin vu khi\nDua vu khi\nPha huy vu khi\nVut bo vu khi%s", excap);
+                return Dialog_Show(playerid, InventoryInteract, DS_LIST, str, excap, "Chon", "Quay lai");
+            }
+            else {
+                format(excap, sizeof excap, "Go trang bi vu khi\nThong tin vu khi\nDua vu khi\nPha huy vu khi\nVut bo vu khi%s", excap);
+                return Dialog_Show(playerid, InventoryInteract, DS_LIST, str, excap, "Chon", "Quay lai");
+            }
         }
-        if(Inventory_IsMagazine(InventoryData[playerid][i][ItemID])) return Dialog_Show(playerid, InventoryInteract, DS_LIST, str, "Nap dan vao vu khi\nThong tin bang dan\nDua bang dan\nPha huy bang dan\nVut bo bang dan", "Chon", "Quay lai");
-        Dialog_Show(playerid, InventoryInteract, DS_LIST, str, "Su dung vat pham\nThong tin vat pham\nDua vat pham\nTieu huy vat pham\nVut bo vat pham", "Chon", "Quay lai");
+        if(Inventory_IsMagazine(InventoryData[playerid][i][ItemID])) {
+            format(excap, sizeof excap, "Nap dan vao vu khi\nThong tin bang dan\nDua bang dan\nPha huy bang dan\nVut bo bang dan%s", excap);
+            return Dialog_Show(playerid, InventoryInteract, DS_LIST, str, excap, "Chon", "Quay lai");
+        }
+        format(excap, sizeof excap, "Su dung vat pham\nThong tin vat pham\nDua vat pham\nTieu huy vat pham\nVut bo vat pham%s", excap);
+        Dialog_Show(playerid, InventoryInteract, DS_LIST, str, excap, "Chon", "Quay lai");
     }
 	return 1;
 }
 
 Dialog:InventoryInteract(playerid, response, listitem, inputtext[]) {
-    static sel; sel = InvSelectedItem[playerid];
+    static sel; sel = CharacterData[playerid][InvSelectedItem];
     if(!response) return callcmd::inventory(playerid);
     switch(listitem) {
         case 0: {
@@ -88,7 +102,7 @@ Dialog:InventoryInteract(playerid, response, listitem, inputtext[]) {
 }
 
 Dialog:InventoryUseAmount(playerid, response, listitem, inputtext[]) {
-    static sel; sel = InvSelectedItem[playerid];
+    static sel; sel = CharacterData[playerid][InvSelectedItem];
     if(!response) return ndpD_InventoryMain(playerid, true, sel);
     if(!IsNumeric(inputtext)) return ErrorMsg(playerid, "So luong su dung khong hop le."), dialog_InventoryInteract(playerid, true, 0, "");
     if(InventoryData[playerid][sel][Amount] < strval(inputtext)) return ErrorMsg(playerid, "So luong su dung khong hop le."), dialog_InventoryInteract(playerid, true, 0, "");
@@ -96,4 +110,4 @@ Dialog:InventoryUseAmount(playerid, response, listitem, inputtext[]) {
     return 1;
 }
 
-Dialog:InventoryViewInfo(playerid, response, listitem, inputtext[]) { ndpD_InventoryMain(playerid, true, InvSelectedItem[playerid]); }
+Dialog:InventoryViewInfo(playerid, response, listitem, inputtext[]) { ndpD_InventoryMain(playerid, true, CharacterData[playerid][InvSelectedItem]); }

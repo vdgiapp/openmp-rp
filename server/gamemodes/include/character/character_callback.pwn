@@ -10,6 +10,8 @@ hook function ResetPlayerVars(playerid) {
 	CharacterData[playerid][HouseAdminID] = -1;
 	CharacterData[playerid][HouseCreateIntID] = -1;
 	CharacterData[playerid][HouseCreatePrice] = 0;
+	CharacterData[playerid][InvSelectedItem] = -1;
+	CharacterData[playerid][HouseSelectedItem] = -1;
 	continue(playerid);
 }
 

@@ -80,7 +80,7 @@ func OnGetCharacterData(playerid) {
 	}
 
 	format(str, sizeof str, "Dang nhap thanh cong voi nhan vat %d: %s", AuthData[playerid][Selected], GetRoleplayName(CharacterData[playerid][Name]));
-	ShowTDN(playerid, str);
+	ShowTDNx(playerid, 5000, str);
 	for(new i; i < 100; i++) ClientMsg(playerid, -1, " ");
 	ShowPlayerHUD(playerid);
 

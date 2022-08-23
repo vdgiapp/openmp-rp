@@ -34,16 +34,13 @@ func OnGetHouseData(hid) {
     HouseData[hid][LockerY] = cache_value_float(0, "LockerY");
     HouseData[hid][LockerZ] = cache_value_float(0, "LockerZ");
     HouseData[hid][Cash] = cache_value_int(0, "Cash");
-    format(HouseData[hid][Item0], 64, "%s", cache_value_string(0, "Item0"));
-    format(HouseData[hid][Item1], 64, "%s", cache_value_string(0, "Item1"));
-    format(HouseData[hid][Item2], 64, "%s", cache_value_string(0, "Item2"));
-    format(HouseData[hid][Item3], 64, "%s", cache_value_string(0, "Item3"));
-    format(HouseData[hid][Item4], 64, "%s", cache_value_string(0, "Item4"));
-    format(HouseData[hid][Item5], 64, "%s", cache_value_string(0, "Item5"));
-    format(HouseData[hid][Item6], 64, "%s", cache_value_string(0, "Item6"));
-    format(HouseData[hid][Item7], 64, "%s", cache_value_string(0, "Item7"));
-    format(HouseData[hid][Item8], 64, "%s", cache_value_string(0, "Item8"));
-    format(HouseData[hid][Item9], 64, "%s", cache_value_string(0, "Item9"));
+
+	for(new i = 0; i < MAX_HOUSE_INV; i++) {
+        static str[64];
+		format(str, sizeof str, "Item%d", i);
+		sscanf(cache_value_string(0, str), "ddfddd", HouseInventory[hid][i][ItemID], HouseInventory[hid][i][Amount],
+		HouseInventory[hid][i][Durable], HouseInventory[hid][i][MagType], HouseInventory[hid][i][MagAmmo], HouseInventory[hid][i][ExData]);
+	}
 
     GetMapZoneName(GetMapZoneAtPoint(HouseData[hid][ExteriorX], HouseData[hid][ExteriorY], HouseData[hid][ExteriorZ]), HouseData[hid][Address]);
 
@@ -92,16 +89,10 @@ House_SaveData(hid) {
 	    mysql_update(Database, "UPDATE `houses` SET `LockerY` = '%f' WHERE `ID` = '%d'", HouseData[hid][LockerY], hid);
 	    mysql_update(Database, "UPDATE `houses` SET `LockerZ` = '%f' WHERE `ID` = '%d'", HouseData[hid][LockerZ], hid);
 	    mysql_update(Database, "UPDATE `houses` SET `Cash` = '%d' WHERE `ID` = '%d'", HouseData[hid][Cash], hid);
-	    mysql_update(Database, "UPDATE `houses` SET `Item0` = '%s' WHERE `ID` = '%d'", HouseData[hid][Item0], hid);
-	    mysql_update(Database, "UPDATE `houses` SET `Item1` = '%s' WHERE `ID` = '%d'", HouseData[hid][Item1], hid);
-	    mysql_update(Database, "UPDATE `houses` SET `Item2` = '%s' WHERE `ID` = '%d'", HouseData[hid][Item2], hid);
-	    mysql_update(Database, "UPDATE `houses` SET `Item3` = '%s' WHERE `ID` = '%d'", HouseData[hid][Item3], hid);
-	    mysql_update(Database, "UPDATE `houses` SET `Item4` = '%s' WHERE `ID` = '%d'", HouseData[hid][Item4], hid);
-	    mysql_update(Database, "UPDATE `houses` SET `Item5` = '%s' WHERE `ID` = '%d'", HouseData[hid][Item5], hid);
-	    mysql_update(Database, "UPDATE `houses` SET `Item6` = '%s' WHERE `ID` = '%d'", HouseData[hid][Item6], hid);
-	    mysql_update(Database, "UPDATE `houses` SET `Item7` = '%s' WHERE `ID` = '%d'", HouseData[hid][Item7], hid);
-	    mysql_update(Database, "UPDATE `houses` SET `Item8` = '%s' WHERE `ID` = '%d'", HouseData[hid][Item8], hid);
-	    mysql_update(Database, "UPDATE `houses` SET `Item9` = '%s' WHERE `ID` = '%d'", HouseData[hid][Item9], hid);
+
+		for(new i = 0; i < MAX_HOUSE_INV; i++) mysql_update(Database, "UPDATE `houses` SET `Item%d` = '%d %d %f %d %d %d' WHERE `ID` = '%d'",
+		i, HouseInventory[hid][i][ItemID], HouseInventory[hid][i][Amount], HouseInventory[hid][i][Durable], HouseInventory[hid][i][MagType],
+		HouseInventory[hid][i][MagAmmo], HouseInventory[hid][i][ExData], hid);
 
 	    printf("House ID %d, DbID %d saved.", hid, HouseData[hid][ID]);
 	}
@@ -112,17 +103,22 @@ House_IsPlayerOutside(playerid, hid, Float:range = 2.0) {
 	&& GetPlayerVirtualWorld(playerid) == HouseData[hid][ExteriorWorld] && GetPlayerInterior(playerid) == HouseData[hid][ExteriorInt]);
 }
 
-House_IsPlayerInsideExt(playerid, hid, Float:range = 2.0) {
+House_IsPlayerNearExt(playerid, hid, Float:range = 2.0) {
 	return (HouseData[hid][Created] && IsPlayerInRangeOfPoint(playerid, range, HouseData[hid][InteriorX], HouseData[hid][InteriorY], HouseData[hid][InteriorZ])
 	&& GetPlayerVirtualWorld(playerid) == HouseData[hid][InteriorWorld] && GetPlayerInterior(playerid) == HouseData[hid][InteriorInt]);
 }
 
-House_IsPlayerInside(playerid, hid, Float:range = 50.0) { return (HouseData[hid][Created] && IsPlayerInRangeOfPoint(playerid, range, HouseData[hid][InteriorX], HouseData[hid][InteriorY], HouseData[hid][InteriorZ]) && GetPlayerInterior(playerid) == HouseData[hid][InteriorInt] && GetPlayerVirtualWorld(playerid) == HouseData[hid][InteriorWorld]); }
+House_IsPlayerInside(playerid, hid, Float:range = 300.0) { return (HouseData[hid][Created] && IsPlayerInRangeOfPoint(playerid, range, HouseData[hid][InteriorX], HouseData[hid][InteriorY], HouseData[hid][InteriorZ]) && GetPlayerInterior(playerid) == HouseData[hid][InteriorInt] && GetPlayerVirtualWorld(playerid) == HouseData[hid][InteriorWorld]); }
+
+House_IsPlayerNearLocker(playerid, hid, Float:range = 2.0) {
+	return (HouseData[hid][Created] && IsPlayerInRangeOfPoint(playerid, range, HouseData[hid][LockerX], HouseData[hid][LockerY], HouseData[hid][LockerZ])
+	&& GetPlayerVirtualWorld(playerid) == HouseData[hid][InteriorWorld] && GetPlayerInterior(playerid) == HouseData[hid][InteriorInt]);
+}
 
 House_Nearest(playerid) {
     for(new i = 0; i < MAX_HOUSES; i++) {
 	    if(!HouseData[i][Created]) continue;
-	    if(House_IsPlayerInsideExt(playerid, i)) return i;
+		if(House_IsPlayerInside(playerid, i)) return i;
 		if(House_IsPlayerOutside(playerid, i)) return i;
 	}
 	return -1;

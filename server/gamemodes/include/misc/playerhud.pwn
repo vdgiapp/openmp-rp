@@ -273,11 +273,6 @@ hook OnPlayerUpdate(playerid) {
 			PlayerTextDrawSetString(playerid, HUD_VehSpeed[playerid], str);
 		}
 
-		PlayerTextDrawSetString(playerid, HUD_Zone[playerid], GetPlayerZone(playerid));
-
-		if(Inventory_HasItem(playerid, 20) != -1 && !IsPlayerTextDrawVisible(playerid, HUD_Zone[playerid])) PlayerTextDrawShow(playerid, HUD_Zone[playerid]);
-		if(Inventory_HasItem(playerid, 21) != -1 && !IsPlayerTextDrawVisible(playerid, HUD_WatchTime[playerid])) PlayerTextDrawShow(playerid, HUD_WatchTime[playerid]);
-
 		static level, exp;
 		sscanf(CharacterData[playerid][Level], "ii", level, exp);
 		format(str, sizeof str, "Lv.%d", level);
@@ -288,6 +283,14 @@ hook OnPlayerUpdate(playerid) {
 		#pragma unused second
 		format(str, sizeof str, "%02d:%02d", hour, minute);
 		PlayerTextDrawSetString(playerid, HUD_WatchTime[playerid], str);
+
+		new hid = -1, str[MAX_MAP_ZONE_NAME];
+		if((hid = House_Nearest(playerid)) != -1) {
+			GetMapZoneName(GetMapZoneAtPoint(HouseData[hid][ExteriorX], HouseData[hid][ExteriorY], HouseData[hid][ExteriorZ]), str);
+			format(str, sizeof str, "Nha so %d, %s", hid, str);
+			PlayerTextDrawSetString(playerid, HUD_Zone[playerid], str);
+		}
+		else PlayerTextDrawSetString(playerid, HUD_Zone[playerid], GetPlayerZone(playerid));
 	}
 	return 1;
 }
@@ -307,6 +310,28 @@ ShowPlayerHUD(playerid) {
 	PlayerTextDrawShow(playerid, HUD_VehSpeed[playerid]);
 	PlayerTextDrawShow(playerid, AnnounceMessage[playerid]);
 	*/
+}
+
+HUD_TogglePlayerWatch(playerid) {
+	if(!IsPlayerTextDrawVisible(playerid, HUD_WatchTime[playerid])) {
+		callcmd::ame(playerid, "da deo mot chiec dong ho");
+		return PlayerTextDrawShow(playerid, HUD_WatchTime[playerid]);
+	}
+	if(IsPlayerTextDrawVisible(playerid, HUD_WatchTime[playerid])) {
+		callcmd::ame(playerid, "da thao dong ho ra");
+		return PlayerTextDrawHide(playerid, HUD_WatchTime[playerid]);
+	}
+}
+
+HUD_TogglePlayerGPS(playerid) {
+	if(!IsPlayerTextDrawVisible(playerid, HUD_Zone[playerid])) {
+		callcmd::ame(playerid, "da bat GPS len");
+		return PlayerTextDrawShow(playerid, HUD_Zone[playerid]);
+	}
+	if(IsPlayerTextDrawVisible(playerid, HUD_Zone[playerid])) {
+		callcmd::ame(playerid, "da tat GPS di");
+		return PlayerTextDrawHide(playerid, HUD_Zone[playerid]);
+	}
 }
 
 static ChangePlayerStatusBar(playerid, PlayerText:playertd, Float:var, Float:max_var) {
@@ -333,13 +358,4 @@ static ChangePlayerStatusBar(playerid, PlayerText:playertd, Float:var, Float:max
 	if((max_var_5p*17)+1 <= var <= max_var_5p*18) 	PlayerTextDrawSetString(playerid, playertd, "llllllllllllllllll");
 	if((max_var_5p*18)+1 <= var <= max_var_5p*19) 	PlayerTextDrawSetString(playerid, playertd, "lllllllllllllllllll");
 	if((max_var_5p*19)+1 <= var <= max_var_5p*20) 	PlayerTextDrawSetString(playerid, playertd, "llllllllllllllllllll");
-}
-
-public OnPlayerCommandReceived(playerid, cmd[], params[], flags) {
-	if(gettime() - CharacterData[playerid][CmdCD] <= 1) {
-		ShowTDN(playerid, "Vui long doi...");
-		return 0;
-	}
-	CharacterData[playerid][CmdCD] = gettime();
-	return 1;
 }
