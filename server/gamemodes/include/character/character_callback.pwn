@@ -7,11 +7,14 @@ hook OnPlayerSpawn(playerid) {
 hook function ResetPlayerVars(playerid) {
 	CharacterData[playerid][ChatCD] = 0;
 	CharacterData[playerid][CmdCD] = 0;
+	CharacterData[playerid][InvSelectedItem] = -1;
+	CharacterData[playerid][HouseSellID] = -1;
+	CharacterData[playerid][HouseSellPrice] = 0;
+	CharacterData[playerid][HouseSellWith] = -1;
+	CharacterData[playerid][HouseSelectedItem] = -1;
 	CharacterData[playerid][HouseAdminID] = -1;
 	CharacterData[playerid][HouseCreateIntID] = -1;
 	CharacterData[playerid][HouseCreatePrice] = 0;
-	CharacterData[playerid][InvSelectedItem] = -1;
-	CharacterData[playerid][HouseSelectedItem] = -1;
 	continue(playerid);
 }
 

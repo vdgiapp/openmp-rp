@@ -290,9 +290,8 @@ hook OnPlayerConnect(playerid) {
 	mysql_tquery(Database, str, "OnCheckingPlayerAccount", "i", playerid);
 
 	// Preload animation
-	for(new i = 0; i < sizeof(g_aPreloadLibs); i++) {
-	    ApplyAnimation(playerid, g_aPreloadLibs[i], "null", 4.0, 0, 0, 0, 0, 0, 1);
-	}
+	for(new i = 0; i < sizeof(g_aPreloadLibs); i++) ApplyAnimation(playerid, g_aPreloadLibs[i], "null", 4.0, 0, 0, 0, 0, 0, 1);
+
 	return 1;
 }
 

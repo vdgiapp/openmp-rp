@@ -11,7 +11,7 @@ hook function ResetGlobalVars() {
         format(HouseData[hid][Owner], 25, "");
         HouseData[hid][Locked] = 0;
         HouseData[hid][Alarm] =  0;
-        HouseData[hid][Level] =  0;
+        HouseData[hid][Level] =  1;
         HouseData[hid][Price] =  0;
         HouseData[hid][IntID] =  0;
         HouseData[hid][ExteriorX] = 0;
@@ -115,7 +115,7 @@ Dialog:HouseAdminDeleteID(playerid, response, listitem, inputtext[]) {
         format(HouseData[hid][Owner], 25, "");
         HouseData[hid][Locked] = 0;
         HouseData[hid][Alarm] =  0;
-        HouseData[hid][Level] =  0;
+        HouseData[hid][Level] =  1;
         HouseData[hid][Price] =  0;
         HouseData[hid][IntID] =  0;
         HouseData[hid][ExteriorX] = 0;
@@ -182,6 +182,7 @@ Dialog:HouseAdminCreatePrice(playerid, response, listitem, inputtext[]) {
     	        HouseData[i][Created] = 1;
         	    HouseData[i][Owned] = 0;
 				format(HouseData[i][Owner], MAX_PLAYER_NAME, "None");
+                HouseData[i][Level] = 1;
 				HouseData[i][Lights] = 0;
 				HouseData[i][Locked] = 0;
             	HouseData[i][Price] = CharacterData[playerid][HouseCreatePrice];
@@ -405,6 +406,8 @@ Cmd:leavehouse(playerid) {
         PlayerPlaySound(playerid, 1055, 0, 0, 0);
         CharacterData[playerid][Cash] += floatround((HouseData[id][Price]*HouseData[id][Level])/10)+HouseData[id][Cash];
         SetPlayerMoney(playerid, CharacterData[playerid][Cash]);
+        ShowTDNx(playerid, 3000, "+ $%s", fNumber(floatround((HouseData[id][Price]*HouseData[id][Level])/10)+HouseData[id][Cash]));
+
         SuccessMsg(playerid, "Ban da bo can nha tai dia chi %d, %s va duoc tra lai $%s",
         id, HouseData[id][Address], floatround((HouseData[id][Price]*HouseData[id][Level])/10)+HouseData[id][Cash]);
 
@@ -442,13 +445,15 @@ Cmd:upgradehouse(playerid, params[]) {
 
             switch(HouseData[id][Level]) {
                 case 1: {
-                    if(CharacterData[playerid][Cash] - HOUSE_UPGR_COST2 < 0) return ErrorMsg(playerid, "So tien yeu cau de nang cap can nha tu cap do 1 len cap do 2 la %d.", HOUSE_UPGR_COST2);
+                    if(CharacterData[playerid][Cash] - HOUSE_UPGR_COST2 < 0) return ErrorMsg(playerid, "So tien yeu cau de nang cap can nha tu cap do 1 len cap do 2 la $%d.", fNumber(HOUSE_UPGR_COST2));
                     CharacterData[playerid][Cash] -= HOUSE_UPGR_COST2;
+                    ShowTDNx(playerid, 3000, "- $%s", fNumber(HOUSE_UPGR_COST2));
                     SuccessMsg(playerid, "Ban da nang cap can nha len cap do 2 (+6 slot locker)");
                 }
                 case 2: {
-                    if(CharacterData[playerid][Cash] - HOUSE_UPGR_COST3 < 0) return ErrorMsg(playerid, "So tien yeu cau de nang cap can nha tu cap do 2 len cap do 3 la %d.", HOUSE_UPGR_COST3);
+                    if(CharacterData[playerid][Cash] - HOUSE_UPGR_COST3 < 0) return ErrorMsg(playerid, "So tien yeu cau de nang cap can nha tu cap do 2 len cap do 3 la $%d.", fNumber(HOUSE_UPGR_COST3));
                     CharacterData[playerid][Cash] -= HOUSE_UPGR_COST3;
+                    ShowTDNx(playerid, 3000, "- $%s", fNumber(HOUSE_UPGR_COST3));
                     SuccessMsg(playerid, "Ban da nang cap can nha len cap do 3 (+18 slot locker)");
                 }
             }
@@ -652,9 +657,61 @@ Dialog:HouseInventoryCash(playerid, response, listitem, inputtext[]) {
             }
             case 1: {
                 format(str, sizeof str, "\\c"COL_YELLOW"So tien hien tai: $%s\n \\c"COL_WHITE"Nhap so tien ma ban muon rut ra:", fNumber(HouseData[id][Cash]));
-                Dialog_Show(playerid, HouseInventoryWithdrawCash, DS_INPUT, ""COL_AQUA"RUT TIEN TU KET SAT", str, "Rut ra", "Quay lai");
+                Dialog_Show(playerid, HouseInventoryWdCash, DS_INPUT, ""COL_AQUA"RUT TIEN TU KET SAT", str, "Rut ra", "Quay lai");
             }
         }
+    }
+    return 1;
+}
+
+Dialog:HouseInventorySaveCash(playerid, response, listitem, inputtext[]) {
+    new id = -1, cash = strval(inputtext);
+    if(!response) return ndpD_HouseInventoryMain(playerid, true, 0);
+    if(!IsNumeric(inputtext)) {
+        ErrorMsg(playerid, "So tien cat vao khong hop le.");
+        return dialog_HouseInventoryCash(playerid, true, 0, "");
+    }
+    if(cash <= 0) {
+        ErrorMsg(playerid, "So tien cat vao phai lon hon 0.");
+        return dialog_HouseInventoryCash(playerid, true, 0, "");
+    }
+    if(!IsPlayerInAnyVehicle(playerid) && (id = House_Nearest(playerid)) != -1 && House_IsPlayerNearLocker(playerid, id)) {
+        if(CharacterData[playerid][Cash] < cash) {
+            ErrorMsg(playerid, "So tien tren nguoi cua ban nho hon $%s.", fNumber(cash));
+            return dialog_HouseInventoryCash(playerid, true, 0, "");
+        }
+        CharacterData[playerid][Cash] -= cash;
+        SetPlayerMoney(playerid, CharacterData[playerid][Cash]);
+        HouseData[id][Cash] += cash;
+
+        SuccessMsg(playerid, "Ban da cat so tien $%s vao trong ket sat.", fNumber(cash));
+        return dialog_HouseInventoryCash(playerid, false, 0, "");
+    }
+    return 1;
+}
+
+Dialog:HouseInventoryWdCash(playerid, response, listitem, inputtext[]) {
+    new id = -1, cash = strval(inputtext);
+    if(!response) return ndpD_HouseInventoryMain(playerid, true, 0);
+    if(!IsNumeric(inputtext)) {
+        ErrorMsg(playerid, "So tien rut ra khong hop le.");
+        return dialog_HouseInventoryCash(playerid, true, 1, "");
+    }
+    if(cash <= 0) {
+        ErrorMsg(playerid, "So tien rut ra phai lon hon 0.");
+        return dialog_HouseInventoryCash(playerid, true, 1, "");
+    }
+    if(!IsPlayerInAnyVehicle(playerid) && (id = House_Nearest(playerid)) != -1 && House_IsPlayerNearLocker(playerid, id)) {
+        if(HouseData[id][Cash] < cash) {
+            ErrorMsg(playerid, "So tien trong ket sat cua can nha nho hon $%s.", fNumber(cash));
+            return dialog_HouseInventoryCash(playerid, true, 1, "");
+        }
+        CharacterData[playerid][Cash] += cash;
+        SetPlayerMoney(playerid, CharacterData[playerid][Cash]);
+        HouseData[id][Cash] -= cash;
+
+        SuccessMsg(playerid, "Ban da rut so tien $%s vao trong ket sat.", fNumber(cash));
+        return dialog_HouseInventoryCash(playerid, false, 0, "");
     }
     return 1;
 }

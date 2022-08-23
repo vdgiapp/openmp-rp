@@ -5,6 +5,17 @@ hook function ResetGlobalVars() {
 		format(StaffData[id][Nick], 25, "");
 		StaffData[id][Rank] = 0;
 		StaffData[id][Helped] = 0;
+		StaffData[id][Spectating] = false;
+		StaffData[id][ClickTP] = false;
+		StaffData[id][ClickTP] = false;
+
+		StaffData[id][prevHealth] = 0;
+		StaffData[id][prevArmour] = 0;
+		StaffData[id][prevPosX] = 0;
+		StaffData[id][prevPosY] = 0;
+		StaffData[id][prevPosZ] = 0;
+		StaffData[id][prevInt] = 0;
+		StaffData[id][prevVW] = 0;
 	}
 	continue();
 }

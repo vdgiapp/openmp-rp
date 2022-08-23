@@ -248,41 +248,54 @@ func OnGetCharTmpData(playerid, slot) {
 }
 
 LoginSuccess(playerid) {
-	static day, month, year, hour, minute, second;
-	getdate(year, month, day);
-	gettime(hour, minute, second);
-
-	static str[256];
-	mysql_format(Database, str, sizeof str, "UPDATE `accounts` SET `Online`='1', `LastTimeLogged`='%02d %02d %02d %02d %02d %04d' WHERE `Account`='%s'", hour, minute, second, day, month, year, AuthData[playerid][Account]);
-	mysql_tquery(Database, str);
-	mysql_tquery(Database, "UPDATE `serverinfo` SET `Logged`=`Logged`+1");
-
-	SuccessMsg(playerid, "Dang nhap vao tai khoan thanh cong. Chuc ban choi game vui ve.");
-	flog(AUTH_LOG_FILE, "[AUTH] Tai khoan \"%s\" da dang nhap vao tro choi.", AuthData[playerid][Account]);
-	PlayerPlaySound(playerid, 1084, 0, 0, 0);
-	SetRandomName(playerid, "Logged_", 100000, 999999);
-
-	for(new i = 0; i < 10; i++) TextDrawHideForPlayer(playerid, AuthTD_MiscTD[i]);
-	TextDrawHideForPlayer(playerid, Auth_Button);
-	TextDrawHideForPlayer(playerid, Auth_Button2);
-	TextDrawHideForPlayer(playerid, Auth_Registered);
-	TextDrawHideForPlayer(playerid, Auth_CharCreated);
-	TextDrawHideForPlayer(playerid, Auth_PlayersOnline);
-	TextDrawHideForPlayer(playerid, Auth_LoggedToday);
-	PlayerTextDrawHide(playerid, Auth_PlayerName[playerid]);
-	CancelSelectTextDraw(playerid);
-
-	// Reset
-    format(AuthData[playerid][Password], 65, "");
-    format(AuthData[playerid][Password2], 65, "");
-	AuthData[playerid][Attempt] = 0;
-
-	// Set var
-	AuthData[playerid][Logged] = 1;
-
-	FadePlayerScreen(playerid, tempLoadCharacters, 0x000000FF, 1000, 25);
+	static str[128];
+	mysql_format(Database, str, sizeof str, "SELECT * FROM `accounts` WHERE `Account`='%s'", AuthData[playerid][Account]);
+	mysql_tquery(Database, str, "OnCheckToLogin", "i", playerid);
 }
 
+func OnCheckToLogin(playerid) {
+	if(cache_num_rows()) {
+
+		if(cache_value_int(0, "Online")) {
+			ErrorMsg(playerid, "Tai khoan nay dang truc tuyen. Ban khong the dang nhap vao tai khoan nay.");
+			return KickPlayer(playerid, 500);
+		}
+
+		static day, month, year, hour, minute, second;
+		getdate(year, month, day);
+		gettime(hour, minute, second);
+
+		static str[256];
+		mysql_format(Database, str, sizeof str, "UPDATE `accounts` SET `Online`='1', `LastTimeLogged`='%02d %02d %02d %02d %02d %04d' WHERE `Account`='%s'", hour, minute, second, day, month, year, AuthData[playerid][Account]);
+		mysql_tquery(Database, str);
+		mysql_tquery(Database, "UPDATE `serverinfo` SET `Logged`=`Logged`+1");
+
+		SuccessMsg(playerid, "Dang nhap vao tai khoan thanh cong. Chuc ban choi game vui ve.");
+		flog(AUTH_LOG_FILE, "[AUTH] Tai khoan \"%s\" da dang nhap vao tro choi.", AuthData[playerid][Account]);
+		PlayerPlaySound(playerid, 1084, 0, 0, 0);
+		SetRandomName(playerid, "Logged_", 100000, 999999);
+
+		for(new i = 0; i < 10; i++) TextDrawHideForPlayer(playerid, AuthTD_MiscTD[i]);
+		TextDrawHideForPlayer(playerid, Auth_Button);
+		TextDrawHideForPlayer(playerid, Auth_Button2);
+		TextDrawHideForPlayer(playerid, Auth_Registered);
+		TextDrawHideForPlayer(playerid, Auth_CharCreated);
+		TextDrawHideForPlayer(playerid, Auth_PlayersOnline);
+		TextDrawHideForPlayer(playerid, Auth_LoggedToday);
+		PlayerTextDrawHide(playerid, Auth_PlayerName[playerid]);
+		CancelSelectTextDraw(playerid);
+
+		// Reset
+	    format(AuthData[playerid][Password], 65, "");
+	    format(AuthData[playerid][Password2], 65, "");
+		AuthData[playerid][Attempt] = 0;
+
+		// Set var
+		AuthData[playerid][Logged] = 1;
+
+		FadePlayerScreen(playerid, tempLoadCharacters, 0x000000FF, 1000, 25);
+	}
+}
 /*
 CheckToRegister(playerid) {
 	static str[1024];
