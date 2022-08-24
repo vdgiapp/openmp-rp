@@ -12,7 +12,7 @@ Cmd:inventory(playerid) {
     static str[128];
     CharacterData[playerid][InvSelectedItem] = -1;
     ClearDialogListitems(playerid);
-    AddDialogListitem(playerid, ""COL_GREY" Vat pham\tDo ben\t");
+    AddDialogListitem(playerid, ""COL_GREY" Vat pham\tDo ben\tCan nang: %.2fkg", Inventory_TotalWeight(playerid));
     Inventory_Sort(playerid);
 	for(new i = 0; i < MAX_INV_ITEMS; i++) {
         if(InventoryData[playerid][i][ItemID]) {
@@ -25,7 +25,7 @@ Cmd:inventory(playerid) {
             magtype = InventoryData[playerid][i][MagType];
             magammo = InventoryData[playerid][i][MagAmmo];
             exdata = InventoryData[playerid][i][ExData];
-            format(itemname, sizeof itemname, "%s", InvItemName[itemid]);
+            format(itemname, sizeof itemname, "%s", ItemInfo[itemid][Name]);
             for(new u = 0; u < 13; u++) { GetPlayerWeaponData(playerid, u, weapondata[u][0], weapondata[u][1]); }
             if(amount > 1) {
                 if(Inventory_IsMagazine(itemid)) AddDialogListitem(playerid, " %s [x%d]\t \t%d / %d", itemname, amount, magammo, Inventory_GetMagSize(itemid));
@@ -35,8 +35,8 @@ Cmd:inventory(playerid) {
             }
             else {
                 if(Inventory_IsWeapon(itemid)) {
-                    if(!isequip) AddDialogListitem(playerid, " %s\t%.2f\t%d / %d (%s)", itemname, durable, magammo, Inventory_GetMagSize(magtype), InvItemName[magtype]);
-                    else AddDialogListitem(playerid, " %s "COL_YELLOW"(DANG TRANG BI)\t%.2f\t%d / %d (%s)", itemname, durable, weapondata[GetWeaponSlot(itemid)][1], Inventory_GetMagSize(magtype), InvItemName[magtype]);
+                    if(!isequip) AddDialogListitem(playerid, " %s\t%.2f\t%d / %d (%s)", itemname, durable, magammo, Inventory_GetMagSize(magtype), ItemInfo[magtype][Name]);
+                    else AddDialogListitem(playerid, " %s "COL_YELLOW"(DANG TRANG BI)\t%.2f\t%d / %d (%s)", itemname, durable, weapondata[GetWeaponSlot(itemid)][1], Inventory_GetMagSize(magtype), ItemInfo[magtype][Name]);
                 }
                 else if(Inventory_IsMagazine(itemid)) AddDialogListitem(playerid, " %s\t \t%d / %d", itemname, magammo, Inventory_GetMagSize(itemid));
                 else if(Inventory_IsFoodDrink(itemid)) AddDialogListitem(playerid, " %s", itemname);
@@ -59,7 +59,7 @@ DialogPages:InventoryMain(playerid, response, listitem) {
         CharacterData[playerid][InvSelectedItem] = listitem;
         i = CharacterData[playerid][InvSelectedItem];
         if(!InventoryData[playerid][i][ItemID]) return callcmd::inventory(playerid);
-        format(str, sizeof str, ""COL_AQUA"TUI DO > %s", InvItemName[InventoryData[playerid][i][ItemID]]);
+        format(str, sizeof str, ""COL_AQUA"TUI DO > %s", ItemInfo[InventoryData[playerid][i][ItemID]][Name]);
         if(Inventory_IsWeapon(InventoryData[playerid][i][ItemID])) {
             if(!InventoryData[playerid][i][IsEquipped]) {
                 format(excap, sizeof excap, "Trang bi vu khi\nThong tin vu khi\nDua vu khi\nPha huy vu khi\nVut bo vu khi%s", excap);
@@ -86,7 +86,7 @@ Dialog:InventoryInteract(playerid, response, listitem, inputtext[]) {
     switch(listitem) {
         case 0: {
             static str[64];
-            format(str, sizeof str, ""COL_AQUA"TUI DO > %s > Su dung (SL: %d)", InvItemName[InventoryData[playerid][sel][ItemID]], InventoryData[playerid][sel][Amount]);
+            format(str, sizeof str, ""COL_AQUA"TUI DO > %s > Su dung (SL: %d)", ItemInfo[InventoryData[playerid][sel][ItemID]][Name], InventoryData[playerid][sel][Amount]);
             if(InventoryData[playerid][sel][Amount] > 1) {
                 if(Inventory_IsMagazine(InventoryData[playerid][sel][ItemID])) Inventory_PlayerUseItem(playerid, sel, 1);
                 else if(Inventory_IsFoodDrink(InventoryData[playerid][sel][ItemID])) Inventory_PlayerUseItem(playerid, sel, 1);
@@ -97,6 +97,12 @@ Dialog:InventoryInteract(playerid, response, listitem, inputtext[]) {
         case 1: Inventory_PlayerViewInfoItem(playerid, sel);
         //case 2: Inventory_PlayerGiveItem(playerid, sel, targetid);
         //case 3: Inventory_PlayerDestroyItem(playerid, sel, amount);
+        case 4: {
+            static str[64];
+            format(str, sizeof str, ""COL_AQUA"TUI DO > %s > Vut bo (SL: %d)", ItemInfo[InventoryData[playerid][sel][ItemID]][Name], InventoryData[playerid][sel][Amount]);
+            if(InventoryData[playerid][sel][Amount] > 1) Dialog_Show(playerid, InventoryDropAmount, DS_INPUT, str, "\\cNhap so luong ma ban muon vut bo:", "Vut bo", "Quay lai");
+            else Inventory_PlayerDropItem(playerid, sel, 1);
+        }
     }
     return 1;
 }
@@ -105,8 +111,17 @@ Dialog:InventoryUseAmount(playerid, response, listitem, inputtext[]) {
     static sel; sel = CharacterData[playerid][InvSelectedItem];
     if(!response) return ndpD_InventoryMain(playerid, true, sel);
     if(!IsNumeric(inputtext)) return ErrorMsg(playerid, "So luong su dung khong hop le."), dialog_InventoryInteract(playerid, true, 0, "");
-    if(InventoryData[playerid][sel][Amount] < strval(inputtext)) return ErrorMsg(playerid, "So luong su dung khong hop le."), dialog_InventoryInteract(playerid, true, 0, "");
+    if(InventoryData[playerid][sel][Amount] < strval(inputtext) || strval(inputtext) == 0) return ErrorMsg(playerid, "So luong su dung khong hop le."), dialog_InventoryInteract(playerid, true, 0, "");
     Inventory_PlayerUseItem(playerid, sel, strval(inputtext));
+    return 1;
+}
+
+Dialog:InventoryDropAmount(playerid, response, listitem, inputtext[]) {
+    static sel; sel = CharacterData[playerid][InvSelectedItem];
+    if(!response) return ndpD_InventoryMain(playerid, true, sel);
+    if(!IsNumeric(inputtext)) return ErrorMsg(playerid, "So luong vut bo khong hop le."), dialog_InventoryInteract(playerid, true, 4, "");
+    if(InventoryData[playerid][sel][Amount] < strval(inputtext) || strval(inputtext) == 0) return ErrorMsg(playerid, "So luong vut bo khong hop le."), dialog_InventoryInteract(playerid, true, 4, "");
+    Inventory_PlayerDropItem(playerid, sel, strval(inputtext));
     return 1;
 }
 

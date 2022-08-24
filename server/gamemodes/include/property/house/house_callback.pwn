@@ -477,7 +477,10 @@ Cmd:sellhouse(playerid, params[]) {
     if(!IsPlayerInRangeOfPlayer(playerid, target)) return ErrorMsg(playerid, "Nguoi choi do khong o gan ban.");
     if(IsPlayerInAnyVehicle(playerid)) return ErrorMsg(playerid, "Ban khong the thuc hien hanh dong nay khi o tren mot phuong tien.");
     if(!House_IsPlayerOutside(playerid, id)) return ErrorMsg(playerid, "Ban can phai ra ben ngoai can nha truoc.");
-    //
+    CharacterData[target][HouseOrderID] = id;
+    CharacterData[target][HouseOrderWith] = playerid;
+    CharacterData[target][HouseOrderPrice] = price;
+
     return 1;
 }
 
@@ -494,6 +497,7 @@ Cmd:buyhouse(playerid, params[]) {
         sscanf(CharacterData[playerid][Bank], "dd", banknum, bankbal);
         if(bankbal < HouseData[id][Price]) return ErrorMsg(playerid, "So du trong nguoi va so du trong tai khoan ngan hang khong du.");
         format(CharacterData[playerid][Bank], 32, "%d %d", banknum, bankbal-HouseData[id][Price]);
+        BankMsg(playerid, "Tai khoan ngan hang da bi tru di $%s, li do: Mua nha dia chi %d, %s", fNumber(HouseData[id][Price]), id, HouseData[id][Address]);
     }
     if(CharacterData[playerid][Cash] >= HouseData[id][Price]) {
         CharacterData[playerid][Cash] -= HouseData[id][Price];
@@ -574,7 +578,7 @@ Cmd:houselocker(playerid) {
             magtype = HouseInventory[id][i][MagType];
             magammo = HouseInventory[id][i][MagAmmo];
             exdata = HouseInventory[id][i][ExData];
-            format(itemname, sizeof itemname, "%s", InvItemName[itemid]);
+            format(itemname, sizeof itemname, "%s", ItemInfo[itemid][Name]);
             for(new u = 0; u < 13; u++) { GetPlayerWeaponData(playerid, u, weapondata[u][0], weapondata[u][1]); }
             if(amount > 1) {
                 if(Inventory_IsMagazine(itemid)) AddDialogListitem(playerid, " %s [x%d]\t \t%d / %d", itemname, amount, magammo, Inventory_GetMagSize(itemid));
@@ -583,7 +587,7 @@ Cmd:houselocker(playerid) {
                 else AddDialogListitem(playerid, " %s [x%d]\t%.2f\t", itemname, amount, durable);
             }
             else {
-                if(Inventory_IsWeapon(itemid)) AddDialogListitem(playerid, " %s\t%.2f\t%d / %d (%s)", itemname, durable, magammo, Inventory_GetMagSize(magtype), InvItemName[magtype]);
+                if(Inventory_IsWeapon(itemid)) AddDialogListitem(playerid, " %s\t%.2f\t%d / %d (%s)", itemname, durable, magammo, Inventory_GetMagSize(magtype), ItemInfo[magtype][Name]);
                 else if(Inventory_IsMagazine(itemid)) AddDialogListitem(playerid, " %s\t \t%d / %d", itemname, magammo, Inventory_GetMagSize(itemid));
                 else if(Inventory_IsFoodDrink(itemid)) AddDialogListitem(playerid, " %s", itemname);
                 else if(exdata != -1) AddDialogListitem(playerid, " %s %d", itemname, exdata);
@@ -594,30 +598,7 @@ Cmd:houselocker(playerid) {
 	ShowPlayerDialogPages(playerid, #HouseInventoryMain, DS_HEADERS, ""COL_AQUA"HOUSE LOCKER", "Chon", "Dong", 12, "{F5D400}TRANG SAU", "{F5D400}TRANG TRUOC");
     return 1;
 }
-/*
-hook ndpD_InventoryMain(playerid, response, listitem) {
-    if(response) {
-        new id = -1;
-        if(!IsPlayerInAnyVehicle(playerid) && (id = House_Nearest(playerid)) != -1 && House_IsPlayerNearLocker(playerid, id)) {
-            if(!HouseData[id][Created] || !HouseData[id][Owned]) return 0;
-            if(!House_IsOwner(playerid, id)) return 0;
 
-            static i, str[128];
-            CharacterData[playerid][InvSelectedItem] = listitem;
-            i = CharacterData[playerid][InvSelectedItem];
-            if(!InventoryData[playerid][i][ItemID]) return callcmd::inventory(playerid);
-            format(str, sizeof str, ""COL_AQUA"TUI DO > %s", InvItemName[InventoryData[playerid][i][ItemID]]);
-            if(Inventory_IsWeapon(InventoryData[playerid][i][ItemID])) {
-                if(!InventoryData[playerid][i][IsEquipped]) return Dialog_Show(playerid, InventoryInteract, DS_LIST, str, "Trang bi vu khi\nThong tin vu khi\nDua vu khi\nPha huy vu khi\nVut bo vu khi\n"COL_YELLOW"Cat vao trong nha", "Chon", "Quay lai");
-                else return Dialog_Show(playerid, InventoryInteract, DS_LIST, str, "Go trang bi vu khi\nThong tin vu khi\nDua vu khi\nPha huy vu khi\nVut bo vu khi\n"COL_YELLOW"Cat vao trong nha", "Chon", "Quay lai");
-            }
-            if(Inventory_IsMagazine(InventoryData[playerid][i][ItemID])) return Dialog_Show(playerid, InventoryInteract, DS_LIST, str, "Nap dan vao vu khi\nThong tin bang dan\nDua bang dan\nPha huy bang dan\nVut bo bang dan\n"COL_YELLOW"Cat vao trong nha", "Chon", "Quay lai");
-            Dialog_Show(playerid, InventoryInteract, DS_LIST, str, "Su dung vat pham\nThong tin vat pham\nDua vat pham\nTieu huy vat pham\nVut bo vat pham\n"COL_YELLOW"Cat vao trong nha", "Chon", "Quay lai");
-        }
-    }
-    return 1;
-}
-*/
 DialogPages:HouseInventoryMain(playerid, response, listitem) {
     if(response) {
         new id = -1, str[128];
@@ -632,7 +613,7 @@ DialogPages:HouseInventoryMain(playerid, response, listitem) {
                     CharacterData[playerid][HouseSelectedItem] = listitem-1;
                     i = CharacterData[playerid][HouseSelectedItem];
                     if(!HouseInventory[id][i][ItemID]) return callcmd::houselocker(playerid);
-                    format(str, sizeof str, ""COL_AQUA"HOUSE LOCKER > %s", InvItemName[HouseInventory[id][i][ItemID]]);
+                    format(str, sizeof str, ""COL_AQUA"HOUSE LOCKER > %s", ItemInfo[HouseInventory[id][i][ItemID]][Name]);
                     Dialog_Show(playerid, HouseInventoryInteract, DS_LIST, str, "LAY VAT PHAM\nTHONG TIN VAT PHAM", "Chon", "Quay lai");
                 }
             }

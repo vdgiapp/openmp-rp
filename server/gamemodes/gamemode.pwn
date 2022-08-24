@@ -46,6 +46,7 @@
 #include <YSI_Coding\y_hooks> // hook, hook function, hook callback
 
 #include <open.mp> // YSF included in Open.MP
+#include <modelsizes> // Modelsize use SQL
 #include <mapfix> // Texture bug fixes
 #include <physics> // Physics
 #include <mapandreas> // Map Andreas

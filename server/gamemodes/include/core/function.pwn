@@ -179,6 +179,8 @@ GetWeaponIDFromModel(modelid) {
         case 365: wid = 41; // Spraycan
         case 366: wid = 42; // Fire Extinguisher
         case 367: wid = 43; // Camera
+        case 368: wid = 44;
+        case 369: wid = 45;
     }
     return wid;
 }
@@ -243,6 +245,13 @@ UsageMsg(playerid, const string[], va_args<>) {
     format(str, sizeof str, string, va_start<2>);
     format(str, sizeof str, "USAGE: %s", str);
     ClientMsg(playerid, COLOR_GREY, str);
+}
+
+BankMsg(playerid, const string[], va_args<>) {
+    static str[256];
+    format(str, sizeof str, string, va_start<2>);
+    format(str, sizeof str, ""COL_YELLOW"NGAN HANG > "COL_WHITE"%s", str);
+    ClientMsg(playerid, -1, str);
 }
 
 Fade:FadeBack(playerid) return 1;

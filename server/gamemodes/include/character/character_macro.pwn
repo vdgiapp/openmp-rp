@@ -47,9 +47,9 @@ enum ENUM_CHARACTER_INFO {
 
 	InvSelectedItem,
 
-	HouseSellID,
-	HouseSellPrice,
-	HouseSellWith,
+	HouseOrderID,
+	HouseOrderPrice,
+	HouseOrderWith,
 	HouseSelectedItem,
 
 	HouseAdminID,

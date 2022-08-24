@@ -465,9 +465,11 @@ native GetPlayerPickupType(playerid, pickupid);
 native GetPlayerPickupVirtualWorld(playerid, pickupid);
 
 // Y_Less's model sizes inc
+/*
 native GetColCount();
 native Float:GetColSphereRadius(modelid);
 native GetColSphereOffset(modelid, &Float:fX, &Float:fY = 0.0, &Float:fZ = 0.0);
+*/
 
 // Formatting
 native SendClientMessagef(playerid, color, const message[], {Float,_}:...);
