@@ -372,101 +372,98 @@ Dialog:HouseAEdit_Locker(playerid, response, listitem, inputtext[]) {
 Alias:lockhouse("khoanha", "hlock", "houselock");
 Cmd:lockhouse(playerid) {
     new id = -1;
-    if(!IsPlayerInAnyVehicle(playerid) && (id = House_Nearest(playerid)) != -1 && (House_IsPlayerOutside(playerid, id) || House_IsPlayerNearExt(playerid, id))) {
-        if(!HouseData[id][Created]) return 0;
-        if(!HouseData[id][Owned]) return 0;
-        if(!House_IsOwner(playerid, id)) return ErrorMsg(playerid, "Ban khong co chia khoa cua can nha nay.");
-        PlayerPlaySound(playerid, 1145, 0, 0, 0);
-        if(HouseData[id][Locked]) return HouseData[id][Locked] = 0, GameTextForPlayerf(playerid, 2000, 6, "~g~Mo khoa");
-        if(!HouseData[id][Locked]) return HouseData[id][Locked] = 1, GameTextForPlayerf(playerid, 2000, 6, "~r~Da khoa");
-    }
+    if((id = House_Nearest(playerid)) == -1) return ErrorMsg(playerid, "Ban khong dung gan can nha nao ca.");
+    if(!(House_IsPlayerOutside(playerid, id) || House_IsPlayerNearExt(playerid, id))) return ErrorMsg(playerid, "Ban can phai dung o truoc loi ra vao cua can nha.");
+    if(IsPlayerInAnyVehicle(playerid)) return ErrorMsg(playerid, "Ban khong the thuc hien hanh dong nay khi o tren mot phuong tien.");
+    if(!HouseData[id][Owned]) return 0;
+    if(!House_IsOwner(playerid, id)) return ErrorMsg(playerid, "Ban khong co chia khoa cua can nha nay.");
+    PlayerPlaySound(playerid, 1145, 0, 0, 0);
+    if(HouseData[id][Locked]) return HouseData[id][Locked] = 0, GameTextForPlayerf(playerid, 2000, 6, "~g~Mo khoa");
+    if(!HouseData[id][Locked]) return HouseData[id][Locked] = 1, GameTextForPlayerf(playerid, 2000, 6, "~r~Da khoa");
     return 1;
 }
 
 Alias:viewhouse("xemnha", "hview", "houseview");
 Cmd:viewhouse(playerid, params[]) {
     new id = -1;
-    if(!IsPlayerInAnyVehicle(playerid) && (id = House_Nearest(playerid)) != -1 && House_IsPlayerOutside(playerid, id)) {
-        if(!HouseData[id][Created]) return 0;
-        if(HouseData[id][Owned]) return 0;
-        if(House_IsOwner(playerid, id)) return ErrorMsg(playerid, "Ban da so huu can nha nay, dung /enter de vao trong nha.");
-        SetPlayerCompensatedPos(playerid, HouseData[id][InteriorX], HouseData[id][InteriorY], HouseData[id][InteriorZ], HouseData[id][InteriorA], 3000, HouseData[id][InteriorWorld], HouseData[id][InteriorInt]);
-        if(HouseData[id][RadioOn] == 1) PlayAudioStreamForPlayer(playerid, HouseData[id][RadioURL]);
-    }
+    if((id = House_Nearest(playerid)) == -1) return ErrorMsg(playerid, "Ban khong dung gan can nha nao ca.");
+    if(!House_IsPlayerOutside(playerid, id)) return 0;
+    if(IsPlayerInAnyVehicle(playerid)) return ErrorMsg(playerid, "Ban khong the thuc hien hanh dong nay khi o tren mot phuong tien.");
+    if(HouseData[id][Owned]) return 0;
+    if(House_IsOwner(playerid, id)) return ErrorMsg(playerid, "Ban da so huu can nha nay, dung /enter de vao trong nha.");
+    SetPlayerCompensatedPos(playerid, HouseData[id][InteriorX], HouseData[id][InteriorY], HouseData[id][InteriorZ], HouseData[id][InteriorA], 3000, HouseData[id][InteriorWorld], HouseData[id][InteriorInt]);
+    if(HouseData[id][RadioOn] == 1) PlayAudioStreamForPlayer(playerid, HouseData[id][RadioURL]);
     return 1;
 }
 
 Alias:leavehouse("bonha", "hleave", "houseleave");
 Cmd:leavehouse(playerid) {
     new id = -1;
-    if(!IsPlayerInAnyVehicle(playerid) && (id = House_Nearest(playerid)) != -1 && House_IsPlayerOutside(playerid, id)) {
-        if(!HouseData[id][Created]) return 0;
-        if(!House_IsOwner(playerid, id)) return ErrorMsg(playerid, "Ban khong phai chu so huu cua can nha nay.");
+    if((id = House_Nearest(playerid)) == -1) return ErrorMsg(playerid, "Ban khong dung gan can nha nao ca.");
+    if(!House_IsPlayerOutside(playerid, id)) return ErrorMsg(playerid, "Ban can phai ra ben ngoai can nha truoc.");
+    if(IsPlayerInAnyVehicle(playerid)) return ErrorMsg(playerid, "Ban khong the thuc hien hanh dong nay khi o tren mot phuong tien.");
+    if(!House_IsOwner(playerid, id)) return ErrorMsg(playerid, "Ban khong phai chu so huu cua can nha nay.");
 
-        PlayerPlaySound(playerid, 1055, 0, 0, 0);
-        CharacterData[playerid][Cash] += floatround((HouseData[id][Price]*HouseData[id][Level])/10)+HouseData[id][Cash];
-        SetPlayerMoney(playerid, CharacterData[playerid][Cash]);
-        ShowTDNx(playerid, 3000, "+ $%s", fNumber(floatround((HouseData[id][Price]*HouseData[id][Level])/10)+HouseData[id][Cash]));
+    PlayerPlaySound(playerid, 1055, 0, 0, 0);
+    CharacterData[playerid][Cash] += floatround((HouseData[id][Price]*HouseData[id][Level])/10)+HouseData[id][Cash];
+    SetPlayerMoney(playerid, CharacterData[playerid][Cash]);
+    ShowTDNx(playerid, 3000, "+ $%s", fNumber(floatround((HouseData[id][Price]*HouseData[id][Level])/10)+HouseData[id][Cash]));
 
-        SuccessMsg(playerid, "Ban da bo can nha tai dia chi %d, %s va duoc tra lai $%s",
-        id, HouseData[id][Address], floatround((HouseData[id][Price]*HouseData[id][Level])/10)+HouseData[id][Cash]);
+    SuccessMsg(playerid, "Ban da bo can nha tai dia chi %d, %s va duoc tra lai $%s",
+    id, HouseData[id][Address], floatround((HouseData[id][Price]*HouseData[id][Level])/10)+HouseData[id][Cash]);
 
-        HouseData[id][Owned] = 0;
-        format(HouseData[id][Owner], 25, "None");
-        HouseData[id][Locked] = 0;
-        HouseData[id][Alarm] = 0;
-        HouseData[id][Lights] = 0;
-        HouseData[id][Level] = 1;
-        HouseData[id][Cash] = 0;
+    HouseData[id][Owned] = 0;
+    format(HouseData[id][Owner], 25, "None");
+    HouseData[id][Locked] = 0;
+    HouseData[id][Alarm] = 0;
+    HouseData[id][Lights] = 0;
+    HouseData[id][Level] = 1;
+    HouseData[id][Cash] = 0;
 
-        for(new i = 0; i < MAX_HOUSE_INV; i++) {
-            HouseInventory[id][i][ItemID] = 0;
-            HouseInventory[id][i][Amount] = 0;
-            HouseInventory[id][i][Durable] = 0;
-            HouseInventory[id][i][MagType] = 0;
-            HouseInventory[id][i][MagAmmo] = 0;
-            HouseInventory[id][i][ExData] = -1;
-        }
-
-        House_Refresh(playerid);
-        House_SaveData(id);
+    for(new i = 0; i < MAX_HOUSE_INV; i++) {
+        HouseInventory[id][i][ItemID] = 0;
+        HouseInventory[id][i][Amount] = 0;
+        HouseInventory[id][i][Durable] = 0;
+        HouseInventory[id][i][MagType] = 0;
+        HouseInventory[id][i][MagAmmo] = 0;
+        HouseInventory[id][i][ExData] = -1;
     }
+
+    House_Refresh(playerid);
+    House_SaveData(id);
     return 1;
 }
 
 Alias:upgradehouse("nangcapnha", "hupgrade", "houseupgrade");
 Cmd:upgradehouse(playerid, params[]) {
     new id = -1;
-    if(!IsPlayerInAnyVehicle(playerid) && (id = House_Nearest(playerid)) != -1) {
-        if(House_IsPlayerInside(playerid, id)) {
-            if(!HouseData[id][Created]) return 0;
-            if(!House_IsOwner(playerid, id)) return ErrorMsg(playerid, "Ban khong phai chu so huu cua can nha nay.");
-            if(HouseData[id][Level] == 3) return ErrorMsg(playerid, "Can nha da dat cap do toi da (cap do 3)");
+    if((id = House_Nearest(playerid)) == -1) return ErrorMsg(playerid, "Ban khong dung gan can nha nao ca.");
+    if(!House_IsPlayerInside(playerid, id)) return ErrorMsg(playerid, "Ban can phai vao ben trong can nha de nang cap.");
+    if(IsPlayerInAnyVehicle(playerid)) return ErrorMsg(playerid, "Ban khong the thuc hien hanh dong nay khi o tren mot phuong tien.");
+    if(!House_IsOwner(playerid, id)) return ErrorMsg(playerid, "Ban khong phai chu so huu cua can nha nay.");
+    if(HouseData[id][Level] == 3) return ErrorMsg(playerid, "Can nha da dat cap do toi da 3");
 
-            switch(HouseData[id][Level]) {
-                case 1: {
-                    if(CharacterData[playerid][Cash] - HOUSE_UPGR_COST2 < 0) return ErrorMsg(playerid, "So tien yeu cau de nang cap can nha tu cap do 1 len cap do 2 la $%d.", fNumber(HOUSE_UPGR_COST2));
-                    CharacterData[playerid][Cash] -= HOUSE_UPGR_COST2;
-                    ShowTDNx(playerid, 3000, "- $%s", fNumber(HOUSE_UPGR_COST2));
-                    SuccessMsg(playerid, "Ban da nang cap can nha len cap do 2 (+6 slot locker)");
-                }
-                case 2: {
-                    if(CharacterData[playerid][Cash] - HOUSE_UPGR_COST3 < 0) return ErrorMsg(playerid, "So tien yeu cau de nang cap can nha tu cap do 2 len cap do 3 la $%d.", fNumber(HOUSE_UPGR_COST3));
-                    CharacterData[playerid][Cash] -= HOUSE_UPGR_COST3;
-                    ShowTDNx(playerid, 3000, "- $%s", fNumber(HOUSE_UPGR_COST3));
-                    SuccessMsg(playerid, "Ban da nang cap can nha len cap do 3 (+18 slot locker)");
-                }
-            }
-
-            HouseData[id][Level]++;
-            House_Refresh(playerid);
-            House_SaveData(id);
-
-            SetPlayerMoney(playerid, CharacterData[playerid][Cash]);
-            PlayerPlaySound(playerid, 1133, 0, 0, 0);
+    switch(HouseData[id][Level]) {
+        case 1: {
+            if(CharacterData[playerid][Cash] - HOUSE_UPGR_COST2 < 0) return ErrorMsg(playerid, "So tien yeu cau de nang cap can nha tu cap do 1 len cap do 2 la $%d.", fNumber(HOUSE_UPGR_COST2));
+            CharacterData[playerid][Cash] -= HOUSE_UPGR_COST2;
+            ShowTDNx(playerid, 3000, "- $%s", fNumber(HOUSE_UPGR_COST2));
+            SuccessMsg(playerid, "Ban da nang cap can nha len cap do 2 (+%d slot locker)", HOUSE_LOCKER_SLOT2-HOUSE_LOCKER_SLOT1);
         }
-        else ErrorMsg(playerid, "Ban can phai vao ben trong can nha de nang cap.");
+        case 2: {
+            if(CharacterData[playerid][Cash] - HOUSE_UPGR_COST3 < 0) return ErrorMsg(playerid, "So tien yeu cau de nang cap can nha tu cap do 2 len cap do 3 la $%d.", fNumber(HOUSE_UPGR_COST3));
+            CharacterData[playerid][Cash] -= HOUSE_UPGR_COST3;
+            ShowTDNx(playerid, 3000, "- $%s", fNumber(HOUSE_UPGR_COST3));
+            SuccessMsg(playerid, "Ban da nang cap can nha len cap do 3 (+%d slot locker)", HOUSE_LOCKER_SLOT3-HOUSE_LOCKER_SLOT2);
+        }
     }
+
+    HouseData[id][Level]++;
+    House_Refresh(playerid);
+    House_SaveData(id);
+
+    SetPlayerMoney(playerid, CharacterData[playerid][Cash]);
+    PlayerPlaySound(playerid, 1133, 0, 0, 0);
     return 1;
 }
 
@@ -476,127 +473,125 @@ Cmd:sellhouse(playerid, params[]) {
     if(sscanf(params, "ui", target, price)) return UsageMsg(playerid, "/hsell [ID nguoi choi] [gia tien]");
     if(target == playerid) return ErrorMsg(playerid, "Ban khong the tu ban nha cho chinh minh.");
     if(!IsPlayerInGame(target)) return ErrorMsg(playerid, "Nguoi choi do chua dang nhap vao tro choi.");
+    if((id = House_Nearest(playerid)) == -1) return ErrorMsg(playerid, "Ban khong o gan can nha nao ca.");
     if(!IsPlayerInRangeOfPlayer(playerid, target)) return ErrorMsg(playerid, "Nguoi choi do khong o gan ban.");
-
-    if(!IsPlayerInAnyVehicle(playerid) && (id = House_Nearest(playerid)) != -1) {
-        if(House_IsPlayerOutside(playerid, id)) {
-
-        }
-        else ErrorMsg(playerid, "Ban can phai ra ben ngoai can nha truoc.");
-    }
+    if(IsPlayerInAnyVehicle(playerid)) return ErrorMsg(playerid, "Ban khong the thuc hien hanh dong nay khi o tren mot phuong tien.");
+    if(!House_IsPlayerOutside(playerid, id)) return ErrorMsg(playerid, "Ban can phai ra ben ngoai can nha truoc.");
+    //
     return 1;
 }
 
 Alias:buyhouse("muanha", "hbuy", "housebuy");
 Cmd:buyhouse(playerid, params[]) {
     new id = -1;
-    if(!IsPlayerInAnyVehicle(playerid) && (id = House_Nearest(playerid)) != -1 && House_IsPlayerOutside(playerid, id)) {
-        if(!HouseData[id][Created]) return 0;
-        if(House_IsOwner(playerid, id)) return ErrorMsg(playerid, "Ban da la chu so huu cua can nha nay roi.");
-        if(HouseData[id][Owned]) return ErrorMsg(playerid, "Ban khong the mua can nha nay vi da co chu so huu.");
-        if(CharacterData[playerid][Cash] < HouseData[id][Price]) {
-            static banknum, bankbal;
-            sscanf(CharacterData[playerid][Bank], "dd", banknum, bankbal);
-            if(bankbal < HouseData[id][Price]) return ErrorMsg(playerid, "So du trong nguoi va so du trong tai khoan ngan hang khong du.");
-            format(CharacterData[playerid][Bank], 32, "%d %d", banknum, bankbal-HouseData[id][Price]);
-        }
-        if(CharacterData[playerid][Cash] >= HouseData[id][Price]) {
-            CharacterData[playerid][Cash] -= HouseData[id][Price];
-            SetPlayerMoney(playerid, CharacterData[playerid][Cash]);
-        }
-        PlayerPlaySound(playerid, 1054, 0, 0, 0);
-        HouseData[id][Owned] = 1;
-        format(HouseData[id][Owner], MAX_PLAYER_NAME, "%s", CharacterData[playerid][Name]);
-        SuccessMsg(playerid, "Ban da mua thanh cong mot can nha tai dia chi %d, %s", id, HouseData[id][Address]);
-        House_Refresh(id);
+    if((id = House_Nearest(playerid)) == -1) return ErrorMsg(playerid, "Ban khong o gan can nha nao ca.");
+    if(!House_IsPlayerOutside(playerid, id)) return ErrorMsg(playerid, "Ban can phai ra ben ngoai can nha truoc.");
+    if(IsPlayerInAnyVehicle(playerid)) return ErrorMsg(playerid, "Ban khong the thuc hien hanh dong nay khi o tren mot phuong tien.");
+    if(House_IsOwner(playerid, id)) return ErrorMsg(playerid, "Ban da la chu so huu cua can nha nay roi.");
+    if(HouseData[id][Owned]) return ErrorMsg(playerid, "Ban khong the mua can nha nay vi da co chu so huu.");
+    if(CharacterData[playerid][Cash] < HouseData[id][Price]) {
+        static banknum, bankbal;
+        sscanf(CharacterData[playerid][Bank], "dd", banknum, bankbal);
+        if(bankbal < HouseData[id][Price]) return ErrorMsg(playerid, "So du trong nguoi va so du trong tai khoan ngan hang khong du.");
+        format(CharacterData[playerid][Bank], 32, "%d %d", banknum, bankbal-HouseData[id][Price]);
     }
+    if(CharacterData[playerid][Cash] >= HouseData[id][Price]) {
+        CharacterData[playerid][Cash] -= HouseData[id][Price];
+        SetPlayerMoney(playerid, CharacterData[playerid][Cash]);
+    }
+    PlayerPlaySound(playerid, 1054, 0, 0, 0);
+    HouseData[id][Owned] = 1;
+    format(HouseData[id][Owner], MAX_PLAYER_NAME, "%s", CharacterData[playerid][Name]);
+    SuccessMsg(playerid, "Ban da mua thanh cong mot can nha tai dia chi %d, %s", id, HouseData[id][Address]);
+    House_Refresh(id);
     return 1;
 }
 
 Alias:houselocker("tudo", "hlocker");
 Cmd:houselocker(playerid) {
     new id = -1;
-    if(!IsPlayerInAnyVehicle(playerid) && (id = House_Nearest(playerid)) != -1 && House_IsPlayerNearLocker(playerid, id) && House_IsOwner(playerid, id)) {
-        CharacterData[playerid][HouseSelectedItem] = -1;
-        // Sort
-        for(new i = 0; i < MAX_HOUSE_INV; i++) {
-            for(new u = i+1; u < MAX_HOUSE_INV; u++) {
-                if(HouseInventory[id][i][ItemID]) {
-    				if(HouseInventory[id][i][ItemID] != HouseInventory[id][u][ItemID]) continue;
-                    if(HouseInventory[id][i][Durable] != HouseInventory[id][u][Durable]) continue;
-                    if(Inventory_IsWeapon(HouseInventory[id][i][ItemID]) || Inventory_IsWeapon(HouseInventory[id][u][ItemID])) continue;
-    				if(HouseInventory[id][i][ExData] != HouseInventory[id][u][ExData]) continue;
-                    if(HouseInventory[id][i][MagAmmo] != HouseInventory[id][u][MagAmmo]) continue;
-                    HouseInventory[id][i][Amount] += HouseInventory[id][u][Amount];
-    				HouseInventory[id][u][ItemID] = 0;
-    				HouseInventory[id][u][Amount] = 0;
-    				HouseInventory[id][u][MagType] = 0;
-    				HouseInventory[id][u][MagAmmo] = 0;
-    				HouseInventory[id][u][ExData] = -1;
-                }
-                if(!HouseInventory[id][i][ItemID] && HouseInventory[id][u][ItemID]) {
-                    SwapInt(HouseInventory[id][u][ItemID], HouseInventory[id][i][ItemID]);
-                    SwapInt(HouseInventory[id][u][Amount], HouseInventory[id][i][Amount]);
-                    SwapFloat(HouseInventory[id][u][Durable], HouseInventory[id][i][Durable]);
-    				SwapInt(HouseInventory[id][u][MagType], HouseInventory[id][i][MagType]);
-                    SwapInt(HouseInventory[id][u][MagAmmo], HouseInventory[id][i][MagAmmo]);
-    				SwapInt(HouseInventory[id][u][ExData], HouseInventory[id][i][ExData]);
-                }
-            }
-    		if(HouseInventory[id][i][Amount] <= 0) HouseInventory[id][i][ItemID] = 0, HouseInventory[id][i][Amount] = 0;
-    		if(Inventory_IsWeapon(HouseInventory[id][i][ItemID])) {
-    			if(HouseInventory[id][i][MagAmmo] <= 0 || HouseInventory[id][i][MagType] <= 0) {
-                    HouseInventory[id][i][MagAmmo] = 0;
-                    HouseInventory[id][i][MagType] = 0;
-                }
-    		}
-    		if(Inventory_IsMagazine(HouseInventory[id][i][ItemID])) {
-    			if(HouseInventory[id][i][MagAmmo] <= 0) {
-    				HouseInventory[id][i][ItemID] = 0;
-                    HouseInventory[id][i][Amount] = 0;
-                    HouseInventory[id][i][Durable] = 0;
-    				HouseInventory[id][i][MagType] = 0;
-                    HouseInventory[id][i][MagAmmo] = 0;
-    				HouseInventory[id][i][ExData] = -1;
-    			}
-    		}
-        }
-        ClearDialogListitems(playerid);
-        AddDialogListitem(playerid, ""COL_GREY" Vat pham\tDo ben\t");
-        AddDialogListitem(playerid, ""COL_YELLOW"KET SAT: $%s", fNumber(HouseData[id][Cash]));
-        for(new i = 0; i < MAX_HOUSE_INV; i++) {
-            if(HouseData[id][Level] == 1 && i >= 12) continue;
-            if(HouseData[id][Level] == 2 && i >= 18) continue;
-            // Level 3 = remain
+    if((id = House_Nearest(playerid)) == -1) return ErrorMsg(playerid, "Ban khong o gan can nha nao ca.");
+    if(!House_IsPlayerNearLocker(playerid, id)) return ErrorMsg(playerid, "Ban khong dung gan locker nao ca.");
+    if(!House_IsOwner(playerid, id)) return ErrorMsg(playerid, "Ban khong phai la chu o huu cua can nha nay.");
+    if(IsPlayerInAnyVehicle(playerid)) return ErrorMsg(playerid, "Ban khong the thuc hien hanh dong nay khi o tren mot phuong tien.");
+    CharacterData[playerid][HouseSelectedItem] = -1;
+    // Sort
+    for(new i = 0; i < MAX_HOUSE_INV; i++) {
+        for(new u = i+1; u < MAX_HOUSE_INV; u++) {
             if(HouseInventory[id][i][ItemID]) {
-                static weapondata[13][2], exdata;
-                static itemname[64], itemid, amount, Float:durable, magtype, magammo;
-                itemid = HouseInventory[id][i][ItemID];
-                amount = HouseInventory[id][i][Amount];
-                durable = HouseInventory[id][i][Durable];
-                magtype = HouseInventory[id][i][MagType];
-                magammo = HouseInventory[id][i][MagAmmo];
-                exdata = HouseInventory[id][i][ExData];
-                format(itemname, sizeof itemname, "%s", InvItemName[itemid]);
-                for(new u = 0; u < 13; u++) { GetPlayerWeaponData(playerid, u, weapondata[u][0], weapondata[u][1]); }
-                if(amount > 1) {
-                    if(Inventory_IsMagazine(itemid)) AddDialogListitem(playerid, " %s [x%d]\t \t%d / %d", itemname, amount, magammo, Inventory_GetMagSize(itemid));
-                    else if(Inventory_IsFoodDrink(itemid)) AddDialogListitem(playerid, " %s [x%d]", itemname, amount);
-                    else if(exdata != -1) AddDialogListitem(playerid, " %s %d [x%d]", itemname, exdata, amount);
-                    else AddDialogListitem(playerid, " %s [x%d]\t%.2f\t", itemname, amount, durable);
-                }
-                else {
-                    if(Inventory_IsWeapon(itemid)) AddDialogListitem(playerid, " %s\t%.2f\t%d / %d (%s)", itemname, durable, magammo, Inventory_GetMagSize(magtype), InvItemName[magtype]);
-                    else if(Inventory_IsMagazine(itemid)) AddDialogListitem(playerid, " %s\t \t%d / %d", itemname, magammo, Inventory_GetMagSize(itemid));
-                    else if(Inventory_IsFoodDrink(itemid)) AddDialogListitem(playerid, " %s", itemname);
-                    else if(exdata != -1) AddDialogListitem(playerid, " %s %d", itemname, exdata);
-                    else AddDialogListitem(playerid, " %s\t%.2f\t", itemname, durable);
-                }
+				if(HouseInventory[id][i][ItemID] != HouseInventory[id][u][ItemID]) continue;
+                if(HouseInventory[id][i][Durable] != HouseInventory[id][u][Durable]) continue;
+                if(Inventory_IsWeapon(HouseInventory[id][i][ItemID]) || Inventory_IsWeapon(HouseInventory[id][u][ItemID])) continue;
+				if(HouseInventory[id][i][ExData] != HouseInventory[id][u][ExData]) continue;
+                if(HouseInventory[id][i][MagAmmo] != HouseInventory[id][u][MagAmmo]) continue;
+                HouseInventory[id][i][Amount] += HouseInventory[id][u][Amount];
+				HouseInventory[id][u][ItemID] = 0;
+				HouseInventory[id][u][Amount] = 0;
+				HouseInventory[id][u][MagType] = 0;
+				HouseInventory[id][u][MagAmmo] = 0;
+				HouseInventory[id][u][ExData] = -1;
             }
-    	}
-    	ShowPlayerDialogPages(playerid, #HouseInventoryMain, DS_HEADERS, ""COL_AQUA"HOUSE LOCKER", "Chon", "Dong", 12, "{F5D400}TRANG SAU", "{F5D400}TRANG TRUOC");
+            if(!HouseInventory[id][i][ItemID] && HouseInventory[id][u][ItemID]) {
+                SwapInt(HouseInventory[id][u][ItemID], HouseInventory[id][i][ItemID]);
+                SwapInt(HouseInventory[id][u][Amount], HouseInventory[id][i][Amount]);
+                SwapFloat(HouseInventory[id][u][Durable], HouseInventory[id][i][Durable]);
+				SwapInt(HouseInventory[id][u][MagType], HouseInventory[id][i][MagType]);
+                SwapInt(HouseInventory[id][u][MagAmmo], HouseInventory[id][i][MagAmmo]);
+				SwapInt(HouseInventory[id][u][ExData], HouseInventory[id][i][ExData]);
+            }
+        }
+		if(HouseInventory[id][i][Amount] <= 0) HouseInventory[id][i][ItemID] = 0, HouseInventory[id][i][Amount] = 0;
+		if(Inventory_IsWeapon(HouseInventory[id][i][ItemID])) {
+			if(HouseInventory[id][i][MagAmmo] <= 0 || HouseInventory[id][i][MagType] <= 0) {
+                HouseInventory[id][i][MagAmmo] = 0;
+                HouseInventory[id][i][MagType] = 0;
+            }
+		}
+		if(Inventory_IsMagazine(HouseInventory[id][i][ItemID])) {
+			if(HouseInventory[id][i][MagAmmo] <= 0) {
+				HouseInventory[id][i][ItemID] = 0;
+                HouseInventory[id][i][Amount] = 0;
+                HouseInventory[id][i][Durable] = 0;
+				HouseInventory[id][i][MagType] = 0;
+                HouseInventory[id][i][MagAmmo] = 0;
+				HouseInventory[id][i][ExData] = -1;
+			}
+		}
     }
-    else ErrorMsg(playerid, "Ban khong dung gan locker nao hoac ban khong phai la chu so huu.");
+    ClearDialogListitems(playerid);
+    AddDialogListitem(playerid, ""COL_GREY" Vat pham\tDo ben\t");
+    AddDialogListitem(playerid, ""COL_YELLOW"KET SAT: $%s", fNumber(HouseData[id][Cash]));
+    for(new i = 0; i < MAX_HOUSE_INV; i++) {
+        if(HouseData[id][Level] == 1 && i >= 12) continue;
+        if(HouseData[id][Level] == 2 && i >= 18) continue;
+        // Level 3 = remain
+        if(HouseInventory[id][i][ItemID]) {
+            static weapondata[13][2], exdata;
+            static itemname[64], itemid, amount, Float:durable, magtype, magammo;
+            itemid = HouseInventory[id][i][ItemID];
+            amount = HouseInventory[id][i][Amount];
+            durable = HouseInventory[id][i][Durable];
+            magtype = HouseInventory[id][i][MagType];
+            magammo = HouseInventory[id][i][MagAmmo];
+            exdata = HouseInventory[id][i][ExData];
+            format(itemname, sizeof itemname, "%s", InvItemName[itemid]);
+            for(new u = 0; u < 13; u++) { GetPlayerWeaponData(playerid, u, weapondata[u][0], weapondata[u][1]); }
+            if(amount > 1) {
+                if(Inventory_IsMagazine(itemid)) AddDialogListitem(playerid, " %s [x%d]\t \t%d / %d", itemname, amount, magammo, Inventory_GetMagSize(itemid));
+                else if(Inventory_IsFoodDrink(itemid)) AddDialogListitem(playerid, " %s [x%d]", itemname, amount);
+                else if(exdata != -1) AddDialogListitem(playerid, " %s %d [x%d]", itemname, exdata, amount);
+                else AddDialogListitem(playerid, " %s [x%d]\t%.2f\t", itemname, amount, durable);
+            }
+            else {
+                if(Inventory_IsWeapon(itemid)) AddDialogListitem(playerid, " %s\t%.2f\t%d / %d (%s)", itemname, durable, magammo, Inventory_GetMagSize(magtype), InvItemName[magtype]);
+                else if(Inventory_IsMagazine(itemid)) AddDialogListitem(playerid, " %s\t \t%d / %d", itemname, magammo, Inventory_GetMagSize(itemid));
+                else if(Inventory_IsFoodDrink(itemid)) AddDialogListitem(playerid, " %s", itemname);
+                else if(exdata != -1) AddDialogListitem(playerid, " %s %d", itemname, exdata);
+                else AddDialogListitem(playerid, " %s\t%.2f\t", itemname, durable);
+            }
+        }
+	}
+	ShowPlayerDialogPages(playerid, #HouseInventoryMain, DS_HEADERS, ""COL_AQUA"HOUSE LOCKER", "Chon", "Dong", 12, "{F5D400}TRANG SAU", "{F5D400}TRANG TRUOC");
     return 1;
 }
 /*
