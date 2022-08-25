@@ -138,3 +138,75 @@ SaveCharacterData(playerid) {
 	Kick(playerid);
 	return 1;
 }
+
+GetGenderName(genderid) {
+	new gender[16];
+	switch(genderid) {
+		case 1: format(gender, sizeof gender, "Nam");
+		case 2: format(gender, sizeof gender, "Nu");
+	}
+	return gender;
+}
+
+GetNationName(nationid) {
+	new nation[32];
+	switch(nationid)  {
+		case 1: format(nation, sizeof nation, "Los Santos");
+		case 2: format(nation, sizeof nation, "San Fierro");
+		case 3: format(nation, sizeof nation, "Las Venturas");
+		case 4: format(nation, sizeof nation, "Countryside");
+	}
+	return nation;
+}
+
+GetFightStyleName(fsid) {
+	new ret[32];
+	switch(fsid) {
+		case 4: format(ret, sizeof ret, "Khong");
+		case 5: format(ret, sizeof ret, "Boxing");
+		case 6: format(ret, sizeof ret, "Kung-fu");
+		case 7: format(ret, sizeof ret, "Kneehead");
+		case 15: format(ret, sizeof ret, "Grabkick");
+		case 16: format(ret, sizeof ret, "Elbow");
+	}
+	return ret;
+}
+
+GetWalkStyleName(id) {
+	new ret[32];
+	switch(id) {
+		case 0: format(ret, sizeof ret, "Mac dinh");
+		case 1: format(ret, sizeof ret, "CJ");
+		case 2: format(ret, sizeof ret, "PED");
+		case 3: format(ret, sizeof ret, "Gangsta");
+		case 4: format(ret, sizeof ret, "Gangsta 2");
+		case 5: format(ret, sizeof ret, "Old");
+		case 6: format(ret, sizeof ret, "Fat Old");
+		case 7: format(ret, sizeof ret, "Fat");
+		case 8: format(ret, sizeof ret, "Woman Old");
+		case 9: format(ret, sizeof ret, "Woman Fat Old");
+		case 10: format(ret, sizeof ret, "Shuffle");
+		case 11: format(ret, sizeof ret, "Lady");
+		case 12: format(ret, sizeof ret, "Lady 2");
+		case 13: format(ret, sizeof ret, "Whore");
+		case 14: format(ret, sizeof ret, "Whore 2");
+		case 15: format(ret, sizeof ret, "Drunk");
+		case 16: format(ret, sizeof ret, "Blind");
+	}
+	return ret;
+}
+
+GetMaxExpFromLevel(level) { return ((level^2) * 100); }
+
+GetJobName(jobid) {
+	new str[128] = "";
+	switch(jobid) {
+		case 0: format(str, sizeof str, "That nghiep");
+		case 1: format(str, sizeof str, "Pizza Delivery");
+		case 2: format(str, sizeof str, "Trucker");
+		case 3: format(str, sizeof str, "Miner");
+		case 4: format(str, sizeof str, "Trash Recycler");
+		case 5: format(str, sizeof str, "Electrician");
+	}
+	return str;
+}

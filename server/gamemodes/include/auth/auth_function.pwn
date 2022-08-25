@@ -17,7 +17,7 @@ func OnGetSvInfo() {
 		mysql_tquery(Database, str);
 	}
 	format(str, sizeof str, "%d", cache_value_int(0, "Logged")); TextDrawSetString(Auth_LoggedToday, str);
-	format(str, sizeof str, "%d", GetPlayersOnline()); TextDrawSetString(Auth_PlayersOnline, str);
+	format(str, sizeof str, "%d", CountPlayers(true, false)); TextDrawSetString(Auth_PlayersOnline, str);
 }
 
 func OnCheckingPlayerAccount(playerid) {
@@ -166,20 +166,6 @@ ShowEmailDialog(playerid) {
 */
 
 ShowCharCreateDialog(playerid) {
-	static gender[16];
-	switch(CreateCharData[playerid][Gender])  {
-		case 1: format(gender, sizeof gender, "Nam");
-		case 2: format(gender, sizeof gender, "Nu");
-	}
-
-	static nation[16];
-	switch(CreateCharData[playerid][Nation])  {
-		case 1: format(nation, sizeof nation, "Los Santos");
-		case 2: format(nation, sizeof nation, "San Fierro");
-		case 3: format(nation, sizeof nation, "Las Venturas");
-		case 4: format(nation, sizeof nation, "Countryside");
-	}
-
 	static str[1024];
     format(str, sizeof str, "Ten nhan vat\t%s\n\
         Gioi tinh\t%s\n\
@@ -188,9 +174,8 @@ ShowCharCreateDialog(playerid) {
         Trang phuc\t%d\n\
         Mo ta nhan vat\n\
         "COL_GREEN"Hoan thanh",
-        GetRoleplayName(CreateCharData[playerid][Name]), gender,
-        CreateCharData[playerid][Birthday],
-        nation, CreateCharData[playerid][SkinID]);
+        GetRoleplayName(CreateCharData[playerid][Name]), GetGenderName(CreateCharData[playerid][Gender]),
+        CreateCharData[playerid][Birthday], GetNationName(CreateCharData[playerid][Nation]), CreateCharData[playerid][SkinID]);
 	return Dialog_Show(playerid, Char_Create, DS_TABLIST, ""COL_AQUA"TAO NHAN VAT", str, "Chon", "Thoat");
 }
 

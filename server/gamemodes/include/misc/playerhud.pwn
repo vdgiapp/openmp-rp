@@ -291,6 +291,11 @@ hook OnPlayerUpdate(playerid) {
 			PlayerTextDrawSetString(playerid, HUD_Zone[playerid], str);
 		}
 		else PlayerTextDrawSetString(playerid, HUD_Zone[playerid], GetPlayerZone(playerid));
+
+		if(Inventory_HasItem(playerid, 20, 1) != -1) PlayerTextDrawShow(playerid, HUD_Zone[playerid]);
+		if(Inventory_HasItem(playerid, 20, 1) == -1) PlayerTextDrawHide(playerid, HUD_Zone[playerid]);
+		if(Inventory_HasItem(playerid, 21, 1) != -1) PlayerTextDrawShow(playerid, HUD_WatchTime[playerid]);
+		if(Inventory_HasItem(playerid, 21, 1) == -1) PlayerTextDrawHide(playerid, HUD_WatchTime[playerid]);
 	}
 	return 1;
 }
@@ -310,28 +315,6 @@ ShowPlayerHUD(playerid) {
 	PlayerTextDrawShow(playerid, HUD_VehSpeed[playerid]);
 	PlayerTextDrawShow(playerid, AnnounceMessage[playerid]);
 	*/
-}
-
-HUD_TogglePlayerWatch(playerid) {
-	if(!IsPlayerTextDrawVisible(playerid, HUD_WatchTime[playerid])) {
-		callcmd::ame(playerid, "da deo mot chiec dong ho");
-		return PlayerTextDrawShow(playerid, HUD_WatchTime[playerid]);
-	}
-	if(IsPlayerTextDrawVisible(playerid, HUD_WatchTime[playerid])) {
-		callcmd::ame(playerid, "da thao dong ho ra");
-		return PlayerTextDrawHide(playerid, HUD_WatchTime[playerid]);
-	}
-}
-
-HUD_TogglePlayerGPS(playerid) {
-	if(!IsPlayerTextDrawVisible(playerid, HUD_Zone[playerid])) {
-		callcmd::ame(playerid, "da bat GPS len");
-		return PlayerTextDrawShow(playerid, HUD_Zone[playerid]);
-	}
-	if(IsPlayerTextDrawVisible(playerid, HUD_Zone[playerid])) {
-		callcmd::ame(playerid, "da tat GPS di");
-		return PlayerTextDrawHide(playerid, HUD_Zone[playerid]);
-	}
 }
 
 static ChangePlayerStatusBar(playerid, PlayerText:playertd, Float:var, Float:max_var) {

@@ -193,15 +193,6 @@ IsPlayerInRangeOfPlayer(playerid, targetid, Float:range = 2.0) {
     && IsPlayerInRangeOfPoint(targetid, range, px, py, pz));
 }
 
-GetPlayersOnline() {
-	static count;
-	count = 0;
-	foreach(new i : Player) {
-		count++;
-	}
-	return count;
-}
-
 FirstUpper(str[256]) {
     str[0] = toupper(str[0]);
     return str;

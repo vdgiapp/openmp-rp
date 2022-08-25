@@ -18,6 +18,52 @@ hook OnPlayerText(playerid, text[]) {
     return 0;
 }
 
+hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
+	if(newkeys & KEY_CTRL_BACK) { // Key H
+        static Float:depth, Float:pdepth;
+        if(!IsPlayerInAnyVehicle(playerid)) callcmd::menu(playerid);
+    }
+	return 1;
+}
+
+Alias:menu("mainmenu", "mm");
+Cmd:menu(playerid) {
+	Dialog_Show(playerid, QuickMenuMain, DS_LIST, ""COL_AQUA"INTERACT MENU", "Thong tin nhan vat\nTui do nhan vat\nDinh vi GPS\nCai dat nhan vat\nDanh sach cac lenh", "Chon", "Dong");
+	return 1;
+}
+
+Dialog:QuickMenuMain(playerid, response, listitem, inputtext[]) {
+	if(response) {
+		switch(listitem) {
+			case 0: callcmd::stats(playerid);
+			case 1: callcmd::inventory(playerid);
+		}
+	}
+	return 1;
+}
+
+Alias:stats("thongtin", "info", "information");
+Cmd:stats(playerid) {
+	new str[128], bday, bmonth, byear;
+	new level, exp;
+	format(str, sizeof str, ""COL_AQUA"THONG TIN > %s", GetRoleplayName(CharacterData[playerid][Name]));
+	sscanf(CharacterData[playerid][Birthday], "ddd", bday, bmonth, byear);
+	sscanf(CharacterData[playerid][Level], "dd", level, exp);
+	ClearDialogListitems(playerid);
+	AddDialogListitem(playerid, "Ho va ten: \t%s", GetRoleplayName(CharacterData[playerid][Name]));
+	AddDialogListitem(playerid, "Ngay sinh: \t%02d / %02d / %04d", bday, bmonth, byear);
+	AddDialogListitem(playerid, "Gioi tinh: \t%s", GetGenderName(CharacterData[playerid][Gender]));
+	AddDialogListitem(playerid, "Quoc tich: \t%s", GetNationName(CharacterData[playerid][Nation]));
+	AddDialogListitem(playerid, "Cap do: \tLv.%d", level);
+	AddDialogListitem(playerid, "Kinh nghiem: \t%s / %s .exp", fNumber(exp), fNumber(GetMaxExpFromLevel(level)));
+	AddDialogListitem(playerid, "Diem Respects: \t%s RP", fNumber(CharacterData[playerid][Respects]));
+	AddDialogListitem(playerid, "Cong viec: \t%s", GetJobName(CharacterData[playerid][JobID]));
+	AddDialogListitem(playerid, "Phong cach chien dau: \t%s", GetFightStyleName(CharacterData[playerid][FightStyle]));
+	AddDialogListitem(playerid, "Kieu di bo: \t%s", GetWalkStyleName(CharacterData[playerid][WalkStyle]));
+	ShowPlayerDialogPages(playerid, #PlayerStatsMain, DS_TABLIST, str, "Chon", "Dong", 20, "{F5D400}TRANG SAU", "{F5D400}TRANG TRUOC");
+	return 1;
+}
+
 Alias:enter("vao");
 Cmd:enter(playerid, params[]) {
     new id = -1;
@@ -206,39 +252,6 @@ Cmd:pm(playerid, params[]) {
     PlayerPlaySound(playerid, 4203, 0, 0, 0);
 
     SendPMLog(playerid, target, FirstUpper(str));
-
-    return 1;
-}
-
-Alias:help("cmd", "cmds", "trogiup");
-Cmd:help(playerid, params[]) {
-    Dialog_Show(playerid, Help_Dialog, DS_LIST, ""COL_AQUA"DANH SACH LENH", "Cac lenh co ban\nCac lenh nghe nghiep\nCac lenh tai san", "Xem", "Thoat");
-    return 1;
-}
-
-Dialog:Help_Dialog(playerid, response, listitem, inputtext[]) {
-    if(response) {
-        switch(listitem) {
-            case 0: {}
-        }
-    }
-    return 1;
-}
-
-Alias:settings("cd", "caidat", "setting");
-Cmd:settings(playerid, params[]) {
-
-    return 1;
-}
-
-Alias:menu("mainmenu", "mm");
-Cmd:menu(playerid, params[]) {
-
-    return 1;
-}
-
-Alias:stats("stat", "thongtin", "info");
-Cmd:stats(playerid, params) {
 
     return 1;
 }
