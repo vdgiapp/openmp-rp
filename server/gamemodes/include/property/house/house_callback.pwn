@@ -563,14 +563,12 @@ Cmd:houselocker(playerid) {
 		}
     }
     ClearDialogListitems(playerid);
-    AddDialogListitem(playerid, ""COL_GREY" Vat pham\tDo ben\t");
+    AddDialogListitem(playerid, ""COL_GREY" Vat pham\tDo ben\t_");
     AddDialogListitem(playerid, ""COL_YELLOW"KET SAT: $%s", fNumber(HouseData[id][Cash]));
     for(new i = 0; i < MAX_HOUSE_INV; i++) {
-        if(HouseData[id][Level] == 1 && i >= 12) continue;
-        if(HouseData[id][Level] == 2 && i >= 18) continue;
         // Level 3 = remain
         if(HouseInventory[id][i][ItemID]) {
-            static weapondata[13][2], exdata;
+            static weapondata[13][2], exdata, string[4096] = "";
             static itemname[64], itemid, amount, Float:durable, magtype, magammo;
             itemid = HouseInventory[id][i][ItemID];
             amount = HouseInventory[id][i][Amount];
@@ -580,19 +578,19 @@ Cmd:houselocker(playerid) {
             exdata = HouseInventory[id][i][ExData];
             format(itemname, sizeof itemname, "%s", ItemInfo[itemid][Name]);
             for(new u = 0; u < 13; u++) { GetPlayerWeaponData(playerid, u, weapondata[u][0], weapondata[u][1]); }
-            if(amount > 1) {
-                if(Inventory_IsMagazine(itemid)) AddDialogListitem(playerid, " %s [x%d]\t \t%d / %d", itemname, amount, magammo, Inventory_GetMagSize(itemid));
-                else if(Inventory_IsFoodDrink(itemid)) AddDialogListitem(playerid, " %s [x%d]", itemname, amount);
-                else if(exdata != -1) AddDialogListitem(playerid, " %s %d [x%d]", itemname, exdata, amount);
-                else AddDialogListitem(playerid, " %s [x%d]\t%.2f\t", itemname, amount, durable);
+            format(string, sizeof string, ""COL_WHITE" %s", Inventory_ItemName(itemid));
+            switch(exdata) {
+                case -1: { }
+                default: format(string, sizeof string, "%s %d", string, exdata);
             }
-            else {
-                if(Inventory_IsWeapon(itemid)) AddDialogListitem(playerid, " %s\t%.2f\t%d / %d (%s)", itemname, durable, magammo, Inventory_GetMagSize(magtype), ItemInfo[magtype][Name]);
-                else if(Inventory_IsMagazine(itemid)) AddDialogListitem(playerid, " %s\t \t%d / %d", itemname, magammo, Inventory_GetMagSize(itemid));
-                else if(Inventory_IsFoodDrink(itemid)) AddDialogListitem(playerid, " %s", itemname);
-                else if(exdata != -1) AddDialogListitem(playerid, " %s %d", itemname, exdata);
-                else AddDialogListitem(playerid, " %s\t%.2f\t", itemname, durable);
+            switch(amount) {
+                case 1: { }
+                default: format(string, sizeof string, "%s [x%s]", string, fNumber(amount));
             }
+            format(string, sizeof string, "%s\t"COL_WHITE"%.1f", string, durable);
+            if(Inventory_IsMagazine(itemid)) format(string, sizeof string, "%s\t"COL_WHITE"%d / %d", string, magammo, Inventory_GetMagSize(itemid));
+            if(Inventory_IsWeapon(itemid)) format(string, sizeof string, "%s\t"COL_WHITE"%d / %d (%s)", string, magammo, Inventory_GetMagSize(magtype), Inventory_ItemName(magtype));
+            AddDialogListitem(playerid, string);
         }
 	}
 	ShowPlayerDialogPages(playerid, #HouseInventoryMain, DS_HEADERS, ""COL_AQUA"HOUSE LOCKER", "Chon", "Dong", 12, "{F5D400}TRANG SAU", "{F5D400}TRANG TRUOC");

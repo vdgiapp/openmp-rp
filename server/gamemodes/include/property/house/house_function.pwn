@@ -157,3 +157,34 @@ House_Refresh(hid) {
 			DestroyDynamicPickup(HouseData[hid][LockerPickup]);
 	}
 }
+
+House_GiveLockerItem(hid, itemid, amount, Float:durable, exdata = -1, magtype = 0, magammo = 0) {
+	for(new i = 0; i < MAX_HOUSE_INV; i++) {
+		if(HouseData[hid][Level] == 1 && i >= 12) continue;
+        if(HouseData[hid][Level] == 2 && i >= 18) continue;
+        if(HouseInventory[hid][i][ItemID] == itemid) {
+            if(HouseInventory[hid][i][Durable] != 100.00) continue;
+            if(Inventory_IsWeapon(itemid)) continue;
+            if(HouseInventory[hid][i][MagAmmo] != magammo) continue;
+			if(HouseInventory[hid][i][ExData] != exdata) continue;
+            HouseInventory[hid][i][Amount] += amount;
+			return 1;
+        }
+        if(!HouseInventory[hid][i][ItemID]) {
+            HouseInventory[hid][i][ItemID] = itemid;
+            HouseInventory[hid][i][Amount] = amount;
+            HouseInventory[hid][i][Durable] = durable;
+			HouseInventory[hid][i][ExData] = exdata;
+            if(Inventory_IsWeapon(itemid) && magammo) {
+                HouseInventory[hid][i][MagAmmo] = magammo;
+                HouseInventory[hid][i][MagType] = magtype;
+            }
+            if(Inventory_IsMagazine(itemid) && magammo) {
+                if(magammo <= Inventory_GetMagSize(itemid)) HouseInventory[hid][i][MagAmmo] = magammo;
+                if(magammo > Inventory_GetMagSize(itemid)) HouseInventory[hid][i][MagAmmo] = Inventory_GetMagSize(itemid);
+            }
+            return 1;
+        }
+    }
+    return -1;
+}

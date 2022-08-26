@@ -89,7 +89,8 @@ DialogPages:InventoryMain(playerid, response, listitem) {
     if(response) {
         new i, str[128], excap[1024] = "", hid = -1;
 
-        if(!IsPlayerInAnyVehicle(playerid) && (hid = House_Nearest(playerid)) != -1 && House_IsPlayerNearLocker(playerid, hid) && House_IsOwner(playerid, hid)) format(excap, sizeof excap, "%s\n"COL_YELLOW"Cat vao trong nha (ID: %d)", excap, hid);
+        if(!IsPlayerInAnyVehicle(playerid) && (hid = House_Nearest(playerid)) != -1 && House_IsPlayerNearLocker(playerid, hid) && House_IsOwner(playerid, hid))
+            format(excap, sizeof excap, "%s\n"COL_YELLOW"Cat vao trong nha (ID: %d)", excap, hid);
 
         CharacterData[playerid][InvSelectedItem] = listitem;
         i = CharacterData[playerid][InvSelectedItem];
@@ -138,6 +139,14 @@ Dialog:InventoryInteract(playerid, response, listitem, inputtext[]) {
             if(InventoryData[playerid][sel][Amount] > 1) Dialog_Show(playerid, InventoryDropAmount, DS_INPUT, str, "\\cNhap so luong ma ban muon vut bo:", "Vut bo", "Quay lai");
             else Inventory_PlayerDropItem(playerid, sel, 1);
         }
+        case 5: {
+            new hid = -1, str[128] = "";
+            if((hid = House_Nearest(playerid)) != -1 && House_IsPlayerNearLocker(playerid, hid) && House_IsOwner(playerid, hid)) {
+                format(str, sizeof str, ""COL_AQUA"TUI DO > %s > Cat vao (SL: %d)", Inventory_ItemName(InventoryData[playerid][sel][ItemID]), InventoryData[playerid][sel][Amount]);
+                if(InventoryData[playerid][sel][Amount] > 1) Dialog_Show(playerid, InvHouseStoreItem, DS_INPUT, str, "\\cNhap so luong ma ban muon cat vao:", "Cat vao", "Quay lai");
+                else dialog_InvHouseStoreItem(playerid, true, 0, "1");
+            }
+        }
     }
     return 1;
 }
@@ -161,3 +170,29 @@ Dialog:InventoryDropAmount(playerid, response, listitem, inputtext[]) {
 }
 
 Dialog:InventoryViewInfo(playerid, response, listitem, inputtext[]) { ndpD_InventoryMain(playerid, true, CharacterData[playerid][InvSelectedItem]); }
+
+Dialog:InvHouseStoreItem(playerid, response, listitem, inputtext[]) {
+    new hid = -1;
+    static sel; sel = CharacterData[playerid][InvSelectedItem];
+    if(!response) return ndpD_InventoryMain(playerid, true, sel);
+    if(!IsNumeric(inputtext)) return ErrorMsg(playerid, "So luong cat vao khong hop le."), dialog_InventoryInteract(playerid, true, 5, "");
+    if(InventoryData[playerid][sel][Amount] < strval(inputtext) || strval(inputtext) == 0) return ErrorMsg(playerid, "So luong cat vao khong hop le."), dialog_InventoryInteract(playerid, true, 5, "");
+    if((hid = House_Nearest(playerid)) != -1 && House_IsPlayerNearLocker(playerid, hid) && House_IsOwner(playerid, hid)) {
+    House_GiveLockerItem(hid, InventoryData[playerid][sel][ItemID], strval(inputtext), InventoryData[playerid][sel][Durable], InventoryData[playerid][sel][ExData], InventoryData[playerid][sel][MagType], InventoryData[playerid][sel][MagAmmo]);
+        if(Inventory_IsWeapon(InventoryData[playerid][sel][ItemID]) && InventoryData[playerid][sel][IsEquipped]) {
+            RemovePlayerWeapon(playerid, InventoryData[playerid][sel][ItemID]);
+            InventoryData[playerid][sel][IsEquipped] = 0;
+        }
+        InventoryData[playerid][sel][Amount] -= strval(inputtext);
+        if(InventoryData[playerid][sel][Amount] <= 0) {
+            InventoryData[playerid][sel][ItemID] = 0;
+            InventoryData[playerid][sel][Amount] = 0;
+            InventoryData[playerid][sel][Durable] = 0;
+            InventoryData[playerid][sel][IsEquipped] = 0;
+            InventoryData[playerid][sel][MagType] = 0;
+            InventoryData[playerid][sel][MagAmmo] = 0;
+            InventoryData[playerid][sel][ExData] = -1;
+        }
+    }
+    return 1;
+}

@@ -23,12 +23,20 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
         static Float:depth, Float:pdepth;
         if(!IsPlayerInAnyVehicle(playerid)) callcmd::menu(playerid);
     }
+	if(newkeys & KEY_NO) {
+		callcmd::enter(playerid, "");
+		callcmd::exit(playerid, "");
+	}
 	return 1;
 }
 
 Alias:menu("mainmenu", "mm");
 Cmd:menu(playerid) {
-	Dialog_Show(playerid, QuickMenuMain, DS_LIST, ""COL_AQUA"INTERACT MENU", "Thong tin nhan vat\nTui do nhan vat\nDinh vi GPS\nCai dat nhan vat\nDanh sach cac lenh", "Chon", "Dong");
+	new str[1024] = "", hid = -1;
+	format(str, sizeof str, "Thong tin nhan vat\nTui do nhan vat\nDinh vi GPS\nCai dat nhan vat\nDanh sach cac lenh");
+	if((hid = House_Nearest(playerid)) != -1 && House_IsPlayerNearLocker(playerid, hid) && House_IsOwner(playerid, hid))
+		format(str, sizeof str, "%s\nTu do can nha (ID: %d)", str, hid);
+	Dialog_Show(playerid, QuickMenuMain, DS_LIST, ""COL_AQUA"INTERACT MENU", str, "Chon", "Dong");
 	return 1;
 }
 
@@ -37,6 +45,10 @@ Dialog:QuickMenuMain(playerid, response, listitem, inputtext[]) {
 		switch(listitem) {
 			case 0: callcmd::stats(playerid);
 			case 1: callcmd::inventory(playerid);
+			case 5: {
+				new hid = -1;
+				if((hid = House_Nearest(playerid)) != -1 && House_IsPlayerNearLocker(playerid, hid) && House_IsOwner(playerid, hid)) return callcmd::houselocker(playerid);
+			}
 		}
 	}
 	return 1;

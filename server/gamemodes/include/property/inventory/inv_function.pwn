@@ -117,8 +117,8 @@ Inventory_GiveItem(playerid, itemid, amount, Float:durable, exdata = -1, magtype
                 InventoryData[playerid][i][MagType] = magtype;
             }
             if(Inventory_IsMagazine(itemid) && magammo) {
-                if(magammo <= Inventory_GetMagSize(InventoryData[playerid][i][ItemID])) InventoryData[playerid][i][MagAmmo] = magammo;
-                if(magammo > Inventory_GetMagSize(InventoryData[playerid][i][ItemID])) InventoryData[playerid][i][MagAmmo] = Inventory_GetMagSize(itemid);
+                if(magammo <= Inventory_GetMagSize(itemid)) InventoryData[playerid][i][MagAmmo] = magammo;
+                if(magammo > Inventory_GetMagSize(itemid)) InventoryData[playerid][i][MagAmmo] = Inventory_GetMagSize(itemid);
             }
             return 1;
         }
@@ -451,6 +451,7 @@ Inventory_PlayerUseItem(playerid, sel, amount) {
 		if(Inventory_IsInteracting(playerid)) return ShowTDNx(playerid, 2000, "Vui long doi...");
 		InventoryData[playerid][sel][Amount]--;
 		if(Inventory_IsFood(itemid)) {
+			//SetPlayerAttachedObject(playerid, 0, Inventory_ItemModel(itemid), 6);
 			switch(random(2)) {
 				case 0: ApplyAnimation(playerid, "FOOD", "EAT_Burger", 4.1, 0, 0, 0, 0, 0, 1);
 			    case 1: ApplyAnimation(playerid, "FOOD", "EAT_Chicken", 4.1, 0, 0, 0, 0, 0, 1);
@@ -458,6 +459,7 @@ Inventory_PlayerUseItem(playerid, sel, amount) {
 			}
 		}
 		if(Inventory_IsDrink(itemid)) {
+			//SetPlayerAttachedObject(playerid, 0, Inventory_ItemModel(itemid), 6);
 			switch(CharacterData[playerid][Gender]) {
 				case 1: ApplyAnimation(playerid, "Bar", "dnk_stndM_loop", 4.1, 0, 0, 0, 0, 0, 1);
 				case 2: ApplyAnimation(playerid, "Bar", "dnk_stndF_loop", 4.1, 0, 0, 0, 0, 0, 1);
@@ -495,7 +497,7 @@ Inventory_PlayerUseItem(playerid, sel, amount) {
 		}
 	}
 
-	/*Backpack item*/ if(itemid == 37 || itemid == 38 || itemid == 39) {
+	if(itemid == 37 || itemid == 38 || itemid == 39) {
 		/*
 		if(InventoryData[playerid][sel][IsEquipped]) {
 			InventoryData[playerid][sel][IsEquipped] = 0;
