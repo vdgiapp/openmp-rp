@@ -5,7 +5,7 @@ Fade:LoadCharacterData(playerid) {
 
 	AuthData[playerid][Joined] = 1;
 
-	mysql_format(Database, str, sizeof str, "SELECT * FROM `characters` WHERE `Account` = '%s' AND `Slot` = '%d'", AuthData[playerid][Account], AuthData[playerid][Selected]);
+	mysql_format(Database, str, sizeof str, "SELECT * FROM `characters` WHERE `SID` = '%d' AND `Slot` = '%d'", AuthData[playerid][SID], AuthData[playerid][Selected]);
 	mysql_tquery(Database, str, "OnGetCharacterData", "i", playerid);
     return 1;
 }
@@ -94,8 +94,8 @@ SaveCharacterData(playerid) {
 
 	if(!IsPlayerInGame(playerid)) return 0;
 
-	static account[25], slot, weaponskill[128];
-	format(account, sizeof account, "%s", AuthData[playerid][Account]);
+	static sid, slot, weaponskill[128];
+	sid = AuthData[playerid][SID];
 	slot = AuthData[playerid][Selected];
 
 	static str[1024], Float:health, Float:armour, Float:angle,
@@ -113,7 +113,7 @@ SaveCharacterData(playerid) {
 
 	for(new i = 0; i < 11; i++) format(weaponskill, sizeof weaponskill, "%s%d ", weaponskill, GetPlayerSkillLevel(playerid, i));
 
-	format(str, sizeof str, "WHERE `Account` = '%s' AND `Slot` = '%d'", account, slot);
+	format(str, sizeof str, "WHERE `SID` = '%d' AND `Slot` = '%d'", sid, slot);
 	mysql_update(Database, "UPDATE `characters` SET `Name` = '%s' %s", CharacterData[playerid][Name], str);
 	mysql_update(Database, "UPDATE `characters` SET `Level` = '%s' %s", CharacterData[playerid][Level], str);
 	mysql_update(Database, "UPDATE `characters` SET `Position` = '%f %f %f %f %d %d' %s", x, y, z, angle, world, int, str);
@@ -132,7 +132,7 @@ SaveCharacterData(playerid) {
 
 	Inventory_SaveData(playerid);
 
-	printf("Account %s with character %s's data saved", account, GetRoleplayName(CharacterData[playerid][Name]));
+	printf("Account with SID %d: %s's data saved", AuthData[playerid][SID], GetRoleplayName(CharacterData[playerid][Name]));
 
 	ResetPlayerVars(playerid);
 	Kick(playerid);

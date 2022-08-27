@@ -1,5 +1,6 @@
 
 hook function ResetPlayerVars(playerid) {
+	AuthData[playerid][SID] = -1;
 	format(AuthData[playerid][Account], MAX_PLAYER_NAME+1, "");
     format(AuthData[playerid][Password], 65, "");
     format(AuthData[playerid][Password2], 65, "");
@@ -291,7 +292,7 @@ hook OnPlayerConnect(playerid) {
 
 	// Preload animation
 	for(new i = 0; i < sizeof(g_aPreloadLibs); i++) ApplyAnimation(playerid, g_aPreloadLibs[i], "null", 4.0, 0, 0, 0, 0, 0, 1);
-	
+
 	return 1;
 }
 
@@ -449,8 +450,7 @@ Dialog:Char_Interact(playerid, response, listitem, inputtext[]) {
 			}
 			case 1: {
 				flog(AUTH_LOG_FILE, "[AUTH] Tai khoan \"%s\" da xoa nhan vat tai slot %d: %s", AuthData[playerid][Account], AuthData[playerid][Selected], GetRoleplayName(tmpCharacterData[playerid][AuthData[playerid][Selected]-1][Name]));
-				mysql_format(Database, str, sizeof str, "DELETE FROM `characters` WHERE `Name`='%s'", tmpCharacterData[playerid][AuthData[playerid][Selected]-1][Name]);
-				mysql_tquery(Database, str);
+				mysql_update(Database, "DELETE FROM `characters` WHERE `Name`='%s'", tmpCharacterData[playerid][AuthData[playerid][Selected]-1][Name]);
 				ShowCharSelDialog(playerid);
 			}
 		}

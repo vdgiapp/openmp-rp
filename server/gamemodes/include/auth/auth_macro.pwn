@@ -1,5 +1,6 @@
 
 enum ENUM_AUTH_INFO {
+	SID,
 	Account[25],
 	Password[65],
 	Password2[65],

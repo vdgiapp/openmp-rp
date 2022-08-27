@@ -563,8 +563,8 @@ Cmd:houselocker(playerid) {
 		}
     }
     ClearDialogListitems(playerid);
-    AddDialogListitem(playerid, ""COL_GREY" Vat pham\tDo ben\t_");
-    AddDialogListitem(playerid, ""COL_YELLOW"KET SAT: $%s", fNumber(HouseData[id][Cash]));
+    AddDialogListitem(playerid, " Vat pham\tDo ben\t_");
+    AddDialogListitem(playerid, ""COL_YELLOW" KET SAT: $%s", fNumber(HouseData[id][Cash]));
     for(new i = 0; i < MAX_HOUSE_INV; i++) {
         // Level 3 = remain
         if(HouseInventory[id][i][ItemID]) {
@@ -604,15 +604,15 @@ DialogPages:HouseInventoryMain(playerid, response, listitem) {
             switch(listitem) {
                 case 0: {
                     format(str, sizeof str, ""COL_AQUA"HOUSE'S SAFE: "COL_YELLOW"$%s", fNumber(HouseData[id][Cash]));
-                    Dialog_Show(playerid, HouseInventoryCash, DS_LIST, str, "CAT TIEN VAO KET SAT\nRUT TIEN TU KET SAT", "Chon", "Quay lai");
+                    Dialog_Show(playerid, HouseInventorySafe, DS_LIST, str, "CAT TIEN VAO KET SAT\nRUT TIEN TU KET SAT", "Chon", "Quay lai");
                 }
                 default: {
                     new i;
                     CharacterData[playerid][HouseSelectedItem] = listitem-1;
                     i = CharacterData[playerid][HouseSelectedItem];
                     if(!HouseInventory[id][i][ItemID]) return callcmd::houselocker(playerid);
-                    format(str, sizeof str, ""COL_AQUA"HOUSE LOCKER > %s", ItemInfo[HouseInventory[id][i][ItemID]][Name]);
-                    Dialog_Show(playerid, HouseInventoryInteract, DS_LIST, str, "LAY VAT PHAM\nTHONG TIN VAT PHAM", "Chon", "Quay lai");
+                    format(str, sizeof str, ""COL_AQUA"HOUSE LOCKER > %s", Inventory_ItemName(HouseInventory[id][i][ItemID]));
+                    Dialog_Show(playerid, HouseInventoryItem, DS_LIST, str, "LAY VAT PHAM\nTHONG TIN VAT PHAM", "Chon", "Quay lai");
                 }
             }
         }
@@ -620,7 +620,7 @@ DialogPages:HouseInventoryMain(playerid, response, listitem) {
 	return 1;
 }
 
-Dialog:HouseInventoryCash(playerid, response, listitem, inputtext[]) {
+Dialog:HouseInventorySafe(playerid, response, listitem, inputtext[]) {
     new id = -1, str[128];
     if(!response) return callcmd::houselocker(playerid);
     if(!IsPlayerInAnyVehicle(playerid) && (id = House_Nearest(playerid)) != -1 && House_IsPlayerNearLocker(playerid, id)) {
@@ -638,28 +638,48 @@ Dialog:HouseInventoryCash(playerid, response, listitem, inputtext[]) {
     return 1;
 }
 
+Dialog:HouseInventoryItem(playerid, response, listitem, inputtext[]) {
+    new id = -1,
+        sel = CharacterData[playerid][HouseSelectedItem];
+    if(!response) return callcmd::houselocker(playerid);
+    if(!IsPlayerInAnyVehicle(playerid) && (id = House_Nearest(playerid)) != -1 && House_IsPlayerNearLocker(playerid, id)) {
+        switch(listitem) {
+            case 0: {
+                if(HouseInventory[id][sel][Amount] > 1) {
+                    
+                }
+                else House_LockerTakeItem(playerid, id, sel, 1);
+            }
+            case 1: {
+
+            }
+        }
+    }
+    return 1;
+}
+
 Dialog:HouseInventorySaveCash(playerid, response, listitem, inputtext[]) {
     new id = -1, cash = strval(inputtext);
     if(!response) return ndpD_HouseInventoryMain(playerid, true, 0);
     if(!IsNumeric(inputtext)) {
         ErrorMsg(playerid, "So tien cat vao khong hop le.");
-        return dialog_HouseInventoryCash(playerid, true, 0, "");
+        return dialog_HouseInventorySafe(playerid, true, 0, "");
     }
     if(cash <= 0) {
         ErrorMsg(playerid, "So tien cat vao phai lon hon 0.");
-        return dialog_HouseInventoryCash(playerid, true, 0, "");
+        return dialog_HouseInventorySafe(playerid, true, 0, "");
     }
     if(!IsPlayerInAnyVehicle(playerid) && (id = House_Nearest(playerid)) != -1 && House_IsPlayerNearLocker(playerid, id)) {
         if(CharacterData[playerid][Cash] < cash) {
             ErrorMsg(playerid, "So tien tren nguoi cua ban nho hon $%s.", fNumber(cash));
-            return dialog_HouseInventoryCash(playerid, true, 0, "");
+            return dialog_HouseInventorySafe(playerid, true, 0, "");
         }
         CharacterData[playerid][Cash] -= cash;
         SetPlayerMoney(playerid, CharacterData[playerid][Cash]);
         HouseData[id][Cash] += cash;
 
         SuccessMsg(playerid, "Ban da cat so tien $%s vao trong ket sat.", fNumber(cash));
-        return dialog_HouseInventoryCash(playerid, false, 0, "");
+        return dialog_HouseInventorySafe(playerid, false, 0, "");
     }
     return 1;
 }
@@ -669,23 +689,23 @@ Dialog:HouseInventoryWdCash(playerid, response, listitem, inputtext[]) {
     if(!response) return ndpD_HouseInventoryMain(playerid, true, 0);
     if(!IsNumeric(inputtext)) {
         ErrorMsg(playerid, "So tien rut ra khong hop le.");
-        return dialog_HouseInventoryCash(playerid, true, 1, "");
+        return dialog_HouseInventorySafe(playerid, true, 1, "");
     }
     if(cash <= 0) {
         ErrorMsg(playerid, "So tien rut ra phai lon hon 0.");
-        return dialog_HouseInventoryCash(playerid, true, 1, "");
+        return dialog_HouseInventorySafe(playerid, true, 1, "");
     }
     if(!IsPlayerInAnyVehicle(playerid) && (id = House_Nearest(playerid)) != -1 && House_IsPlayerNearLocker(playerid, id)) {
         if(HouseData[id][Cash] < cash) {
             ErrorMsg(playerid, "So tien trong ket sat cua can nha nho hon $%s.", fNumber(cash));
-            return dialog_HouseInventoryCash(playerid, true, 1, "");
+            return dialog_HouseInventorySafe(playerid, true, 1, "");
         }
         CharacterData[playerid][Cash] += cash;
         SetPlayerMoney(playerid, CharacterData[playerid][Cash]);
         HouseData[id][Cash] -= cash;
 
         SuccessMsg(playerid, "Ban da rut so tien $%s vao trong ket sat.", fNumber(cash));
-        return dialog_HouseInventoryCash(playerid, false, 0, "");
+        return dialog_HouseInventorySafe(playerid, false, 0, "");
     }
     return 1;
 }

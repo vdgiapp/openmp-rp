@@ -59,7 +59,7 @@ func OnGetHouseData(hid) {
 			DestroyDynamicPickup(HouseData[hid][LockerPickup]);
     }
 
-    printf("House ID %d, DbID %d loaded.", hid, HouseData[hid][ID]);
+    printf("Loaded House ID %d", hid);
     return 1;
 }
 
@@ -90,7 +90,8 @@ House_SaveData(hid) {
 	    mysql_update(Database, "UPDATE `houses` SET `LockerZ` = '%f' WHERE `ID` = '%d'", HouseData[hid][LockerZ], hid);
 	    mysql_update(Database, "UPDATE `houses` SET `Cash` = '%d' WHERE `ID` = '%d'", HouseData[hid][Cash], hid);
 
-		for(new i = 0; i < MAX_HOUSE_INV; i++) mysql_update(Database, "UPDATE `houses` SET `Item%d` = '%d %d %f %d %d %d' WHERE `ID` = '%d'",
+		for(new i = 0; i < MAX_HOUSE_INV; i++)
+		if(HouseInventory[hid][i][ItemID]) mysql_update(Database, "UPDATE `houses` SET `Item%d` = '%d %d %f %d %d %d' WHERE `ID` = '%d'",
 		i, HouseInventory[hid][i][ItemID], HouseInventory[hid][i][Amount], HouseInventory[hid][i][Durable], HouseInventory[hid][i][MagType],
 		HouseInventory[hid][i][MagAmmo], HouseInventory[hid][i][ExData], hid);
 
@@ -158,11 +159,11 @@ House_Refresh(hid) {
 	}
 }
 
-House_GiveLockerItem(hid, itemid, amount, Float:durable, exdata = -1, magtype = 0, magammo = 0) {
+House_LockerStoreItem(hid, itemid, amount, Float:durable, exdata = -1, magtype = 0, magammo = 0) {
 	for(new i = 0; i < MAX_HOUSE_INV; i++) {
-		if(HouseData[hid][Level] == 1 && i >= 12) continue;
-        if(HouseData[hid][Level] == 2 && i >= 18) continue;
-        if(HouseInventory[hid][i][ItemID] == itemid) {
+		if(HouseData[hid][Level] == 1 && i >= HOUSE_LOCKER_SLOT1) continue;
+        if(HouseData[hid][Level] == 2 && i >= HOUSE_LOCKER_SLOT2) continue;
+        if(HouseInventory[hid][i][ItemID] == itemid) { // HOUSE_LOCKER_SLOT3
             if(HouseInventory[hid][i][Durable] != 100.00) continue;
             if(Inventory_IsWeapon(itemid)) continue;
             if(HouseInventory[hid][i][MagAmmo] != magammo) continue;
@@ -187,4 +188,23 @@ House_GiveLockerItem(hid, itemid, amount, Float:durable, exdata = -1, magtype = 
         }
     }
     return -1;
+}
+
+House_LockerTakeItem(playerid, hid, sel, amount) {
+	new itemid = HouseInventory[hid][sel][ItemID],
+		Float:durable = HouseInventory[hid][sel][Durable],
+		exdata = HouseInventory[hid][sel][ExData],
+		magtype = HouseInventory[hid][sel][MagType],
+		magammo = HouseInventory[hid][sel][MagAmmo];
+	if(Inventory_GiveItem(playerid, itemid, amount, durable, exdata, magtype, magammo) == -1) return ErrorMsg(playerid, "Hanh trang cua ban da day hoac qua nang.");
+	HouseInventory[hid][sel][Amount] -= amount;
+	if(HouseInventory[hid][sel][Amount] <= 0) {
+		HouseInventory[hid][sel][ItemID] = 0;
+		HouseInventory[hid][sel][Amount] = 0;
+		HouseInventory[hid][sel][Durable] = 0;
+		HouseInventory[hid][sel][MagType] = 0;
+		HouseInventory[hid][sel][MagAmmo] = 0;
+		HouseInventory[hid][sel][ExData] = -1;
+	}
+	return -1;
 }

@@ -208,7 +208,7 @@ ShowCharSelDialog(playerid) {
 	format(AuthData[playerid][CharSel], 512, "Slot\tTen nhan vat\tCap do");
 	for(new i = 1; i < 4; i++) {
 		static str[512];
-		mysql_format(Database, str, sizeof str, "SELECT * FROM `characters` WHERE `Account`='%s' AND `Slot`='%d'", AuthData[playerid][Account], i);
+		mysql_format(Database, str, sizeof str, "SELECT * FROM `characters` WHERE `SID`='%d' AND `Slot`='%d'", AuthData[playerid][SID], i);
 		mysql_tquery(Database, str, "OnGetCharTmpData", "ii", playerid, i);
 	}
 }
@@ -246,13 +246,15 @@ func OnCheckToLogin(playerid) {
 			return KickPlayer(playerid, 500);
 		}
 
+		AuthData[playerid][SID] = cache_value_int(0, "SID");
+		AuthData[playerid][Logged] = 1;
+
 		static day, month, year, hour, minute, second;
 		getdate(year, month, day);
 		gettime(hour, minute, second);
 
 		static str[256];
-		mysql_format(Database, str, sizeof str, "UPDATE `accounts` SET `Online`='1', `LastTimeLogged`='%02d %02d %02d %02d %02d %04d' WHERE `Account`='%s'", hour, minute, second, day, month, year, AuthData[playerid][Account]);
-		mysql_tquery(Database, str);
+		mysql_update(Database, "UPDATE `accounts` SET `Online`='1', `LastTimeLogged`='%02d %02d %02d %02d %02d %04d' WHERE `SID`='%d'", hour, minute, second, day, month, year, AuthData[playerid][SID]);
 		mysql_tquery(Database, "UPDATE `serverinfo` SET `Logged`=`Logged`+1");
 
 		SuccessMsg(playerid, "Dang nhap vao tai khoan thanh cong. Chuc ban choi game vui ve.");
@@ -274,9 +276,6 @@ func OnCheckToLogin(playerid) {
 	    format(AuthData[playerid][Password], 65, "");
 	    format(AuthData[playerid][Password2], 65, "");
 		AuthData[playerid][Attempt] = 0;
-
-		// Set var
-		AuthData[playerid][Logged] = 1;
 
 		FadePlayerScreen(playerid, tempLoadCharacters, 0x000000FF, 1000, 25);
 	}
@@ -352,8 +351,8 @@ CreateCharacterForPlayer(playerid, name[], slot) {
     format(lastpl, sizeof lastpl, "%02d %02d %02d %02d %02d %04d", ho, mi, se, da, mo, ye);
 
     flog(AUTH_LOG_FILE, "[AUTH] Tai khoan \"%s\" da tao mot nhan vat tai slot %d: %s", AuthData[playerid][Account], slot, GetRoleplayName(name));
-    mysql_format(Database, str, sizeof str, "INSERT INTO `characters` \
-    	(`Slot`, `Account`, `DateCreated`, `LastTimePlayed`, \
+    mysql_update(Database, "INSERT INTO `characters` \
+    	(`SID`, `Slot`, `Account`, `DateCreated`, `LastTimePlayed`, \
     	`Name`, `Description`, `Level`, `Gender`, `Birthday`, \
     	`Nation`, `SkinID`, `Cash`, `Coins`, `LicenseData`, \
     	`PhoneData`, `MuteData`, `ImprisonData`, `Hunger`, \
@@ -363,14 +362,13 @@ CreateCharacterForPlayer(playerid, name[], slot) {
     	'%d', '%02d %02d %04d', '%d', '%d', '1000', '10', '0 0 0 0 0 0', \
     	'0 000000 0', '0 0', '0 0 0 0', '%f', '%f', '%f', \
     	'100', '0', '4', '%d', '1743 -1862 13.6 0 0 0')",
-    	slot, AuthData[playerid][Account], crtdate, lastpl,
+		AuthData[playerid][SID], slot, AuthData[playerid][Account], crtdate, lastpl,
     	CreateCharData[playerid][Name], CreateCharData[playerid][Description],
     	CreateCharData[playerid][Gender], CreateCharData[playerid][BDay],
     	CreateCharData[playerid][BMonth], CreateCharData[playerid][BYear],
     	CreateCharData[playerid][Nation], CreateCharData[playerid][SkinID],
 		MAX_PLAYER_HUNGER, MAX_PLAYER_THIRST, MAX_PLAYER_STAMINA,
     	E_WALKING_STYLE_DEFAULT);
-    mysql_tquery(Database, str);
 
     format(CreateCharData[playerid][Name], MAX_PLAYER_NAME+1, "");
 	format(CreateCharData[playerid][Description], 256, "");

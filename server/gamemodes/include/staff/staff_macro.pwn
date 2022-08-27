@@ -13,7 +13,7 @@
 #define FOUNDER_RANK 			(10)
 
 enum ENUM_ADMIN_INFO {
-	Account[25],
+	SID,
 	Nick[25],
 	Rank,
 	Helped,

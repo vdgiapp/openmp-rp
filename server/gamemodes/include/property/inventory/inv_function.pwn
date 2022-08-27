@@ -94,7 +94,7 @@ Float:Inventory_MaxWeight(playerid) {
     return max;
 }
 
-Inventory_GiveItem(playerid, itemid, amount, Float:durable, exdata = -1, magtype = 0, magammo = 0) {
+Inventory_GiveItem(playerid, itemid, amount, Float:durable = 100.0, exdata = -1, magtype = 0, magammo = 0) {
     for(new i = 0; i < MAX_INV_ITEMS; i++) {
 		if(Inventory_IsWeapon(itemid) && Inventory_TotalWeight(playerid) + (Inventory_ItemWeight(itemid) + (Inventory_ItemWeight(magtype) * magammo) + 0.3) > Inventory_MaxWeight(playerid)) return -1;
 		if(Inventory_IsMagazine(itemid) && Inventory_TotalWeight(playerid) + (((Inventory_ItemWeight(itemid) * magammo) + 0.3) * amount) > Inventory_MaxWeight(playerid)) return -1;
@@ -126,22 +126,13 @@ Inventory_GiveItem(playerid, itemid, amount, Float:durable, exdata = -1, magtype
     return -1;
 }
 
-Inventory_TakeItem(playerid, itemid, amount, exdata = -1) {
+Inventory_DestroyItem(playerid, itemid, amount, exdata = -1) {
     for(new i = 0; i < MAX_INV_ITEMS; i++) {
         if(InventoryData[playerid][i][ItemID] == itemid
 		&& InventoryData[playerid][i][Amount] >= amount
 		&& InventoryData[playerid][i][ExData] == exdata) {
             InventoryData[playerid][i][Amount] -= amount;
 			if(Inventory_IsWeapon(itemid) && InventoryData[playerid][i][IsEquipped]) RemovePlayerWeapon(playerid, itemid);
-            if(InventoryData[playerid][i][Amount] <= 0) {
-                InventoryData[playerid][i][ItemID] = 0;
-                InventoryData[playerid][i][Amount] = 0;
-                InventoryData[playerid][i][Durable] = 0;
-				InventoryData[playerid][i][IsEquipped] = 0;
-				InventoryData[playerid][i][MagType] = 0;
-                InventoryData[playerid][i][MagAmmo] = 0;
-				InventoryData[playerid][i][ExData] = -1;
-            }
             return 1;
         }
     }
@@ -175,7 +166,15 @@ Inventory_Sort(playerid) {
 				SwapInt(InventoryData[playerid][u][ExData], InventoryData[playerid][i][ExData]);
             }
         }
-		if(InventoryData[playerid][i][Amount] <= 0) InventoryData[playerid][i][ItemID] = 0, InventoryData[playerid][i][Amount] = 0;
+		if(InventoryData[playerid][i][Amount] <= 0) {
+			InventoryData[playerid][i][ItemID] = 0;
+			InventoryData[playerid][i][Amount] = 0;
+			InventoryData[playerid][i][Durable] = 0;
+			InventoryData[playerid][i][IsEquipped] = 0;
+			InventoryData[playerid][i][MagType] = 0;
+			InventoryData[playerid][i][MagAmmo] = 0;
+			InventoryData[playerid][i][ExData] = -1;
+		}
 		if(Inventory_IsWeapon(InventoryData[playerid][i][ItemID])) {
 			if(!InventoryData[playerid][i][IsEquipped] && (InventoryData[playerid][i][MagAmmo] <= 0 || InventoryData[playerid][i][MagType] <= 0)) InventoryData[playerid][i][MagAmmo] = 0, InventoryData[playerid][i][MagType] = 0;
 			if(InventoryData[playerid][i][IsEquipped]) {
@@ -596,15 +595,6 @@ Inventory_PlayerDropItem(playerid, sel, amount) {
 			DroppedItem[i][Timer] = SetTimerEx(#DropItem_TimerRemove, DROP_ITEM_TIME, 0, "i", i);
 			ApplyAnimation(playerid, "BOMBER", "BOM_Plant", 4.1, 0, 0, 0, 0, 0, 1);
 			InventoryData[playerid][sel][Amount] -= amount;
-			if(InventoryData[playerid][sel][Amount] <= 0) {
-				InventoryData[playerid][sel][ItemID] = 0;
-                InventoryData[playerid][sel][Amount] = 0;
-                InventoryData[playerid][sel][Durable] = 0;
-				InventoryData[playerid][sel][IsEquipped] = 0;
-				InventoryData[playerid][sel][MagType] = 0;
-                InventoryData[playerid][sel][MagAmmo] = 0;
-				InventoryData[playerid][sel][ExData] = -1;
-			}
 			return 1;
 		}
 	}

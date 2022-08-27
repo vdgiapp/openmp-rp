@@ -26,7 +26,7 @@ func @OnPlayerDisconnect(playerid, reason) {
 			case 1: flog(AUTH_LOG_FILE, "[AUTH] Tai khoan \"%s\" da dang xuat khoi tro choi (thoat game).", AuthData[playerid][Account]);
 			case 2: flog(AUTH_LOG_FILE, "[AUTH] Tai khoan \"%s\" da dang xuat khoi tro choi (kick/ban).", AuthData[playerid][Account]);
 		}
-		mysql_update(Database, "UPDATE `accounts` SET `Online`='0' WHERE `Account`='%s'", AuthData[playerid][Account]);
+		mysql_update(Database, "UPDATE `accounts` SET `Online`='0' WHERE `SID`='%d'", AuthData[playerid][SID]);
 		SaveCharacterData(playerid);
 	}
 	return 1;
