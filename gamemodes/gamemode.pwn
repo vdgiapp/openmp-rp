@@ -19,13 +19,6 @@
 #define SERVER_WEBSITE "\"http://gtapg.vn\""
 #define SERVER_VERSION "RP v1.415"
 
-/*
-$options = [
-	'cost' => 12,
-];
-$asd = password_hash("151607389", PASSWORD_BCRYPT, $options);
-echo ''.$asd;
-*/
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
