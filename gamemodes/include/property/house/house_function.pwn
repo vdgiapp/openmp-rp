@@ -1,66 +1,63 @@
 
 House_LoadData() {
-	for(new i = 0; i < MAX_HOUSES; i++) {
-		static str[128]; format(str, sizeof str, "SELECT * FROM `houses` WHERE `ID` = '%d'", i);
-		mysql_tquery(Database, str, "OnGetHouseData", "i", i);
+	for(new hid = 0; hid < MAX_HOUSES; hid++) {
+		inline const GotIt() {
+		    if(!cache_num_rows()) return 0;
+		    HouseData[hid][ID] = cache_value_int(0, "ID");
+		    HouseData[hid][Created] = cache_value_int(0, "Created");
+		    HouseData[hid][Owned] = cache_value_int(0, "Owned");
+		    format(HouseData[hid][Owner], 25, "%s", cache_value_string(0, "Owner"));
+		    HouseData[hid][Locked] = cache_value_int(0, "Locked");
+		    HouseData[hid][Alarm] = cache_value_int(0, "Alarm");
+		    HouseData[hid][Level] = cache_value_int(0, "Level");
+		    HouseData[hid][Price] = cache_value_int(0, "Price");
+		    HouseData[hid][IntID] = cache_value_int(0, "IntID");
+		    HouseData[hid][ExteriorX] = cache_value_float(0, "ExteriorX");
+		    HouseData[hid][ExteriorY] = cache_value_float(0, "ExteriorY");
+		    HouseData[hid][ExteriorZ] = cache_value_float(0, "ExteriorZ");
+		    HouseData[hid][ExteriorA] = cache_value_float(0, "ExteriorA");
+		    HouseData[hid][ExteriorInt] = cache_value_int(0, "ExteriorInt");
+		    HouseData[hid][ExteriorWorld] = cache_value_int(0, "ExteriorWorld");
+		    HouseData[hid][InteriorX] = cache_value_float(0, "InteriorX");
+		    HouseData[hid][InteriorY] = cache_value_float(0, "InteriorY");
+		    HouseData[hid][InteriorZ] = cache_value_float(0, "InteriorZ");
+		    HouseData[hid][InteriorA] = cache_value_float(0, "InteriorA");
+		    HouseData[hid][InteriorInt] = cache_value_int(0, "InteriorInt");
+		    HouseData[hid][InteriorWorld] = cache_value_int(0, "InteriorWorld");
+		    HouseData[hid][LockerX] = cache_value_float(0, "LockerX");
+		    HouseData[hid][LockerY] = cache_value_float(0, "LockerY");
+		    HouseData[hid][LockerZ] = cache_value_float(0, "LockerZ");
+		    HouseData[hid][Cash] = cache_value_int(0, "Cash");
+
+			for(new i = 0; i < MAX_HOUSE_INV; i++) {
+		        static str[64];
+				format(str, sizeof str, "Item%d", i);
+				sscanf(cache_value_string(0, str), "ddfddd", HouseLocker[hid][i][ItemID], HouseLocker[hid][i][Amount],
+				HouseLocker[hid][i][Durable], HouseLocker[hid][i][MagType], HouseLocker[hid][i][MagAmmo], HouseLocker[hid][i][ExData]);
+			}
+
+		    GetMapZoneName(GetMapZoneAtPoint(HouseData[hid][ExteriorX], HouseData[hid][ExteriorY], HouseData[hid][ExteriorZ]), HouseData[hid][Address]);
+
+		    HouseData[hid][ExtPickup] = CreateDynamicPickup(19198, 1, HouseData[hid][ExteriorX], HouseData[hid][ExteriorY], HouseData[hid][ExteriorZ]+0.5, HouseData[hid][ExteriorWorld], HouseData[hid][ExteriorInt], -1, HOUSE_SHOW_DISTANCE);
+		    HouseData[hid][IntPickup] = CreateDynamicPickup(19198, 1, HouseData[hid][InteriorX], HouseData[hid][InteriorY], HouseData[hid][InteriorZ]+0.5, HouseData[hid][InteriorWorld], HouseData[hid][InteriorInt], -1, HOUSE_SHOW_DISTANCE);
+			HouseData[hid][LockerPickup] = CreateDynamicPickup(1277, 1, HouseData[hid][LockerX], HouseData[hid][LockerY], HouseData[hid][LockerZ], HouseData[hid][InteriorWorld], HouseData[hid][InteriorInt]);
+
+		    if(!HouseData[hid][Created]) {
+				if (IsValidDynamicPickup(HouseData[hid][IntPickup]))
+				    DestroyDynamicPickup(HouseData[hid][IntPickup]);
+
+				if (IsValidDynamicPickup(HouseData[hid][ExtPickup]))
+				    DestroyDynamicPickup(HouseData[hid][ExtPickup]);
+
+				if (IsValidDynamicPickup(HouseData[hid][LockerPickup]))
+					DestroyDynamicPickup(HouseData[hid][LockerPickup]);
+		    }
+
+		    printf("Loaded House ID %d", hid);
+		}
+		MySQL_TQueryInline(Database, using inline GotIt, "SELECT * FROM `houses` WHERE `ID` = '%d'", hid);
 	}
 	return 1;
-}
-
-func OnGetHouseData(hid) {
-    if(!cache_num_rows()) return 0;
-    HouseData[hid][ID] = cache_value_int(0, "ID");
-    HouseData[hid][Created] = cache_value_int(0, "Created");
-    HouseData[hid][Owned] = cache_value_int(0, "Owned");
-    format(HouseData[hid][Owner], 25, "%s", cache_value_string(0, "Owner"));
-    HouseData[hid][Locked] = cache_value_int(0, "Locked");
-    HouseData[hid][Alarm] = cache_value_int(0, "Alarm");
-    HouseData[hid][Level] = cache_value_int(0, "Level");
-    HouseData[hid][Price] = cache_value_int(0, "Price");
-    HouseData[hid][IntID] = cache_value_int(0, "IntID");
-    HouseData[hid][ExteriorX] = cache_value_float(0, "ExteriorX");
-    HouseData[hid][ExteriorY] = cache_value_float(0, "ExteriorY");
-    HouseData[hid][ExteriorZ] = cache_value_float(0, "ExteriorZ");
-    HouseData[hid][ExteriorA] = cache_value_float(0, "ExteriorA");
-    HouseData[hid][ExteriorInt] = cache_value_int(0, "ExteriorInt");
-    HouseData[hid][ExteriorWorld] = cache_value_int(0, "ExteriorWorld");
-    HouseData[hid][InteriorX] = cache_value_float(0, "InteriorX");
-    HouseData[hid][InteriorY] = cache_value_float(0, "InteriorY");
-    HouseData[hid][InteriorZ] = cache_value_float(0, "InteriorZ");
-    HouseData[hid][InteriorA] = cache_value_float(0, "InteriorA");
-    HouseData[hid][InteriorInt] = cache_value_int(0, "InteriorInt");
-    HouseData[hid][InteriorWorld] = cache_value_int(0, "InteriorWorld");
-    HouseData[hid][LockerX] = cache_value_float(0, "LockerX");
-    HouseData[hid][LockerY] = cache_value_float(0, "LockerY");
-    HouseData[hid][LockerZ] = cache_value_float(0, "LockerZ");
-    HouseData[hid][Cash] = cache_value_int(0, "Cash");
-
-	for(new i = 0; i < MAX_HOUSE_INV; i++) {
-        static str[64];
-		format(str, sizeof str, "Item%d", i);
-		sscanf(cache_value_string(0, str), "ddfddd", HouseInventory[hid][i][ItemID], HouseInventory[hid][i][Amount],
-		HouseInventory[hid][i][Durable], HouseInventory[hid][i][MagType], HouseInventory[hid][i][MagAmmo], HouseInventory[hid][i][ExData]);
-	}
-
-    GetMapZoneName(GetMapZoneAtPoint(HouseData[hid][ExteriorX], HouseData[hid][ExteriorY], HouseData[hid][ExteriorZ]), HouseData[hid][Address]);
-
-    HouseData[hid][ExtPickup] = CreateDynamicPickup(19198, 1, HouseData[hid][ExteriorX], HouseData[hid][ExteriorY], HouseData[hid][ExteriorZ]+0.5, HouseData[hid][ExteriorWorld], HouseData[hid][ExteriorInt], -1, HOUSE_SHOW_DISTANCE);
-    HouseData[hid][IntPickup] = CreateDynamicPickup(19198, 1, HouseData[hid][InteriorX], HouseData[hid][InteriorY], HouseData[hid][InteriorZ]+0.5, HouseData[hid][InteriorWorld], HouseData[hid][InteriorInt], -1, HOUSE_SHOW_DISTANCE);
-	HouseData[hid][LockerPickup] = CreateDynamicPickup(1277, 1, HouseData[hid][LockerX], HouseData[hid][LockerY], HouseData[hid][LockerZ], HouseData[hid][InteriorWorld], HouseData[hid][InteriorInt]);
-
-    if(!HouseData[hid][Created]) {
-		if (IsValidDynamicPickup(HouseData[hid][IntPickup]))
-		    DestroyDynamicPickup(HouseData[hid][IntPickup]);
-
-		if (IsValidDynamicPickup(HouseData[hid][ExtPickup]))
-		    DestroyDynamicPickup(HouseData[hid][ExtPickup]);
-
-		if (IsValidDynamicPickup(HouseData[hid][LockerPickup]))
-			DestroyDynamicPickup(HouseData[hid][LockerPickup]);
-    }
-
-    printf("Loaded House ID %d", hid);
-    return 1;
 }
 
 House_SaveData(hid) {
@@ -91,9 +88,9 @@ House_SaveData(hid) {
 	    mysql_update(Database, "UPDATE `houses` SET `Cash` = '%d' WHERE `ID` = '%d'", HouseData[hid][Cash], hid);
 
 		for(new i = 0; i < MAX_HOUSE_INV; i++)
-		if(HouseInventory[hid][i][ItemID]) mysql_update(Database, "UPDATE `houses` SET `Item%d` = '%d %d %f %d %d %d' WHERE `ID` = '%d'",
-		i, HouseInventory[hid][i][ItemID], HouseInventory[hid][i][Amount], HouseInventory[hid][i][Durable], HouseInventory[hid][i][MagType],
-		HouseInventory[hid][i][MagAmmo], HouseInventory[hid][i][ExData], hid);
+		if(HouseLocker[hid][i][ItemID]) mysql_update(Database, "UPDATE `houses` SET `Item%d` = '%d %d %f %d %d %d' WHERE `ID` = '%d'",
+		i, HouseLocker[hid][i][ItemID], HouseLocker[hid][i][Amount], HouseLocker[hid][i][Durable], HouseLocker[hid][i][MagType],
+		HouseLocker[hid][i][MagAmmo], HouseLocker[hid][i][ExData], hid);
 
 	    printf("House ID %d, DbID %d saved.", hid, HouseData[hid][ID]);
 	}
@@ -163,26 +160,26 @@ House_LockerStoreItem(hid, itemid, amount, Float:durable, exdata = -1, magtype =
 	for(new i = 0; i < MAX_HOUSE_INV; i++) {
 		if(HouseData[hid][Level] == 1 && i >= HOUSE_LOCKER_SLOT1) continue;
         if(HouseData[hid][Level] == 2 && i >= HOUSE_LOCKER_SLOT2) continue;
-        if(HouseInventory[hid][i][ItemID] == itemid) { // HOUSE_LOCKER_SLOT3
-            if(HouseInventory[hid][i][Durable] != 100.00) continue;
+        if(HouseLocker[hid][i][ItemID] == itemid) { // HOUSE_LOCKER_SLOT3
+            if(HouseLocker[hid][i][Durable] != 100.00) continue;
             if(Inventory_IsWeapon(itemid)) continue;
-            if(HouseInventory[hid][i][MagAmmo] != magammo) continue;
-			if(HouseInventory[hid][i][ExData] != exdata) continue;
-            HouseInventory[hid][i][Amount] += amount;
+            if(HouseLocker[hid][i][MagAmmo] != magammo) continue;
+			if(HouseLocker[hid][i][ExData] != exdata) continue;
+            HouseLocker[hid][i][Amount] += amount;
 			return 1;
         }
-        if(!HouseInventory[hid][i][ItemID]) {
-            HouseInventory[hid][i][ItemID] = itemid;
-            HouseInventory[hid][i][Amount] = amount;
-            HouseInventory[hid][i][Durable] = durable;
-			HouseInventory[hid][i][ExData] = exdata;
+        if(!HouseLocker[hid][i][ItemID]) {
+            HouseLocker[hid][i][ItemID] = itemid;
+            HouseLocker[hid][i][Amount] = amount;
+            HouseLocker[hid][i][Durable] = durable;
+			HouseLocker[hid][i][ExData] = exdata;
             if(Inventory_IsWeapon(itemid) && magammo) {
-                HouseInventory[hid][i][MagAmmo] = magammo;
-                HouseInventory[hid][i][MagType] = magtype;
+                HouseLocker[hid][i][MagAmmo] = magammo;
+                HouseLocker[hid][i][MagType] = magtype;
             }
             if(Inventory_IsMagazine(itemid) && magammo) {
-                if(magammo <= Inventory_GetMagSize(itemid)) HouseInventory[hid][i][MagAmmo] = magammo;
-                if(magammo > Inventory_GetMagSize(itemid)) HouseInventory[hid][i][MagAmmo] = Inventory_GetMagSize(itemid);
+                if(magammo <= Inventory_GetMagSize(itemid)) HouseLocker[hid][i][MagAmmo] = magammo;
+                if(magammo > Inventory_GetMagSize(itemid)) HouseLocker[hid][i][MagAmmo] = Inventory_GetMagSize(itemid);
             }
             return 1;
         }
@@ -191,20 +188,20 @@ House_LockerStoreItem(hid, itemid, amount, Float:durable, exdata = -1, magtype =
 }
 
 House_LockerTakeItem(playerid, hid, sel, amount) {
-	new itemid = HouseInventory[hid][sel][ItemID],
-		Float:durable = HouseInventory[hid][sel][Durable],
-		exdata = HouseInventory[hid][sel][ExData],
-		magtype = HouseInventory[hid][sel][MagType],
-		magammo = HouseInventory[hid][sel][MagAmmo];
-	if(Inventory_GiveItem(playerid, itemid, amount, durable, exdata, magtype, magammo) == -1) return ErrorMsg(playerid, "Hanh trang cua ban da day hoac qua nang.");
-	HouseInventory[hid][sel][Amount] -= amount;
-	if(HouseInventory[hid][sel][Amount] <= 0) {
-		HouseInventory[hid][sel][ItemID] = 0;
-		HouseInventory[hid][sel][Amount] = 0;
-		HouseInventory[hid][sel][Durable] = 0;
-		HouseInventory[hid][sel][MagType] = 0;
-		HouseInventory[hid][sel][MagAmmo] = 0;
-		HouseInventory[hid][sel][ExData] = -1;
+	new itemid = HouseLocker[hid][sel][ItemID],
+		Float:durable = HouseLocker[hid][sel][Durable],
+		exdata = HouseLocker[hid][sel][ExData],
+		magtype = HouseLocker[hid][sel][MagType],
+		magammo = HouseLocker[hid][sel][MagAmmo];
+	if(Inventory_GiveItem(playerid, itemid, amount, durable, exdata, magtype, magammo) == -1) return -1;
+	HouseLocker[hid][sel][Amount] -= amount;
+	if(HouseLocker[hid][sel][Amount] <= 0) {
+		HouseLocker[hid][sel][ItemID] = 0;
+		HouseLocker[hid][sel][Amount] = 0;
+		HouseLocker[hid][sel][Durable] = 0;
+		HouseLocker[hid][sel][MagType] = 0;
+		HouseLocker[hid][sel][MagAmmo] = 0;
+		HouseLocker[hid][sel][ExData] = -1;
 	}
-	return -1;
+	return 1;
 }

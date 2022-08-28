@@ -1,10 +1,10 @@
 
 hook function ResetPlayerVars(playerid) {
 	AuthData[playerid][SID] = -1;
-	format(AuthData[playerid][Account], MAX_PLAYER_NAME+1, "");
-    format(AuthData[playerid][Password], 65, "");
-    format(AuthData[playerid][Password2], 65, "");
-    format(AuthData[playerid][Email], 64, "");
+	AuthData[playerid][Account][0] = EOS;
+    AuthData[playerid][Password][0] = EOS;
+    AuthData[playerid][Password2][0] = EOS;
+    AuthData[playerid][Email][0] = EOS;
     AuthData[playerid][EnablePass2] = 0;
 	AuthData[playerid][Attempt] = 0;
 	AuthData[playerid][Logged] = 0;
@@ -13,16 +13,16 @@ hook function ResetPlayerVars(playerid) {
 	AuthData[playerid][Creating] = 0;
 
 	for(new i = 0; i < 3; i++) {
-		format(tmpCharacterData[playerid][i][Name], 25, "");
-		format(tmpCharacterData[playerid][i][Level], 16, "");
+		tmpCharacterData[playerid][i][Name][0] = EOS;
+		tmpCharacterData[playerid][i][Level][0] = EOS;
 		tmpCharacterData[playerid][i][Available] = 0;
 	}
 
 	PlayerTextDrawDestroy(playerid, Auth_PlayerName[playerid]);
 
-	format(CreateCharData[playerid][Name], MAX_PLAYER_NAME+1, "");
-	format(CreateCharData[playerid][Description], 256, "");
-	format(CreateCharData[playerid][Birthday], 16, "");
+	CreateCharData[playerid][Name][0] = EOS;
+	CreateCharData[playerid][Description][0] = EOS;
+	CreateCharData[playerid][Birthday][0] = EOS;
 	CreateCharData[playerid][Gender] = 0;
 	CreateCharData[playerid][BDay] = 0;
 	CreateCharData[playerid][BMonth] = 0;
@@ -259,8 +259,7 @@ hook OnGameModeInit()
 	TextDrawSetProportional(AuthTD_MiscTD[9], 1);
 	TextDrawSetSelectable(AuthTD_MiscTD[9], 0);
 
-	// task
-	GetSvInfo();
+	GetServerInfo();
 
 	return 1;
 }
@@ -287,8 +286,74 @@ hook OnPlayerConnect(playerid) {
 	SetRandomName(playerid, "Unknown_", 100000, 999999);
 
 	// Check if player is a newbie or old member
-	mysql_format(Database, str, sizeof str, "SELECT * FROM `accounts` WHERE `Account`='%s'", AuthData[playerid][Account]);
-	mysql_tquery(Database, str, "OnCheckingPlayerAccount", "i", playerid);
+	inline const Checked() {
+		if(cache_num_rows()) {
+			static isbanned, banday, banmonth, banyear, banby[32], banreason[128],
+				unbanday, unbanmonth, unbanyear, online;
+			static day, month, year, hour, minute, second, str[256];
+			online = cache_value_int(0, "Online");
+			getdate(year, month, day); gettime(hour, minute, second);
+			sscanf(cache_value_string(0, "BanData"), "iiiis[32]iii", isbanned, banday, banmonth, banyear, banby, unbanday, unbanmonth, unbanyear);
+			format(banreason, sizeof banreason, "%s", cache_value_string(0, "BanReason"));
+			format(AuthData[playerid][Password], 65, "%s", cache_value_string(0, "Password"));
+			format(AuthData[playerid][Password2], 65, "%s", cache_value_string(0, "Password2"));
+			AuthData[playerid][EnablePass2] = cache_value_int(0, "EnablePass2");
+
+			// MISC
+			for(new i = 0; i < 100; i++) ClientMsg(playerid, -1, " ");
+			SetPlayerTeam(playerid, NO_TEAM);
+			SetPlayerColor(playerid, COLOR_WHITE);
+			SetPlayerPos(playerid, 1514.5, -1006, 100);
+			SetPlayerVirtualWorld(playerid, 100+playerid);
+			SetPlayerInterior(playerid, 0);
+			SetPlayerHealth(playerid, FLOAT_INFINITY);
+			SetPlayerCameraPos(playerid, 1514.5, -1006, 77.5);//1982.5140, -1703.8862, 100);
+			SetPlayerCameraLookAt(playerid, 1511, -1002.5, 77.5);//1765.5276, -1451.8524, 137.7477);
+			TogglePlayerControllable(playerid, false);
+			//CheckVoiceChat(playerid);
+
+			format(str, sizeof str, "~w~%s", AuthData[playerid][Account]);
+			Auth_PlayerName[playerid] = CreatePlayerTextDraw(playerid, 15.000000, 97.000000, str);
+			PlayerTextDrawFont(playerid, Auth_PlayerName[playerid], 1);
+			PlayerTextDrawLetterSize(playerid, Auth_PlayerName[playerid], 0.362500, 1.700000);
+			PlayerTextDrawTextSize(playerid, Auth_PlayerName[playerid], 630.000000, 200.000000);
+			PlayerTextDrawSetOutline(playerid, Auth_PlayerName[playerid], 0);
+			PlayerTextDrawSetShadow(playerid, Auth_PlayerName[playerid], 0);
+			PlayerTextDrawAlignment(playerid, Auth_PlayerName[playerid], 1);
+			PlayerTextDrawColor(playerid, Auth_PlayerName[playerid], -1);
+			PlayerTextDrawBackgroundColor(playerid, Auth_PlayerName[playerid], 255);
+			PlayerTextDrawBoxColor(playerid, Auth_PlayerName[playerid], 50);
+			PlayerTextDrawUseBox(playerid, Auth_PlayerName[playerid], 0);
+			PlayerTextDrawSetProportional(playerid, Auth_PlayerName[playerid], 1);
+			PlayerTextDrawSetSelectable(playerid, Auth_PlayerName[playerid], 0);
+
+			for(new i = 0; i < 10; i++) TextDrawShowForPlayer(playerid, AuthTD_MiscTD[i]);
+			TextDrawShowForPlayer(playerid, Auth_Button);
+			TextDrawShowForPlayer(playerid, Auth_Button2);
+			TextDrawShowForPlayer(playerid, Auth_Registered);
+			TextDrawShowForPlayer(playerid, Auth_CharCreated);
+			TextDrawShowForPlayer(playerid, Auth_PlayersOnline);
+			TextDrawShowForPlayer(playerid, Auth_LoggedToday);
+			PlayerTextDrawShow(playerid, Auth_PlayerName[playerid]);
+			SelectTextDraw(playerid, COLOR_WHITE);
+
+			if((day >= unbanday && month >= unbanmonth && year >= unbanyear) || (day < unbanday && month > unbanmonth && year >= unbanyear)) {
+				isbanned = 0;
+				mysql_update(Database, "UPDATE `accounts` SET `BanData`='0 0 0 0 none 0 0 0' WHERE `Account`='%s'", AuthData[playerid][Account]);
+			}
+			if(isbanned == 1) {
+				ErrorMsg(playerid, "Tai khoan nay da bi khoa. Hay truy cap vao dien dan de xem thong tin chi tiet hon.");
+				return KickPlayer(playerid, 500);
+			}
+			if(online == 1) {
+				ErrorMsg(playerid, "Tai khoan nay dang truc tuyen. Ban khong the dang nhap vao tai khoan nay.");
+				return KickPlayer(playerid, 500);
+			}
+			if(IsPlayerInGame(playerid)) return Kick(playerid);
+		}
+		return 1;
+	}
+	MySQL_TQueryInline(Database, using inline Checked, "SELECT * FROM `accounts` WHERE `Account`='%s'", AuthData[playerid][Account]);
 
 	// Preload animation
 	for(new i = 0; i < sizeof(g_aPreloadLibs); i++) ApplyAnimation(playerid, g_aPreloadLibs[i], "null", 4.0, 0, 0, 0, 0, 0, 1);
@@ -363,37 +428,40 @@ Fade:PlayerCreateCharacter(playerid) {
 
 Dialog:Login_Pass(playerid, response, listitem, inputtext[]) {
 	if(response) {
-		static str[65];
-		SHA256_PassHash(inputtext, "", str, sizeof str);
-
-		if(!isequal(str, AuthData[playerid][Password], true)) {
-			AuthData[playerid][Attempt]++;
-			if(AuthData[playerid][Attempt] >= 3) {
-				format(str, sizeof str, "Ban da bi kick vi nhap sai mat khau %d lan.", AuthData[playerid][Attempt]);
-				ErrorMsg(playerid, str);
-				return KickPlayer(playerid, 500);
+		static str[256];
+		inline const OnChecked(bool:correct) {
+			if(correct) {
+				if(AuthData[playerid][EnablePass2])	return Dialog_Show(playerid, Login_Pass2, DS_PASS,""COL_AQUA"He thong bao mat cap 2", ""COL_WHITE"Hay nhap mat khau bao mat cap 2 cua ban de tiep tuc:", "Xong", "Thoat");
+				return LoginSuccess(playerid);
 			}
-			format(str, sizeof str, "Ban da nhap sai mat khau %d lan, vui long thu lai.", AuthData[playerid][Attempt]);
-			ErrorMsg(playerid, str);
-			return ShowLoginDialog(playerid);
+			else {
+				AuthData[playerid][Attempt]++;
+				if(AuthData[playerid][Attempt] >= 3) {
+					format(str, sizeof str, "Ban da bi kick vi nhap sai mat khau %d lan.", AuthData[playerid][Attempt]);
+					ErrorMsg(playerid, str);
+					return KickPlayer(playerid, 500);
+				}
+				format(str, sizeof str, "Ban da nhap sai mat khau %d lan, vui long thu lai.", AuthData[playerid][Attempt]);
+				ErrorMsg(playerid, str);
+				return ShowLoginDialog(playerid);
+			}
 		}
-		else {
-			if(AuthData[playerid][EnablePass2])	return Dialog_Show(playerid, Login_Pass2, DS_PASS,""COL_AQUA"He thong bao mat cap 2", ""COL_WHITE"Hay nhap mat khau bao mat cap 2 cua ban de tiep tuc:", "Xong", "Thoat");
-			LoginSuccess(playerid);
-		}
+		BCrypt_CheckInline(inputtext, AuthData[playerid][Password], using inline OnChecked);
+		ClientMsg(playerid, COLOR_YELLOW, "Dang lay du lieu nguoi dung...");
 	}
 }
 
 Dialog:Login_Pass2(playerid, response, listitem, inputtext[]) {
 	if(!response) return KickPlayer(playerid, 500);
 	else {
-		static str[65];
-		SHA256_PassHash(inputtext, "", str, sizeof str);
-		if(isequal(str, AuthData[playerid][Password2], true)) return LoginSuccess(playerid);
-		else {
-			Dialog_Show(playerid, Login_Pass2, DS_PASS,""COL_AQUA"He thong bao mat cap 2", ""COL_WHITE"Hay nhap mat khau bao mat cap 2 cua ban de tiep tuc:", "Xong", "Thoat");
-			return ErrorMsg(playerid, "Mat khau bao mat cap 2 ban vua nhap khong dung.");
+		inline const OnChecked(bool:correct) {
+			if(correct) return LoginSuccess(playerid);
+			else {
+				Dialog_Show(playerid, Login_Pass2, DS_PASS,""COL_AQUA"He thong bao mat cap 2", ""COL_WHITE"Hay nhap mat khau bao mat cap 2 cua ban de tiep tuc:", "Xong", "Thoat");
+				return ErrorMsg(playerid, "Mat khau bao mat cap 2 ban vua nhap khong dung.");
+			}
 		}
+		BCrypt_CheckInline(inputtext, AuthData[playerid][Password2], using inline OnChecked);
 	}
 }
 /*
@@ -491,9 +559,24 @@ Dialog:Char_Create(playerid, response, listitem, inputtext[])  {
 Dialog:cCreate_Name(playerid, response, listitem, inputtext[]) {
 	if(!response) ShowCharCreateDialog(playerid);
 	else {
-		static str[256];
-		mysql_format(Database, str, sizeof str, "SELECT * FROM `characters` WHERE `Name`='%s'", inputtext);
-		mysql_tquery(Database, str, "OnCheckNewCharName", "is", playerid, inputtext);
+		inline const Checked() {
+			static str[256];
+			if(cache_num_rows()) {
+				format(str, sizeof str, "\\c"COL_LIGHTRED"Ten nhan vat "COL_WHITE"%s "COL_LIGHTRED"da ton tai. Vui long chon mot ten khac!\n\\c"COL_WHITE"Nhap ten cho nhan vat cua ban. "COL_GREEN"Vi du: Ho_Ten.", inputtext);
+				Dialog_Show(playerid, cCreate_Name, DS_INPUT, ""COL_AQUA"TEN NHAN VAT", str, "Xong", "Quay lai");
+			}
+			else {
+			    if(strlen(inputtext) < 6 || strlen(inputtext) > 24) return Dialog_Show(playerid, cCreate_Name, DS_INPUT, ""COL_AQUA"TEN NHAN VAT", "\\c"COL_LIGHTRED"Ten ban vua nhap phai gom tu 6 den 24 ki tu!\n\\c"COL_WHITE"Nhap ten cho nhan vat cua ban. "COL_GREEN"Vi du: Ho_Ten.", "Xong", "Quay lai");
+			    if(!IsRoleplayName(inputtext)) {
+			    	format(str, sizeof str, "\\c"COL_LIGHTRED"Ten nhan vat "COL_WHITE"%s "COL_LIGHTRED"khong hop le hoac Non-RP!\n\\c"COL_WHITE"Nhap ten cho nhan vat cua ban. "COL_GREEN"Vi du: Ho_Ten.", GetRoleplayName(inputtext));
+			    	Dialog_Show(playerid, cCreate_Name, DS_INPUT, ""COL_AQUA"TEN NHAN VAT", str, "Xong", "Quay lai");
+			    	return 1;
+			    }
+			    format(CreateCharData[playerid][Name], MAX_PLAYER_NAME+1, "%s", inputtext);
+			    ShowCharCreateDialog(playerid);
+			}
+		}
+		MySQL_TQueryInline(Database, using inline Checked, "SELECT * FROM `characters` WHERE `Name`='%s'", inputtext);
 	}
 }
 

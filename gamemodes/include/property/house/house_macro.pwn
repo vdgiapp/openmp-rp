@@ -56,7 +56,7 @@ enum ENUM_HOUSEINV_INFO {
     MagAmmo, // Bang dan / dan trong sung
     ExData
 }
-new HouseInventory[MAX_HOUSES][MAX_HOUSE_INV][ENUM_HOUSEINV_INFO];
+new HouseLocker[MAX_HOUSES][MAX_HOUSE_INV][ENUM_HOUSEINV_INFO];
 
 enum ENUM_HOUSE_INT {
 	Int,

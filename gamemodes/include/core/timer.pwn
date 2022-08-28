@@ -13,5 +13,5 @@ timer tKickPlayer[0](playerid) {
 
 timer playerHideTDN[0](playerid, TDN, i) {
 	hideTDN(playerid, TDN);
-	format(tmpTDN_Str[playerid][i], 4096, "");
+	tmpTDN_Str[playerid][i][0] = EOS;
 }

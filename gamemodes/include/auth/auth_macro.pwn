@@ -2,10 +2,10 @@
 enum ENUM_AUTH_INFO {
 	SID,
 	Account[25],
-	Password[65],
-	Password2[65],
+	Password[1024],
+	Password2[1024],
 	EnablePass2,
-	Email,
+	Email[128],
 	Attempt,
 	Logged,
 	Selected,

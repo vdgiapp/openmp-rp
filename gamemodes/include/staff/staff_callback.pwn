@@ -2,7 +2,7 @@
 hook function ResetGlobalVars() {
 	for(new id = 0; id < MAX_STAFF; id++) {
 		StaffData[id][SID] = -1;
-		format(StaffData[id][Nick], 25, "");
+		StaffData[id][Nick][0] = EOS;
 		StaffData[id][Rank] = 0;
 		StaffData[id][Helped] = 0;
 		StaffData[id][Spectating] = false;

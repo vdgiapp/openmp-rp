@@ -2,7 +2,7 @@
 #include <YSI_Coding\y_hooks>
 
 // +-+-+-+-+- MAIN DEFINES +-+-+-+-+-
-#define func%0(%1) 				forward%0(%1); public%0(%1)
+#define func%0(%1) 				forward%0(%1);public%0(%1)
 #define ClientMsg 				SendClientMessagef
 #define ServerMsg 				SendClientMessageToAllf
 

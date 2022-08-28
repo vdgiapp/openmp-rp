@@ -1,18 +1,18 @@
 
 public OnPlayerCommandReceived(playerid, cmd[], params[], flags) {
 	if(!IsPlayerInGame(playerid)) return 0;
-	if(gettime() - CharacterData[playerid][CmdCD] <= 1) {
+	if(GetTickCount() - CharacterData[playerid][CmdCD] <= 1000) {
 		ShowTDNx(playerid, 2000, "Vui long doi...");
 		return 0;
 	}
-	CharacterData[playerid][CmdCD] = gettime();
+	CharacterData[playerid][CmdCD] = GetTickCount();
 	return 1;
 }
 
 hook OnPlayerText(playerid, text[]) {
     if(IsPlayerInGame(playerid)) {
-        if(gettime() - CharacterData[playerid][ChatCD] <= 1) return ShowTDNx(playerid, 2000, "Vui long doi...");
-    	CharacterData[playerid][ChatCD] = gettime();
+        if(GetTickCount() - CharacterData[playerid][ChatCD] <= 1000) return ShowTDNx(playerid, 2000, "Vui long doi...");
+    	CharacterData[playerid][ChatCD] = GetTickCount();
         callcmd::local(playerid, text);
     }
     return 0;

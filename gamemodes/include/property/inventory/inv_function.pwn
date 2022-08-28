@@ -530,7 +530,7 @@ Inventory_PlayerViewInfoItem(playerid, sel) {
 				format(magammo, sizeof magammo, "%d / %d", weapondata[GetWeaponSlot(itemid)][1], Inventory_GetMagSize(InventoryData[playerid][sel][MagType]));
 			}
 		}
-		format(rightmag, sizeof rightmag, "");
+		rightmag[0] = EOS;
 		for(new a = 47; a < 73; a++) {
 			if(Inventory_IsWeapUseMag(itemid, a)) {
 				format(rightmag, sizeof rightmag, "%s%s | ", rightmag, Inventory_ItemName(a));
@@ -563,7 +563,7 @@ Inventory_PlayerDestroyItem(playerid, sel, amount) {
 func DropItem_TimerRemove(i) {
 	if(IsValidDynamicObject(DroppedItem[i][Object])) DestroyDynamicObject(DroppedItem[i][Object]);
 	if(IsValidDynamic3DTextLabel(DroppedItem[i][Label])) DestroyDynamic3DTextLabel(DroppedItem[i][Label]);
-	format(DroppedItem[i][Params], 128, "");
+	DroppedItem[i][Params][0] = EOS;
 	KillTimer(DroppedItem[i][Timer]);
 }
 

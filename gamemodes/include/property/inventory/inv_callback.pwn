@@ -143,8 +143,8 @@ Dialog:InventoryInteract(playerid, response, listitem, inputtext[]) {
             new hid = -1, str[128] = "";
             if((hid = House_Nearest(playerid)) != -1 && House_IsPlayerNearLocker(playerid, hid) && House_IsOwner(playerid, hid)) {
                 format(str, sizeof str, ""COL_AQUA"TUI DO > %s > Cat vao (SL: %d)", Inventory_ItemName(InventoryData[playerid][sel][ItemID]), InventoryData[playerid][sel][Amount]);
-                if(InventoryData[playerid][sel][Amount] > 1) Dialog_Show(playerid, InvHouseStoreItem, DS_INPUT, str, "\\cNhap so luong ma ban muon cat vao:", "Cat vao", "Quay lai");
-                else dialog_InvHouseStoreItem(playerid, true, 0, "1");
+                if(InventoryData[playerid][sel][Amount] > 1) Dialog_Show(playerid, HouseLockerStoreItem, DS_INPUT, str, "\\cNhap so luong ma ban muon cat vao:", "Cat vao", "Quay lai");
+                else dialog_HouseLockerStoreItem(playerid, true, 0, "1");
             }
         }
     }
@@ -170,20 +170,3 @@ Dialog:InventoryDropAmount(playerid, response, listitem, inputtext[]) {
 }
 
 Dialog:InventoryViewInfo(playerid, response, listitem, inputtext[]) { ndpD_InventoryMain(playerid, true, CharacterData[playerid][InvSelectedItem]); }
-
-Dialog:InvHouseStoreItem(playerid, response, listitem, inputtext[]) {
-    new hid = -1;
-    static sel; sel = CharacterData[playerid][InvSelectedItem];
-    if(!response) return ndpD_InventoryMain(playerid, true, sel);
-    if(!IsNumeric(inputtext)) return ErrorMsg(playerid, "So luong cat vao khong hop le."), dialog_InventoryInteract(playerid, true, 5, "");
-    if(InventoryData[playerid][sel][Amount] < strval(inputtext) || strval(inputtext) == 0) return ErrorMsg(playerid, "So luong cat vao khong hop le."), dialog_InventoryInteract(playerid, true, 5, "");
-    if((hid = House_Nearest(playerid)) != -1 && House_IsPlayerNearLocker(playerid, hid) && House_IsOwner(playerid, hid)) {
-        if(House_LockerStoreItem(hid, InventoryData[playerid][sel][ItemID], strval(inputtext), InventoryData[playerid][sel][Durable], InventoryData[playerid][sel][ExData], InventoryData[playerid][sel][MagType], InventoryData[playerid][sel][MagAmmo]) == -1) return ErrorMsg(playerid, "Khong the cat them vat pham vao vi tu do da day.");
-        if(Inventory_IsWeapon(InventoryData[playerid][sel][ItemID]) && InventoryData[playerid][sel][IsEquipped]) {
-            RemovePlayerWeapon(playerid, InventoryData[playerid][sel][ItemID]);
-            InventoryData[playerid][sel][IsEquipped] = 0;
-        }
-        InventoryData[playerid][sel][Amount] -= strval(inputtext);
-    }
-    return 1;
-}

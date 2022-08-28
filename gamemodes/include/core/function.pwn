@@ -47,7 +47,7 @@ ShowTDNx(playerid, time, str[], va_args<>) {
     static str1[4096], tdnid;
     format(str1, sizeof str1, str, va_start<3>);
     for(new i = 0; i < MAX_TDN; i++) {
-        if(isnull(tmpTDN_Str[playerid][i]) || isequal(tmpTDN_Str[playerid][i], "")) {
+        if(isnull(tmpTDN_Str[playerid][i])) {
             format(tmpTDN_Str[playerid][i], 4096, "%s", str1);
             tdnid = ShowTDN_Manual(playerid, tmpTDN_Str[playerid][i]);
             defer playerHideTDN[time](playerid, tdnid, i);

@@ -69,6 +69,7 @@
     "password": "",
     "pawn": {
         "legacy_plugins": [
+            "bcrypt",
             "gmtime",
             "memory",
             "sscanf",

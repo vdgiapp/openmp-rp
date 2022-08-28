@@ -4,7 +4,7 @@
 	S A - M P   S E R V E R   R O L E P L A Y
 	W I T H   O P E N . M P   B Y   G I A P P
 
-	Pawn Dir: OpenMP-Roleplay\server\pawno\pawncc.exe
+	Pawn Dir: openmp-rp\pawno\pawncc.exe
 	Pawn Options: -d1, -(, -;
 */
 
@@ -19,6 +19,13 @@
 #define SERVER_WEBSITE "\"http://gtapg.vn\""
 #define SERVER_VERSION "RP v1.415"
 
+/*
+$options = [
+	'cost' => 12,
+];
+$asd = password_hash("151607389", PASSWORD_BCRYPT, $options);
+echo ''.$asd;
+*/
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -32,6 +39,7 @@
 #include <a_sampdb> // SA-MP database
 #include <a_zones> // SA-MP zones
 #include <a_mysql> // SA-MP MySQL
+#include <a_bcrypt> // SA-MP Bcrypt
 #include <pwnraknet> // PAWN RakNet
 #include <pwnplus> // PAWN plus
 #include <pwncmd> // PAWN commands
@@ -41,8 +49,13 @@
 //#include <weapon-config> // Weapon config
 
 #include <YSI_Data\y_iterate> // or YSI_Data/y_foreach (instead of foreach)
+#include <YSI_Extra\y_inline_mysql>
+#include <YSI_Extra\y_inline_bcrypt>
+#include <YSI_Extra\y_inline_requests>
+#include <YSI_Extra\y_inline_timers>
 #include <YSI_Coding\y_va> // Variable arguments (va_args<>, va_format, va_start<3>)
 #include <YSI_Coding\y_timers> // task, ptask, timer - (pause, resume, defer, repeat, stop)
+#include <YSI_Coding\y_inline> // inline
 #include <YSI_Coding\y_hooks> // hook, hook function, hook callback
 
 #include <open.mp> // YSF included in Open.MP
@@ -66,6 +79,7 @@
 #include <playertd> // Player textdraw
 #include <UmSelection> // Upgraded model selection
 #include <notification> // Textdraw notification
+#include <InfoTD> // Info Textdraw
 #include <MenuStore> // Menu store texdraw
 #include <progress2> // Progress bar
 #include <progress3D> // Progress bar 3D
