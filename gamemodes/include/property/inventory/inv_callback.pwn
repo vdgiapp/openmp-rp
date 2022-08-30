@@ -80,7 +80,7 @@ Cmd:inventory(playerid) {
             */
         }
 	}
-    format(str, sizeof str, ""COL_AQUA"TUI DO NHAN VAT - "COL_YELLOW"So du: $%s", fNumber(CharacterData[playerid][Cash]));
+    format(str, sizeof str, "Tui do "COL_YELLOW"[ $%s ]", fNumber(CharacterData[playerid][Cash]));
     ShowPlayerDialogPages(playerid, #InventoryMain, DS_HEADERS, str, "Chon", "Dong", 12, "{F5D400}TRANG SAU", "{F5D400}TRANG TRUOC");
     return 1;
 }
@@ -95,7 +95,7 @@ DialogPages:InventoryMain(playerid, response, listitem) {
         CharacterData[playerid][InvSelectedItem] = listitem;
         i = CharacterData[playerid][InvSelectedItem];
         if(!InventoryData[playerid][i][ItemID]) return callcmd::inventory(playerid);
-        format(str, sizeof str, ""COL_AQUA"TUI DO > %s", Inventory_ItemName(InventoryData[playerid][i][ItemID]));
+        format(str, sizeof str, "Tui do > %s", Inventory_ItemName(InventoryData[playerid][i][ItemID]));
         if(Inventory_IsWeapon(InventoryData[playerid][i][ItemID])) {
             if(!InventoryData[playerid][i][IsEquipped]) {
                 format(excap, sizeof excap, "Trang bi vu khi\nThong tin vu khi\nDua vu khi\nPha huy vu khi\nVut bo vu khi%s", excap);
@@ -122,7 +122,7 @@ Dialog:InventoryInteract(playerid, response, listitem, inputtext[]) {
     switch(listitem) {
         case 0: {
             static str[64];
-            format(str, sizeof str, ""COL_AQUA"TUI DO > %s > Su dung (SL: %d)", Inventory_ItemName(InventoryData[playerid][sel][ItemID]), InventoryData[playerid][sel][Amount]);
+            format(str, sizeof str, "Tui do > %s > Su dung (SL: %d)", Inventory_ItemName(InventoryData[playerid][sel][ItemID]), InventoryData[playerid][sel][Amount]);
             if(InventoryData[playerid][sel][Amount] > 1) {
                 if(Inventory_IsMagazine(InventoryData[playerid][sel][ItemID])) Inventory_PlayerUseItem(playerid, sel, 1);
                 else if(Inventory_IsFoodDrink(InventoryData[playerid][sel][ItemID])) Inventory_PlayerUseItem(playerid, sel, 1);
@@ -135,14 +135,14 @@ Dialog:InventoryInteract(playerid, response, listitem, inputtext[]) {
         //case 3: Inventory_PlayerDestroyItem(playerid, sel, amount);
         case 4: {
             static str[64];
-            format(str, sizeof str, ""COL_AQUA"TUI DO > %s > Vut bo (SL: %d)", Inventory_ItemName(InventoryData[playerid][sel][ItemID]), InventoryData[playerid][sel][Amount]);
+            format(str, sizeof str, "Tui do > %s > Vut bo (SL: %d)", Inventory_ItemName(InventoryData[playerid][sel][ItemID]), InventoryData[playerid][sel][Amount]);
             if(InventoryData[playerid][sel][Amount] > 1) Dialog_Show(playerid, InventoryDropAmount, DS_INPUT, str, "\\cNhap so luong ma ban muon vut bo:", "Vut bo", "Quay lai");
             else Inventory_PlayerDropItem(playerid, sel, 1);
         }
         case 5: {
             new hid = -1, str[128] = "";
             if((hid = House_Nearest(playerid)) != -1 && House_IsPlayerNearLocker(playerid, hid) && House_IsOwner(playerid, hid)) {
-                format(str, sizeof str, ""COL_AQUA"TUI DO > %s > Cat vao (SL: %d)", Inventory_ItemName(InventoryData[playerid][sel][ItemID]), InventoryData[playerid][sel][Amount]);
+                format(str, sizeof str, "Tui do > %s > Cat vao (SL: %d)", Inventory_ItemName(InventoryData[playerid][sel][ItemID]), InventoryData[playerid][sel][Amount]);
                 if(InventoryData[playerid][sel][Amount] > 1) Dialog_Show(playerid, HouseLockerStoreItem, DS_INPUT, str, "\\cNhap so luong ma ban muon cat vao:", "Cat vao", "Quay lai");
                 else dialog_HouseLockerStoreItem(playerid, true, 0, "1");
             }

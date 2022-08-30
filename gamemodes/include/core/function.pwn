@@ -22,13 +22,13 @@ GetPlayerZone(playerid) {
 GivePlayerHealth(playerid, Float:hp) {
 	static Float:ohp;
 	GetPlayerHealth(playerid, ohp);
-	return SetPlayerHealth(playerid, floatadd(ohp, hp));
+	return SetPlayerHealth(playerid, ohp+hp);
 }
 
 GivePlayerArmour(playerid, Float:ar) {
 	static Float:oar;
 	GetPlayerArmour(playerid, oar);
-	return SetPlayerArmour(playerid, floatadd(oar, ar));
+	return SetPlayerArmour(playerid, oar+ar);
 }
 
 Float:PlayerHealth(playerid) {
@@ -220,14 +220,14 @@ ErrorMsg(playerid, const string[], va_args<>) {
 SuccessMsg(playerid, const string[], va_args<>) {
 	static str[256];
     format(str, sizeof str, string, va_start<2>);
-	format(str, sizeof str, ""COL_GREEN"SUCCESS > "COL_GREY"%s", str);
+	format(str, sizeof str, ""COL_GREEN"SUCCESS > "COL_WHITE"%s", str);
 	ClientMsg(playerid, -1, str);
 }
 
 NotificationMsg(playerid, const string[], va_args<>) {
 	static str[256];
     format(str, sizeof str, string, va_start<2>);
-	format(str, sizeof str, ""COLOR_LIGHTYELLOW2"THONG BAO > "COL_GREY"%s", str);
+	format(str, sizeof str, ""COLOR_LIGHTYELLOW2"THONG BAO > "COL_WHITE"%s", str);
 	ClientMsg(playerid, -1, str);
 }
 

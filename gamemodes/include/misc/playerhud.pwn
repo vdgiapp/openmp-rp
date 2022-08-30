@@ -275,7 +275,7 @@ hook OnPlayerUpdate(playerid) {
 
 		static level, exp;
 		sscanf(CharacterData[playerid][Level], "ii", level, exp);
-		format(str, sizeof str, "Lv.%d", level);
+		format(str, sizeof str, "Lvl. %d", level);
 		PlayerTextDrawSetString(playerid, HUD_Level[playerid], str);
 
 		static hour, minute, second;

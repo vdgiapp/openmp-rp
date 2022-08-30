@@ -36,7 +36,7 @@ Cmd:menu(playerid) {
 	format(str, sizeof str, "Thong tin nhan vat\nTui do nhan vat\nDinh vi GPS\nCai dat nhan vat\nDanh sach cac lenh");
 	if((hid = House_Nearest(playerid)) != -1 && House_IsPlayerNearLocker(playerid, hid) && House_IsOwner(playerid, hid))
 		format(str, sizeof str, "%s\nTu do can nha (ID: %d)", str, hid);
-	Dialog_Show(playerid, QuickMenuMain, DS_LIST, ""COL_AQUA"INTERACT MENU", str, "Chon", "Dong");
+	Dialog_Show(playerid, QuickMenuMain, DS_LIST, "Main menu", str, "Chon", "Dong");
 	return 1;
 }
 
@@ -58,7 +58,7 @@ Alias:stats("thongtin", "info", "information");
 Cmd:stats(playerid) {
 	new str[128], bday, bmonth, byear;
 	new level, exp;
-	format(str, sizeof str, ""COL_AQUA"THONG TIN > %s", GetRoleplayName(CharacterData[playerid][Name]));
+	format(str, sizeof str, "Thong tin nhan vat %s", GetRoleplayName(CharacterData[playerid][Name]));
 	sscanf(CharacterData[playerid][Birthday], "ddd", bday, bmonth, byear);
 	sscanf(CharacterData[playerid][Level], "dd", level, exp);
 	ClearDialogListitems(playerid);

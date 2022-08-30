@@ -341,7 +341,7 @@ Inventory_IsWeapUseMag(wid, magid) {
 
 Inventory_GetMagSize(itemid) {
     switch(itemid) {
-        case 69..72: return 6;
+        case 69..72: return 5;
         case 47, 53..55: return 7;
         case 49..52: return 7;
         case 48: return 17;
@@ -542,7 +542,7 @@ Inventory_PlayerViewInfoItem(playerid, sel) {
 			case 22: format(weapdesc, sizeof weapdesc, "Colt M1911 la mot loai sung luc cua My do John Browning thiet ke tu nam 1905.\n Sung su dung loai dan .45 ACP hoac bang dan mo rong cua .45 ACP (.45 ACP .ext).");
 			case 23: format(weapdesc, sizeof weapdesc, "Cung giong nhu Colt M1911 nhung duoc tich hop them giam thanh vao nong sung.\n Sung su dung loai dan .45 ACP hoac bang dan mo rong cua .45 ACP (.45 ACP .ext).");
 		}
-		format(title, sizeof title, ""COL_AQUA"VU KHI: %s", Inventory_ItemName(itemid));
+		format(title, sizeof title, "VU KHI: %s", Inventory_ItemName(itemid));
 		format(caption, sizeof caption, "Can nang: %.2fkg\nDo ben: %.2f\nTrang thai: %s\nBang dan: %s\nLoai dan hien tai: %s \
 		\nCac loai dan thich hop: %s\nMo ta: %s\n",
 		Inventory_ItemWeight(itemid), InventoryData[playerid][sel][Durable], equiping, magammo,

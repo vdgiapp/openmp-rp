@@ -39,16 +39,13 @@
 #include <pwnregex> // PAWN Regex
 #include <callbacks> // More callbacks
 #include <sampvoice> // SA-MP voice
-//#include <weapon-config> // Weapon config
 
 #include <YSI_Data\y_iterate> // or YSI_Data/y_foreach (instead of foreach)
-#include <YSI_Extra\y_inline_mysql>
-#include <YSI_Extra\y_inline_bcrypt>
-#include <YSI_Extra\y_inline_requests>
-#include <YSI_Extra\y_inline_timers>
 #include <YSI_Coding\y_va> // Variable arguments (va_args<>, va_format, va_start<3>)
 #include <YSI_Coding\y_timers> // task, ptask, timer - (pause, resume, defer, repeat, stop)
-#include <YSI_Coding\y_inline> // inline
+#include <YSI_Coding\y_inline> // inline const, using inline
+#include <YSI_Extra\y_inline_mysql> // mysql inline (MySQL_TQueryInline, MySQL_PQueryInline)
+#include <YSI_Extra\y_inline_bcrypt> // bcrypt inline
 #include <YSI_Coding\y_hooks> // hook, hook function, hook callback
 
 #include <open.mp> // YSF included in Open.MP
@@ -124,5 +121,7 @@ main() {
 #include "include\player\player_entry.pwn"
 
 #include "include\staff\staff_entry.pwn"
+
+#include "include\system\damage.pwn"
 
 #include "include\misc\playerhud.pwn"

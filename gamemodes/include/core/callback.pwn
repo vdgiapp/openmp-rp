@@ -33,16 +33,9 @@ public OnGameModeInit() {
 	SetTimeZone(7);
 
 	ToggleChatTextReplacement(true);
-
-	// Weapon config
-	/*
-	SetDamageFeed(false);
-	SetKnifeSync(false);
-	SetCbugAllowed(false);
 	SetVehiclePassengerDamage(true);
 	SetVehicleUnoccupiedDamage(true);
-	SetCustomArmourRules(true, true);
-	*/
+	SetArmourRules(true);
 
 	// Log files
 	printf("Checking log files...");

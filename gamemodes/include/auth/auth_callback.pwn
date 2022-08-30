@@ -431,7 +431,7 @@ Dialog:Login_Pass(playerid, response, listitem, inputtext[]) {
 		static str[256];
 		inline const OnChecked(bool:correct) {
 			if(correct) {
-				if(AuthData[playerid][EnablePass2])	return Dialog_Show(playerid, Login_Pass2, DS_PASS,""COL_AQUA"He thong bao mat cap 2", ""COL_WHITE"Hay nhap mat khau bao mat cap 2 cua ban de tiep tuc:", "Xong", "Thoat");
+				if(AuthData[playerid][EnablePass2])	return Dialog_Show(playerid, Login_Pass2, DS_PASS, "He thong bao mat cap 2", ""COL_WHITE"Hay nhap mat khau bao mat cap 2 cua ban de tiep tuc:", "Xong", "Thoat");
 				return LoginSuccess(playerid);
 			}
 			else {
@@ -448,6 +448,14 @@ Dialog:Login_Pass(playerid, response, listitem, inputtext[]) {
 		}
 		BCrypt_CheckInline(inputtext, AuthData[playerid][Password], using inline OnChecked);
 		ClientMsg(playerid, COLOR_YELLOW, "Dang lay du lieu nguoi dung...");
+		for(new i = 0; i < 10; i++) TextDrawHideForPlayer(playerid, AuthTD_MiscTD[i]);
+		TextDrawHideForPlayer(playerid, Auth_Button);
+		TextDrawHideForPlayer(playerid, Auth_Button2);
+		TextDrawHideForPlayer(playerid, Auth_Registered);
+		TextDrawHideForPlayer(playerid, Auth_CharCreated);
+		TextDrawHideForPlayer(playerid, Auth_PlayersOnline);
+		TextDrawHideForPlayer(playerid, Auth_LoggedToday);
+		PlayerTextDrawHide(playerid, Auth_PlayerName[playerid]);
 	}
 }
 
@@ -457,7 +465,7 @@ Dialog:Login_Pass2(playerid, response, listitem, inputtext[]) {
 		inline const OnChecked(bool:correct) {
 			if(correct) return LoginSuccess(playerid);
 			else {
-				Dialog_Show(playerid, Login_Pass2, DS_PASS,""COL_AQUA"He thong bao mat cap 2", ""COL_WHITE"Hay nhap mat khau bao mat cap 2 cua ban de tiep tuc:", "Xong", "Thoat");
+				Dialog_Show(playerid, Login_Pass2, DS_PASS, "He thong bao mat cap 2", ""COL_WHITE"Hay nhap mat khau bao mat cap 2 cua ban de tiep tuc:", "Xong", "Thoat");
 				return ErrorMsg(playerid, "Mat khau bao mat cap 2 ban vua nhap khong dung.");
 			}
 		}
@@ -481,7 +489,7 @@ Dialog:Register_Pass(playerid, response, listitem, inputtext[]) {
 Dialog:Register_Email(playerid, response, listitem, inputtext[]) {
 	if(response) {
 		if(!IsValidEmail(inputtext)) {
-			Dialog_Show(playerid, Reg_Email, DS_INPUT, ""COL_AQUA"HE THONG DANG KY", "\\cNhap email ban muon dang ky vao o duoi day:", "Xong", "Quay lai");
+			Dialog_Show(playerid, Reg_Email, DS_INPUT, "HE THONG DANG KY", "\\cNhap email ban muon dang ky vao o duoi day:", "Xong", "Quay lai");
 			return ErrorMsg(playerid, "Email ban vua nhap la khong phai la mot email hop le.");
 		}
 		format(AuthData[playerid][Email], 64, "%s", inputtext);
@@ -497,11 +505,11 @@ Dialog:Char_Selection(playerid, response, listitem, inputtext[]) {
 		static str[64];
 		AuthData[playerid][Selected] = listitem+1;
 		if(tmpCharacterData[playerid][listitem][Available]) {
-			format(str, sizeof str, ""COL_AQUA"NHAN VAT %d: %s", AuthData[playerid][Selected], GetRoleplayName(tmpCharacterData[playerid][listitem][Name]));
+			format(str, sizeof str, "Nhan vat %d: %s", AuthData[playerid][Selected], GetRoleplayName(tmpCharacterData[playerid][listitem][Name]));
 			Dialog_Show(playerid, Char_Interact, DS_LIST, str, ""COL_GREEN"Tham gia tro choi\n"COL_RED"Xoa nhan vat", "Chon", "Quay lai");
 		}
 		else {
-			format(str, sizeof str, ""COL_AQUA"NHAN VAT %d: Tao nhan vat", AuthData[playerid][Selected]);
+			format(str, sizeof str, "Nhan vat %d: Tao nhan vat", AuthData[playerid][Selected]);
 			Dialog_Show(playerid, Char_CreateC, DS_MSGBOX, str, ""COL_WHITE"\\cBan co thuc su muon tao nhan vat tai slot nay khong?", "Co", "Khong");
 		}
 	}
@@ -534,11 +542,11 @@ Dialog:Char_Create(playerid, response, listitem, inputtext[])  {
 	if(!response) KickPlayer(playerid, 500);
 	else {
 		switch(listitem) {
-			case 0: Dialog_Show(playerid, cCreate_Name, DS_INPUT, ""COL_AQUA"TEN NHAN VAT", "\\c"COL_WHITE"Nhap ten cho nhan vat cua ban. "COL_GREEN"Vi du: Ho_Ten.", "Xong", "Quay lai");
-			case 1: Dialog_Show(playerid, cCreate_Gender, DS_LIST, ""COL_AQUA"CHON GIOI TINH", "Nam\nNu", "Chon", "Quay lai");
+			case 0: Dialog_Show(playerid, cCreate_Name, DS_INPUT, "Ten nhan vat", "\\c"COL_WHITE"Nhap ten cho nhan vat cua ban. "COL_GREEN"Vi du: Ho_Ten.", "Xong", "Quay lai");
+			case 1: Dialog_Show(playerid, cCreate_Gender, DS_LIST, "Chon gioi tinh", "Nam\nNu", "Chon", "Quay lai");
 			case 2: ShowBMonthDialog(playerid);
-			case 3: Dialog_Show(playerid, cCreate_Nation, DS_LIST, ""COL_AQUA"CHON QUOC GIA", "Los Santos\nSan Fierro\nLas Venturas\nCountryside (Nong thon)", "Chon", "Quay lai");
-			case 4: //Dialog_Show(playerid, cCreate_Skin, DS_LIST, ""COL_AQUA"CHON TRANG PHUC", "Trang phuc nam\nTrang phuc nu", "Chon", "Quay lai");
+			case 3: Dialog_Show(playerid, cCreate_Nation, DS_LIST, "Chon quoc gia", "Los Santos\nSan Fierro\nLas Venturas\nCountryside (Nong thon)", "Chon", "Quay lai");
+			case 4: //Dialog_Show(playerid, cCreate_Skin, DS_LIST, "CHON TRANG PHUC", "Trang phuc nam\nTrang phuc nu", "Chon", "Quay lai");
 			{
 				switch(CreateCharData[playerid][Gender]) {
 					case 0: return ErrorMsg(playerid, "Ban chua chon gioi tinh cho nhan vat cua ban."), ShowCharCreateDialog(playerid);
@@ -546,10 +554,10 @@ Dialog:Char_Create(playerid, response, listitem, inputtext[])  {
 					case 2: ShowModelSelectionMenu(playerid, FemaleSkinList, "Trang phuc nu");
 				}
 			}
-			case 5:	Dialog_Show(playerid, cCreate_Desc, DS_INPUT, ""COL_AQUA"MO TA NHAN VAT", "\\c"COL_WHITE"Nhap mo ta ve nhan vat cua ban (co the bo qua):", "Xong", "Quay lai");
+			case 5:	Dialog_Show(playerid, cCreate_Desc, DS_INPUT, "Mo ta", "\\c"COL_WHITE"Nhap mo ta ve nhan vat cua ban (co the bo qua):", "Xong", "Quay lai");
 			case 6: {
 				static str[64];
-				format(str, sizeof str, ""COL_AQUA"NHAN VAT %d: Tao nhan vat", AuthData[playerid][Selected]);
+				format(str, sizeof str, "Nhan vat %d: Tao nhan vat", AuthData[playerid][Selected]);
 				Dialog_Show(playerid, cCreate_Confirm, DS_MSGBOX, str, ""COL_WHITE"\\cBan da chac chan rang cac thong tin cua nhan vat la chinh xac khong?\n\\c"COL_WHITE"Bam "COL_GREEN"'Co' "COL_WHITE"de tao nhan vat, bam "COL_LIGHTRED"'Khong' "COL_WHITE"de quay lai va chinh sua thong tin.", "Co", "Khong");
 			}
 		}
@@ -563,13 +571,13 @@ Dialog:cCreate_Name(playerid, response, listitem, inputtext[]) {
 			static str[256];
 			if(cache_num_rows()) {
 				format(str, sizeof str, "\\c"COL_LIGHTRED"Ten nhan vat "COL_WHITE"%s "COL_LIGHTRED"da ton tai. Vui long chon mot ten khac!\n\\c"COL_WHITE"Nhap ten cho nhan vat cua ban. "COL_GREEN"Vi du: Ho_Ten.", inputtext);
-				Dialog_Show(playerid, cCreate_Name, DS_INPUT, ""COL_AQUA"TEN NHAN VAT", str, "Xong", "Quay lai");
+				Dialog_Show(playerid, cCreate_Name, DS_INPUT, "Ten nhan vat", str, "Xong", "Quay lai");
 			}
 			else {
-			    if(strlen(inputtext) < 6 || strlen(inputtext) > 24) return Dialog_Show(playerid, cCreate_Name, DS_INPUT, ""COL_AQUA"TEN NHAN VAT", "\\c"COL_LIGHTRED"Ten ban vua nhap phai gom tu 6 den 24 ki tu!\n\\c"COL_WHITE"Nhap ten cho nhan vat cua ban. "COL_GREEN"Vi du: Ho_Ten.", "Xong", "Quay lai");
+			    if(strlen(inputtext) < 6 || strlen(inputtext) > 24) return Dialog_Show(playerid, cCreate_Name, DS_INPUT, "Ten nhan vat", "\\c"COL_LIGHTRED"Ten ban vua nhap phai gom tu 6 den 24 ki tu!\n\\c"COL_WHITE"Nhap ten cho nhan vat cua ban. "COL_GREEN"Vi du: Ho_Ten.", "Xong", "Quay lai");
 			    if(!IsRoleplayName(inputtext)) {
 			    	format(str, sizeof str, "\\c"COL_LIGHTRED"Ten nhan vat "COL_WHITE"%s "COL_LIGHTRED"khong hop le hoac Non-RP!\n\\c"COL_WHITE"Nhap ten cho nhan vat cua ban. "COL_GREEN"Vi du: Ho_Ten.", GetRoleplayName(inputtext));
-			    	Dialog_Show(playerid, cCreate_Name, DS_INPUT, ""COL_AQUA"TEN NHAN VAT", str, "Xong", "Quay lai");
+			    	Dialog_Show(playerid, cCreate_Name, DS_INPUT, "Ten nhan vat", str, "Xong", "Quay lai");
 			    	return 1;
 			    }
 			    format(CreateCharData[playerid][Name], MAX_PLAYER_NAME+1, "%s", inputtext);

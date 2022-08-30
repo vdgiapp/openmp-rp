@@ -75,18 +75,18 @@ CheckPlayerNameToLogin(playerid) {
 ShowLoginDialog(playerid) {
 	static str[256];
 	format(str, sizeof str, "\\c"COL_WHITE"Chao mung ban da quay tro lai may chu, "COL_GREEN"%s\n\\c"COL_WHITE"Hay nhap mat khau cua ban de dang nhap vao tro choi!", AuthData[playerid][Account]);
-	Dialog_Show(playerid, Login_Pass, DS_PASS, ""COL_AQUA""SERVER_NAME"", str, "Xong", "Dong");
+	Dialog_Show(playerid, Login_Pass, DS_PASS, ""SERVER_NAME"", str, "Xong", "Dong");
 }
 
 /*
 ShowRegisterDialog(playerid) {
 	static str[256];
 	format(str, sizeof str, "\\c"COL_WHITE"Chao mung ban da den may chu, "COL_GREEN"%s\n\\c"COL_WHITE"Hay nhap mat khau cua ban de dang ky tai khoan moi!", AuthData[playerid][Account]);
-	Dialog_Show(playerid, Register_Pass, DS_PASS, ""COL_AQUA""SERVER_NAME"", str, "Xong", "Dong");
+	Dialog_Show(playerid, Register_Pass, DS_PASS, ""SERVER_NAME"", str, "Xong", "Dong");
 }
 
 ShowEmailDialog(playerid) {
-	Dialog_Show(playerid, Register_Email, DS_INPUT, ""COL_AQUA""SERVER_NAME"", "\\c"COL_WHITE"Hay nhap email cua ban de hoan thanh qua trinh dang ky tai khoan!", "Xong", "Quay lai");
+	Dialog_Show(playerid, Register_Email, DS_INPUT, ""SERVER_NAME"", "\\c"COL_WHITE"Hay nhap email cua ban de hoan thanh qua trinh dang ky tai khoan!", "Xong", "Quay lai");
 }
 */
 
@@ -101,7 +101,7 @@ ShowCharCreateDialog(playerid) {
         "COL_GREEN"Hoan thanh",
         GetRoleplayName(CreateCharData[playerid][Name]), GetGenderName(CreateCharData[playerid][Gender]),
         CreateCharData[playerid][Birthday], GetNationName(CreateCharData[playerid][Nation]), CreateCharData[playerid][SkinID]);
-	return Dialog_Show(playerid, Char_Create, DS_TABLIST, ""COL_AQUA"TAO NHAN VAT", str, "Chon", "Thoat");
+	return Dialog_Show(playerid, Char_Create, DS_TABLIST, "TAO NHAN VAT", str, "Chon", "Thoat");
 }
 
 ShowBDayDialog(playerid) {
@@ -111,13 +111,13 @@ ShowBDayDialog(playerid) {
 		case 1,3,5,7,8,10,12: for(new i = 2; i < 32; i++) { format(string, sizeof string, "%s\nNgay %02d", string, i); }
 		case 4,6,9,11: for(new i = 2; i < 31; i++) { format(string, sizeof string, "%s\nNgay %02d", string, i); }
 	}
-	Dialog_Show(playerid, cCreate_BDay, DS_LIST, ""COL_AQUA"CHON NGAY SINH", string, "Chon", "Quay lai");
+	Dialog_Show(playerid, cCreate_BDay, DS_LIST, "CHON NGAY SINH", string, "Chon", "Quay lai");
 }
 
 ShowBMonthDialog(playerid) {
 	static string[512]; format(string, sizeof string, "Thang 01");
 	for(new i = 2; i < 13; i++) { format(string, sizeof string, "%s\nThang %02d", string, i); }
-	Dialog_Show(playerid, cCreate_BMonth, DS_LIST, ""COL_AQUA"CHON THANG SINH", string, "Chon", "Quay lai");
+	Dialog_Show(playerid, cCreate_BMonth, DS_LIST, "CHON THANG SINH", string, "Chon", "Quay lai");
 }
 
 ShowBYearDialog(playerid) {
@@ -126,7 +126,7 @@ ShowBYearDialog(playerid) {
 	#pragma unused a, b
 	static string[1024]; format(string, sizeof string, "Nam %d", currentyear-80);
     for(new i = currentyear-79; i < currentyear-17+1; i++) { format(string, sizeof string, "%s\nNam %d", string, i); }
-	Dialog_Show(playerid, cCreate_BYear, DS_LIST, ""COL_AQUA"CHON NAM SINH", string, "Chon", "Quay lai");
+	Dialog_Show(playerid, cCreate_BYear, DS_LIST, "CHON NAM SINH", string, "Chon", "Quay lai");
 }
 
 /*
@@ -138,14 +138,14 @@ func OnGetCharTmpData(playerid, slot) {
 		format(tmpCharacterData[playerid][tmp][Name], 25, "%s", cache_value_string(0, "Name"));
 		format(str, sizeof str, "\n%d\t%s\tLv.%d", slot, GetRoleplayName(tmpCharacterData[playerid][tmp][Name]), tmpCharacterData[playerid][tmp][Level]);
 		strcat(AuthData[playerid][CharSel], str);
-		if(slot == 3) Dialog_Show(playerid, Char_Selection, DS_HEADERS, ""COL_AQUA"CHON NHAN VAT", AuthData[playerid][CharSel], "Chon", "Thoat");
+		if(slot == 3) Dialog_Show(playerid, Char_Selection, DS_HEADERS, "CHON NHAN VAT", AuthData[playerid][CharSel], "Chon", "Thoat");
 	}
 	else {
 		tmpCharacterData[playerid][tmp][Available] = 0;
 		format(tmpCharacterData[playerid][tmp][Name], 25, "");
 		format(str, sizeof str, "\n"COL_GREY"%d\t"COL_GREY"Tao nhan vat", slot);
 		strcat(AuthData[playerid][CharSel], str);
-		if(slot == 3) Dialog_Show(playerid, Char_Selection, DS_HEADERS, ""COL_AQUA"CHON NHAN VAT", AuthData[playerid][CharSel], "Chon", "Thoat");
+		if(slot == 3) Dialog_Show(playerid, Char_Selection, DS_HEADERS, "CHON NHAN VAT", AuthData[playerid][CharSel], "Chon", "Thoat");
 	}
 }
 
@@ -172,14 +172,14 @@ ShowCharSelDialog(playerid) {
 				format(tmpCharacterData[playerid][tmp][Name], 25, "%s", cache_value_string(0, "Name"));
 				format(str, sizeof str, "\n%d\t%s\tLv.%d", slot, GetRoleplayName(tmpCharacterData[playerid][tmp][Name]), tmpCharacterData[playerid][tmp][Level]);
 				strcat(AuthData[playerid][CharSel], str);
-				if(slot == 3) Dialog_Show(playerid, Char_Selection, DS_HEADERS, ""COL_AQUA"CHON NHAN VAT", AuthData[playerid][CharSel], "Chon", "Thoat");
+				if(slot == 3) Dialog_Show(playerid, Char_Selection, DS_HEADERS, "Chon nhan vat", AuthData[playerid][CharSel], "Chon", "Thoat");
 			}
 			else {
 				tmpCharacterData[playerid][tmp][Available] = 0;
 				format(tmpCharacterData[playerid][tmp][Name], 25, "");
 				format(str, sizeof str, "\n"COL_GREY"%d\t"COL_GREY"Tao nhan vat", slot);
 				strcat(AuthData[playerid][CharSel], str);
-				if(slot == 3) Dialog_Show(playerid, Char_Selection, DS_HEADERS, ""COL_AQUA"CHON NHAN VAT", AuthData[playerid][CharSel], "Chon", "Thoat");
+				if(slot == 3) Dialog_Show(playerid, Char_Selection, DS_HEADERS, "Chon nhan vat", AuthData[playerid][CharSel], "Chon", "Thoat");
 			}
 		}
 		MySQL_TQueryInline(Database, using inline GotIt, "SELECT * FROM `characters` WHERE `SID`='%d' AND `Slot`='%d'", AuthData[playerid][SID], i);

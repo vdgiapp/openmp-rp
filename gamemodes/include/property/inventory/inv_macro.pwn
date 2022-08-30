@@ -30,7 +30,7 @@ enum ENUM_ITEM_INFO {
     Float:Weight, // kilogram
     Model
 }
-new const ItemInfo[][ENUM_ITEM_INFO] = {
+new ItemInfo[][ENUM_ITEM_INFO] = {
 //  ItemID      Name                        Weight      Model
     {0,         "Trong",                    0.0,        3086},
     {1,         "Brass knuckles",           0.1,        331},
@@ -60,10 +60,10 @@ new const ItemInfo[][ENUM_ITEM_INFO] = {
 
     {22,        "Standard Pistol",          1.24,       346},
     {23,        "Silenced Pistol",          1.54,       347},
-    {24,        "Desert Eagle",             2.0,        348},
+    {24,        "Deagle",                   2.0,        348},
     {25,        "Standard Shotgun",         2.62,       349},
     {26,        "Sawnoff Shotgun",          1.65,       350},
-    {27,        "Franchi SPAS-12",          3.3,        351},
+    {27,        "Combat Shotgun",           3.3,        351},
     {28,        "Micro SMG",                2.7,        352},
     {29,        "MP5 SMG",                  2.54,       353},
     {30,        "AK-47",                    3.47,       355},
@@ -125,12 +125,12 @@ new const ItemInfo[][ENUM_ITEM_INFO] = {
     {68,        "9mm NATO .ext",            0.0083,     19995}, // 50v
 
     // Country rifle
-    {69,        ".219 Zipper",              0.004,      2061}, // 6v
-    {70,        ".338 ME FTX",              0.013,      2061}, // 6v - higher dmg
+    {69,        ".219 Zipper",              0.004,      2061}, // 5v
+    {70,        ".338 ME FTX",              0.013,      2061}, // 5v - higher dmg
 
     // Sniper rifle
-    {71,        ".308 Winchester",          0.0097,     2061}, // 6v
-    {72,        ".30-06 SF RN",             0.014,      2061}, // 6v - higher dmg
+    {71,        ".308 Winchester",          0.0097,     2061}, // 5v
+    {72,        ".30-06 SF RN",             0.014,      2061}, // 5v - higher dmg
 
     // Health
     {73,        "Bang cap cuu",             0.027,      11747},

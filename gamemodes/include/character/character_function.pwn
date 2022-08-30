@@ -193,7 +193,7 @@ GetWalkStyleName(id) {
 	return ret;
 }
 
-GetMaxExpFromLevel(level) { return ((level^2) * 100); }
+GetMaxExpFromLevel(level) { return ((level*level) * 100); }
 
 GetJobName(jobid) {
 	new str[128] = "";
