@@ -4,28 +4,28 @@ for upcoming open.mp modification of GTA San Andreas, written mostly in PAWN and
 
 ## YSI Shortcuts
 ```
-	Checkpoint = CP
-	Collisions = Col
-	Container  = Cnt
-	Inventory  = Inv
-	TextDraw   = TD
-	Command    = Cmd
-	Dynamic    = Dyn
-	Action     = Act
-	Object     = Obj
-	Update     = Upd
+Checkpoint = CP
+Collisions = Col
+Container  = Cnt
+Inventory  = Inv
+TextDraw   = TD
+Command    = Cmd
+Dynamic    = Dyn
+Action     = Act
+Object     = Obj
+Update     = Upd
 
-	Float:I@ // temp float
-	J@ // temp int
-	Q@[Length] // temp string
+Float:I@ // temp float
+J@ // temp int
+Q@[Length] // temp string
 ```
 
 ## YSI Shortcuts
 ```
-	U@ - setproperty
-	V@ - getproperty
-	W@ - CallRemoteFunction
-	O@ - SetTimerEx
+U@ - setproperty
+V@ - getproperty
+W@ - CallRemoteFunction
+O@ - SetTimerEx
 ```
 
 ## More
